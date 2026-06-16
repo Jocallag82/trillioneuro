@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Record — Trillioneuro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white:  #ffffff;
+  --off:    #f5f5f7;
+  --text:   #1d1d1f;
+  --mid:    #6e6e73;
+  --faint:  #a1a1a6;
+  --line:   #d2d2d7;
+  --gold:   #b8860b;
+  --goldhi: #c9940d;
+  --gold-bg:#fdf8ee;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  background: var(--white); color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100; height: 44px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+}
+.nav-logo { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; text-decoration: none; color: var(--text); }
+.nav-logo b { color: var(--gold); font-weight: 500; }
+.nav-btn {
+  font-size: 12px; font-weight: 500; color: var(--gold);
+  background: none; border: none; cursor: pointer; font-family: inherit;
+  transition: opacity 0.15s;
+}
+.nav-btn:hover { opacity: 0.7; }
+
+/* ── HEADER ── */
+.rec-head { text-align: center; padding: 64px 24px 36px; }
+.rec-head .kicker {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+}
+.rec-head h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 6vw, 72px); font-weight: 300;
+  letter-spacing: -0.02em; line-height: 1; margin-bottom: 12px;
+}
+.rec-head h1 i { font-style: italic; color: var(--gold); }
+.rec-head p { font-size: 16px; font-weight: 300; color: var(--mid); max-width: 460px; margin: 0 auto; line-height: 1.5; }
+
+/* ── CONTROLS ── */
+.controls {
+  position: sticky; top: 44px; z-index: 50;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 20px;
+}
+.controls-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.search-box {
+  flex: 1; min-width: 200px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--off); border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px 13px;
+  transition: border-color 0.15s;
+}
+.search-box:focus-within { border-color: var(--gold); }
+.search-box svg { flex-shrink: 0; }
+.search-box input {
+  flex: 1; border: none; background: none; outline: none;
+  font-family: inherit; font-size: 14px; color: var(--text);
+}
+.search-box input::placeholder { color: var(--faint); }
+
+.select-wrap { position: relative; }
+.country-select {
+  font-family: inherit; font-size: 14px; color: var(--text);
+  background: var(--off); border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px 32px 9px 13px;
+  cursor: pointer; outline: none; -webkit-appearance: none; appearance: none;
+  transition: border-color 0.15s;
+}
+.country-select:focus { border-color: var(--gold); }
+.select-wrap::after {
+  content: '▾'; position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%); pointer-events: none;
+  color: var(--faint); font-size: 11px;
+}
+
+.view-toggle {
+  display: flex; background: var(--off);
+  border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+}
+.view-toggle button {
+  font-family: inherit; font-size: 13px; font-weight: 400;
+  color: var(--mid); background: none; border: none;
+  padding: 9px 16px; cursor: pointer; transition: all 0.12s;
+}
+.view-toggle button.active { background: var(--gold); color: #fff; font-weight: 500; }
+
+/* ── RESULT META ── */
+.result-meta {
+  max-width: 1100px; margin: 0 auto;
+  padding: 18px 20px 0;
+  font-size: 13px; color: var(--faint);
+}
+.result-meta b { color: var(--text); font-weight: 500; }
+
+/* ── LIST VIEW ── */
+.list-view { max-width: 1100px; margin: 0 auto; padding: 12px 12px 60px; }
+.rec-row {
+  display: grid; grid-template-columns: 56px 36px 1fr auto;
+  align-items: center; gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.08s;
+}
+.rec-row:hover { background: var(--off); }
+.rec-row.r1 { background: var(--gold-bg); }
+.rec-rank {
+  font-size: 13px; font-weight: 500; color: var(--faint);
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+.rec-rank.top { color: var(--gold); }
+.rec-rank .crown { font-size: 16px; }
+.rec-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 500; color: #fff;
+  background: linear-gradient(135deg, var(--gold), var(--goldhi));
+  overflow: hidden;
+}
+.rec-av img { width: 100%; height: 100%; object-fit: cover; }
+.rec-info { min-width: 0; }
+.rec-name {
+  font-size: 15px; font-weight: 500; letter-spacing: -0.1px;
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rec-flag { font-size: 14px; }
+.rec-meta {
+  font-size: 12px; color: var(--faint); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rec-meta a { color: var(--gold); text-decoration: none; }
+.rec-meta a:hover { text-decoration: underline; }
+.rec-amt {
+  font-size: 15px; font-weight: 500; color: var(--text);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.rec-row.r1 .rec-amt { color: var(--gold); }
+
+/* ── PAGINATION ── */
+.pager {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 32px 0 0; flex-wrap: wrap;
+}
+.pager button {
+  font-family: inherit; font-size: 13px; color: var(--gold);
+  background: none; border: 1px solid rgba(184,134,11,0.3);
+  border-radius: 6px; padding: 7px 14px; cursor: pointer;
+  transition: background 0.1s;
+}
+.pager button:hover:not(:disabled) { background: rgba(184,134,11,0.07); }
+.pager button:disabled { opacity: 0.25; cursor: default; }
+.pager .pg-info { font-size: 13px; color: var(--mid); padding: 0 8px; }
+
+/* ── MONUMENT WALL ── */
+.wall-view { display: none; }
+.wall-view.active { display: block; }
+.list-view.hidden { display: none; }
+
+.wall-intro {
+  text-align: center; padding: 8px 24px 28px;
+}
+.wall-intro p { font-size: 14px; color: var(--mid); font-weight: 300; }
+
+.wall {
+  background: #0a0a0a;
+  padding: 40px 20px 80px;
+  min-height: 60vh;
+}
+.wall-grid {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center;
+}
+.tile {
+  font-size: 11px; font-weight: 300; letter-spacing: 0.01em;
+  color: rgba(240,237,232,0.55);
+  padding: 4px 9px; border-radius: 5px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  white-space: nowrap; cursor: default;
+  transition: all 0.15s;
+  animation: tileIn 0.4s ease both;
+}
+.tile:hover {
+  color: #0a0a0a; background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.08); z-index: 2;
+}
+/* size tiers reflect contribution — bigger payers, bigger tiles */
+.tile.t1 { font-size: 19px; font-weight: 400; color: var(--gold); padding: 7px 16px;
+           background: rgba(184,134,11,0.12); border-color: rgba(184,134,11,0.4); }
+.tile.t2 { font-size: 15px; color: rgba(240,237,232,0.85); padding: 6px 13px; }
+.tile.t3 { font-size: 13px; color: rgba(240,237,232,0.7); }
+@keyframes tileIn { from { opacity: 0; transform: scale(0.9);} to { opacity: 1; transform: scale(1);} }
+
+.wall-density {
+  text-align: center; padding: 28px 24px 0;
+}
+.wall-density button {
+  font-family: inherit; font-size: 13px; color: var(--gold);
+  background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.3);
+  border-radius: 980px; padding: 9px 22px; cursor: pointer;
+  transition: background 0.15s;
+}
+.wall-density button:hover { background: rgba(184,134,11,0.16); }
+
+/* ── EMPTY ── */
+.empty {
+  text-align: center; padding: 60px 24px; color: var(--faint);
+  font-size: 15px;
+}
+
+/* ── FOOTER ── */
+footer { background: var(--off); border-top: 1px solid var(--line); padding: 40px 20px; text-align: center; }
+.footer-brand { font-size: 14px; font-weight: 500; margin-bottom: 14px; }
+.footer-brand b { color: var(--gold); font-weight: 500; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+.footer-links a { font-size: 12px; color: var(--mid); text-decoration: none; }
+.footer-links a:hover { color: var(--text); }
+.footer-legal { font-size: 11px; color: var(--faint); line-height: 1.6; max-width: 540px; margin: 0 auto; }
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .controls-inner { gap: 8px; }
+  .search-box { order: 1; width: 100%; flex: none; }
+  .select-wrap { order: 2; flex: 1; }
+  .country-select { width: 100%; }
+  .view-toggle { order: 3; }
+  .rec-row { grid-template-columns: 40px 32px 1fr auto; gap: 10px; padding: 12px 10px; }
+  .rec-av { width: 32px; height: 32px; font-size: 12px; }
+  .rec-name { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Trillion<b>€</b>uro</a>
+  <button class="nav-btn" onclick="location.href='index.html'">Claim your name →</button>
+</nav>
+
+<!-- HEADER -->
+<div class="rec-head">
+  <p class="kicker">The permanent ledger</p>
+  <h1>The <i>Record</i></h1>
+  <p>Every name ever added to history. Searchable, permanent, public. This is the complete ledger.</p>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a1a1a6" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/>
+      </svg>
+      <input type="text" id="search" placeholder="Search any name in history…" oninput="onSearch(this.value)">
+    </div>
+    <div class="select-wrap">
+      <select class="country-select" id="country" onchange="onCountry(this.value)">
+        <option value="ALL">🌍 All countries (global)</option>
+      </select>
+    </div>
+    <div class="view-toggle">
+      <button id="btn-list" class="active" onclick="setView('list')">List</button>
+      <button id="btn-wall" onclick="setView('wall')">Monument wall</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT META -->
+<div class="result-meta" id="meta"></div>
+
+<!-- LIST VIEW -->
+<div class="list-view" id="list-view">
+  <div id="rows"></div>
+  <div class="pager" id="pager"></div>
+</div>
+
+<!-- MONUMENT WALL -->
+<div class="wall-view" id="wall-view">
+  <div class="wall-intro">
+    <p>Every name, sized by their place in history. Hover any tile. The largest gave the most.</p>
+  </div>
+  <div class="wall">
+    <div class="wall-grid" id="wall-grid"></div>
+    <div class="wall-density">
+      <button id="wall-more" onclick="growWall()">Reveal more names</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Trillion<b>€</b>uro</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="#">About</a>
+    <a href="#">How it works</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+  <p class="footer-legal">
+    Payments are non-refundable platform fees for permanent public listing on the Trillioneuro record.
+    This is not a charity, investment, or financial product. Trillioneuro is a trading name. Registered in Ireland. &copy; 2025 Trillioneuro.
+  </p>
+</footer>
+
+<script>
+/* ── DATA (shared shape with homepage; replace with Supabase) ── */
+const PAGE = 50;
+
+function seed(n, s) {
+  const fn = ['Aoife','James','Maria','Lucas','Emma','Ciarán','Priya','Oliver','Niamh','Raj',
+              'Sophie','Seán','Declan','Lena','Hugo','Patrick','Roisin','Jack','Hannah','Lukas',
+              'Nathan','Camille','Gabriel','Arjun','Ethan','Anna','Tomás','Ingrid','Mei','Carlos'];
+  const ln = ['Murphy','Kelly','O\'Brien','Walsh','Doyle','Byrne','Ryan','Nolan','McCarthy',
+              'Burke','Fitzgerald','Bauer','Martin','Sharma','Tremblay','Fischer','Müller',
+              'Silva','Johnson','Watson','Tanaka','Rossi','Dubois','Andersen','Nguyen'];
+  const msgs = ['Making history!','','Ireland first 🍀','','Go on!','','Proud to be here',
+                '','For my kids','','Future is now','','Legend','',''];
+  const urls = ['','','','mybiz.ie','','','mycompany.com','','','storefound.ie','',''];
+  const avatars = ['🦁','','','🏢','','🚀','','','⚽','','','🎨'];
+  return Array.from({length: n}, (_, i) => ({
+    name:   fn[(s*7+i*3) % fn.length] + ' ' + ln[(s*3+i*7) % ln.length],
+    amount: Math.max(1, Math.round(8000 / Math.pow(i+1, 0.72))),
+    msg:    msgs[i % msgs.length],
+    url:    i < 7 ? urls[i % urls.length] : '',
+    avatar: i < 12 ? avatars[i % avatars.length] : ''
+  }));
+}
+
+const COUNTRIES = [
+  { code:'IE', flag:'🇮🇪', name:'Ireland',        count:12840, donors: seed(160, 0) },
+  { code:'US', flag:'🇺🇸', name:'United States',  count:31200, donors: seed(160, 1) },
+  { code:'GB', flag:'🇬🇧', name:'United Kingdom', count:18600, donors: seed(160, 2) },
+  { code:'DE', flag:'🇩🇪', name:'Germany',        count:9400,  donors: seed(160, 3) },
+  { code:'FR', flag:'🇫🇷', name:'France',         count:7200,  donors: seed(160, 4) },
+  { code:'AU', flag:'🇦🇺', name:'Australia',      count:5800,  donors: seed(160, 5) },
+  { code:'CA', flag:'🇨🇦', name:'Canada',         count:4900,  donors: seed(160, 6) },
+  { code:'NL', flag:'🇳🇱', name:'Netherlands',    count:3900,  donors: seed(160, 7) },
+  { code:'IN', flag:'🇮🇳', name:'India',          count:6200,  donors: seed(160, 8) },
+  { code:'BR', flag:'🇧🇷', name:'Brazil',         count:4100,  donors: seed(160, 9) },
+  { code:'JP', flag:'🇯🇵', name:'Japan',          count:3200,  donors: seed(160, 10) },
+];
+
+// Attach country meta to each donor & build a global list
+const ALL = [];
+COUNTRIES.forEach(c => c.donors.forEach(d => ALL.push({ ...d, cflag: c.flag, cname: c.name, ccode: c.code })));
+
+const fmt = n => '€' + n.toLocaleString();
+
+/* ── STATE ── */
+let state = { country: 'ALL', q: '', page: 0, view: 'list', wallCount: 120 };
+
+/* populate country dropdown */
+(function initCountries(){
+  const sel = document.getElementById('country');
+  [...COUNTRIES].sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.code; o.textContent = `${c.flag} ${c.name}`;
+    sel.appendChild(o);
+  });
+})();
+
+/* ── FILTER + SORT ── */
+function getFiltered() {
+  let list = state.country === 'ALL'
+    ? ALL.slice()
+    : ALL.filter(d => d.ccode === state.country);
+  if (state.q) {
+    const q = state.q.toLowerCase();
+    list = list.filter(d => d.name.toLowerCase().includes(q));
+  }
+  list.sort((a,b) => b.amount - a.amount);
+  return list;
+}
+
+/* ── RENDER LIST ── */
+function renderList() {
+  const list = getFiltered();
+  const total = list.length;
+  const pages = Math.max(1, Math.ceil(total / PAGE));
+  state.page = Math.min(state.page, pages - 1);
+  const start = state.page * PAGE;
+  const slice = list.slice(start, start + PAGE);
+
+  const showGlobalFlag = state.country === 'ALL';
+  const rows = document.getElementById('rows');
+
+  if (!slice.length) {
+    rows.innerHTML = `<div class="empty">No names match "${state.q}". Be the first — claim it.</div>`;
+    document.getElementById('pager').innerHTML = '';
+  } else {
+    rows.innerHTML = slice.map((d, i) => {
+      const rank = start + i + 1;
+      const isOne = rank === 1;
+      const initials = d.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      const av = d.avatar
+        ? `<div class="rec-av">${d.avatar}</div>`
+        : `<div class="rec-av">${initials}</div>`;
+      const urlText = d.url ? d.url.replace(/https?:\/\//,'') : '';
+      const urlHtml = d.url ? `<a href="${d.url.startsWith('http')?d.url:'https://'+d.url}" target="_blank" rel="noopener">${urlText}</a>` : '';
+      const meta = [d.msg, urlHtml].filter(Boolean).join(' · ');
+      return `<div class="rec-row${isOne?' r1':''}">
+        <div class="rec-rank${rank<=3?' top':''}">${isOne?'<span class="crown">♛</span>':rank}</div>
+        ${av}
+        <div class="rec-info">
+          <div class="rec-name">${d.name}${showGlobalFlag?` <span class="rec-flag">${d.cflag}</span>`:''}</div>
+          ${meta?`<div class="rec-meta">${meta}</div>`:''}
+        </div>
+        <div class="rec-amt">${fmt(d.amount)}</div>
+      </div>`;
+    }).join('');
+    renderPager(total, pages);
+  }
+
+  // meta line
+  const scope = state.country === 'ALL' ? 'worldwide' : 'in ' + (COUNTRIES.find(c=>c.code===state.country)||{}).name;
+  const realCount = state.country === 'ALL'
+    ? COUNTRIES.reduce((s,c)=>s+c.count,0)
+    : (COUNTRIES.find(c=>c.code===state.country)||{}).count;
+  document.getElementById('meta').innerHTML = state.q
+    ? `<b>${total.toLocaleString()}</b> names match “${state.q}” ${scope}`
+    : `<b>${realCount.toLocaleString()}</b> names recorded ${scope}`;
+}
+
+function renderPager(total, pages) {
+  const start = state.page * PAGE;
+  document.getElementById('pager').innerHTML = `
+    <button onclick="turnPage(-1)" ${state.page===0?'disabled':''}>‹ Prev</button>
+    <span class="pg-info">${(start+1).toLocaleString()}–${Math.min(start+PAGE,total).toLocaleString()} of ${total.toLocaleString()}</span>
+    <button onclick="turnPage(1)" ${state.page>=pages-1?'disabled':''}>Next ›</button>`;
+}
+function turnPage(d){ state.page += d; renderList(); window.scrollTo({top:200,behavior:'smooth'}); }
+
+/* ── RENDER WALL ── */
+function renderWall() {
+  const list = getFiltered().slice(0, state.wallCount);
+  const grid = document.getElementById('wall-grid');
+  grid.innerHTML = list.map((d, i) => {
+    let cls = 'tile';
+    if (i === 0) cls += ' t1';
+    else if (i < 6) cls += ' t2';
+    else if (i < 25) cls += ' t3';
+    return `<span class="${cls}" title="${d.name} · ${fmt(d.amount)} · ${d.cname}" style="animation-delay:${Math.min(i*4,600)}ms">${d.name}</span>`;
+  }).join('');
+
+  const scope = state.country === 'ALL' ? 'worldwide' : 'in ' + (COUNTRIES.find(c=>c.code===state.country)||{}).name;
+  const realCount = state.country === 'ALL'
+    ? COUNTRIES.reduce((s,c)=>s+c.count,0)
+    : (COUNTRIES.find(c=>c.code===state.country)||{}).count;
+  document.getElementById('meta').innerHTML = `Showing <b>${Math.min(state.wallCount, list.length).toLocaleString()}</b> of <b>${realCount.toLocaleString()}</b> names ${scope}`;
+
+  const moreBtn = document.getElementById('wall-more');
+  moreBtn.style.display = list.length < getFiltered().length ? '' : 'none';
+}
+function growWall(){ state.wallCount += 200; renderWall(); }
+
+/* ── VIEW SWITCH ── */
+function setView(v) {
+  state.view = v;
+  document.getElementById('btn-list').classList.toggle('active', v==='list');
+  document.getElementById('btn-wall').classList.toggle('active', v==='wall');
+  document.getElementById('list-view').classList.toggle('hidden', v!=='list');
+  document.getElementById('wall-view').classList.toggle('active', v==='wall');
+  if (v === 'wall') { state.wallCount = 120; renderWall(); }
+  else renderList();
+}
+
+/* ── INPUT HANDLERS ── */
+function onSearch(v){ state.q = v.trim(); state.page = 0; state.wallCount = 120; state.view==='list'?renderList():renderWall(); }
+function onCountry(v){ state.country = v; state.page = 0; state.wallCount = 120; state.view==='list'?renderList():renderWall(); }
+
+/* ── INIT ── */
+// Detect home country from URL ?c=IE, else default global
+const params = new URLSearchParams(location.search);
+const startCountry = params.get('c');
+if (startCountry && COUNTRIES.find(c=>c.code===startCountry.toUpperCase())) {
+  state.country = startCountry.toUpperCase();
+  document.getElementById('country').value = state.country;
+}
+renderList();
+</script>
+</body>
+</html>
