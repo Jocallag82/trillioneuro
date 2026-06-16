@@ -3,7 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Primary SEO -->
 <title>Trillioneuro — Claim Your Place in History, Free</title>
+<meta name="description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members — your name, your country, recorded forever. Be among the first.">
+<meta name="keywords" content="trillioneuro, be part of history, public record, founding member, leaderboard, trillion euro">
+<meta name="author" content="Trillioneuro">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trillioneuro.com/">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp, iMessage) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Trillioneuro">
+<meta property="og:url" content="https://trillioneuro.com/">
+<meta property="og:title" content="Be Part of History — Claim Your Place, Free">
+<meta property="og:description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members. The earlier you are, the more it means.">
+<meta property="og:image" content="https://trillioneuro.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_IE">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@trillioneuro">
+<meta name="twitter:title" content="Be Part of History — Claim Your Place, Free">
+<meta name="twitter:description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members.">
+<meta name="twitter:image" content="https://trillioneuro.com/og-image.png">
+
+<!-- Favicon (inline gold € — replace with real favicon files later) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' x='5'>€</text></svg>">
+<meta name="theme-color" content="#0a0a0a">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
@@ -389,8 +419,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 
 <script>
 /* ════════════════════════════════════════════════════════════
-   SUPABASE CONFIG — paste your project URL and anon key here.
-   Find them in: Supabase dashboard → Project Settings → API
+   SUPABASE CONFIG
    ════════════════════════════════════════════════════════════ */
 const SUPABASE_URL = 'https://kxzywyflylkcqoidiqmo.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
@@ -415,7 +444,6 @@ function paint() {
   document.getElementById('spots-left').textContent = left.toLocaleString();
 
   if (left === 0) {
-    // Threshold hit — the record opens
     document.querySelector('.countdown-label').textContent = 'The record is open';
     document.getElementById('spots-left').textContent = 'Live';
     document.querySelector('.threshold-unit').textContent = 'the record has opened';
@@ -430,7 +458,6 @@ async function loadCount() {
   if (!error && typeof count === 'number') { founders = count; paint(); }
 }
 setTimeout(loadCount, 200);
-// Poll the live count every 20s so the page feels alive without a realtime subscription
 if (LIVE) setInterval(loadCount, 20000);
 
 /* ── REVEALS ── */
@@ -439,7 +466,6 @@ document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
 /* ── MODAL ── */
 function openModal() {
-  // carry hero email into modal if present
   const he = document.getElementById('hero-email').value.trim();
   if (he) document.getElementById('f-email').value = he;
   document.getElementById('overlay').classList.add('open');
@@ -475,7 +501,6 @@ async function claim() {
   btn.disabled = true; btn.textContent = 'Reserving…';
 
   if (sb) {
-    // Insert founder. Email is unique — a repeat returns the existing row's rank.
     const { data, error } = await sb
       .from('founders')
       .insert({ name, email, message: msg || null, country: country || null })
@@ -483,7 +508,6 @@ async function claim() {
       .single();
 
     if (error) {
-      // Duplicate email → fetch their existing place instead of failing
       if (error.code === '23505') {
         const { data: existing } = await sb
           .from('founders').select('founder_number').eq('email', email).single();
@@ -498,7 +522,6 @@ async function claim() {
     }
     await loadCount();
   } else {
-    // Demo mode (no Supabase configured yet)
     displayBase++; paint();
     finishClaim(name, displayBase);
   }
