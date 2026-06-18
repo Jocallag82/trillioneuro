@@ -1,0 +1,8 @@
+<!-- Favicon (inline gold € — URL-encoded SVG) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a0a0a">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>window.__SB_LIB_OK = typeof window.supabase !== 'undefined';</script>
+<!-- Fallback Supabase CDN if jsdelivr is blocked/unreachable -->
+<script>if(!window.__SB_LIB_OK){document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');}</script>

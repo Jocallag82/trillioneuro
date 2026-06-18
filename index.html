@@ -12,7 +12,7 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://trillioneuro.com/">
 
-<!-- Open Graph (Facebook, LinkedIn, WhatsApp, iMessage) -->
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Trillioneuro">
 <meta property="og:url" content="https://trillioneuro.com/">
@@ -30,11 +30,17 @@
 <meta name="twitter:description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members.">
 <meta name="twitter:image" content="https://trillioneuro.com/og-image.png">
 
-<!-- Favicon (inline gold € — replace with real favicon files later) -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' x='5'>€</text></svg>">
+<!-- Favicon (inline gold € — URL-encoded so it never breaks parsing) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#0a0a0a">
 
+<!-- Supabase library, with fallback CDN if the first is unreachable -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof window.supabase === 'undefined') {
+    document.write('\x3Cscript src="https://unpkg.com/@supabase/supabase-js@2">\x3C/script>');
+  }
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
 
@@ -272,7 +278,6 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 @media (max-width:600px){
   .nav-live{display:none;}
   .stage-grid{grid-template-columns:1fr;}
-  .countdown-grid{gap:10px;} .cd-cell{min-width:56px;}
   .claim-form input{min-width:0;}
 }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;} }
@@ -426,17 +431,21 @@ const SUPABASE_ANON_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
 
 let sb = null;
 const LIVE = SUPABASE_URL.indexOf('YOUR-PROJECT') === -1;
-if (LIVE && window.supabase) {
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+function initSb() {
+  if (LIVE && typeof window.supabase !== 'undefined' && !sb) {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return sb;
 }
+initSb();
 
 /* ── LIVE FOUNDER COUNT ── */
-let founders = 0;        // real count from DB
-let displayBase = 0;     // honest: starts from zero until real founders join
+let founders = 0;
+let displayBase = 0;
 const GOAL = 10000;
 
 function paint() {
-  const n = LIVE ? founders : displayBase;
+  const n = (LIVE && sb) ? founders : displayBase;
   const left = Math.max(0, GOAL - n);
   document.getElementById('nav-n').textContent = n.toLocaleString();
   document.getElementById('prog-n').textContent = n.toLocaleString() + ' founders';
@@ -453,11 +462,14 @@ function paint() {
 }
 
 async function loadCount() {
-  if (!sb) { paint(); return; }
-  const { count, error } = await sb.from('founders').select('*', { count: 'exact', head: true });
-  if (!error && typeof count === 'number') { founders = count; paint(); }
+  if (!initSb()) { paint(); return; }
+  try {
+    const { count, error } = await sb.from('founders_public').select('*', { count: 'exact', head: true });
+    if (!error && typeof count === 'number') { founders = count; }
+  } catch (e) { /* network hiccup — keep last known count */ }
+  paint();
 }
-setTimeout(loadCount, 200);
+setTimeout(loadCount, 300);
 if (LIVE) setInterval(loadCount, 20000);
 
 /* ── REVEALS ── */
@@ -500,28 +512,29 @@ async function claim() {
 
   btn.disabled = true; btn.textContent = 'Reserving…';
 
-  if (sb) {
-    const { data, error } = await sb
-      .from('founders')
-      .insert({ name, email, message: msg || null, country: country || null })
-      .select('founder_number')
-      .single();
+  if (initSb()) {
+    try {
+      const { data, error } = await sb.rpc('reserve_founder', {
+        p_name: name,
+        p_email: email,
+        p_message: msg || null,
+        p_country: country || null
+      });
 
-    if (error) {
-      if (error.code === '23505') {
-        const { data: existing } = await sb
-          .from('founders').select('founder_number').eq('email', email).single();
-        finishClaim(name, existing ? existing.founder_number : null);
-      } else {
+      if (error) {
         btn.disabled = false; btn.textContent = 'Reserve my place — free';
-        alert('Something went wrong reserving your place. Please try again.');
+        alert('Could not reserve your place: ' + (error.message || 'unknown error') + '. Please try again.');
         return;
       }
-    } else {
-      finishClaim(name, data.founder_number);
+      finishClaim(name, data);
+      await loadCount();
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Reserve my place — free';
+      alert('Network error reserving your place. Please check your connection and try again.');
+      return;
     }
-    await loadCount();
   } else {
+    // Library failed to load — demo fallback so the UX still completes
     displayBase++; paint();
     finishClaim(name, displayBase);
   }
