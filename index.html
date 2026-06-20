@@ -162,15 +162,12 @@ nav {
   font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--gold); margin-bottom: 18px;
 }
-.threshold-num {
+.threshold-statement {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(64px, 12vw, 130px); font-weight: 400;
-  color: var(--text); line-height: 0.95; letter-spacing: -0.03em;
+  font-size: clamp(42px, 7vw, 88px); font-weight: 300;
+  color: var(--text); line-height: 1.0; letter-spacing: -0.02em;
 }
-.threshold-unit {
-  font-size: 13px; color: var(--faint); text-transform: uppercase;
-  letter-spacing: 0.08em; margin-top: 8px;
-}
+.threshold-statement i { font-style: italic; color: var(--gold); }
 .countdown-sub { font-size: 14px; color: var(--mid); margin-top: 24px; max-width: 460px; margin-left: auto; margin-right: auto; line-height: 1.5; }
 .countdown-sub b { color: var(--text); font-weight: 500; }
 
@@ -301,7 +298,6 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <nav>
   <div class="nav-logo">Trillion<b>€</b>uro</div>
   <div class="nav-right">
-    <div class="nav-live"><div class="nav-live-dot"></div><span><strong id="nav-n">0</strong> founders reserved</span></div>
     <button class="nav-btn" onclick="openModal()">Claim free →</button>
   </div>
 </nav>
@@ -326,15 +322,15 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   <div class="hero-rule"></div>
 </section>
 
-<!-- THRESHOLD COUNTDOWN -->
+<!-- THRESHOLD STATEMENT -->
 <div class="countdown reveal">
-  <div class="countdown-label">The record opens when 10,000 founders join</div>
-  <div class="threshold-num" id="spots-left">10,000</div>
-  <div class="threshold-unit">founding places remaining</div>
-  <p class="countdown-sub">No fixed date. The moment the <b>10,000th founder</b> reserves, the record opens to everyone — and every founding name goes live together.</p>
+  <div class="countdown-label">Be among the first</div>
+  <div class="threshold-statement">The first names<br><i>in history.</i></div>
+  <p class="countdown-sub">We open the record to the world once <b>10,000 founders</b> have claimed their place. Until then, every name added is among the very first ever recorded — and the earlier you are, the more it means.</p>
 </div>
 
-<!-- PROGRESS -->
+<!-- PROGRESS (hidden until real founder numbers build — re-enable later) -->
+<!--
 <div class="progress-section reveal">
   <div class="progress-inner">
     <div class="progress-top">
@@ -345,6 +341,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
     <p class="progress-caption">When we hit 10,000 reserved founders, the record opens to everyone.</p>
   </div>
 </div>
+-->
 
 <!-- STAGES -->
 <div class="stages reveal">
@@ -463,18 +460,12 @@ const GOAL = 10000;
 function paint() {
   const n = (LIVE && sb) ? founders : displayBase;
   const left = Math.max(0, GOAL - n);
-  document.getElementById('nav-n').textContent = n.toLocaleString();
-  document.getElementById('prog-n').textContent = n.toLocaleString() + ' founders';
-  document.getElementById('prog-fill').style.width = Math.min(n / GOAL * 100, 100) + '%';
-  document.getElementById('spots-left').textContent = left.toLocaleString();
-
-  if (left === 0) {
-    document.querySelector('.countdown-label').textContent = 'The record is open';
-    document.getElementById('spots-left').textContent = 'Live';
-    document.querySelector('.threshold-unit').textContent = 'the record has opened';
-    document.querySelector('.countdown-sub').innerHTML =
-      'We reached 10,000 founders. <b>The record is now live.</b> <a href="record.html" style="color:var(--gold);text-decoration:none">Explore it →</a>';
-  }
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setText('nav-n', n.toLocaleString());
+  setText('prog-n', n.toLocaleString() + ' founders');
+  const fill = document.getElementById('prog-fill');
+  if (fill) fill.style.width = Math.min(n / GOAL * 100, 100) + '%';
+  setText('spots-left', left.toLocaleString());
 }
 
 async function loadCount() {
