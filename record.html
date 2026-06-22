@@ -175,11 +175,12 @@ nav {
 }
 .rec-meta a { color: var(--gold); text-decoration: none; }
 .rec-meta a:hover { text-decoration: underline; }
-.rec-amt {
-  font-size: 15px; font-weight: 500; color: var(--text);
-  font-variant-numeric: tabular-nums; white-space: nowrap;
+.rec-badge {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--gold); background: var(--gold-bg); border: 1px solid rgba(184,134,11,0.25);
+  border-radius: 980px; padding: 3px 9px; white-space: nowrap;
 }
-.rec-row.r1 .rec-amt { color: var(--gold); }
+.rec-row.r1 .rec-badge { background: var(--gold); color: #fff; border-color: var(--gold); }
 
 /* ── PAGINATION ── */
 .pager {
@@ -231,7 +232,7 @@ nav {
   border-color: var(--gold);
   transform: scale(1.08); z-index: 2;
 }
-/* size tiers reflect contribution — bigger payers, bigger tiles */
+/* size tiers reflect join order — earlier founders get larger tiles */
 .tile.t1 { font-size: 19px; font-weight: 400; color: var(--gold); padding: 7px 16px;
            background: rgba(184,134,11,0.12); border-color: rgba(184,134,11,0.4); }
 .tile.t2 { font-size: 15px; color: rgba(240,237,232,0.85); padding: 6px 13px; }
@@ -328,7 +329,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <!-- MONUMENT WALL -->
 <div class="wall-view" id="wall-view">
   <div class="wall-intro">
-    <p>Every name, sized by their place in history. Hover any tile. The largest gave the most.</p>
+    <p>Every founding name, recorded forever. The earliest founders appear largest.</p>
   </div>
   <div class="wall">
     <div class="wall-grid" id="wall-grid"></div>
@@ -349,13 +350,12 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
     <a href="#">Terms</a>
   </div>
   <p class="footer-legal">
-    Payments are non-refundable platform fees for permanent public listing on the Trillioneuro record.
-    This is not a charity, investment, or financial product. Trillioneuro is a trading name. Registered in Ireland. &copy; 2025 Trillioneuro.
+    Founding membership is free. No payment is taken to reserve your place. Trillioneuro is a celebratory public record, not a charity, investment, or financial product.
+    Trillioneuro is a trading name. Registered in Ireland. &copy; 2025 Trillioneuro.
   </p>
 </footer>
 
 <script>
-/* ── DATA (shared shape with homepage; replace with Supabase) ── */
 const PAGE = 50;
 
 function seed(n, s) {
@@ -371,7 +371,7 @@ function seed(n, s) {
   const avatars = ['🦁','','','🏢','','🚀','','','⚽','','','🎨'];
   return Array.from({length: n}, (_, i) => ({
     name:   fn[(s*7+i*3) % fn.length] + ' ' + ln[(s*3+i*7) % ln.length],
-    amount: Math.max(1, Math.round(8000 / Math.pow(i+1, 0.72))),
+    rank:   s * 160 + i + 1,
     msg:    msgs[i % msgs.length],
     url:    i < 7 ? urls[i % urls.length] : '',
     avatar: i < 12 ? avatars[i % avatars.length] : ''
@@ -392,16 +392,11 @@ const COUNTRIES = [
   { code:'JP', flag:'🇯🇵', name:'Japan',          count:3200,  donors: seed(160, 10) },
 ];
 
-// Attach country meta to each donor & build a global list
 const ALL = [];
 COUNTRIES.forEach(c => c.donors.forEach(d => ALL.push({ ...d, cflag: c.flag, cname: c.name, ccode: c.code })));
 
-const fmt = n => '€' + n.toLocaleString();
-
-/* ── STATE ── */
 let state = { country: 'ALL', q: '', page: 0, view: 'list', wallCount: 120 };
 
-/* populate country dropdown */
 (function initCountries(){
   const sel = document.getElementById('country');
   [...COUNTRIES].sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
@@ -411,7 +406,6 @@ let state = { country: 'ALL', q: '', page: 0, view: 'list', wallCount: 120 };
   });
 })();
 
-/* ── FILTER + SORT ── */
 function getFiltered() {
   let list = state.country === 'ALL'
     ? ALL.slice()
@@ -420,11 +414,10 @@ function getFiltered() {
     const q = state.q.toLowerCase();
     list = list.filter(d => d.name.toLowerCase().includes(q));
   }
-  list.sort((a,b) => b.amount - a.amount);
+  list.sort((a, b) => a.rank - b.rank);
   return list;
 }
 
-/* ── RENDER LIST ── */
 function renderList() {
   const list = getFiltered();
   const total = list.length;
@@ -457,20 +450,19 @@ function renderList() {
           <div class="rec-name">${d.name}${showGlobalFlag?` <span class="rec-flag">${d.cflag}</span>`:''}</div>
           ${meta?`<div class="rec-meta">${meta}</div>`:''}
         </div>
-        <div class="rec-amt">${fmt(d.amount)}</div>
+        <div class="rec-badge">Founding Member</div>
       </div>`;
     }).join('');
     renderPager(total, pages);
   }
 
-  // meta line
   const scope = state.country === 'ALL' ? 'worldwide' : 'in ' + (COUNTRIES.find(c=>c.code===state.country)||{}).name;
   const realCount = state.country === 'ALL'
     ? COUNTRIES.reduce((s,c)=>s+c.count,0)
     : (COUNTRIES.find(c=>c.code===state.country)||{}).count;
   document.getElementById('meta').innerHTML = state.q
-    ? `<b>${total.toLocaleString()}</b> names match “${state.q}” ${scope}`
-    : `<b>${realCount.toLocaleString()}</b> names recorded ${scope}`;
+    ? `<b>${total.toLocaleString()}</b> names match "${state.q}" ${scope}`
+    : `<b>${realCount.toLocaleString()}</b> founding names recorded ${scope}`;
 }
 
 function renderPager(total, pages) {
@@ -482,7 +474,6 @@ function renderPager(total, pages) {
 }
 function turnPage(d){ state.page += d; renderList(); window.scrollTo({top:200,behavior:'smooth'}); }
 
-/* ── RENDER WALL ── */
 function renderWall() {
   const list = getFiltered().slice(0, state.wallCount);
   const grid = document.getElementById('wall-grid');
@@ -491,21 +482,20 @@ function renderWall() {
     if (i === 0) cls += ' t1';
     else if (i < 6) cls += ' t2';
     else if (i < 25) cls += ' t3';
-    return `<span class="${cls}" title="${d.name} · ${fmt(d.amount)} · ${d.cname}" style="animation-delay:${Math.min(i*4,600)}ms">${d.name}</span>`;
+    return `<span class="${cls}" title="${d.name} · Founding Member · ${d.cname}" style="animation-delay:${Math.min(i*4,600)}ms">${d.name}</span>`;
   }).join('');
 
   const scope = state.country === 'ALL' ? 'worldwide' : 'in ' + (COUNTRIES.find(c=>c.code===state.country)||{}).name;
   const realCount = state.country === 'ALL'
     ? COUNTRIES.reduce((s,c)=>s+c.count,0)
     : (COUNTRIES.find(c=>c.code===state.country)||{}).count;
-  document.getElementById('meta').innerHTML = `Showing <b>${Math.min(state.wallCount, list.length).toLocaleString()}</b> of <b>${realCount.toLocaleString()}</b> names ${scope}`;
+  document.getElementById('meta').innerHTML = `Showing <b>${Math.min(state.wallCount, list.length).toLocaleString()}</b> of <b>${realCount.toLocaleString()}</b> founding names ${scope}`;
 
   const moreBtn = document.getElementById('wall-more');
   moreBtn.style.display = list.length < getFiltered().length ? '' : 'none';
 }
 function growWall(){ state.wallCount += 200; renderWall(); }
 
-/* ── VIEW SWITCH ── */
 function setView(v) {
   state.view = v;
   document.getElementById('btn-list').classList.toggle('active', v==='list');
@@ -516,12 +506,9 @@ function setView(v) {
   else renderList();
 }
 
-/* ── INPUT HANDLERS ── */
 function onSearch(v){ state.q = v.trim(); state.page = 0; state.wallCount = 120; state.view==='list'?renderList():renderWall(); }
 function onCountry(v){ state.country = v; state.page = 0; state.wallCount = 120; state.view==='list'?renderList():renderWall(); }
 
-/* ── INIT ── */
-// Detect home country from URL ?c=IE, else default global
 const params = new URLSearchParams(location.search);
 const startCountry = params.get('c');
 if (startCountry && COUNTRIES.find(c=>c.code===startCountry.toUpperCase())) {
