@@ -94,3 +94,12 @@ grant select on public.founders_public to anon;
 --    separate `rank_overrides` / auction system on top WITHOUT touching the
 --    permanent founders record. Identity stays immutable; rank stays fluid.
 -- ─────────────────────────────────────────────────────────────────────
+
+-- Email-only pre-registrations (captured on hero email blur before modal)
+CREATE TABLE IF NOT EXISTS founder_interests (
+  id        bigserial PRIMARY KEY,
+  email     text UNIQUE NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE founder_interests ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_insert" ON founder_interests FOR INSERT TO anon WITH CHECK (true);

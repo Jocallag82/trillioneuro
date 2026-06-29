@@ -315,7 +315,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   </p>
   <p class="hero-free">Free for founding members. No payment. No catch.</p>
   <div class="claim-form">
-    <input type="email" id="hero-email" placeholder="Your email — reserve your place" autocomplete="email">
+    <input type="email" id="hero-email" placeholder="Your email — reserve your place" autocomplete="email" onblur="captureHeroEmail(this.value)">
     <button class="btn-primary" onclick="openModal()">Claim my name</button>
   </div>
   <p class="hero-foot">Be among the first names ever recorded. The earlier you are, the more it means.</p>
@@ -507,6 +507,15 @@ function previewAvatar(input) {
   r.readAsDataURL(f);
 }
 
+let claimInProgress = false;
+
+function captureHeroEmail(email) {
+  if (!email || !email.includes('@')) return;
+  if (!initSb()) return;
+  // Silently upsert email-only pre-registration (no name yet)
+  sb.from('founder_interests').upsert({ email }, { onConflict: 'email', ignoreDuplicates: true }).then(() => {}).catch(() => {});
+}
+
 async function claim() {
   const name    = document.getElementById('f-name').value.trim();
   const email   = document.getElementById('f-email').value.trim();
@@ -514,9 +523,11 @@ async function claim() {
   const country = document.getElementById('f-country').value.trim();
   const btn     = document.querySelector('.modal-submit');
 
+  if (claimInProgress) return;
   if (!name) { document.getElementById('f-name').focus(); return; }
   if (!email || !email.includes('@')) { document.getElementById('f-email').focus(); return; }
 
+  claimInProgress = true;
   btn.disabled = true; btn.textContent = 'Reserving…';
 
   if (initSb()) {
@@ -530,6 +541,7 @@ async function claim() {
 
       if (error) {
         btn.disabled = false; btn.textContent = 'Reserve my place — free';
+  claimInProgress = false;
         alert('Could not reserve your place: ' + (error.message || 'unknown error') + '. Please try again.');
         return;
       }
@@ -537,6 +549,7 @@ async function claim() {
       await loadCount();
     } catch (e) {
       btn.disabled = false; btn.textContent = 'Reserve my place — free';
+      claimInProgress = false;
       alert('Network error reserving your place. Please check your connection and try again.');
       return;
     }
