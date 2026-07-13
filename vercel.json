@@ -2,7 +2,15 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "routes": [
+    { "src": "/auction", "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/auction.html" },
+    { "src": "/privacy", "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/privacy.html" },
+    { "src": "/terms", "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/terms.html" },
+    { "src": "/", "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/index.html" },
+    { "src": "/(.*)", "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/$1" },
+
     { "src": "/record", "dest": "/record.html" },
+    { "src": "/privacy", "dest": "/privacy.html" },
+    { "src": "/terms", "dest": "/terms.html" },
     { "src": "/", "dest": "/index.html" }
   ]
 }

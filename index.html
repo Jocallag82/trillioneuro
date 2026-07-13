@@ -284,6 +284,34 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.65s ease, transform 0.65s ease; }
 .reveal.in { opacity:1; transform:none; }
 
+/* ── ABOUT ── */
+.about-band { max-width: 720px; margin: 0 auto; padding: 70px 24px; text-align: center; }
+.about-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,4.5vw,44px); font-weight:300; letter-spacing:-0.02em; margin-bottom:16px; }
+.about-band h2 i { font-style:italic; color:var(--gold); }
+.about-band p { font-size:15px; font-weight:300; color:var(--mid); line-height:1.7; }
+.about-band p + p { margin-top:12px; }
+.about-band a { color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(184,134,11,0.35); }
+.about-band a:hover { border-color:var(--gold); }
+
+/* ── ACCESSIBILITY ── */
+.visually-hidden {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+.f input:focus-visible, .f textarea:focus-visible, .claim-form input:focus-visible,
+.nav-btn:focus-visible, .btn-primary:focus-visible, .btn-outline:focus-visible,
+.modal-cancel:focus-visible, .modal-submit:focus-visible, .avatar-preview:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 2px;
+}
+
+/* ── INLINE FORM ERROR ── */
+.modal-error {
+  display:none; font-size:12.5px; color:#b3261e; background:#fdecea;
+  border:1px solid #f3c6c1; border-radius:8px; padding:9px 12px; margin-bottom:12px; line-height:1.4;
+}
+.modal-error.show { display:block; }
+.f.invalid input, .f.invalid textarea { border-color:#b3261e; }
+
 @media (max-width:600px){
   .nav-live{display:none;}
   .stage-grid{grid-template-columns:1fr;}
@@ -314,10 +342,11 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
     Claim your name on the world's first trillion-euro public record. Permanent. Global. Yours.
   </p>
   <p class="hero-free">Free for founding members. No payment. No catch.</p>
-  <div class="claim-form">
-    <input type="email" id="hero-email" placeholder="Your email — reserve your place" autocomplete="email" onblur="captureHeroEmail(this.value)">
-    <button class="btn-primary" onclick="openModal()">Claim my name</button>
-  </div>
+  <form class="claim-form" onsubmit="event.preventDefault(); openModal();">
+    <label class="visually-hidden" for="hero-email">Your email address</label>
+    <input type="email" id="hero-email" placeholder="Your email — reserve your place" autocomplete="email" inputmode="email" onblur="captureHeroEmail(this.value)">
+    <button type="submit" class="btn-primary">Claim my name</button>
+  </form>
   <p class="hero-foot">Be among the first names ever recorded. The earlier you are, the more it means.</p>
   <div class="hero-rule"></div>
 </section>
@@ -344,7 +373,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 -->
 
 <!-- STAGES -->
-<div class="stages reveal">
+<div class="stages reveal" id="how-it-works">
   <div class="stages-head">
     <h2>How your place <i>works</i></h2>
     <p>Free to claim today. Yours to keep forever. Here's the honest deal.</p>
@@ -368,6 +397,14 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   </div>
 </div>
 
+<!-- ABOUT -->
+<div class="about-band reveal" id="about">
+  <h2>What this <i>actually is.</i></h2>
+  <p>Trillioneuro is a permanent public record — one page, one ledger, one name at a time. No token, no investment, no promise of return. Just a place in history that can't be edited or taken back once it's yours.</p>
+  <p>Founding membership is free for your first year. After that, €1 keeps your place forever. That's the entire business model — no hidden tiers, no upsell.</p>
+  <p>Want the very top instead of a place in the record? <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a> is the sister project where the single most contested seat — #1 in the world, #1 in your country — is decided by open bidding.</p>
+</div>
+
 <!-- PREVIEW -->
 <div class="preview-band reveal">
   <h2>See the record <i>taking shape</i></h2>
@@ -380,10 +417,11 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   <div class="footer-brand">Trillion<b>€</b>uro</div>
   <div class="footer-links">
     <a href="record.html">The Record</a>
-    <a href="#">About</a>
-    <a href="#">How it works</a>
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
+    <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a>
+    <a href="#about">About</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
   </div>
   <p class="footer-legal">
     Founding membership is free. No payment is taken to reserve your place. Trillioneuro is a celebratory public record, not a charity, investment, or financial product.
@@ -393,32 +431,33 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 
 <!-- MODAL -->
 <div class="overlay" id="overlay" onclick="overlayClick(event)">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal-panel">
     <div class="modal-form" id="mform">
       <p class="modal-kicker">Founding Member — Free</p>
-      <h2>Claim your<br><i>place.</i></h2>
+      <h2 id="modal-title">Claim your<br><i>place.</i></h2>
       <p class="modal-sub">Reserve your permanent spot on the record. Free for founding members — we'll email you the moment it goes live.</p>
+      <p class="modal-error" id="modal-err" role="alert"></p>
       <div class="avatar-upload">
-        <label class="avatar-preview" id="av-prev" for="f-av"><span>＋</span></label>
+        <label class="avatar-preview" id="av-prev" for="f-av" aria-label="Add a photo or logo, optional"><span>＋</span></label>
         <input type="file" id="f-av" accept="image/*" style="display:none" onchange="previewAvatar(this)">
         <div class="avatar-text"><b>Add a photo or logo</b>Optional. Shown beside your name. Reviewed before going live.</div>
       </div>
-      <div class="f"><label>Your name / handle <span>max 30 chars</span></label>
+      <div class="f" id="f-name-wrap"><label for="f-name">Your name / handle <span>max 30 chars</span></label>
         <input type="text" id="f-name" maxlength="30" placeholder="e.g. Ciarán Murphy"></div>
-      <div class="f"><label>Email <span>to claim your place</span></label>
-        <input type="email" id="f-email" placeholder="you@email.com" autocomplete="email"></div>
-      <div class="f"><label>Message <span id="mc">0 / 80</span></label>
+      <div class="f" id="f-email-wrap"><label for="f-email">Email <span>to claim your place</span></label>
+        <input type="email" id="f-email" placeholder="you@email.com" autocomplete="email" inputmode="email"></div>
+      <div class="f"><label for="f-msg">Message <span id="mc">0 / 80</span></label>
         <textarea id="f-msg" maxlength="80" rows="2" placeholder="Optional — shown below your name"
           oninput="document.getElementById('mc').textContent=this.value.length+' / 80'"></textarea></div>
-      <div class="f"><label>Country <span>auto-detected</span></label>
-        <input type="text" id="f-country" value="Ireland"></div>
+      <div class="f"><label for="f-country">Country <span id="country-hint">auto-detecting…</span></label>
+        <input type="text" id="f-country" placeholder="e.g. Ireland"></div>
       <div class="modal-actions">
         <button class="modal-cancel" onclick="closeModal()">Cancel</button>
         <button class="modal-submit" onclick="claim()">Reserve my place — free</button>
       </div>
       <p class="modal-legal">No payment required. By reserving you agree to your name appearing publicly on the record at launch. We'll only email you about your place.</p>
     </div>
-    <div class="modal-ok" id="mok">
+    <div class="modal-ok" id="mok" tabindex="-1">
       <div class="share-card">
         <div class="sc-label">✦ Founding Member</div>
         <div class="sc-name" id="sc-name">Your Name</div>
@@ -459,13 +498,12 @@ const GOAL = 10000;
 
 function paint() {
   const n = (LIVE && sb) ? founders : displayBase;
-  const left = Math.max(0, GOAL - n);
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  setText('nav-n', n.toLocaleString());
+  // Progress section is intentionally hidden until real founder numbers
+  // are worth showing — see commented .progress-section markup above.
   setText('prog-n', n.toLocaleString() + ' founders');
   const fill = document.getElementById('prog-fill');
   if (fill) fill.style.width = Math.min(n / GOAL * 100, 100) + '%';
-  setText('spots-left', left.toLocaleString());
 }
 
 async function loadCount() {
@@ -484,9 +522,12 @@ const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
 /* ── MODAL ── */
+let lastFocused = null;
+
 function openModal() {
   const he = document.getElementById('hero-email').value.trim();
   if (he) document.getElementById('f-email').value = he;
+  lastFocused = document.activeElement;
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(() => document.getElementById('f-name').focus(), 300);
@@ -496,9 +537,48 @@ function closeModal() {
   document.body.style.overflow = '';
   document.getElementById('mform').classList.remove('gone');
   document.getElementById('mok').classList.remove('show');
+  clearError();
+  if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
 }
 function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('overlay').classList.contains('open')) closeModal();
+  if (e.key === 'Tab' && document.getElementById('overlay').classList.contains('open')) trapFocus(e);
+});
+
+function trapFocus(e) {
+  const panel = document.getElementById('modal-panel');
+  const focusable = panel.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+  const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+  if (!visible.length) return;
+  const first = visible[0], last = visible[visible.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/* ── COUNTRY AUTO-DETECT ── */
+let countryDetectStarted = false;
+function detectCountry() {
+  if (countryDetectStarted) return;
+  countryDetectStarted = true;
+  const hint = document.getElementById('country-hint');
+  const field = document.getElementById('f-country');
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeout = controller ? setTimeout(() => controller.abort(), 2500) : null;
+  fetch('https://ipapi.co/json/', controller ? { signal: controller.signal } : {})
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      if (timeout) clearTimeout(timeout);
+      if (data && data.country_name && !field.value) field.value = data.country_name;
+      if (hint) hint.textContent = 'auto-detected';
+    })
+    .catch(() => {
+      if (timeout) clearTimeout(timeout);
+      if (hint) hint.textContent = 'please confirm';
+      if (!field.value) field.placeholder = 'e.g. Ireland';
+    });
+}
+detectCountry();
 
 function previewAvatar(input) {
   const f = input.files[0]; if (!f) return;
@@ -516,6 +596,24 @@ function captureHeroEmail(email) {
   sb.from('founder_interests').upsert({ email }, { onConflict: 'email', ignoreDuplicates: true }).then(() => {}).catch(() => {});
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function showError(msg, field) {
+  const err = document.getElementById('modal-err');
+  err.textContent = msg;
+  err.classList.add('show');
+  document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+  if (field) {
+    const wrap = document.getElementById(field);
+    if (wrap) wrap.classList.add('invalid');
+  }
+}
+function clearError() {
+  const err = document.getElementById('modal-err');
+  err.textContent = ''; err.classList.remove('show');
+  document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+}
+
 async function claim() {
   const name    = document.getElementById('f-name').value.trim();
   const email   = document.getElementById('f-email').value.trim();
@@ -524,8 +622,18 @@ async function claim() {
   const btn     = document.querySelector('.modal-submit');
 
   if (claimInProgress) return;
-  if (!name) { document.getElementById('f-name').focus(); return; }
-  if (!email || !email.includes('@')) { document.getElementById('f-email').focus(); return; }
+  clearError();
+
+  if (!name) {
+    showError('Enter your name or handle to claim your place.', 'f-name-wrap');
+    document.getElementById('f-name').focus();
+    return;
+  }
+  if (!email || !EMAIL_RE.test(email)) {
+    showError('Enter a valid email address so we can confirm your place.', 'f-email-wrap');
+    document.getElementById('f-email').focus();
+    return;
+  }
 
   claimInProgress = true;
   btn.disabled = true; btn.textContent = 'Reserving…';
@@ -541,8 +649,11 @@ async function claim() {
 
       if (error) {
         btn.disabled = false; btn.textContent = 'Reserve my place — free';
-  claimInProgress = false;
-        alert('Could not reserve your place: ' + (error.message || 'unknown error') + '. Please try again.');
+        claimInProgress = false;
+        const friendly = /unique|duplicate/i.test(error.message || '')
+          ? 'That email has already claimed a place in history. Check your inbox — or use a different email.'
+          : 'Could not reserve your place right now. Please try again in a moment.';
+        showError(friendly, 'f-email-wrap');
         return;
       }
       finishClaim(name, data);
@@ -550,7 +661,7 @@ async function claim() {
     } catch (e) {
       btn.disabled = false; btn.textContent = 'Reserve my place — free';
       claimInProgress = false;
-      alert('Network error reserving your place. Please check your connection and try again.');
+      showError('Network error — please check your connection and try again.');
       return;
     }
   } else {
@@ -563,10 +674,12 @@ async function claim() {
 }
 
 function finishClaim(name, number) {
+  clearError();
   document.getElementById('sc-name').textContent = name;
   document.getElementById('sc-rank').textContent = number ? '#' + Number(number).toLocaleString() : '—';
   document.getElementById('mform').classList.add('gone');
   document.getElementById('mok').classList.add('show');
+  document.getElementById('mok').focus?.();
 }
 
 /* ── SHARE ── */

@@ -265,6 +265,24 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 .footer-links a:hover { color: var(--text); }
 .footer-legal { font-size: 11px; color: var(--faint); line-height: 1.6; max-width: 540px; margin: 0 auto; }
 
+/* ── PREVIEW BADGE ── */
+.preview-tag {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid);
+  background: var(--off); border: 1px solid var(--line); border-radius: 980px;
+  padding: 5px 13px; margin-top: 16px;
+}
+.preview-tag::before { content: '◐'; color: var(--gold); }
+
+.visually-hidden {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+.search-box input:focus-visible, .country-select:focus-visible, .view-toggle button:focus-visible,
+.pager button:focus-visible, .nav-btn:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 2px;
+}
+
 /* ── MOBILE ── */
 @media (max-width: 600px) {
   .controls-inner { gap: 8px; }
@@ -294,6 +312,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   <p class="kicker">The permanent ledger</p>
   <h1>The <i>Record</i></h1>
   <p>Every name ever added to history. Searchable, permanent, public. This is the complete ledger.</p>
+  <span class="preview-tag">Preview — illustrative names, not real founders yet</span>
 </div>
 
 <!-- CONTROLS -->
@@ -303,9 +322,11 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a1a1a6" stroke-width="2">
         <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/>
       </svg>
+      <label class="visually-hidden" for="search">Search any name in history</label>
       <input type="text" id="search" placeholder="Search any name in history…" oninput="onSearch(this.value)">
     </div>
     <div class="select-wrap">
+      <label class="visually-hidden" for="country">Filter by country</label>
       <select class="country-select" id="country" onchange="onCountry(this.value)">
         <option value="ALL">🌍 All countries (global)</option>
       </select>
@@ -344,10 +365,10 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   <div class="footer-brand">Trillion<b>€</b>uro</div>
   <div class="footer-links">
     <a href="index.html">Home</a>
-    <a href="#">About</a>
-    <a href="#">How it works</a>
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#how-it-works">How it works</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
   </div>
   <p class="footer-legal">
     Founding membership is free. No payment is taken to reserve your place. Trillioneuro is a celebratory public record, not a charity, investment, or financial product.

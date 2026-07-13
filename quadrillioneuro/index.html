@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Primary SEO -->
+<title>Quadrillioneuro — The Auction for the Top of History</title>
+<meta name="description" content="Trillioneuro gave 10,000 people a permanent, free place in history. Quadrillioneuro is where the single most contested seat — #1 in the world, #1 in your country — gets decided. Register free, no bid yet.">
+<meta name="keywords" content="quadrillioneuro, top of history, world number one, country leaderboard, auction, contested seat">
+<meta name="author" content="Quadrillioneuro">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://quadrillioneuro.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quadrillioneuro">
+<meta property="og:url" content="https://quadrillioneuro.com/">
+<meta property="og:title" content="Some Places in History Aren't Given. They're Won.">
+<meta property="og:description" content="The auction for the most contested seat in history: #1 in the world, #1 in your country. Register free — no bid, no card, until bidding opens.">
+<meta property="og:image" content="https://quadrillioneuro.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_IE">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@quadrillioneuro">
+<meta name="twitter:title" content="Some Places in History Aren't Given. They're Won.">
+<meta name="twitter:description" content="The auction for the most contested seat in history: #1 in the world, #1 in your country. Free to register.">
+<meta name="twitter:image" content="https://quadrillioneuro.com/og-image.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#060606">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof window.supabase === 'undefined') {
+    document.write('\x3Cscript src="https://unpkg.com/@supabase/supabase-js@2">\x3C/script>');
+  }
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --black:#060606; --panel:#101010; --panel2:#161616; --plat:#ece8dd; --mid:#9a968c;
+  --faint:#666258; --line:rgba(255,255,255,0.09); --gold:#d4af37; --goldhi:#e8c869;
+  --gold-bg:rgba(212,175,55,0.08); --live:#ff453a;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  background: var(--black); color: var(--plat); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100; height: 44px;
+  background: rgba(6,6,6,0.85); backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+}
+.nav-logo { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; color: var(--plat); text-decoration:none; }
+.nav-logo b { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-btn { font-size: 12px; font-weight: 500; color: var(--gold); background: none;
+  border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+.nav-btn:hover { opacity: 0.7; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; overflow: hidden; min-height: 94vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 70px 24px 64px;
+}
+.hero::before {
+  content: ''; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+  width: 1000px; height: 640px;
+  background: radial-gradient(ellipse at center, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.05) 40%, transparent 72%);
+  pointer-events: none; z-index: 1;
+}
+.hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; pointer-events:none; opacity:0.55; }
+.hero::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: radial-gradient(ellipse 62% 58% at center, rgba(6,6,6,0.75) 0%, rgba(6,6,6,0.4) 45%, transparent 78%);
+}
+.hero > *:not(.hero-video) { position: relative; z-index: 2; }
+.badge-live {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--plat); background: var(--panel2); border: 1px solid var(--line);
+  padding: 6px 14px; border-radius: 980px; margin-bottom: 26px;
+  opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
+}
+.badge-dot { width:6px; height:6px; border-radius:50%; background: var(--live);
+  box-shadow: 0 0 0 3px rgba(255,69,58,0.2); animation: blink 1.6s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 9vw, 108px);
+  font-weight: 300; line-height: 0.96; letter-spacing: -0.02em; color: var(--plat);
+  margin-bottom: 26px; opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+}
+.hero h1 i { font-style: italic; color: var(--gold); }
+.hero-sub {
+  max-width: 580px; font-size: clamp(16px, 2vw, 19px); font-weight: 300; line-height: 1.65;
+  color: rgba(236,232,221,0.62); margin-bottom: 14px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s ease forwards;
+}
+.hero-free { font-size: 14px; color: var(--gold); font-weight: 500; margin-bottom: 40px;
+  opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards; }
+
+.claim-form { display: flex; gap: 10px; width: 100%; max-width: 460px; flex-wrap: wrap;
+  justify-content: center; opacity: 0; animation: fadeUp 0.8s 0.5s ease forwards; }
+.claim-form input { flex: 1; min-width: 200px; font-family: inherit; font-size: 16px; color: var(--plat);
+  background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+  border-radius: 12px; padding: 15px 18px; outline: none; transition: border-color 0.15s; }
+.claim-form input::placeholder { color: rgba(236,232,221,0.3); }
+.claim-form input:focus { border-color: var(--gold); }
+.btn-primary { background: var(--gold); color: #0a0800; border: none; border-radius: 12px;
+  padding: 15px 28px; font-size: 16px; font-weight: 500; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.1px; transition: background 0.15s, transform 0.1s; white-space: nowrap; }
+.btn-primary:hover { background: var(--goldhi); }
+.btn-primary:active { transform: scale(0.98); }
+.hero-foot { font-size: 12px; color: rgba(236,232,221,0.38); margin-top: 18px;
+  opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards; }
+.hero-rule { position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent); }
+
+/* ── THRESHOLD ── */
+.countdown { border-bottom: 1px solid var(--line); padding: 56px 24px; text-align: center; }
+.countdown-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px; }
+.threshold-statement { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px, 6.5vw, 78px);
+  font-weight: 300; color: var(--plat); line-height: 1.05; letter-spacing: -0.02em; }
+.threshold-statement i { font-style: italic; color: var(--gold); }
+.countdown-sub { font-size: 14px; color: var(--mid); margin-top: 24px; max-width: 480px;
+  margin-left: auto; margin-right: auto; line-height: 1.6; }
+.countdown-sub b { color: var(--plat); font-weight: 500; }
+
+/* ── SEATS PREVIEW ── */
+.seats { max-width: 1080px; margin: 0 auto; padding: 80px 24px; }
+.seats-head { text-align: center; margin-bottom: 44px; }
+.seats-head h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px,5vw,52px); font-weight: 300;
+  letter-spacing: -0.02em; margin-bottom: 12px; }
+.seats-head h2 i { font-style: italic; color: var(--gold); }
+.seats-head p { font-size: 15px; font-weight: 300; color: var(--mid); max-width: 480px; margin: 0 auto; line-height: 1.6; }
+.seat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.seat-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px;
+  transition: border-color 0.15s, transform 0.15s; cursor: pointer; }
+.seat-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-2px); }
+.seat-card.world { background: linear-gradient(155deg, var(--panel2), var(--panel)); border-color: rgba(212,175,55,0.3); }
+.seat-flag { font-size: 22px; margin-bottom: 12px; display:block; }
+.seat-name { font-size: 13px; font-weight: 500; color: var(--plat); margin-bottom: 4px; }
+.seat-status { font-size: 11px; color: var(--mid); margin-bottom: 14px; }
+.seat-status b { color: var(--gold); font-weight: 500; }
+.seat-cta { font-size: 12px; font-weight: 500; color: var(--gold); }
+
+/* ── HOW / STAGES ── */
+.stages { max-width: 1000px; margin: 0 auto; padding: 80px 24px; border-top: 1px solid var(--line); }
+.stages-head { text-align: center; margin-bottom: 56px; }
+.stages-head h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px,5vw,56px); font-weight: 300;
+  letter-spacing: -0.02em; margin-bottom: 12px; }
+.stages-head h2 i { font-style: italic; color: var(--gold); }
+.stages-head p { font-size: 16px; font-weight: 300; color: var(--mid); max-width: 460px; margin: 0 auto; line-height: 1.5; }
+.stage-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.stage { background: var(--panel); padding: 32px 28px; }
+.stage-tag { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 980px; margin-bottom: 18px; }
+.stage-tag.now { background: var(--gold); color: #0a0800; }
+.stage-tag.soon { background: var(--panel2); color: var(--mid); border: 1px solid var(--line); }
+.stage h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 10px; letter-spacing: -0.01em; }
+.stage h3 .price { color: var(--gold); }
+.stage p { font-size: 14px; font-weight: 300; color: var(--mid); line-height: 1.6; }
+
+/* ── LINEAGE ── */
+.lineage { max-width: 720px; margin: 0 auto; padding: 70px 24px; text-align: center; border-top: 1px solid var(--line); }
+.lineage h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(28px,4.2vw,40px); font-weight:300; letter-spacing:-0.02em; margin-bottom:16px; }
+.lineage h2 i { font-style:italic; color:var(--gold); }
+.lineage p { font-size: 15px; font-weight: 300; color: var(--mid); line-height: 1.7; }
+.lineage p + p { margin-top: 12px; }
+.lineage a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,175,55,0.35); }
+.lineage a:hover { border-color: var(--gold); }
+
+/* ── PREVIEW LINK ── */
+.preview-band { padding: 70px 24px; text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+.preview-band::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:600px; height:300px; background: radial-gradient(ellipse at top, rgba(212,175,55,0.12) 0%, transparent 70%); }
+.preview-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,5vw,56px); font-weight:300; color:var(--plat); margin-bottom:14px; position:relative; letter-spacing:-0.02em; }
+.preview-band h2 i { font-style:italic; color:var(--gold); }
+.preview-band p { font-size:16px; font-weight:300; color: var(--mid); max-width:420px; margin:0 auto 36px; position:relative; line-height:1.6; }
+.btn-outline { position: relative; display:inline-block; font-family:inherit; font-size:16px; font-weight:400;
+  color: var(--gold); background:none; border:1px solid rgba(212,175,55,0.5);
+  border-radius:980px; padding:14px 30px; cursor:pointer; text-decoration:none; transition:background 0.15s; }
+.btn-outline:hover { background: rgba(212,175,55,0.1); }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: center; }
+.footer-brand { font-size: 14px; font-weight: 500; margin-bottom: 14px; }
+.footer-brand b { color: var(--gold); font-weight: 500; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+.footer-links a { font-size: 12px; color: var(--mid); text-decoration: none; }
+.footer-links a:hover { color: var(--plat); }
+.footer-legal { font-size: 11px; color: var(--faint); line-height: 1.6; max-width: 580px; margin: 0 auto; }
+
+/* ── MODAL ── */
+.overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:16px; }
+.overlay.open { display:flex; }
+.modal { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:32px 28px; width:100%; max-width:440px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5); animation:modalIn 0.28s cubic-bezier(0.34,1.4,0.64,1); max-height:92vh; overflow-y:auto; }
+@keyframes modalIn { from{opacity:0;transform:translateY(14px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+.modal-kicker { font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.modal h2 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; letter-spacing:-0.02em; line-height:1.05; margin-bottom:6px; color:var(--plat); }
+.modal h2 i { font-style:italic; }
+.modal-sub { font-size:13px; font-weight:300; color:var(--mid); line-height:1.5; margin-bottom:20px; }
+
+.seat-toggle { display:flex; gap:8px; margin-bottom:16px; }
+.seat-toggle button { flex:1; font-family:inherit; font-size:13px; font-weight:500; color:var(--mid);
+  background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 8px; cursor:pointer; transition:all 0.12s; }
+.seat-toggle button.active { background:var(--gold); color:#0a0800; border-color:var(--gold); }
+
+.f { margin-bottom:12px; }
+.f label { display:flex; justify-content:space-between; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--mid); margin-bottom:5px; }
+.f label span { font-weight:300; text-transform:none; letter-spacing:0; color:var(--faint); }
+.f input { width:100%; font-family:inherit; font-size:15px; color:var(--plat); background:var(--panel2);
+  border:1px solid var(--line); border-radius:8px; padding:10px 12px; outline:none;
+  transition:border-color 0.15s; -webkit-appearance:none; }
+.f input:focus { border-color:var(--gold); }
+.f input::placeholder { color:var(--faint); }
+.modal-actions { display:flex; gap:8px; margin-top:20px; }
+.modal-submit { flex:1; padding:13px; font-family:inherit; font-size:15px; font-weight:500;
+  background:var(--gold); color:#0a0800; border:none; border-radius:8px; cursor:pointer; transition:background 0.15s; }
+.modal-submit:hover { background:var(--goldhi); }
+.modal-cancel { padding:13px 16px; font-family:inherit; font-size:14px; font-weight:400; color:var(--mid);
+  background:var(--panel2); border:1px solid var(--line); border-radius:8px; cursor:pointer; }
+.modal-legal { font-size:11px; color:var(--faint); text-align:center; margin-top:12px; line-height:1.5; }
+
+.modal-error { display:none; font-size:12.5px; color:#ff6b60; background:rgba(255,69,58,0.1);
+  border:1px solid rgba(255,69,58,0.3); border-radius:8px; padding:9px 12px; margin-bottom:12px; line-height:1.4; }
+.modal-error.show { display:block; }
+.f.invalid input { border-color:#ff453a; }
+
+/* success / share card */
+.modal-ok { display:none; text-align:center; }
+.modal-ok.show { display:block; }
+.modal-form.gone { display:none; }
+.share-card { background:#000; border-radius:16px; padding:28px 24px; margin-bottom:20px; position:relative; overflow:hidden; border:1px solid var(--line); }
+.share-card::before { content:''; position:absolute; top:-40%; left:50%; transform:translateX(-50%);
+  width:300px; height:200px; background:radial-gradient(ellipse at center, rgba(212,175,55,0.3) 0%, transparent 70%); }
+.share-card .sc-label { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; position:relative; }
+.share-card .sc-name { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:400; color:var(--plat); position:relative; margin-bottom:6px; }
+.share-card .sc-rank { font-size:14px; color:rgba(236,232,221,0.6); position:relative; }
+.share-card .sc-rank b { color:var(--gold); font-weight:500; }
+.share-card .sc-brand { font-size:11px; color:rgba(236,232,221,0.4); margin-top:16px; position:relative; }
+.modal-ok h3 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; margin-bottom:8px; color: var(--plat); }
+.modal-ok > p { font-size:14px; color:var(--mid); line-height:1.6; margin-bottom:16px; }
+.ref-box { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+  font-size:12px; color:var(--mid); display:flex; align-items:center; gap:8px; margin-bottom:16px; text-align:left; }
+.ref-box code { flex:1; color:var(--gold); font-family:ui-monospace,monospace; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ref-box button { font-family:inherit; font-size:11px; font-weight:500; color:var(--plat); background:var(--panel);
+  border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; white-space:nowrap; }
+.share-btns { display:flex; gap:8px; }
+.share-btns button { flex:1; font-family:inherit; font-size:14px; font-weight:500; padding:12px; border-radius:8px; cursor:pointer; border:none; transition:background 0.15s; }
+.share-x { background:var(--plat); color:#0a0800; }
+.share-copy { background:var(--panel2); color:var(--plat); border:1px solid var(--line) !important; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.f input:focus-visible, .claim-form input:focus-visible, .nav-btn:focus-visible, .btn-primary:focus-visible,
+.btn-outline:focus-visible, .modal-cancel:focus-visible, .modal-submit:focus-visible, .seat-toggle button:focus-visible,
+.seat-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+@media (max-width:600px){
+  .stage-grid{grid-template-columns:1fr;}
+  .claim-form input{min-width:0;}
+  .seat-toggle{flex-wrap:wrap;}
+}
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;} .hero-video{display:none;} }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Quadrillion<b>€</b>uro</a>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="openModal()">Reserve my bid →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline poster="hero-poster.jpg">
+    <source src="hero-bg.webm" type="video/webm">
+    <source src="hero-bg.mp4" type="video/mp4">
+  </video>
+  <div class="badge-live"><span class="badge-dot"></span> The Contested Seats — Registration Open</div>
+  <h1>Some places<br><i>are won.</i></h1>
+  <p class="hero-sub">
+    Trillioneuro gave 10,000 people a permanent, free place in history. Quadrillioneuro is where the single most contested seat in that history — #1 in the world, #1 in your country — gets decided. One name per seat. Highest bid holds it.
+  </p>
+  <p class="hero-free">Free to register interest. No bid placed, no card charged, until bidding opens.</p>
+  <form class="claim-form" onsubmit="event.preventDefault(); openModal();">
+    <label class="visually-hidden" for="hero-email">Your email address</label>
+    <input type="email" id="hero-email" placeholder="Your email — reserve your bid" autocomplete="email" inputmode="email" onblur="captureHeroEmail(this.value)">
+    <button type="submit" class="btn-primary">Reserve my bid</button>
+  </form>
+  <p class="hero-foot">Only one name can hold #1. Right now, no one does.</p>
+  <div class="hero-rule"></div>
+</section>
+
+<!-- THRESHOLD -->
+<div class="countdown reveal">
+  <div class="countdown-label">The seats open when enough of us show up</div>
+  <div class="threshold-statement">One world.<br><i>Every country.</i></div>
+  <p class="countdown-sub">Bidding opens on a seat once <b>1,000 people</b> register interest in it. Until then, every seat is unclaimed — and everything below is a preview of what's coming.</p>
+</div>
+
+<!-- SEATS PREVIEW -->
+<div class="seats reveal">
+  <div class="seats-head">
+    <h2>The seats <i>up for the taking</i></h2>
+    <p>Every country has a #1. So does the world. Register interest in the one you want — it costs nothing until the clock starts.</p>
+  </div>
+  <div class="seat-grid">
+    <div class="seat-card world" onclick="openModal('WORLD')">
+      <span class="seat-flag">🌍</span>
+      <div class="seat-name">World #1</div>
+      <div class="seat-status">Registration: <b>early</b></div>
+      <div class="seat-cta">Register interest →</div>
+    </div>
+    <div class="seat-card" onclick="openModal('IE')"><span class="seat-flag">🇮🇪</span><div class="seat-name">Ireland #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('US')"><span class="seat-flag">🇺🇸</span><div class="seat-name">United States #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('GB')"><span class="seat-flag">🇬🇧</span><div class="seat-name">United Kingdom #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('DE')"><span class="seat-flag">🇩🇪</span><div class="seat-name">Germany #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('AU')"><span class="seat-flag">🇦🇺</span><div class="seat-name">Australia #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('CA')"><span class="seat-flag">🇨🇦</span><div class="seat-name">Canada #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('OTHER')"><span class="seat-flag">✦</span><div class="seat-name">Your country</div><div class="seat-status">Not listed? <b>Still counts</b></div><div class="seat-cta">Register interest →</div></div>
+  </div>
+</div>
+
+<!-- STAGES -->
+<div class="stages reveal" id="how-it-works">
+  <div class="stages-head">
+    <h2>How the seat <i>changes hands</i></h2>
+    <p>No money moves until bidding opens. Here's the entire mechanic, honestly.</p>
+  </div>
+  <div class="stage-grid">
+    <div class="stage">
+      <span class="stage-tag now">Now — Free</span>
+      <h3>Register your intent</h3>
+      <p>Tell us which seat you want — World #1 or your country's #1. Completely free. No bid yet, no card, no obligation.</p>
+    </div>
+    <div class="stage">
+      <span class="stage-tag soon">Once a seat hits 1,000</span>
+      <h3>Bidding <span class="price">opens</span></h3>
+      <p>Registered seats open for a 7-day bidding window. Highest confirmed bid when the clock hits zero wins the seat outright.</p>
+    </div>
+    <div class="stage">
+      <span class="stage-tag soon">After you win</span>
+      <h3>Held, not forgotten</h3>
+      <p>Your name holds the seat until the next season, when it opens again. But every winner enters the permanent Hall of Champions — the seat moves on, your record never does.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LINEAGE -->
+<div class="lineage reveal" id="about">
+  <h2>Part of the <i>same record.</i></h2>
+  <p>Quadrillioneuro is built on the same foundation as <a href="https://trillioneuro.com" target="_blank" rel="noopener">Trillioneuro</a> — the free, permanent public record of founding names. That project answers "were you here." This one answers "were you the best."</p>
+  <p>Nothing here is a financial product, investment, or game of chance. It's an auction for a symbolic title, decided by who wants it most.</p>
+</div>
+
+<!-- PREVIEW -->
+<div class="preview-band reveal">
+  <h2>See the seats <i>up close</i></h2>
+  <p>Explore how the live board will look once bidding opens for each seat.</p>
+  <a class="btn-outline" href="auction.html">Preview the auction board →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Quadrillion<b>€</b>uro</div>
+  <div class="footer-links">
+    <a href="auction.html">The Auction</a>
+    <a href="#about">About</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+  <p class="footer-legal">
+    Registration is free. No payment is taken and no bid is placed until bidding formally opens for a seat. Quadrillioneuro is a skill-based auction for a symbolic title — not a charity, investment, lottery, or financial product.
+    Quadrillioneuro is a trading name, part of the same family as Trillioneuro. Registered in Ireland. &copy; 2026 Quadrillioneuro.
+  </p>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal-panel">
+    <div class="modal-form" id="mform">
+      <p class="modal-kicker">Registration — Free</p>
+      <h2 id="modal-title">Reserve your<br><i>bid.</i></h2>
+      <p class="modal-sub">Tell us which seat you want. No charge, no obligation — just your place in line for when bidding opens.</p>
+      <p class="modal-error" id="modal-err" role="alert"></p>
+
+      <div class="seat-toggle" role="group" aria-label="Which seat are you interested in">
+        <button type="button" id="seat-btn-world" onclick="selectSeat('WORLD')">🌍 World #1</button>
+        <button type="button" id="seat-btn-country" onclick="selectSeat('COUNTRY')">📍 My country's #1</button>
+      </div>
+
+      <div class="f" id="f-name-wrap"><label for="f-name">Your name / handle <span>max 30 chars</span></label>
+        <input type="text" id="f-name" maxlength="30" placeholder="e.g. Ciarán Murphy"></div>
+      <div class="f" id="f-email-wrap"><label for="f-email">Email <span>to hold your place in line</span></label>
+        <input type="email" id="f-email" placeholder="you@email.com" autocomplete="email" inputmode="email"></div>
+      <div class="f" id="f-country-field"><label for="f-country">Country <span id="country-hint">auto-detecting…</span></label>
+        <input type="text" id="f-country" placeholder="e.g. Ireland"></div>
+      <div class="f"><label for="f-bid">How high would you go? <span>optional, non-binding</span></label>
+        <input type="text" id="f-bid" placeholder="e.g. €500 — just a guide for us, never charged"></div>
+
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-submit" onclick="reserve()">Reserve my place in line</button>
+      </div>
+      <p class="modal-legal">No payment required. Your name and seat choice may appear on the public auction board once bidding opens. We'll only email you about this seat.</p>
+    </div>
+    <div class="modal-ok" id="mok" tabindex="-1">
+      <div class="share-card">
+        <div class="sc-label">✦ In Line</div>
+        <div class="sc-name" id="sc-name">Your Name</div>
+        <div class="sc-rank"><span id="sc-seat">World #1</span> — position <b id="sc-rank">#—</b> in line</div>
+        <div class="sc-brand">quadrillioneuro.com</div>
+      </div>
+      <h3>You're in line.</h3>
+      <p>Every friend who registers through your link moves you up — and gets their own place in line for free.</p>
+      <div class="ref-box">
+        <code id="ref-link">quadrillioneuro.com/?r=…</code>
+        <button onclick="copyRef()">Copy</button>
+      </div>
+      <div class="share-btns">
+        <button class="share-x" onclick="shareX()">Share on X</button>
+        <button class="share-copy" onclick="copyLink()">Copy link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   SUPABASE CONFIG — replace with your own project before launch
+   (see supabase-setup.sql for the schema + step-by-step wiring).
+   Until replaced, the page runs in local demo mode automatically.
+   ════════════════════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR-ANON-KEY';
+
+let sb = null;
+const LIVE = SUPABASE_URL.indexOf('YOUR-PROJECT') === -1;
+function initSb() {
+  if (LIVE && typeof window.supabase !== 'undefined' && !sb) {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return sb;
+}
+initSb();
+
+/* ── REVEALS ── */
+const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ── REFERRAL CAPTURE ── */
+const params = new URLSearchParams(location.search);
+const refFromLink = params.get('r') || '';
+
+/* ── COUNTRY AUTO-DETECT ── */
+let countryDetectStarted = false;
+let detectedCountryName = '';
+function detectCountry() {
+  if (countryDetectStarted) return;
+  countryDetectStarted = true;
+  const hint = document.getElementById('country-hint');
+  const field = document.getElementById('f-country');
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeout = controller ? setTimeout(() => controller.abort(), 2500) : null;
+  fetch('https://ipapi.co/json/', controller ? { signal: controller.signal } : {})
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      if (timeout) clearTimeout(timeout);
+      if (data && data.country_name) {
+        detectedCountryName = data.country_name;
+        if (!field.value) field.value = data.country_name;
+        const cb = document.getElementById('seat-btn-country');
+        if (cb) cb.textContent = '📍 ' + data.country_name + ' #1';
+      }
+      if (hint) hint.textContent = 'auto-detected';
+    })
+    .catch(() => {
+      if (timeout) clearTimeout(timeout);
+      if (hint) hint.textContent = 'please confirm';
+      if (!field.value) field.placeholder = 'e.g. Ireland';
+    });
+}
+detectCountry();
+
+/* ── MODAL ── */
+let lastFocused = null;
+let selectedSeat = 'WORLD';
+
+function selectSeat(kind) {
+  selectedSeat = kind;
+  document.getElementById('seat-btn-world').classList.toggle('active', kind === 'WORLD');
+  document.getElementById('seat-btn-country').classList.toggle('active', kind === 'COUNTRY');
+  document.getElementById('f-country-field').style.display = kind === 'COUNTRY' ? '' : 'none';
+}
+
+function openModal(seatHint) {
+  const he = document.getElementById('hero-email').value.trim();
+  if (he) document.getElementById('f-email').value = he;
+  lastFocused = document.activeElement;
+
+  if (seatHint === 'WORLD') selectSeat('WORLD');
+  else if (seatHint) { selectSeat('COUNTRY'); if (seatHint !== 'OTHER') document.getElementById('f-country').value = seatHint; }
+  else selectSeat('WORLD');
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('f-name').focus(), 300);
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('mform').classList.remove('gone');
+  document.getElementById('mok').classList.remove('show');
+  clearError();
+  if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+}
+function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('overlay').classList.contains('open')) closeModal();
+  if (e.key === 'Tab' && document.getElementById('overlay').classList.contains('open')) trapFocus(e);
+});
+function trapFocus(e) {
+  const panel = document.getElementById('modal-panel');
+  const focusable = panel.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+  const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+  if (!visible.length) return;
+  const first = visible[0], last = visible[visible.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+let claimInProgress = false;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function showError(msg, field) {
+  const err = document.getElementById('modal-err');
+  err.textContent = msg; err.classList.add('show');
+  document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+  if (field) { const wrap = document.getElementById(field); if (wrap) wrap.classList.add('invalid'); }
+}
+function clearError() {
+  const err = document.getElementById('modal-err');
+  err.textContent = ''; err.classList.remove('show');
+  document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+}
+
+function captureHeroEmail(email) {
+  if (!email || !EMAIL_RE.test(email)) return;
+  if (!initSb()) return;
+  sb.from('quad_prewarm').upsert({ email }, { onConflict: 'email', ignoreDuplicates: true }).then(() => {}).catch(() => {});
+}
+
+async function reserve() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const country = document.getElementById('f-country').value.trim();
+  const bid = document.getElementById('f-bid').value.trim();
+  const btn = document.querySelector('.modal-submit');
+  const seat = selectedSeat === 'WORLD' ? 'WORLD' : (country || detectedCountryName || 'UNKNOWN');
+
+  if (claimInProgress) return;
+  clearError();
+
+  if (!name) { showError('Enter your name or handle.', 'f-name-wrap'); document.getElementById('f-name').focus(); return; }
+  if (!email || !EMAIL_RE.test(email)) { showError('Enter a valid email so we can hold your place.', 'f-email-wrap'); document.getElementById('f-email').focus(); return; }
+  if (selectedSeat === 'COUNTRY' && !country) { showError('Tell us which country\'s seat you want.', 'f-country-field'); document.getElementById('f-country').focus(); return; }
+
+  claimInProgress = true;
+  btn.disabled = true; btn.textContent = 'Reserving…';
+
+  if (initSb()) {
+    try {
+      const { data, error } = await sb.rpc('register_interest', {
+        p_seat: seat, p_name: name, p_email: email, p_country: country || null, p_ref_in: refFromLink || null
+      });
+      if (error) {
+        btn.disabled = false; btn.textContent = 'Reserve my place in line';
+        claimInProgress = false;
+        showError('Could not reserve your place right now. Please try again in a moment.');
+        return;
+      }
+      const row = Array.isArray(data) ? data[0] : data;
+      finishClaim(name, seat, row?.queue_position, row?.ref_code);
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Reserve my place in line';
+      claimInProgress = false;
+      showError('Network error — please check your connection and try again.');
+      return;
+    }
+  } else {
+    // Demo fallback — no backend wired up yet
+    const demoPos = Math.floor(Math.random() * 40) + 1;
+    const demoRef = Math.random().toString(36).slice(2, 8);
+    finishClaim(name, seat, demoPos, demoRef);
+  }
+
+  btn.disabled = false; btn.textContent = 'Reserve my place in line';
+}
+
+function seatLabel(seat) { return seat === 'WORLD' ? 'World #1' : (seat + ' #1'); }
+
+function finishClaim(name, seat, position, refCode) {
+  clearError();
+  document.getElementById('sc-name').textContent = name;
+  document.getElementById('sc-seat').textContent = seatLabel(seat);
+  document.getElementById('sc-rank').textContent = position ? '#' + Number(position).toLocaleString() : '—';
+  const link = 'https://quadrillioneuro.com/?r=' + (refCode || '');
+  document.getElementById('ref-link').textContent = link;
+  document.getElementById('ref-link').dataset.link = link;
+  document.getElementById('mform').classList.add('gone');
+  document.getElementById('mok').classList.add('show');
+  document.getElementById('mok').focus?.();
+}
+
+/* ── SHARE ── */
+function shareX() {
+  const name = document.getElementById('sc-name').textContent;
+  const seat = document.getElementById('sc-seat').textContent;
+  const link = document.getElementById('ref-link').dataset.link || 'https://quadrillioneuro.com';
+  const text = encodeURIComponent(`I just reserved my place in line for ${seat} on @quadrillioneuro — the auction for the top of history. Free to register:`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, '_blank');
+}
+function copyLink() {
+  const link = document.getElementById('ref-link').dataset.link || 'https://quadrillioneuro.com';
+  navigator.clipboard?.writeText(link).then(() => {
+    const b = document.querySelector('.share-copy');
+    const t = b.textContent; b.textContent = 'Copied ✓';
+    setTimeout(() => b.textContent = t, 1500);
+  });
+}
+function copyRef() {
+  const link = document.getElementById('ref-link').dataset.link || document.getElementById('ref-link').textContent;
+  navigator.clipboard?.writeText(link).then(() => {
+    const b = document.querySelector('.ref-box button');
+    const t = b.textContent; b.textContent = 'Copied';
+    setTimeout(() => b.textContent = t, 1500);
+  });
+}
+</script>
+</body>
+</html>
