@@ -151,8 +151,11 @@ grant execute on function public.reserve_founder(text,text,text,text,text) to an
 --    it was previewing files client-side but never persisting them
 --    anywhere, which silently broke the "reviewed before going live"
 --    promise. Bring it back once the storage + moderation step exists.
---  • €1 renewal (year two): add a `payments` table referencing founders.id.
---    Never change founder_number — only add payment rows.
+--  • €1/year badge renewal (starting year two): add a `payments` table
+--    (founder_id, year, paid_at) and derive badge_active from whether the
+--    current year has a paid row. Never remove/alter the founders row or
+--    founder_number for a lapsed payment — the record entry is permanent
+--    regardless; only the Founder badge depends on renewal.
 --  • Rank bidding: ranks already live in a computed view, so you can layer a
 --    separate `rank_overrides` / auction system on top WITHOUT touching the
 --    permanent founders record. Identity stays immutable; rank stays fluid.
