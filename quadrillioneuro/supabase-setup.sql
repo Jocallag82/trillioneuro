@@ -73,8 +73,14 @@ create policy "anyone can read champions" on public.quad_champions for select to
 -- validates any inbound referral code, and returns this registrant's
 -- queue position within their seat plus how many people they've
 -- referred so far.
+-- Changing a function's parameter list creates a new OVERLOAD rather than
+-- replacing the old one — drop the original 5-arg signature explicitly so
+-- a live project doesn't end up with two register_interest functions,
+-- which PostgREST can fail to disambiguate.
+drop function if exists public.register_interest(text,text,text,text,text);
+
 create or replace function public.register_interest(
-  p_seat text, p_name text, p_email text, p_country text, p_ref_in text
+  p_seat text, p_name text, p_email text, p_country text, p_ref_in text, p_bid_hint text default null
 ) returns table(queue_position bigint, ref_code text, referral_count bigint)
 language plpgsql security definer as $$
 declare
@@ -86,10 +92,10 @@ begin
     select exists(select 1 from public.quad_interests where ref_code = p_ref_in) into v_referrer_valid;
   end if;
 
-  insert into public.quad_interests (seat, name, email, country, ref_code, referred_by)
-  values (p_seat, p_name, p_email, p_country, encode(gen_random_bytes(5), 'hex'),
+  insert into public.quad_interests (seat, name, email, country, max_bid_hint, ref_code, referred_by)
+  values (p_seat, p_name, p_email, p_country, p_bid_hint, encode(gen_random_bytes(5), 'hex'),
           case when v_referrer_valid then p_ref_in else null end)
-  on conflict (seat, email) do update set name = excluded.name
+  on conflict (seat, email) do update set name = excluded.name, max_bid_hint = coalesce(excluded.max_bid_hint, quad_interests.max_bid_hint)
   returning quad_interests.ref_code, quad_interests.created_at into v_ref_code, v_created_at;
 
   return query
@@ -101,7 +107,7 @@ begin
 end;
 $$;
 
-grant execute on function public.register_interest(text,text,text,text,text) to anon;
+grant execute on function public.register_interest(text,text,text,text,text,text) to anon;
 
 -- ════════════════════════════════════════════════════════════════════
 --  WIRING THE PAGE

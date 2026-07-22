@@ -186,6 +186,19 @@ nav {
 .lineage a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,175,55,0.35); }
 .lineage a:hover { border-color: var(--gold); }
 
+/* ── FAQ ── */
+.faq-band { max-width: 680px; margin: 0 auto; padding: 70px 24px 80px; border-top: 1px solid var(--line); }
+.faq-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,4.5vw,44px); font-weight:300; letter-spacing:-0.02em; margin-bottom: 36px; text-align:center; color: var(--plat); }
+.faq-band h2 i { font-style:italic; color:var(--gold); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary { list-style:none; cursor:pointer; padding:20px 4px; font-size:16px; font-weight:500; color:var(--plat);
+  display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.faq-item summary::-webkit-details-marker { display:none; }
+.faq-item summary::after { content:'+'; font-size:22px; font-weight:300; color:var(--gold); flex-shrink:0; transition:transform 0.2s; line-height:1; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.faq-item p { font-size:14px; font-weight:300; color:var(--mid); line-height:1.7; padding:0 28px 22px 4px; }
+
 /* ── PREVIEW LINK ── */
 .preview-band { padding: 70px 24px; text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--line); }
 .preview-band::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
@@ -387,6 +400,36 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
   <a class="btn-outline" href="auction.html">Preview the auction board →</a>
 </div>
 
+<!-- FAQ -->
+<div class="faq-band reveal" id="faq">
+  <h2>Questions, <i>answered honestly.</i></h2>
+
+  <details class="faq-item">
+    <summary>Is this gambling?</summary>
+    <p>No. Outcomes are decided entirely by who's willing to bid the most, not by chance — there's no randomness involved. It's an auction for a symbolic title, the same mechanic as any other auction house, just for a leaderboard position instead of an object.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Will I be charged anything by registering?</summary>
+    <p>No. Registering interest is completely free and reserves your place in line for a seat. No payment method is collected and no bid is placed until bidding formally opens — which hasn't happened for any seat yet.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What if I register and never bid?</summary>
+    <p>Nothing happens — there's no obligation. You'll simply be notified when your seat's bidding window opens, and it's entirely your call whether to take part.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What's the difference between this and Trillioneuro?</summary>
+    <p><a href="https://trillioneuro.com" target="_blank" rel="noopener">Trillioneuro</a> is a free, permanent record of everyone who was here — join order never changes. Quadrillioneuro is the opposite mechanic: one seat per country (plus the World seat), won by whoever wants it most, and re-contested each season.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens if I lose a bidding season?</summary>
+    <p>You're free to bid again next season. And if you've ever won a seat, that win stays in the permanent Hall of Champions record regardless of who holds the seat now — no past win is ever erased.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Why register before bidding even opens?</summary>
+    <p>Each seat only opens for bidding once 1,000 people register interest in it — so registering now is what actually gets your seat closer to going live, and puts you in line ahead of people who register later.</p>
+  </details>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">Quadrillion<b>€</b>uro</div>
@@ -394,6 +437,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
     <a href="auction.html">The Auction</a>
     <a href="#about">About</a>
     <a href="#how-it-works">How it works</a>
+    <a href="#faq">FAQ</a>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
   </div>
@@ -599,7 +643,8 @@ async function reserve() {
   if (initSb()) {
     try {
       const { data, error } = await sb.rpc('register_interest', {
-        p_seat: seat, p_name: name, p_email: email, p_country: country || null, p_ref_in: refFromLink || null
+        p_seat: seat, p_name: name, p_email: email, p_country: country || null,
+        p_ref_in: refFromLink || null, p_bid_hint: bid || null
       });
       if (error) {
         btn.disabled = false; btn.textContent = 'Reserve my place in line';

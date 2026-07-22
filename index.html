@@ -236,14 +236,6 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 .modal h2 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; letter-spacing:-0.02em; line-height:1.05; margin-bottom:6px; }
 .modal h2 i { font-style:italic; }
 .modal-sub { font-size:13px; font-weight:300; color:var(--mid); line-height:1.5; margin-bottom:22px; }
-.avatar-upload { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
-.avatar-preview { width:52px; height:52px; border-radius:50%; flex-shrink:0; overflow:hidden;
-  display:flex; align-items:center; justify-content:center; background:var(--off); border:1px dashed var(--line);
-  font-size:20px; color:var(--faint); cursor:pointer; transition:border-color 0.15s; }
-.avatar-preview:hover { border-color:var(--gold); }
-.avatar-preview img { width:100%; height:100%; object-fit:cover; }
-.avatar-text { font-size:12px; color:var(--mid); line-height:1.4; }
-.avatar-text b { color:var(--text); font-weight:500; display:block; font-size:13px; }
 .f { margin-bottom:12px; }
 .f label { display:flex; justify-content:space-between; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--mid); margin-bottom:5px; }
 .f label span { font-weight:300; text-transform:none; letter-spacing:0; color:var(--faint); }
@@ -275,7 +267,13 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 .share-card .sc-rank b { color:var(--gold); font-weight:500; }
 .share-card .sc-brand { font-size:11px; color:rgba(240,237,232,0.4); margin-top:16px; position:relative; }
 .modal-ok h3 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; margin-bottom:8px; }
-.modal-ok > p { font-size:14px; color:var(--mid); line-height:1.6; margin-bottom:20px; }
+.modal-ok > p { font-size:14px; color:var(--mid); line-height:1.6; margin-bottom:16px; }
+.ref-box { background:var(--off); border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+  font-size:12px; color:var(--mid); display:flex; align-items:center; gap:8px; margin-bottom:10px; text-align:left; }
+.ref-box code { flex:1; color:var(--gold); font-family:ui-monospace,monospace; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ref-box button { font-family:inherit; font-size:11px; font-weight:500; color:var(--text); background:var(--white);
+  border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; white-space:nowrap; }
+.ref-count { font-size:12px; color:var(--mid); margin-bottom:16px; min-height:16px; }
 .share-btns { display:flex; gap:8px; }
 .share-btns button { flex:1; font-family:inherit; font-size:14px; font-weight:500; padding:12px; border-radius:8px; cursor:pointer; border:none; transition:background 0.15s; }
 .share-x { background:#0a0a0a; color:#fff; }
@@ -294,6 +292,19 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 .about-band a { color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(184,134,11,0.35); }
 .about-band a:hover { border-color:var(--gold); }
 
+/* ── FAQ ── */
+.faq-band { max-width: 680px; margin: 0 auto; padding: 20px 24px 80px; }
+.faq-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,4.5vw,44px); font-weight:300; letter-spacing:-0.02em; margin-bottom:36px; text-align:center; }
+.faq-band h2 i { font-style:italic; color:var(--gold); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary { list-style:none; cursor:pointer; padding:20px 4px; font-size:16px; font-weight:500; color:var(--text);
+  display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.faq-item summary::-webkit-details-marker { display:none; }
+.faq-item summary::after { content:'+'; font-size:22px; font-weight:300; color:var(--gold); flex-shrink:0; transition:transform 0.2s; line-height:1; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.faq-item p { font-size:14px; font-weight:300; color:var(--mid); line-height:1.7; padding:0 28px 22px 4px; }
+
 /* ── ACCESSIBILITY ── */
 .visually-hidden {
   position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
@@ -301,7 +312,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 }
 .f input:focus-visible, .f textarea:focus-visible, .claim-form input:focus-visible,
 .nav-btn:focus-visible, .btn-primary:focus-visible, .btn-outline:focus-visible,
-.modal-cancel:focus-visible, .modal-submit:focus-visible, .avatar-preview:focus-visible {
+.modal-cancel:focus-visible, .modal-submit:focus-visible, .ref-box button:focus-visible {
   outline: 2px solid var(--gold); outline-offset: 2px;
 }
 
@@ -383,7 +394,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
     <div class="stage">
       <span class="stage-tag now">Now — Free</span>
       <h3>Claim your name</h3>
-      <p>Reserve your permanent place as a Founding Member. Add your name, photo or business logo, and a message. Completely free for your first year — no card, no catch.</p>
+      <p>Reserve your permanent place as a Founding Member. Add your name, an optional message, and your country. Completely free for your first year — no card, no catch.</p>
     </div>
     <div class="stage">
       <span class="stage-tag soon">After year one</span>
@@ -413,6 +424,36 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   <a class="btn-outline" href="record.html">Preview the record →</a>
 </div>
 
+<!-- FAQ -->
+<div class="faq-band reveal" id="faq">
+  <h2>Questions, <i>answered honestly.</i></h2>
+
+  <details class="faq-item">
+    <summary>Is this a scam?</summary>
+    <p>No. We don't ask for payment, passwords, or ID, and founding membership costs nothing to claim. Trillioneuro is a symbolic public record, not a financial product — there's no investment, no return, and nothing to lose by joining.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What's the catch?</summary>
+    <p>Founding membership is free for your first year. After that, a one-off €1 payment keeps your place permanently — that's the entire business model. This part is planned but not yet active: nothing is charged automatically, and we'll email you before any payment is ever requested.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens to my email address?</summary>
+    <p>It's used only to confirm your place and contact you about it — never shown publicly, never sold. Full detail in our <a href="privacy.html">Privacy Policy</a>.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I remove my name later?</summary>
+    <p>Yes — email us any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Does sharing my link move me up the ranks?</summary>
+    <p>No — your founder number is your real join order and never changes, which is what lets us promise it's permanent and honest. Sharing your link just lets us credit you for the friends who join through it.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Who's behind this?</summary>
+    <p>Trillioneuro is a trading name registered in Ireland. See our <a href="terms.html">Terms</a> for the full detail on what founding membership does and doesn't entitle you to.</p>
+  </details>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">Trillion<b>€</b>uro</div>
@@ -421,6 +462,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
     <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a>
     <a href="#about">About</a>
     <a href="#how-it-works">How it works</a>
+    <a href="#faq">FAQ</a>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
   </div>
@@ -438,11 +480,6 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
       <h2 id="modal-title">Claim your<br><i>place.</i></h2>
       <p class="modal-sub">Reserve your permanent spot on the record. Free for founding members — we'll email you the moment it goes live.</p>
       <p class="modal-error" id="modal-err" role="alert"></p>
-      <div class="avatar-upload">
-        <label class="avatar-preview" id="av-prev" for="f-av" aria-label="Add a photo or logo, optional"><span>＋</span></label>
-        <input type="file" id="f-av" accept="image/*" style="display:none" onchange="previewAvatar(this)">
-        <div class="avatar-text"><b>Add a photo or logo</b>Optional. Shown beside your name. Reviewed before going live.</div>
-      </div>
       <div class="f" id="f-name-wrap"><label for="f-name">Your name / handle <span>max 30 chars</span></label>
         <input type="text" id="f-name" maxlength="30" placeholder="e.g. Ciarán Murphy"></div>
       <div class="f" id="f-email-wrap"><label for="f-email">Email <span>to claim your place</span></label>
@@ -466,7 +503,12 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
         <div class="sc-brand">trillioneuro.com</div>
       </div>
       <h3>You're a Founder.</h3>
-      <p>Your place is reserved. Share it — every friend who joins through you climbs the founding ranks faster.</p>
+      <p>Your place is reserved, permanently. Share your link below and we'll show you how many friends join through it.</p>
+      <div class="ref-box">
+        <code id="ref-link">trillioneuro.com/?r=…</code>
+        <button onclick="copyRef()">Copy</button>
+      </div>
+      <p class="ref-count" id="ref-count"></p>
       <div class="share-btns">
         <button class="share-x" onclick="shareX()">Share on X</button>
         <button class="share-copy" onclick="copyLink()">Copy link</button>
@@ -521,6 +563,13 @@ if (LIVE) setInterval(loadCount, 20000);
 /* ── REVEALS ── */
 const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ── REFERRAL CAPTURE ── */
+// Attribution only — a referral never changes anyone's founder_number or
+// rank. It's a permanent, honestly-ordered record; referrals just track
+// who introduced whom.
+const refParams = new URLSearchParams(location.search);
+const refFromLink = refParams.get('r') || '';
 
 /* ── MODAL ── */
 let lastFocused = null;
@@ -581,13 +630,6 @@ function detectCountry() {
 }
 detectCountry();
 
-function previewAvatar(input) {
-  const f = input.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = e => document.getElementById('av-prev').innerHTML = `<img src="${e.target.result}">`;
-  r.readAsDataURL(f);
-}
-
 let claimInProgress = false;
 
 function captureHeroEmail(email) {
@@ -645,7 +687,8 @@ async function claim() {
         p_name: name,
         p_email: email,
         p_message: msg || null,
-        p_country: country || null
+        p_country: country || null,
+        p_ref_in: refFromLink || null
       });
 
       if (error) {
@@ -657,7 +700,8 @@ async function claim() {
         showError(friendly, 'f-email-wrap');
         return;
       }
-      finishClaim(name, data);
+      const row = Array.isArray(data) ? data[0] : data;
+      finishClaim(name, row?.founder_number, row?.ref_code, row?.referral_count);
       await loadCount();
     } catch (e) {
       btn.disabled = false; btn.textContent = 'Reserve my place — free';
@@ -668,16 +712,25 @@ async function claim() {
   } else {
     // Library failed to load — demo fallback so the UX still completes
     displayBase++; paint();
-    finishClaim(name, displayBase);
+    const demoRef = Math.random().toString(36).slice(2, 8);
+    finishClaim(name, displayBase, demoRef, 0);
   }
 
   btn.disabled = false; btn.textContent = 'Reserve my place — free';
 }
 
-function finishClaim(name, number) {
+function finishClaim(name, number, refCode, referralCount) {
   clearError();
+  const rankText = number ? '#' + Number(number).toLocaleString() : '—';
   document.getElementById('sc-name').textContent = name;
-  document.getElementById('sc-rank').textContent = number ? '#' + Number(number).toLocaleString() : '—';
+  document.getElementById('sc-rank').textContent = rankText;
+  const link = 'https://trillioneuro.com/?r=' + (refCode || '');
+  document.getElementById('ref-link').textContent = link;
+  document.getElementById('ref-link').dataset.link = link;
+  const count = Number(referralCount) || 0;
+  document.getElementById('ref-count').textContent = count > 0
+    ? `${count.toLocaleString()} ${count === 1 ? 'person has' : 'people have'} joined through your link so far.`
+    : '';
   document.getElementById('mform').classList.add('gone');
   document.getElementById('mok').classList.add('show');
   document.getElementById('mok').focus?.();
@@ -685,15 +738,24 @@ function finishClaim(name, number) {
 
 /* ── SHARE ── */
 function shareX() {
-  const name = document.getElementById('sc-name').textContent;
   const rank = document.getElementById('sc-rank').textContent;
+  const link = document.getElementById('ref-link').dataset.link || 'https://trillioneuro.com';
   const text = encodeURIComponent(`I just reserved place ${rank} in history on @trillioneuro — be part of the world's first trillion-euro record. Claim yours free:`);
-  window.open(`https://twitter.com/intent/tweet?text=${text}&url=https://trillioneuro.com`, '_blank');
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, '_blank');
 }
 function copyLink() {
-  navigator.clipboard?.writeText('https://trillioneuro.com').then(() => {
+  const link = document.getElementById('ref-link').dataset.link || 'https://trillioneuro.com';
+  navigator.clipboard?.writeText(link).then(() => {
     const b = document.querySelector('.share-copy');
     const t = b.textContent; b.textContent = 'Copied ✓';
+    setTimeout(() => b.textContent = t, 1500);
+  });
+}
+function copyRef() {
+  const link = document.getElementById('ref-link').dataset.link || document.getElementById('ref-link').textContent;
+  navigator.clipboard?.writeText(link).then(() => {
+    const b = document.querySelector('.ref-box button');
+    const t = b.textContent; b.textContent = 'Copied';
     setTimeout(() => b.textContent = t, 1500);
   });
 }
