@@ -41,8 +41,17 @@
     document.write('\x3Cscript src="https://unpkg.com/@supabase/supabase-js@2">\x3C/script>');
   }
 </script>
+<!-- Fonts as real <link> elements, not an @import inside <style>.
+     @import forces a waterfall — HTML, then this stylesheet, then the font
+     CSS, then the font files — and the entire look of this page rests on the
+     Cormorant Garamond headline. Until it arrived the hero rendered in a
+     fallback serif and then reflowed. preconnect opens the two connections
+     during HTML parse so the request starts immediately instead of fourth
+     in line. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -67,13 +76,14 @@ nav {
 .nav-logo { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; }
 .nav-logo b { color: var(--gold); font-weight: 500; }
 .nav-right { display: flex; align-items: center; gap: 16px; }
-.nav-live { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--mid); }
-.nav-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34,197,94,0.2); animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.nav-live strong { color: var(--text); font-weight: 500; }
+/* Padded to a real target. As a bare text button this measured 70x14 —
+   under half the 44px minimum, and the single most important control above
+   the fold on a phone. Negative right margin keeps it optically flush with
+   the nav edge despite the padding. */
 .nav-btn { font-size: 12px; font-weight: 500; color: var(--gold); background: none;
-  border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+  border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px;
+  margin-right: -4px; }
 .nav-btn:hover { opacity: 0.7; }
 
 /* ── HERO ── */
@@ -220,8 +230,10 @@ nav {
 footer { background: var(--off); border-top: 1px solid var(--line); padding: 40px 20px; text-align: center; }
 .footer-brand { font-size: 14px; font-weight: 500; margin-bottom: 14px; }
 .footer-brand b { color: var(--gold); font-weight: 500; }
-.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
-.footer-links a { font-size: 12px; color: var(--mid); text-decoration: none; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 4px; }
+/* 44px targets. These were ~16px tall, which on a phone means aiming. */
+.footer-links a { font-size: 12px; color: var(--mid); text-decoration: none;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 2px; }
 .footer-links a:hover { color: var(--text); }
 .footer-legal { font-size: 11px; color: var(--faint); line-height: 1.6; max-width: 560px; margin: 0 auto; }
 
@@ -325,12 +337,114 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 .f.invalid input, .f.invalid textarea { border-color:#b3261e; }
 
 @media (max-width:600px){
-  .nav-live{display:none;}
   .stage-grid{grid-template-columns:1fr;}
-  .claim-form input{min-width:0;}
+  /* Stack the claim form rather than squeezing it. Side by side, the input
+     was collapsing to ~168px on a 390px screen — narrow enough that its own
+     placeholder was ellipsised and, once typing started, you could not see
+     the end of your own address. Both controls now get the full width, which
+     is also the better tap target. */
+  .claim-form{flex-direction:column; flex-wrap:nowrap; max-width:360px;}
+  .claim-form input{min-width:0; width:100%;}
+  .claim-form .btn-primary{width:100%;}
 }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;} .hero-video{display:none;} }
 </style>
+<!-- Structured data. The FAQ answers below are copied verbatim from the
+     visible FAQ section — Google treats FAQ markup that does not match
+     on-page content as a violation, and it is the fastest way to lose a
+     rich result. If the section changes, change this too. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://trillioneuro.com/#website",
+      "url": "https://trillioneuro.com/",
+      "name": "Trillioneuro",
+      "description": "A permanent public record of founding members. Free to claim your place.",
+      "inLanguage": "en-IE",
+      "publisher": {
+        "@id": "https://trillioneuro.com/#org"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://trillioneuro.com/#org",
+      "name": "Trillioneuro",
+      "url": "https://trillioneuro.com/",
+      "logo": "https://trillioneuro.com/og-image.png",
+      "areaServed": "Worldwide",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IE"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://trillioneuro.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this a scam?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. We don't ask for payment, passwords, or ID, and founding membership costs nothing to claim. Trillioneuro is a symbolic public record, not a financial product — there's no investment, no return, and nothing to lose by joining."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the catch?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Founding membership is free for your first year. After that, a small €1/year fee keeps your Founder badge active — your entry on the record is permanent regardless of payment. This part is planned but not yet active: nothing is charged automatically, and we'll email you before any payment is ever requested."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can someone take my rank away from me?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Your entry never disappears — but your rank isn't locked in forever. After year one, anyone can bid to challenge your position and push you down. This part is planned, not live yet, and we'll be upfront about it when it launches."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens to my email address?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's used only to confirm your place and contact you about it — never shown publicly, never sold. Full detail in our Privacy Policy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I remove my name later?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — email us any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does sharing my link move me up the ranks?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No — your founder number is your real join order and never changes, which is what lets us promise it's permanent and honest. Sharing your link just lets us credit you for the friends who join through it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who's behind this?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trillioneuro is a trading name registered in Ireland. See our Terms for the full detail on what founding membership does and doesn't entitle you to."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -356,7 +470,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   <p class="hero-free">Free for founding members. No payment. No catch.</p>
   <form class="claim-form" onsubmit="event.preventDefault(); openModal();">
     <label class="visually-hidden" for="hero-email">Your email address</label>
-    <input type="email" id="hero-email" placeholder="Your email — reserve your place" autocomplete="email" inputmode="email" onblur="captureHeroEmail(this.value)">
+    <input type="email" id="hero-email" placeholder="Your email address" autocomplete="email" inputmode="email" onblur="captureHeroEmail(this.value)">
     <button type="submit" class="btn-primary">Claim my name</button>
   </form>
   <p class="hero-foot">Be among the first names ever recorded. The earlier you are, the more it means.</p>
