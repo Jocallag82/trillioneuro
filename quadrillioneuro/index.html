@@ -698,10 +698,34 @@ async function reserve() {
       return;
     }
   } else {
-    // Demo fallback — no backend wired up yet
-    const demoPos = Math.floor(Math.random() * 40) + 1;
-    const demoRef = Math.random().toString(36).slice(2, 8);
-    finishClaim(name, seat, demoPos, demoRef);
+    /* No backend wired up yet — say so, and do not fake a reservation.
+     *
+     * This branch used to invent a queue position with
+     * Math.floor(Math.random() * 40) + 1, invent a referral code with
+     * Math.random(), and hand both to finishClaim() — which shows the success
+     * card reading "<Their Name> — World #1, position #7 in line", prints a
+     * shareable link at /?r=<made-up code>, and sits beside a button that
+     * tweets "I just reserved my place in line for World #1".
+     *
+     * quadrillioneuro.com is routed live in vercel.json, so a real visitor who
+     * filled this in was told they held a place, given a position that came out
+     * of a random number generator, and invited to announce it publicly — while
+     * nothing was stored anywhere, because there is no database behind this
+     * page yet. Their referral link led nowhere either.
+     *
+     * A page with no backend can honestly do one of two things: say it is not
+     * open, or take the address and store it. It cannot confirm a reservation.
+     * Until SUPABASE_URL / SUPABASE_ANON_KEY are filled in at the top of this
+     * file it says it is not open; filling them in restores the real path
+     * above, unchanged.
+     */
+    btn.disabled = false;
+    btn.textContent = 'Reserve my place in line';
+    claimInProgress = false;
+    showError(
+      'Registration isn’t open just yet — nothing has been saved. Check back shortly and you’ll be able to claim a place properly.'
+    );
+    return;
   }
 
   btn.disabled = false; btn.textContent = 'Reserve my place in line';

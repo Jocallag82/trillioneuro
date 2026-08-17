@@ -15,7 +15,7 @@ This repo now serves two domains from one Vercel project, routed by hostname (se
 
 ## Files (trillioneuro.com — repo root)
 - `index.html` — founding member pre-launch page (live now)
-- `record.html` — full public ledger + monument wall (goes live at 1,000 founders)
+- `record.html` — full public ledger + monument wall (goes live at 10,000 founders)
 - `privacy.html` / `terms.html` — legal pages
 - `supabase-setup.sql` — run once in Supabase SQL editor to create the schema
 - `vercel.json` — Vercel routing config for **both** domains

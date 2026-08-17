@@ -71,6 +71,30 @@ create or replace view public.founders_public as
     row_number() over (order by founder_number asc) as rank  -- computed, not stored
   from public.founders;
 
+-- ── ANON PRIVILEGES ─────────────────────────────────────────────────
+-- Supabase grants anon broad table privileges by default and relies on RLS to
+-- gate them. That works — an anon SELECT on founders returns nothing, because
+-- the only policy above is for INSERT — but it makes RLS the single thing
+-- standing between a future config slip and the founder email list.
+--
+-- TRUNCATE is the specific reason to narrow it: unlike SELECT/INSERT/UPDATE/
+-- DELETE, TRUNCATE is NOT subject to row level security, and it was granted to
+-- anon on all three objects.
+--
+-- So: revoke everything, then grant back exactly what index.html uses.
+--   founders          INSERT only — creation goes through reserve_founder()
+--                     (SECURITY DEFINER, needs no anon privilege); the INSERT
+--                     grant keeps the documented RLS backstop usable.
+--   founders_public   SELECT only — it is a read view. It was also granted
+--                     INSERT/UPDATE/DELETE, which failed only because the
+--                     window function makes it non-auto-updatable. Luck, not
+--                     design.
+--   founder_interests INSERT only — the email capture is an upsert with
+--                     ignoreDuplicates, i.e. INSERT ... ON CONFLICT DO NOTHING.
+revoke all on public.founders from anon;
+grant insert on public.founders to anon;
+
+revoke all on public.founders_public from anon;
 grant select on public.founders_public to anon;
 
 -- ── RESERVE FOUNDER (RPC) ────────────────────────────────────────────
@@ -91,7 +115,26 @@ create or replace function public.reserve_founder(
   p_name text, p_email text, p_message text default null,
   p_country text default null, p_ref_in text default null
 ) returns table(founder_number bigint, ref_code text, referral_count bigint)
-language plpgsql security definer as $$
+language plpgsql security definer
+-- search_path is pinned, and it is not optional here.
+--
+-- This function is SECURITY DEFINER by design: it is the only way a founder
+-- row is created, so anon never needs write access to public.founders itself.
+-- But a DEFINER function with a caller-influenced search_path is the classic
+-- privilege-escalation shape — anything the body references unqualified can be
+-- shadowed by an object in a schema that resolves earlier, and that shadowed
+-- code then runs with the owner's rights.
+--
+-- The earlier FOUR-argument version of this function did have search_path set.
+-- When p_ref_in was added, `create or replace` with a new signature created a
+-- second function rather than replacing the first, and the new one — the one
+-- index.html actually calls — inherited nothing. Supabase's linter flags it as
+-- 0011_function_search_path_mutable. The stale 4-arg overload is dropped just
+-- below, so there is one anon-callable entry point rather than two.
+--
+-- pg_temp is pinned last so a temp object cannot take precedence either.
+set search_path = public, pg_temp
+as $$
 declare
   v_founder_number bigint;
   v_ref_code text;
@@ -119,6 +162,18 @@ end;
 $$;
 
 grant execute on function public.reserve_founder(text,text,text,text,text) to anon;
+
+-- Retire the pre-referral overload.
+--
+-- `create or replace` above only replaces a function with a MATCHING argument
+-- list, so adding p_ref_in left the old four-argument version in place and
+-- still granted to anon. Two live entry points, and the older one writes a
+-- founder row without recording who referred them — so referral counts could
+-- be bypassed by calling the RPC directly with four arguments.
+--
+-- Safe to drop: index.html sends all five named arguments, and it is the only
+-- caller in the repo.
+drop function if exists public.reserve_founder(text,text,text,text);
 
 -- ════════════════════════════════════════════════════════════════════
 --  THAT'S IT. The launch page can now reserve founders and read the count.
@@ -174,3 +229,8 @@ CREATE TABLE IF NOT EXISTS founder_interests (
 );
 ALTER TABLE founder_interests ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "anon_insert" ON founder_interests FOR INSERT TO anon WITH CHECK (true);
+
+-- Same narrowing as founders above: anon needs INSERT and nothing else. These
+-- are captured email addresses, and TRUNCATE is not covered by RLS.
+revoke all on public.founder_interests from anon;
+grant insert on public.founder_interests to anon;
