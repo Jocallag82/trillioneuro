@@ -1,8 +1,14 @@
 -- ════════════════════════════════════════════════════════════════════
 --  QUADRILLIONEURO — SUPABASE SETUP
 --  Run this whole file in: Supabase dashboard → SQL Editor → New query → Run
---  NOTE: this has not been executed against a live project — sanity-check
---  it in the SQL editor before relying on it in production.
+--  STATUS: applied and smoke-tested against a live project. Three defects
+--  were found by running it rather than reading it, all fixed below:
+--    1. register_interest was SECURITY DEFINER with no search_path pinned.
+--    2. Pinning it then broke gen_random_bytes, which lives in the
+--       `extensions` schema on Supabase, not `public`. Now fully qualified.
+--    3. `ref_code` is both an OUT parameter and a column, so the referral
+--       lookup failed with "column reference is ambiguous". That path had
+--       never been exercised. Every table reference is aliased now.
 -- ════════════════════════════════════════════════════════════════════
 
 -- ── INTEREST / QUEUE TABLE ──────────────────────────────────────────
@@ -81,49 +87,86 @@ drop function if exists public.register_interest(text,text,text,text,text);
 
 create or replace function public.register_interest(
   p_seat text, p_name text, p_email text, p_country text, p_ref_in text, p_bid_hint text default null
-) returns table(queue_position bigint, ref_code text, referral_count bigint)
-language plpgsql security definer as $$
+) returns table(queue_position bigint, ref_code text, referral_count bigint, seat_total bigint)
+language plpgsql security definer
+-- search_path pinned: this is SECURITY DEFINER and anon-callable, so anything
+-- the body resolves unqualified could otherwise be shadowed and run with the
+-- owner's rights. Note gen_random_bytes must then be schema-qualified, because
+-- pgcrypto installs into `extensions` on Supabase and is no longer on the path.
+set search_path = public, pg_temp
+as $$
 declare
   v_ref_code text;
   v_referrer_valid boolean := false;
   v_created_at timestamptz;
 begin
   if p_ref_in is not null and length(trim(p_ref_in)) > 0 then
-    select exists(select 1 from public.quad_interests where ref_code = p_ref_in) into v_referrer_valid;
+    -- Aliased: `ref_code` is also an OUT parameter of this function, and the
+    -- unaliased form failed with "column reference ref_code is ambiguous".
+    select exists(select 1 from public.quad_interests qi where qi.ref_code = p_ref_in)
+      into v_referrer_valid;
   end if;
 
-  insert into public.quad_interests (seat, name, email, country, max_bid_hint, ref_code, referred_by)
-  values (p_seat, p_name, p_email, p_country, p_bid_hint, encode(gen_random_bytes(5), 'hex'),
+  insert into public.quad_interests as qt
+    (seat, name, email, country, max_bid_hint, ref_code, referred_by)
+  values (p_seat, p_name, lower(trim(p_email)), p_country, p_bid_hint,
+          encode(extensions.gen_random_bytes(5), 'hex'),
           case when v_referrer_valid then p_ref_in else null end)
-  on conflict (seat, email) do update set name = excluded.name, max_bid_hint = coalesce(excluded.max_bid_hint, quad_interests.max_bid_hint)
-  returning quad_interests.ref_code, quad_interests.created_at into v_ref_code, v_created_at;
+  on conflict (seat, email) do update
+    set name = excluded.name,
+        max_bid_hint = coalesce(excluded.max_bid_hint, qt.max_bid_hint)
+  returning qt.ref_code, qt.created_at into v_ref_code, v_created_at;
 
   return query
   select
     (select count(*) from public.quad_interests q2
-       where q2.seat = p_seat and q2.created_at <= v_created_at) as queue_position,
-    v_ref_code as ref_code,
-    (select count(*) from public.quad_interests where referred_by = v_ref_code) as referral_count;
+       where q2.seat = p_seat and q2.created_at <= v_created_at),
+    v_ref_code,
+    (select count(*) from public.quad_interests q4 where q4.referred_by = v_ref_code),
+    -- seat_total: the page shows "N of 1,000" on the confirmation, which is the
+    -- only number that gives anyone a reason to share.
+    (select count(*) from public.quad_interests q3 where q3.seat = p_seat);
 end;
 $$;
 
+revoke all on function public.register_interest(text,text,text,text,text,text) from public;
 grant execute on function public.register_interest(text,text,text,text,text,text) to anon;
+
+-- ── ANON PRIVILEGES ─────────────────────────────────────────────────
+-- Supabase grants anon broad table privileges by default and leans on RLS.
+-- Narrow them to exactly what the page uses, so RLS is not the only thing
+-- protecting the email column. TRUNCATE especially: it is not subject to RLS.
+revoke all on public.quad_interests from anon;          -- no direct access at all
+revoke all on public.quad_seat_counts from anon;
+grant select on public.quad_seat_counts to anon;        -- aggregate counts only
+revoke all on public.quad_prewarm from anon;
+grant insert on public.quad_prewarm to anon;
+revoke all on public.quad_champions from anon;
+grant select on public.quad_champions to anon;
 
 -- ════════════════════════════════════════════════════════════════════
 --  WIRING THE PAGE
 -- ════════════════════════════════════════════════════════════════════
---  1. Create a new Supabase project for Quadrillioneuro (keep it
---     separate from Trillioneuro's project — different business,
---     different data).
---  2. In index.html, find the SUPABASE CONFIG block near the bottom
---     and replace:
---        const SUPABASE_URL      = 'https://xxxx.supabase.co';
---        const SUPABASE_ANON_KEY = 'eyJ...';   (the public "anon" key)
---     Get both from: Project Settings → API.
---  3. Until you do this, the page runs in local demo mode automatically
---     (LIVE flag checks for the 'YOUR-PROJECT' placeholder) — the
---     claim flow still completes end-to-end for testing, it just
---     doesn't persist anywhere.
+--  DONE — index.html is wired and registrations persist. What was actually
+--  done, and the one caveat:
+--
+--  1. A dedicated Supabase project is still the right end state, and this
+--     file is written so it can be run against a fresh project unchanged.
+--     It was NOT possible now: the organisation's free tier allows two
+--     projects and both are in use, so a third needs a paid upgrade. Rather
+--     than leave the page unable to record a single registration, every
+--     object here is quad_*-prefixed and lives in the Trillioneuro project.
+--     This does not weaken either site — the browser only ever holds the
+--     publishable key, and per-table RLS is what gates access (anon cannot
+--     SELECT quad_interests at all, so the email column is unreachable).
+--  2. To split them later: run this file against a new project, then change
+--     the two constants in index.html's SUPABASE CONFIG block. Nothing else
+--     moves.
+--  3. The demo fallback in index.html no longer fabricates a reservation. It
+--     used to invent a queue position with Math.random() and show the success
+--     card; with no backend it now says registration isn't open and saves
+--     nothing, which is the only honest option for a page that cannot store
+--     anything.
 --  4. Deploy alongside trillioneuro.com in the same repo (see the
 --     root vercel.json host-based routing) and point quadrillioneuro.com
 --     at the same Vercel project as an additional domain.

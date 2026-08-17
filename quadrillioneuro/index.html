@@ -168,6 +168,21 @@ nav {
 .seat-status b { color: var(--gold); font-weight: 500; }
 .seat-cta { font-size: 12px; font-weight: 500; color: var(--gold); }
 
+/* ── SEAT PROGRESS ──
+   Every seat used to read "Registration: early", which is not a fact about
+   anything. The 1,000-registration threshold is the entire engine of this
+   product — it decides when a seat can be bid on — and it was invisible, so
+   there was no reason to register today rather than next month, and no reason
+   to tell anyone. These render the real count. */
+.seat-track { height: 3px; background: rgba(236,232,221,0.08); border-radius: 2px; overflow: hidden; margin-bottom: 12px; }
+.seat-fill { height: 100%; width: 0; border-radius: 2px;
+  background: linear-gradient(90deg, rgba(212,175,55,0.5), var(--gold));
+  transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+.seat-card.leading { border-color: rgba(212,175,55,0.55); }
+.seat-lead-tag { display: inline-block; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(212,175,55,0.35); border-radius: 100px;
+  padding: 2px 8px; margin-bottom: 10px; }
+
 /* ── HOW / STAGES ── */
 .stages { max-width: 1000px; margin: 0 auto; padding: 80px 24px; border-top: 1px solid var(--line); }
 .stages-head { text-align: center; margin-bottom: 56px; }
@@ -279,6 +294,12 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 .share-card .sc-rank { font-size:14px; color:rgba(236,232,221,0.6); position:relative; }
 .share-card .sc-rank b { color:var(--gold); font-weight:500; }
 .share-card .sc-brand { font-size:11px; color:rgba(236,232,221,0.4); margin-top:16px; position:relative; }
+/* Seat state on the confirmation — the shortfall to the threshold, which is
+   the only number that makes sharing worth doing. */
+.sc-progress { font-size:13.5px; line-height:1.6; color:rgba(236,232,221,0.72);
+  background:var(--gold-bg); border:1px solid rgba(212,175,55,0.22);
+  border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+.sc-progress b { color:var(--gold); font-weight:500; }
 .modal-ok h3 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; margin-bottom:8px; color: var(--plat); }
 .modal-ok > p { font-size:14px; color:var(--mid); line-height:1.6; margin-bottom:16px; }
 .ref-box { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 12px;
@@ -385,15 +406,16 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
     <div class="seat-card world" onclick="openModal('WORLD')">
       <span class="seat-flag">🌍</span>
       <div class="seat-name">World #1</div>
-      <div class="seat-status">Registration: <b>early</b></div>
+      <div class="seat-status" data-seat-status="WORLD">Registration open</div>
+      <div class="seat-track"><div class="seat-fill" data-seat-fill="WORLD"></div></div>
       <div class="seat-cta">Register interest →</div>
     </div>
-    <div class="seat-card" onclick="openModal('IE')"><span class="seat-flag">🇮🇪</span><div class="seat-name">Ireland #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
-    <div class="seat-card" onclick="openModal('US')"><span class="seat-flag">🇺🇸</span><div class="seat-name">United States #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
-    <div class="seat-card" onclick="openModal('GB')"><span class="seat-flag">🇬🇧</span><div class="seat-name">United Kingdom #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
-    <div class="seat-card" onclick="openModal('DE')"><span class="seat-flag">🇩🇪</span><div class="seat-name">Germany #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
-    <div class="seat-card" onclick="openModal('AU')"><span class="seat-flag">🇦🇺</span><div class="seat-name">Australia #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
-    <div class="seat-card" onclick="openModal('CA')"><span class="seat-flag">🇨🇦</span><div class="seat-name">Canada #1</div><div class="seat-status">Registration: <b>early</b></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('IE')"><span class="seat-flag">🇮🇪</span><div class="seat-name">Ireland #1</div><div class="seat-status" data-seat-status="IE">Registration open</div><div class="seat-track"><div class="seat-fill" data-seat-fill="IE"></div></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('US')"><span class="seat-flag">🇺🇸</span><div class="seat-name">United States #1</div><div class="seat-status" data-seat-status="US">Registration open</div><div class="seat-track"><div class="seat-fill" data-seat-fill="US"></div></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('GB')"><span class="seat-flag">🇬🇧</span><div class="seat-name">United Kingdom #1</div><div class="seat-status" data-seat-status="GB">Registration open</div><div class="seat-track"><div class="seat-fill" data-seat-fill="GB"></div></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('DE')"><span class="seat-flag">🇩🇪</span><div class="seat-name">Germany #1</div><div class="seat-status" data-seat-status="DE">Registration open</div><div class="seat-track"><div class="seat-fill" data-seat-fill="DE"></div></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('AU')"><span class="seat-flag">🇦🇺</span><div class="seat-name">Australia #1</div><div class="seat-status" data-seat-status="AU">Registration open</div><div class="seat-track"><div class="seat-fill" data-seat-fill="AU"></div></div><div class="seat-cta">Register interest →</div></div>
+    <div class="seat-card" onclick="openModal('CA')"><span class="seat-flag">🇨🇦</span><div class="seat-name">Canada #1</div><div class="seat-status" data-seat-status="CA">Registration open</div><div class="seat-track"><div class="seat-fill" data-seat-fill="CA"></div></div><div class="seat-cta">Register interest →</div></div>
     <div class="seat-card" onclick="openModal('OTHER')"><span class="seat-flag">✦</span><div class="seat-name">Your country</div><div class="seat-status">Not listed? <b>Still counts</b></div><div class="seat-cta">Register interest →</div></div>
   </div>
 </div>
@@ -521,7 +543,17 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
         <div class="sc-brand">quadrillioneuro.com</div>
       </div>
       <h3>You're in line.</h3>
-      <p>Every friend who registers through your link moves you up — and gets their own place in line for free.</p>
+      <!-- Live seat state, filled by finishClaim(). -->
+      <p class="sc-progress" id="sc-progress"></p>
+      <!-- This read "Every friend who registers through your link moves you up".
+           It does not. queue_position is computed purely from created_at — the
+           order people arrived — and referrals are recorded in referred_by
+           without ever affecting it. Trillioneuro's schema is explicit that
+           referrals are "attribution-only: they never change founder_number or
+           immutable join order", and the same is true here.
+           The real effect of a referral is better anyway: it brings the seat
+           closer to the threshold that lets anyone bid at all. -->
+      <p>Referrals don't move you up the line — the order is fixed by when you registered, permanently. What they do is bring this seat closer to opening.</p>
       <div class="ref-box">
         <code id="ref-link">quadrillioneuro.com/?r=…</code>
         <button onclick="copyRef()">Copy</button>
@@ -536,12 +568,28 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 
 <script>
 /* ════════════════════════════════════════════════════════════
-   SUPABASE CONFIG — replace with your own project before launch
-   (see supabase-setup.sql for the schema + step-by-step wiring).
-   Until replaced, the page runs in local demo mode automatically.
+   SUPABASE CONFIG
+
+   The publishable key is meant to ship in the browser — it can only do
+   what row level security allows, and every quad_* table is scoped so
+   anon can INSERT a registration and read aggregate seat counts, never
+   read an email address.
+
+   NOTE ON THE PROJECT: supabase-setup.sql and the README both ask for a
+   Supabase project of its own, separate from Trillioneuro's. That is the
+   better architecture and the tables are all quad_*-prefixed so the move
+   is easy — but the organisation's free tier allows two projects and both
+   are already in use, so a dedicated project needs a paid upgrade. Rather
+   than leave the site unable to record a single registration, the tables
+   live in the Trillioneuro project for now.
+
+   This does not weaken either site: the browser only ever holds this
+   publishable key, and per-table RLS is what actually gates access. To
+   split them later, run supabase-setup.sql against a new project and
+   change the two constants below. Nothing else in this file needs to move.
    ════════════════════════════════════════════════════════════ */
-const SUPABASE_URL = 'https://YOUR-PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR-ANON-KEY';
+const SUPABASE_URL = 'https://kxzywyflylkcqoidiqmo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
 
 let sb = null;
 const LIVE = SUPABASE_URL.indexOf('YOUR-PROJECT') === -1;
@@ -556,6 +604,71 @@ initSb();
 /* ── REVEALS ── */
 const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ══════════════════════════════════════════════════════════════════
+   SEAT PROGRESS
+
+   The threshold is the product. Bidding opens on a seat once this many
+   people register interest in it, so this number is the difference
+   between "some day" and "we are 312 away". Every card previously read
+   "Registration: early", which states nothing, gives no reason to
+   register today rather than next month, and gives no reason at all to
+   tell anyone else.
+
+   Read from quad_seat_counts, which is an aggregate view — seat and a
+   count, no names and no email addresses. That is the only thing anon
+   is allowed to select, deliberately.
+   ══════════════════════════════════════════════════════════════════ */
+const THRESHOLD = 1000;
+let seatCounts = {};
+
+function seatCopy(n) {
+  if (n >= THRESHOLD) return 'Threshold met — <b>bidding opens</b>';
+  if (n === 0) return 'No one registered yet — <b>be first</b>';
+  const left = THRESHOLD - n;
+  return `<b>${n.toLocaleString()}</b> registered · ${left.toLocaleString()} to open`;
+}
+
+function paintSeats() {
+  let leader = null, leaderN = 0;
+  document.querySelectorAll('[data-seat-status]').forEach(el => {
+    const seat = el.dataset.seatStatus;
+    const n = seatCounts[seat] || 0;
+    el.innerHTML = seatCopy(n);
+    const fill = document.querySelector(`[data-seat-fill="${seat}"]`);
+    if (fill) fill.style.width = Math.min(n / THRESHOLD * 100, 100) + '%';
+    if (n > leaderN) { leaderN = n; leader = seat; }
+  });
+
+  // Mark whichever seat is closest to opening. With everything at zero there
+  // is no leader, and claiming one would be inventing a race that has not
+  // started.
+  document.querySelectorAll('.seat-card.leading').forEach(c => c.classList.remove('leading'));
+  document.querySelectorAll('.seat-lead-tag').forEach(t => t.remove());
+  if (leader && leaderN > 0) {
+    const el = document.querySelector(`[data-seat-status="${leader}"]`);
+    const card = el && el.closest('.seat-card');
+    if (card) {
+      card.classList.add('leading');
+      const tag = document.createElement('span');
+      tag.className = 'seat-lead-tag';
+      tag.textContent = 'Closest to opening';
+      card.insertBefore(tag, card.querySelector('.seat-name'));
+    }
+  }
+}
+
+async function loadSeatCounts() {
+  if (!initSb()) { paintSeats(); return; }
+  try {
+    const { data, error } = await sb.from('quad_seat_counts').select('seat, registered');
+    if (error || !Array.isArray(data)) { paintSeats(); return; }
+    seatCounts = {};
+    data.forEach(r => { seatCounts[r.seat] = Number(r.registered) || 0; });
+  } catch { /* leave counts empty — the copy handles zero honestly */ }
+  paintSeats();
+}
+loadSeatCounts();
 
 /* ── REFERRAL CAPTURE ── */
 const params = new URLSearchParams(location.search);
@@ -690,7 +803,11 @@ async function reserve() {
         return;
       }
       const row = Array.isArray(data) ? data[0] : data;
-      finishClaim(name, seat, row?.queue_position, row?.ref_code);
+      // seat_total comes back from the RPC so the confirmation can state where
+      // the seat now stands. Also folded into the local cache so the seat grid
+      // updates behind the modal without another round trip.
+      if (row?.seat_total != null) { seatCounts[seat] = Number(row.seat_total); paintSeats(); }
+      finishClaim(name, seat, row?.queue_position, row?.ref_code, row?.seat_total);
     } catch (e) {
       btn.disabled = false; btn.textContent = 'Reserve my place in line';
       claimInProgress = false;
@@ -733,11 +850,33 @@ async function reserve() {
 
 function seatLabel(seat) { return seat === 'WORLD' ? 'World #1' : (seat + ' #1'); }
 
-function finishClaim(name, seat, position, refCode) {
+/* Tracks the last confirmed seat so the share text can name it and say how far
+   off opening it is. */
+let lastClaim = { seat: null, total: 0 };
+
+function finishClaim(name, seat, position, refCode, seatTotal) {
   clearError();
   document.getElementById('sc-name').textContent = name;
   document.getElementById('sc-seat').textContent = seatLabel(seat);
   document.getElementById('sc-rank').textContent = position ? '#' + Number(position).toLocaleString() : '—';
+
+  const total = Number(seatTotal) || seatCounts[seat] || 0;
+  lastClaim = { seat, total };
+
+  // State of the seat, on the confirmation.
+  //
+  // "You're #7 in line" on its own invites the obvious question — in line for
+  // what, and when? The answer is the threshold, so it goes here: how many are
+  // registered and how many are still needed before this seat can be bid on.
+  // It is also the only honest reason to share, which the next block uses.
+  const prog = document.getElementById('sc-progress');
+  if (prog) {
+    const left = Math.max(THRESHOLD - total, 0);
+    prog.innerHTML = left === 0
+      ? `<b>${seatLabel(seat)}</b> has passed ${THRESHOLD.toLocaleString()} registrations — bidding opens on this seat.`
+      : `<b>${seatLabel(seat)}</b> now has <b>${total.toLocaleString()}</b> of the ${THRESHOLD.toLocaleString()} registrations needed before bidding can open. <b>${left.toLocaleString()}</b> to go.`;
+  }
+
   const link = 'https://quadrillioneuro.com/?r=' + (refCode || '');
   document.getElementById('ref-link').textContent = link;
   document.getElementById('ref-link').dataset.link = link;
@@ -747,11 +886,25 @@ function finishClaim(name, seat, position, refCode) {
 }
 
 /* ── SHARE ── */
+/* Share text asks for the one thing that actually helps.
+ *
+ * It used to read "I just reserved my place in line for World #1" — a boast,
+ * with nothing in it for the person reading. Worse, when the page had no
+ * backend it was a boast about a reservation that did not exist.
+ *
+ * A seat opens for bidding at THRESHOLD registrations, so recruiting people to
+ * your seat is not a favour to us — it is the only way the thing you just
+ * registered for ever happens. Naming the shortfall makes that legible and
+ * gives the reader a reason to act rather than just be impressed. */
 function shareX() {
-  const name = document.getElementById('sc-name').textContent;
-  const seat = document.getElementById('sc-seat').textContent;
+  const seatName = document.getElementById('sc-seat').textContent;
   const link = document.getElementById('ref-link').dataset.link || 'https://quadrillioneuro.com';
-  const text = encodeURIComponent(`I just reserved my place in line for ${seat} on @quadrillioneuro — the auction for the top of history. Free to register:`);
+  const left = Math.max(THRESHOLD - (lastClaim.total || 0), 0);
+  const text = encodeURIComponent(
+    left > 0
+      ? `I've registered for ${seatName} on @quadrillioneuro. It only opens for bidding once ${THRESHOLD.toLocaleString()} people register that seat — ${left.toLocaleString()} to go. Free, no card:`
+      : `${seatName} on @quadrillioneuro has hit the ${THRESHOLD.toLocaleString()} registrations needed — bidding opens. Free to register:`
+  );
   window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, '_blank');
 }
 function copyLink() {
