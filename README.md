@@ -50,6 +50,38 @@ the business.
 Media (`hero-bg.webm`/`.mp4`, `hero-poster.jpg`, `og-image.png`) is duplicated in both
 locations because host routing serves each site from its own folder.
 
+## Routing (`vercel.json`)
+
+JSON has no comments and **Vercel rejects any unknown property in a route object**,
+which fails the deployment at schema validation *before the build starts* — producing an
+error with no build logs at all. So the reasoning lives here instead, and
+`node scripts/check-vercel-json.mjs` guards it.
+
+The file uses the legacy `routes` key rather than `rewrites`/`redirects`/`headers`/`cleanUrls`.
+That is deliberate and is the crux of the whole setup: **`routes` is the only routing
+property evaluated *before* the filesystem.** `rewrites` run *after* it, so on
+quadrillioneuro.com a request for `/privacy` would be answered by the root (Trillioneuro)
+`privacy.html` before any rewrite could redirect it — silently serving the wrong brand's
+legal page. Vercel also refuses to combine the two styles, so this file commits to one.
+
+Route groups, in order:
+
+1. **Security headers**, then **immutable media caching** — both `continue: true`, so they
+   add headers and keep routing instead of swallowing the host rules below.
+2. **`www` → apex**, both domains. Both `www` hosts are attached to the project and were
+   serving complete duplicate copies of each site while every canonical tag pointed at the
+   apex.
+3. **`trillioneuro.com/quadrillioneuro/*` → `quadrillioneuro.com`.** The sister site's files
+   physically live in that folder, so the whole of it was reachable — and indexable — on the
+   wrong domain.
+4. **quadrillioneuro.com → `/quadrillioneuro/`.** The catch-all is
+   `/((?!_vercel/).*)`; without that exclusion it rewrote `/_vercel/insights/script.js` into
+   a path that does not exist, which would have left analytics silently dead on that domain
+   only.
+5. **Clean URLs for trillioneuro.com**, then `.html` → extensionless `308`s. Internal links
+   used `.html` while `sitemap.xml` listed the extensionless form: a redirect hop per click
+   and two URLs per page for search engines.
+
 ## Setup / operations
 
 1. Run `supabase-setup.sql` in the Supabase SQL editor. It is safe to re-run against the

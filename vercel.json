@@ -1,9 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-
   "routes": [
     {
-      "//": "Security headers on every response. `continue: true` means this rule adds headers and then keeps routing, so it does not swallow the host rules below. Kept in `routes` rather than the top-level `headers` key on purpose: `routes` is the only routing property that is evaluated BEFORE the filesystem, and host-based folder routing depends on that. `rewrites` run after the filesystem, so on quadrillioneuro.com a request for /privacy would be answered by the root (Trillioneuro) privacy.html before any rewrite could redirect it — silently serving the wrong brand's legal page. Mixing the two styles is also rejected by Vercel, so this file commits to one.",
       "src": "/(.*)",
       "headers": {
         "X-Content-Type-Options": "nosniff",
@@ -15,14 +13,12 @@
       "continue": true
     },
     {
-      "//": "Long-lived cache for the immutable media. hero-bg.mp4 alone is 1.5MB and was being revalidated on every visit.",
       "src": "/(.*)\\.(webm|mp4|jpg|jpeg|png|ico|woff2)",
       "headers": { "Cache-Control": "public, max-age=31536000, immutable" },
       "continue": true
     },
 
     {
-      "//": "Canonicalise to the apex host. Both www variants are attached to this project and previously served a full duplicate of each site, while every canonical tag points at the apex — two indexable copies of the same page competing with each other.",
       "src": "/(.*)",
       "has": [{ "type": "host", "value": "www.trillioneuro.com" }],
       "headers": { "Location": "https://trillioneuro.com/$1" },
@@ -36,8 +32,7 @@
     },
 
     {
-      "//": "Quadrillioneuro's files are physically under /quadrillioneuro/, so they were ALSO reachable at trillioneuro.com/quadrillioneuro/* — a second indexable copy of the whole sister site on the wrong domain, with canonical tags pointing at quadrillioneuro.com. Send those to the real host.",
-      "src": "/quadrillioneuro/?$",
+      "src": "/quadrillioneuro/?",
       "has": [{ "type": "host", "value": "trillioneuro.com" }],
       "headers": { "Location": "https://quadrillioneuro.com/" },
       "status": 308
@@ -49,32 +44,21 @@
       "status": 308
     },
 
-    {
-      "//": "── quadrillioneuro.com → /quadrillioneuro/ ──",
-      "src": "/",
-      "has": [{ "type": "host", "value": "quadrillioneuro.com" }],
-      "dest": "/quadrillioneuro/index.html"
-    },
+    { "src": "/",           "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/index.html" },
     { "src": "/auction/?",  "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/auction.html" },
     { "src": "/privacy/?",  "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/privacy.html" },
     { "src": "/terms/?",    "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/terms.html" },
     {
-      "//": "Catch-all for the quad host, with /_vercel/ excluded. Without that exclusion this rule rewrote /_vercel/insights/script.js to /quadrillioneuro/_vercel/insights/script.js, which does not exist — analytics and Speed Insights would have been silently dead on quadrillioneuro.com only, the hardest kind of gap to notice.",
       "src": "/((?!_vercel/).*)",
       "has": [{ "type": "host", "value": "quadrillioneuro.com" }],
       "dest": "/quadrillioneuro/$1"
     },
 
-    {
-      "//": "── trillioneuro.com clean URLs ── Explicit rather than via `cleanUrls`, which cannot be combined with `routes`.",
-      "src": "/record/?",  "dest": "/record.html"
-    },
+    { "src": "/record/?",  "dest": "/record.html" },
     { "src": "/privacy/?", "dest": "/privacy.html" },
     { "src": "/terms/?",   "dest": "/terms.html" },
-    {
-      "//": "Retire the .html URLs: they were the only form used by internal links, while sitemap.xml listed the extensionless form — so every internal click was an extra redirect hop and search engines saw two URLs per page.",
-      "src": "/record\\.html",  "headers": { "Location": "/record" },  "status": 308
-    },
+
+    { "src": "/record\\.html",  "headers": { "Location": "/record" },  "status": 308 },
     { "src": "/privacy\\.html", "headers": { "Location": "/privacy" }, "status": 308 },
     { "src": "/terms\\.html",   "headers": { "Location": "/terms" },   "status": 308 },
     { "src": "/index\\.html",   "headers": { "Location": "/" },        "status": 308 }
