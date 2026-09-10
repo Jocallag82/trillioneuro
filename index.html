@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Primary SEO -->
-<title>Trillioneuro — Claim Your Place in History, Free</title>
-<meta name="description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members — your name, your country, recorded forever. Be among the first.">
+<title>Trillioneuro — Claim Your Number on the Permanent Public List</title>
+<meta name="description" content="One public list, kept in the order people joined. Claim your name and it holds that number permanently. Free — no card, no payment. The earlier you join, the lower your number.">
 <meta name="keywords" content="trillioneuro, be part of history, public record, founding member, leaderboard, trillion euro">
 <meta name="author" content="Trillioneuro">
 <meta name="robots" content="index, follow">
@@ -16,8 +16,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Trillioneuro">
 <meta property="og:url" content="https://trillioneuro.com/">
-<meta property="og:title" content="Be Part of History — Claim Your Place, Free">
-<meta property="og:description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members. The earlier you are, the more it means.">
+<meta property="og:title" content="Claim Your Number on the List — Free">
+<meta property="og:description" content="One public list, kept in join order. Your name holds its number permanently. Free — and #1 can only ever belong to one person.">
 <meta property="og:image" content="https://trillioneuro.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -26,14 +26,25 @@
 <!-- Twitter / X Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@trillioneuro">
-<meta name="twitter:title" content="Be Part of History — Claim Your Place, Free">
-<meta name="twitter:description" content="Reserve your permanent place on the world's first trillion-euro public record. Free for founding members.">
+<meta name="twitter:title" content="Claim Your Number on the List — Free">
+<meta name="twitter:description" content="One public list, kept in join order. Your name holds its number permanently. Free.">
 <meta name="twitter:image" content="https://trillioneuro.com/og-image.png">
 
 <!-- Favicon (inline gold € — URL-encoded so it never breaks parsing) -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#0a0a0a">
 
+<!-- Vercel Web Analytics + Speed Insights.
+     Neither site had any measurement of any kind: no pageviews, no funnel,
+     no Core Web Vitals. With one signup in three months the open question
+     is *where* people are dropping out — landing without scrolling, opening
+     the form and abandoning it, or never arriving at all — and none of those
+     could be told apart. Both scripts are first-party (served from
+     /_vercel/*, no third-party host, no cookie banner needed as they set no
+     cookies and do not fingerprint) and are already included in the Vercel
+     plan this project is on. -->
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 <!-- Supabase library, with fallback CDN if the first is unreachable -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -421,7 +432,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
           "name": "Can I remove my name later?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes — email us any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history."
+            "text": "Yes — email privacy@trillioneuro.com any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history."
           }
         },
         {
@@ -463,17 +474,19 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
     <source src="hero-bg.mp4" type="video/mp4">
   </video>
   <div class="badge-founding">✦ Founding Member — Free</div>
-  <h1>Be part of<br><i>history.</i></h1>
+  <h1>Get your name<br><i>on the list.</i></h1>
   <p class="hero-sub">
-    Claim your name on the world's first trillion-euro public record. Permanent. Global. Yours.
+    Trillioneuro is one public list, kept in the exact order people joined it.
+    Add your name and it holds that number permanently — <b>#1</b> can only ever
+    belong to one person.
   </p>
-  <p class="hero-free">Free for founding members. No payment. No catch.</p>
+  <p class="hero-free">Free. No card, no payment, nothing to buy.</p>
   <form class="claim-form" onsubmit="event.preventDefault(); openModal();">
     <label class="visually-hidden" for="hero-email">Your email address</label>
     <input type="email" id="hero-email" placeholder="Your email address" autocomplete="email" inputmode="email" onblur="captureHeroEmail(this.value)">
     <button type="submit" class="btn-primary">Claim my name</button>
   </form>
-  <p class="hero-foot">Be among the first names ever recorded. The earlier you are, the more it means.</p>
+  <p class="hero-foot">Every name added takes the next number. The earlier you are, the lower it is — forever.</p>
   <div class="hero-rule"></div>
 </section>
 
@@ -481,7 +494,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <div class="countdown reveal">
   <div class="countdown-label">Be among the first</div>
   <div class="threshold-statement">The first names<br><i>in history.</i></div>
-  <p class="countdown-sub">We open the record to the world once <b>10,000 founders</b> have claimed their place. Until then, every name added is among the very first ever recorded — and the earlier you are, the more it means.</p>
+  <p class="countdown-sub">The full record opens publicly once <b>10,000 names</b> are on it. Until then every name added takes one of the first numbers — and those are the only ones that can never be beaten.</p>
 </div>
 
 <!-- PROGRESS (hidden until real founder numbers build — re-enable later) -->
@@ -502,7 +515,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <div class="stages reveal" id="how-it-works">
   <div class="stages-head">
     <h2>How your place <i>works</i></h2>
-    <p>Your entry in the record is forever. Your rank on it is not. Here's the honest deal.</p>
+    <p>Three facts, including the ones most sites would bury. Nothing here costs anything today.</p>
   </div>
   <div class="stage-grid">
     <div class="stage">
@@ -511,14 +524,14 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
       <p>Reserve your permanent entry as a Founding Member. Add your name, an optional message, and your country. Completely free for your first year — no card, no catch.</p>
     </div>
     <div class="stage">
-      <span class="stage-tag soon">After year one</span>
-      <h3>Keep it <span class="price">€1/yr</span></h3>
-      <p>A small €1-a-year fee keeps your verified Founder badge active. Your entry — your name, your founder number, the fact you were here — is never removed, paid or not. The badge is what depends on staying current.</p>
+      <span class="stage-tag now">Immediately</span>
+      <h3>Your number is yours</h3>
+      <p>You get the next number on the list and it never changes hands. Not by paying, not by referring anyone, not by us deciding otherwise — the order is simply when you arrived. That is the only thing this record promises, and the reason it is worth anything.</p>
     </div>
     <div class="stage">
-      <span class="stage-tag soon">Coming later</span>
-      <h3>Defend your rank</h3>
-      <p>No rank is safe forever. After year one, anyone can bid to challenge your position and push you down — and whoever was below you gets pushed too. It's an ongoing war for placement. Only your entry in the record is untouchable; your rank is yours to defend.</p>
+      <span class="stage-tag soon">Later, and openly</span>
+      <h3>What changes, what doesn't</h3>
+      <p>Two things are planned and neither is active yet: a €1/year fee to keep the verified Founder badge after year one, and the option to bid for a higher <i>display position</i>. Your name, your number and your place in the order are never affected by either, paid or not. Nothing is ever charged without asking you first.</p>
     </div>
   </div>
 </div>
@@ -526,8 +539,8 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <!-- ABOUT -->
 <div class="about-band reveal" id="about">
   <h2>What this <i>actually is.</i></h2>
-  <p>Trillioneuro is a permanent public record — one page, one ledger, one name at a time. No token, no investment, no promise of return. Your entry — your name, your founder number, the fact you were here — can't be edited or erased once it's yours. Your rank on the leaderboard is a different promise: after year one, it's yours to defend, not yours to keep unchallenged.</p>
-  <p>Founding membership is free for your first year. After that, a small €1/year fee keeps your Founder badge active — your entry on the record is permanent regardless. That's the cost of the badge — no hidden tiers, no upsell. Bidding to defend or challenge rank (below) is a separate, later mechanic.</p>
+  <p>Trillioneuro is a numbered public list of people, kept in the order they joined. That is the whole thing. Despite the name there is no money in it, no token, no investment and nothing to buy — the euro sign is the brand, not a claim. What you get is a number that is genuinely scarce, because only one person can ever hold each one.</p>
+  <p>Claiming is free and stays free. Two later additions are planned and openly flagged: a €1/year fee for the verified Founder badge after year one, and paid bidding for display position. Neither can take your name, your number or your place in the order — those are fixed the moment you claim, and no payment protects or threatens them.</p>
   <p>Want the very top instead of a place in the record? <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a> is the sister project where the single most contested seat — #1 in the world, #1 in your country — is decided by open bidding.</p>
 </div>
 
@@ -535,7 +548,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <div class="preview-band reveal">
   <h2>See the record <i>taking shape</i></h2>
   <p>Explore how the live record and monument wall will look when the founding names go live.</p>
-  <a class="btn-outline" href="record.html">Preview the record →</a>
+  <a class="btn-outline" href="/record">Preview the record →</a>
 </div>
 
 <!-- FAQ -->
@@ -556,11 +569,11 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   </details>
   <details class="faq-item">
     <summary>What happens to my email address?</summary>
-    <p>It's used only to confirm your place and contact you about it — never shown publicly, never sold. Full detail in our <a href="privacy.html">Privacy Policy</a>.</p>
+    <p>It's used only to confirm your place and contact you about it — never shown publicly, never sold. Full detail in our <a href="/privacy">Privacy Policy</a>.</p>
   </details>
   <details class="faq-item">
     <summary>Can I remove my name later?</summary>
-    <p>Yes — email us any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history.</p>
+    <p>Yes — email <a href="mailto:privacy@trillioneuro.com">privacy@trillioneuro.com</a> any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history.</p>
   </details>
   <details class="faq-item">
     <summary>Does sharing my link move me up the ranks?</summary>
@@ -568,7 +581,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   </details>
   <details class="faq-item">
     <summary>Who's behind this?</summary>
-    <p>Trillioneuro is a trading name registered in Ireland. See our <a href="terms.html">Terms</a> for the full detail on what founding membership does and doesn't entitle you to.</p>
+    <p>Trillioneuro is a trading name registered in Ireland. See our <a href="/terms">Terms</a> for the full detail on what founding membership does and doesn't entitle you to.</p>
   </details>
 </div>
 
@@ -576,13 +589,14 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <footer>
   <div class="footer-brand">Trillion<b>€</b>uro</div>
   <div class="footer-links">
-    <a href="record.html">The Record</a>
+    <a href="/record">The Record</a>
     <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a>
     <a href="#about">About</a>
     <a href="#how-it-works">How it works</a>
     <a href="#faq">FAQ</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="mailto:hello@trillioneuro.com">Contact</a>
   </div>
   <p class="footer-legal">
     Founding membership is free. No payment is taken to reserve your place. Trillioneuro is a celebratory public record, not a charity, investment, or financial product.
@@ -617,7 +631,7 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
       <div class="share-card">
         <div class="sc-label">✦ Founding Member</div>
         <div class="sc-name" id="sc-name">Your Name</div>
-        <div class="sc-rank">Reserved place <b id="sc-rank">#—</b> in history</div>
+        <div class="sc-rank">Number <b id="sc-rank">#—</b> on the list</div>
         <div class="sc-brand">trillioneuro.com</div>
       </div>
       <h3>You're a Founder.</h3>
@@ -636,6 +650,21 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 </div>
 
 <script>
+
+/* ── FUNNEL EVENTS ──────────────────────────────────────────────────────
+   One helper, so every event name is defined in one place and a missing
+   analytics script can never throw inside a click handler. Events are
+   deliberately few and map to the only funnel that matters here:
+
+     view  →  cta_click  →  form_open  →  claim  →  share
+
+   Nothing personal is sent: seat codes and step names only, never a name,
+   email address or referral code. */
+function track(name, data) {
+  try {
+    if (typeof window.va === 'function') window.va('event', { name: name, data: data || {} });
+  } catch (e) { /* analytics must never break the page */ }
+}
 /* ════════════════════════════════════════════════════════════
    SUPABASE CONFIG
    ════════════════════════════════════════════════════════════ */
@@ -693,6 +722,7 @@ const refFromLink = refParams.get('r') || '';
 let lastFocused = null;
 
 function openModal() {
+  track('form_open');
   const he = document.getElementById('hero-email').value.trim();
   if (he) document.getElementById('f-email').value = he;
   lastFocused = document.activeElement;
@@ -748,16 +778,22 @@ function detectCountry() {
 }
 detectCountry();
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 let claimInProgress = false;
 
 function captureHeroEmail(email) {
-  if (!email || !email.includes('@')) return;
+  if (!email || !EMAIL_RE.test(email)) return;
   if (!initSb()) return;
-  // Silently upsert email-only pre-registration (no name yet)
-  sb.from('founder_interests').upsert({ email }, { onConflict: 'email', ignoreDuplicates: true }).then(() => {}).catch(() => {});
+  /* Was a direct anon INSERT on founder_interests. anon no longer holds any
+     privilege on that table: an unauthenticated, unthrottled write path into
+     a table of email addresses is the cheapest thing on the site to abuse,
+     and it fired on blur of a field with no validation beyond "contains @".
+     capture_email() validates and rate-limits server-side. */
+  sb.rpc('capture_email', { p_email: email, p_site: 'trillion' })
+    .then(() => track('email_capture'))
+    .catch(() => {});
 }
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function showError(msg, field) {
   const err = document.getElementById('modal-err');
@@ -773,6 +809,18 @@ function clearError() {
   const err = document.getElementById('modal-err');
   err.textContent = ''; err.classList.remove('show');
   document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+}
+
+/* The RPC now validates and rate-limits server-side, so it rejects requests
+   the browser would have allowed. Map its codes to something a person can
+   act on, and never surface a raw Postgres message. */
+function serverError(error) {
+  const m = String(error?.message || '');
+  if (/RATE_LIMIT/.test(m))       return ['Too many attempts from your connection. Please try again in a little while.', null];
+  if (/INVALID_EMAIL/.test(m))    return ['That email address does not look right — check it and try again.', 'f-email-wrap'];
+  if (/INVALID_NAME/.test(m))     return ['Enter a name between 1 and 30 characters.', 'f-name-wrap'];
+  if (/unique|duplicate/i.test(m))return ['That email has already claimed a place in history. Check your inbox — or use a different email.', 'f-email-wrap'];
+  return ['Could not reserve your place right now. Please try again in a moment.', null];
 }
 
 async function claim() {
@@ -812,13 +860,11 @@ async function claim() {
       if (error) {
         btn.disabled = false; btn.textContent = 'Reserve my place — free';
         claimInProgress = false;
-        const friendly = /unique|duplicate/i.test(error.message || '')
-          ? 'That email has already claimed a place in history. Check your inbox — or use a different email.'
-          : 'Could not reserve your place right now. Please try again in a moment.';
-        showError(friendly, 'f-email-wrap');
+        showError(...serverError(error));
         return;
       }
       const row = Array.isArray(data) ? data[0] : data;
+      track('claim', { referred: refFromLink ? 'yes' : 'no' });
       finishClaim(name, row?.founder_number, row?.ref_code, row?.referral_count);
       await loadCount();
     } catch (e) {
@@ -856,12 +902,18 @@ function finishClaim(name, number, refCode, referralCount) {
 
 /* ── SHARE ── */
 function shareX() {
+  track('share', { via: 'x' });
   const rank = document.getElementById('sc-rank').textContent;
   const link = document.getElementById('ref-link').dataset.link || 'https://trillioneuro.com';
-  const text = encodeURIComponent(`I just reserved place ${rank} in history on @trillioneuro — be part of the world's first trillion-euro record. Claim yours free:`);
+  /* The share text is the product's only real distribution channel, so it
+     has to carry the one thing that is actually interesting: the number.
+     It also no longer claims a "trillion-euro record", which invited the
+     scam reading the FAQ then had to spend its first answer denying. */
+  const text = encodeURIComponent(`I'm ${rank} on Trillioneuro — a public list kept in the order people joined, so this number is mine permanently. Yours is free:`);
   window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, '_blank');
 }
 function copyLink() {
+  track('share', { via: 'copy_link' });
   const link = document.getElementById('ref-link').dataset.link || 'https://trillioneuro.com';
   navigator.clipboard?.writeText(link).then(() => {
     const b = document.querySelector('.share-copy');
@@ -870,6 +922,7 @@ function copyLink() {
   });
 }
 function copyRef() {
+  track('share', { via: 'copy_ref' });
   const link = document.getElementById('ref-link').dataset.link || document.getElementById('ref-link').textContent;
   navigator.clipboard?.writeText(link).then(() => {
     const b = document.querySelector('.ref-box button');

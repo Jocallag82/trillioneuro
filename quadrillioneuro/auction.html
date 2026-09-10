@@ -17,6 +17,18 @@
 <meta name="twitter:image" content="https://quadrillioneuro.com/og-image.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#060606">
+<!-- Vercel Web Analytics + Speed Insights.
+     Neither site had any measurement of any kind: no pageviews, no funnel,
+     no Core Web Vitals. With one signup in three months the open question
+     is *where* people are dropping out — landing without scrolling, opening
+     the form and abandoning it, or never arriving at all — and none of those
+     could be told apart. Both scripts are first-party (served from
+     /_vercel/*, no third-party host, no cookie banner needed as they set no
+     cookies and do not fingerprint) and are already included in the Vercel
+     plan this project is on. -->
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -98,6 +110,15 @@ nav { position: sticky; top: 0; z-index: 100; height: 44px; background: rgba(6,6
 .champions h2 i { font-style: italic; color: var(--gold); }
 .champions p { font-size: 14px; color: var(--mid); max-width: 460px; margin: 0 auto; line-height: 1.6; }
 .champions-empty { margin: 28px auto 0; max-width: 420px; padding: 28px; background: var(--panel); border: 1px dashed var(--line); border-radius: 14px; font-size: 13px; color: var(--faint); }
+/* Populated Hall of Champions. Unstyled until now — loadChampions() swaps
+   the empty panel for this list the first time a season actually closes,
+   and without these rules that day would render as unstyled text. */
+.champions-list { margin: 28px auto 0; max-width: 520px; text-align: left; }
+.champ-row { padding: 14px 18px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; font-size: 13px; color: var(--mid); display: flex;
+  flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.champ-row + .champ-row { margin-top: 8px; }
+.champ-row b { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; }
 
 .empty { text-align: center; padding: 60px 24px; color: var(--faint); font-size: 15px; }
 
@@ -125,15 +146,15 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Quadrillion<b>€</b>uro</a>
-  <button class="nav-btn" onclick="location.href='index.html'">Reserve my bid →</button>
+  <a href="/" class="nav-logo">Quadrillion<b>€</b>uro</a>
+  <button class="nav-btn" onclick="location.href='/'">Reserve my bid →</button>
 </nav>
 
 <div class="rec-head">
   <p class="kicker">The contested seats</p>
   <h1>The <i>Auction</i></h1>
   <p>World #1. Every country's #1. Each seat opens for bidding once 1,000 people register interest in it.</p>
-  <span class="preview-tag">Preview — illustrative registration counts, bidding not yet open</span>
+  <span class="preview-tag">Live registration counts — bidding not yet open</span>
 </div>
 
 <div class="controls">
@@ -172,12 +193,12 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 <footer>
   <div class="footer-brand">Quadrillion<b>€</b>uro</div>
   <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#how-it-works">How it works</a>
-    <a href="index.html#faq">FAQ</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
+    <a href="/">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
   </div>
   <p class="footer-legal">
     Registration is free. No payment is taken and no bid is placed until bidding formally opens for a seat. Quadrillioneuro is a skill-based auction for a symbolic title — not a charity, investment, lottery, or financial product.
@@ -186,86 +207,219 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 </footer>
 
 <script>
-const PAGE = 24;
 
-const SEATS = [
-  { code:'WORLD', flag:'🌍', name:'World #1',           registered: 340, leader: '—', hot: 1.00 },
-  { code:'IE',    flag:'🇮🇪', name:'Ireland #1',         registered: 210, leader: '—', hot: 0.62 },
-  { code:'US',    flag:'🇺🇸', name:'United States #1',   registered: 188, leader: '—', hot: 0.55 },
-  { code:'GB',    flag:'🇬🇧', name:'United Kingdom #1',  registered: 165, leader: '—', hot: 0.49 },
-  { code:'DE',    flag:'🇩🇪', name:'Germany #1',         registered: 122, leader: '—', hot: 0.36 },
-  { code:'FR',    flag:'🇫🇷', name:'France #1',          registered: 98,  leader: '—', hot: 0.29 },
-  { code:'AU',    flag:'🇦🇺', name:'Australia #1',       registered: 87,  leader: '—', hot: 0.26 },
-  { code:'CA',    flag:'🇨🇦', name:'Canada #1',          registered: 74,  leader: '—', hot: 0.22 },
-  { code:'NL',    flag:'🇳🇱', name:'Netherlands #1',     registered: 61,  leader: '—', hot: 0.18 },
-  { code:'IN',    flag:'🇮🇳', name:'India #1',           registered: 143, leader: '—', hot: 0.42 },
-  { code:'BR',    flag:'🇧🇷', name:'Brazil #1',          registered: 68,  leader: '—', hot: 0.20 },
-  { code:'JP',    flag:'🇯🇵', name:'Japan #1',           registered: 52,  leader: '—', hot: 0.15 },
-  { code:'ES',    flag:'🇪🇸', name:'Spain #1',           registered: 44,  leader: '—', hot: 0.13 },
-  { code:'IT',    flag:'🇮🇹', name:'Italy #1',           registered: 39,  leader: '—', hot: 0.12 },
-  { code:'NZ',    flag:'🇳🇿', name:'New Zealand #1',     registered: 31,  leader: '—', hot: 0.09 },
-  { code:'ZA',    flag:'🇿🇦', name:'South Africa #1',    registered: 27,  leader: '—', hot: 0.08 },
+/* ── FUNNEL EVENTS ──────────────────────────────────────────────────────
+   One helper, so every event name is defined in one place and a missing
+   analytics script can never throw inside a click handler. Events are
+   deliberately few and map to the only funnel that matters here:
+
+     view  →  cta_click  →  form_open  →  register  →  share
+
+   Nothing personal is sent: seat codes and step names only, never a name,
+   email address or referral code. */
+function track(name, data) {
+  try {
+    if (typeof window.va === 'function') window.va('event', { name: name, data: data || {} });
+  } catch (e) { /* analytics must never break the page */ }
+}
+/* ══════════════════════════════════════════════════════════════════════
+   THE AUCTION BOARD — real registration counts only.
+
+   The SEATS array here previously carried hard-coded numbers — World #1
+   340 registered, Ireland #1 210, United States #1 188, and so on — each
+   rendered into a progress bar tracking toward the 1,000 threshold. The
+   quad_interests table held zero rows.
+
+   Those numbers are the single most persuasive thing on the page: "340
+   people already want World #1, 660 to go" is the entire reason to
+   register today. Inventing them is inventing the demand the product is
+   selling, and the small "illustrative" pill did not undo that for anyone
+   skimming sixteen filled progress bars.
+
+   So the numbers now come from quad_seat_counts — an aggregate view of
+   seat plus a count, the only thing anon is permitted to read. Seats with
+   no registrations say so, plainly. Champions come from quad_champions,
+   which stays genuinely empty until a season actually closes.
+   ══════════════════════════════════════════════════════════════════════ */
+
+const SUPABASE_URL = 'https://kxzywyflylkcqoidiqmo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
+const PAGE = 24;
+const GOAL = 1000;
+
+let sb = null;
+function initSb() {
+  if (!sb && typeof window.supabase !== 'undefined') {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return sb;
+}
+
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/* The seats the board always shows, whether or not anyone has registered
+   for them yet — a board with one row is not a board. Codes match what
+   canon_seat() in the database stores, so the counts line up. Any other
+   seat that appears in the data (someone registered a country not listed
+   here) is appended dynamically below. */
+const BOARD = [
+  ['WORLD','🌍','World #1'], ['IE','🇮🇪','Ireland #1'], ['US','🇺🇸','United States #1'],
+  ['GB','🇬🇧','United Kingdom #1'], ['DE','🇩🇪','Germany #1'], ['FR','🇫🇷','France #1'],
+  ['AU','🇦🇺','Australia #1'], ['CA','🇨🇦','Canada #1'], ['NL','🇳🇱','Netherlands #1'],
+  ['IN','🇮🇳','India #1'], ['BR','🇧🇷','Brazil #1'], ['JP','🇯🇵','Japan #1'],
+  ['ES','🇪🇸','Spain #1'], ['IT','🇮🇹','Italy #1'], ['NZ','🇳🇿','New Zealand #1'],
+  ['ZA','🇿🇦','South Africa #1']
 ];
 
-const GOAL = 1000;
+let seats = [];          // [{code, flag, name, registered}]
 let state = { q: '', sort: 'hot', page: 0 };
+let loadFailed = false;
+
+async function loadSeats() {
+  const counts = {};
+  const { data, error } = await sb.from('quad_seat_counts').select('seat, registered');
+  if (error) throw error;
+  (data || []).forEach(r => { counts[r.seat] = Number(r.registered) || 0; });
+
+  seats = BOARD.map(([code, flag, name]) => ({
+    code, flag, name, registered: counts[code] || 0
+  }));
+
+  /* Seats registered for a country the board does not list. Titlecased
+     from the stored code so "NARNIA" reads "Narnia #1" rather than
+     shouting, and skipped if it is the UNKNOWN catch-all. */
+  Object.keys(counts).forEach(code => {
+    if (BOARD.some(b => b[0] === code) || code === 'UNKNOWN') return;
+    const pretty = code.charAt(0) + code.slice(1).toLowerCase();
+    seats.push({ code, flag: '✦', name: pretty + ' #1', registered: counts[code] });
+  });
+}
+
+async function loadChampions() {
+  const el = document.querySelector('.champions-empty');
+  if (!el) return;
+  const { data, error } = await sb.from('quad_champions')
+    .select('seat, name, country, season, won_at')
+    .order('won_at', { ascending: false }).limit(50);
+  if (error || !data || !data.length) return;   // stays empty, honestly
+  el.classList.remove('champions-empty');
+  el.className = 'champions-list';
+  el.innerHTML = data.map(c => `<div class="champ-row">
+      <b>${esc(c.name)}</b> &mdash; ${esc(c.seat)}${c.country ? ' · ' + esc(c.country) : ''}
+      <span style="color:var(--faint)">Season ${esc(c.season)}</span>
+    </div>`).join('');
+}
 
 function getFiltered() {
-  let list = SEATS.slice();
+  let list = seats.slice();
   if (state.q) {
     const q = state.q.toLowerCase();
     list = list.filter(s => s.name.toLowerCase().includes(q));
   }
-  if (state.sort === 'hot') list.sort((a,b) => b.registered - a.registered);
-  else if (state.sort === 'az') list.sort((a,b) => a.name.localeCompare(b.name));
+  if (state.sort === 'hot') {
+    /* World #1 is pinned to the top of "most contested". It is the headline
+       seat and the only one every visitor is eligible for — and with all
+       counts legitimately at zero, a pure sort put Australia first purely
+       because of the alphabet. */
+    list.sort((a, b) =>
+      (b.code === 'WORLD') - (a.code === 'WORLD') ||
+      b.registered - a.registered ||
+      a.name.localeCompare(b.name));
+  }
+  else if (state.sort === 'az') list.sort((a, b) => a.name.localeCompare(b.name));
   else if (state.sort === 'new') list.reverse();
   return list;
 }
 
+/* Zero is stated as zero. "Be the first to register" is a genuine reason
+   to act; a fake head start is not. */
+function seatCopy(n) {
+  if (n >= GOAL) return '<b>Threshold met</b> · bidding opens';
+  if (n === 0)  return 'No registrations yet &mdash; <b>be first</b>';
+  return `<b>${n.toLocaleString()}</b> registered · ${(GOAL - n).toLocaleString()} to open`;
+}
+
 function render() {
+  const grid = document.getElementById('seat-grid');
+  const metaEl = document.getElementById('meta');
+
+  if (loadFailed) {
+    grid.innerHTML = '';
+    document.getElementById('pager').innerHTML = '';
+    metaEl.innerHTML = 'The board could not be loaded just now. '
+      + '<button onclick="reload()" style="margin-left:8px;padding:6px 12px;border:1px solid var(--line);'
+      + 'border-radius:6px;background:transparent;color:inherit;font-family:inherit;cursor:pointer">Try again</button>';
+    return;
+  }
+
   const list = getFiltered();
   const total = list.length;
   const pages = Math.max(1, Math.ceil(total / PAGE));
   state.page = Math.min(state.page, pages - 1);
   const start = state.page * PAGE;
   const slice = list.slice(start, start + PAGE);
-  const grid = document.getElementById('seat-grid');
 
   if (!slice.length) {
     grid.innerHTML = '';
     document.getElementById('pager').innerHTML = '';
-    document.getElementById('meta').innerHTML = `No seats match "${state.q}".`;
+    metaEl.innerHTML = `No seats match &ldquo;${esc(state.q)}&rdquo;.`;
     return;
   }
 
   grid.innerHTML = slice.map(s => {
     const pct = Math.min(100, s.registered / GOAL * 100);
-    return `<div class="seat-card${s.code==='WORLD'?' world':''}">
-      <div class="seat-top"><span class="seat-flag">${s.flag}</span><span class="seat-name">${s.name}</span></div>
+    return `<div class="seat-card${s.code === 'WORLD' ? ' world' : ''}">
+      <div class="seat-top"><span class="seat-flag">${s.flag}</span><span class="seat-name">${esc(s.name)}</span></div>
       <div class="seat-lead">Leading bid: <b>Not yet open</b></div>
-      <div class="seat-progress-label"><span>${s.registered.toLocaleString()} registered</span><span>of ${GOAL.toLocaleString()} to open</span></div>
+      <div class="seat-progress-label"><span>${seatCopy(s.registered)}</span><span>of ${GOAL.toLocaleString()}</span></div>
       <div class="seat-track"><div class="seat-fill" style="width:${pct}%"></div></div>
-      <div class="seat-foot"><a class="seat-btn" href="index.html">Register interest →</a></div>
+      <div class="seat-foot"><a class="seat-btn" href="/">Register interest &rarr;</a></div>
     </div>`;
   }).join('');
 
-  document.getElementById('meta').innerHTML = `<b>${total.toLocaleString()}</b> seats tracked${state.q ? ` matching "${state.q}"` : ''} — none open for bidding yet`;
+  const registered = seats.reduce((a, s) => a + s.registered, 0);
+  metaEl.innerHTML = `<b>${total.toLocaleString()}</b> seats tracked`
+    + (state.q ? ` matching &ldquo;${esc(state.q)}&rdquo;` : '')
+    + ` · <b>${registered.toLocaleString()}</b> ${registered === 1 ? 'registration' : 'registrations'} so far`
+    + ' · none open for bidding yet';
   renderPager(total, pages);
 }
 
 function renderPager(total, pages) {
   const start = state.page * PAGE;
-  if (pages <= 1) { document.getElementById('pager').innerHTML = ''; return; }
-  document.getElementById('pager').innerHTML = `
-    <button onclick="turnPage(-1)" ${state.page===0?'disabled':''}>‹ Prev</button>
-    <span class="pg-info">${(start+1).toLocaleString()}–${Math.min(start+PAGE,total).toLocaleString()} of ${total.toLocaleString()}</span>
-    <button onclick="turnPage(1)" ${state.page>=pages-1?'disabled':''}>Next ›</button>`;
+  const el = document.getElementById('pager');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <button onclick="turnPage(-1)" ${state.page === 0 ? 'disabled' : ''}>&lsaquo; Prev</button>
+    <span class="pg-info">${(start + 1).toLocaleString()}&ndash;${Math.min(start + PAGE, total).toLocaleString()} of ${total.toLocaleString()}</span>
+    <button onclick="turnPage(1)" ${state.page >= pages - 1 ? 'disabled' : ''}>Next &rsaquo;</button>`;
 }
-function turnPage(d){ state.page += d; render(); window.scrollTo({top:200,behavior:'smooth'}); }
-function onSearch(v){ state.q = v.trim(); state.page = 0; render(); }
-function onSort(v){ state.sort = v; state.page = 0; render(); }
+function turnPage(d) { state.page += d; render(); window.scrollTo({ top: 200, behavior: 'smooth' }); }
+function onSearch(v) { state.q = v.trim(); state.page = 0; render(); }
+function onSort(v) { state.sort = v; state.page = 0; render(); }
+function reload() { loadFailed = false; boot(); }
 
-render();
+async function boot() {
+  if (!initSb()) { loadFailed = true; render(); return; }
+  try {
+    await loadSeats();
+    loadChampions();          // non-blocking: an empty hall is the normal case
+    loadFailed = false;
+  } catch (e) {
+    loadFailed = true;
+  }
+  render();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
 </script>
 </body>
 </html>

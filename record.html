@@ -6,6 +6,18 @@
 <title>The Record — Trillioneuro</title>
 <meta name="description" content="The complete public record of every founding member of Trillioneuro. Search any name, explore by country, or view the monument wall of history.">
 <link rel="canonical" href="https://trillioneuro.com/record">
+<!-- Vercel Web Analytics + Speed Insights.
+     Neither site had any measurement of any kind: no pageviews, no funnel,
+     no Core Web Vitals. With one signup in three months the open question
+     is *where* people are dropping out — landing without scrolling, opening
+     the form and abandoning it, or never arriving at all — and none of those
+     could be told apart. Both scripts are first-party (served from
+     /_vercel/*, no third-party host, no cookie banner needed as they set no
+     cookies and do not fingerprint) and are already included in the Vercel
+     plan this project is on. -->
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Trillioneuro">
@@ -283,6 +295,37 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
   outline: 2px solid var(--gold); outline-offset: 2px;
 }
 
+
+/* ── EMPTY / FIRST-NAMES STATE ──
+   The record used to render a generated dataset here. With real data it is
+   legitimately near-empty for a while, so the zero and near-zero states
+   have to be the best-looking states on the page, not an afterthought. */
+.empty-hero {
+  max-width: 520px; margin: 0 auto; padding: 72px 24px 88px; text-align: center;
+}
+.empty-hero .eh-mark {
+  font-family: 'Cormorant Garamond', serif; font-size: 64px; color: var(--gold);
+  line-height: 1; margin-bottom: 18px;
+}
+.empty-hero h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 5vw, 40px);
+  font-weight: 300; letter-spacing: -0.02em; margin-bottom: 12px;
+}
+.empty-hero h2 i { font-style: italic; color: var(--gold); }
+.empty-hero p { font-size: 15px; font-weight: 300; color: var(--mid); line-height: 1.7; margin-bottom: 26px; }
+.empty-hero .eh-cta {
+  display: inline-block; font-size: 15px; font-weight: 500; color: #fff;
+  background: var(--gold); border-radius: 980px; padding: 14px 30px; text-decoration: none;
+}
+.empty-hero .eh-cta:hover { background: var(--goldhi); }
+.load-note { text-align: center; padding: 60px 24px; color: var(--faint); font-size: 14px; }
+.rec-skel {
+  height: 62px; border-bottom: 1px solid var(--line);
+  background: linear-gradient(90deg, var(--off) 25%, #ececf0 37%, var(--off) 63%);
+  background-size: 400% 100%; animation: skel 1.3s ease-in-out infinite;
+}
+@keyframes skel { 0%{background-position:100% 50%} 100%{background-position:0 50%} }
+
 /* ── MOBILE ── */
 @media (max-width: 600px) {
   .controls-inner { gap: 8px; }
@@ -303,16 +346,16 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">Trillion<b>€</b>uro</a>
-  <button class="nav-btn" onclick="location.href='index.html'">Claim your name →</button>
+  <a href="/" class="nav-logo">Trillion<b>€</b>uro</a>
+  <button class="nav-btn" onclick="location.href='/'">Claim your name →</button>
 </nav>
 
 <!-- HEADER -->
 <div class="rec-head">
   <p class="kicker">The permanent ledger</p>
   <h1>The <i>Record</i></h1>
-  <p>Every name ever added to history. Searchable, permanent, public. This is the complete ledger.</p>
-  <span class="preview-tag">Preview — illustrative names, not real founders yet</span>
+  <p>Every name added to the record, in the order it arrived. Searchable, permanent, public.</p>
+  <span class="preview-tag">Live — read directly from the record</span>
 </div>
 
 <!-- CONTROLS -->
@@ -364,12 +407,12 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 <footer>
   <div class="footer-brand">Trillion<b>€</b>uro</div>
   <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#how-it-works">How it works</a>
-    <a href="index.html#faq">FAQ</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
+    <a href="/">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
   </div>
   <p class="footer-legal">
     Founding membership is free. No payment is taken to reserve your place. Trillioneuro is a celebratory public record, not a charity, investment, or financial product.
@@ -378,166 +421,353 @@ footer { background: var(--off); border-top: 1px solid var(--line); padding: 40p
 </footer>
 
 <script>
+
+/* ── FUNNEL EVENTS ──────────────────────────────────────────────────────
+   One helper, so every event name is defined in one place and a missing
+   analytics script can never throw inside a click handler. Events are
+   deliberately few and map to the only funnel that matters here:
+
+     view  →  cta_click  →  form_open  →  claim  →  share
+
+   Nothing personal is sent: seat codes and step names only, never a name,
+   email address or referral code. */
+function track(name, data) {
+  try {
+    if (typeof window.va === 'function') window.va('event', { name: name, data: data || {} });
+  } catch (e) { /* analytics must never break the page */ }
+}
+/* ══════════════════════════════════════════════════════════════════════
+   THE RECORD — real data only.
+
+   This page previously rendered a GENERATED dataset: seed() invented
+   founder names from two name lists, and a COUNTRIES table hard-coded
+   per-country totals (Ireland 12,840 · United States 31,200 · …) that
+   the header printed as "111,340 founding names recorded worldwide".
+   Every row carried a "Founding Member" badge, some carried invented
+   business links (mybiz.ie, mycompany.com — domains we do not own), and
+   the page was indexable and listed in sitemap.xml.
+
+   The real founders table held one row.
+
+   A single "illustrative" pill above 1,760 fabricated names does not make
+   that honest, and inventing traction is exactly what a project whose
+   whole pitch is "a permanent, honest record" cannot afford to be caught
+   doing. So: the generator is gone. Everything below reads founders_public
+   — the column-filtered view anon is allowed to select — and when there is
+   nothing to show, it says so and asks for the next name.
+   ══════════════════════════════════════════════════════════════════════ */
+
+const SUPABASE_URL = 'https://kxzywyflylkcqoidiqmo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
 const PAGE = 50;
 
-function seed(n, s) {
-  const fn = ['Aoife','James','Maria','Lucas','Emma','Ciarán','Priya','Oliver','Niamh','Raj',
-              'Sophie','Seán','Declan','Lena','Hugo','Patrick','Roisin','Jack','Hannah','Lukas',
-              'Nathan','Camille','Gabriel','Arjun','Ethan','Anna','Tomás','Ingrid','Mei','Carlos'];
-  const ln = ['Murphy','Kelly','O\'Brien','Walsh','Doyle','Byrne','Ryan','Nolan','McCarthy',
-              'Burke','Fitzgerald','Bauer','Martin','Sharma','Tremblay','Fischer','Müller',
-              'Silva','Johnson','Watson','Tanaka','Rossi','Dubois','Andersen','Nguyen'];
-  const msgs = ['Making history!','','Ireland first 🍀','','Go on!','','Proud to be here',
-                '','For my kids','','Future is now','','Legend','',''];
-  const urls = ['','','','mybiz.ie','','','mycompany.com','','','storefound.ie','',''];
-  const avatars = ['🦁','','','🏢','','🚀','','','⚽','','','🎨'];
-  return Array.from({length: n}, (_, i) => ({
-    name:   fn[(s*7+i*3) % fn.length] + ' ' + ln[(s*3+i*7) % ln.length],
-    rank:   s * 160 + i + 1,
-    msg:    msgs[i % msgs.length],
-    url:    i < 7 ? urls[i % urls.length] : '',
-    avatar: i < 12 ? avatars[i % avatars.length] : ''
-  }));
+let sb = null;
+function initSb() {
+  if (!sb && typeof window.supabase !== 'undefined') {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return sb;
 }
 
-const COUNTRIES = [
-  { code:'IE', flag:'🇮🇪', name:'Ireland',        count:12840, donors: seed(160, 0) },
-  { code:'US', flag:'🇺🇸', name:'United States',  count:31200, donors: seed(160, 1) },
-  { code:'GB', flag:'🇬🇧', name:'United Kingdom', count:18600, donors: seed(160, 2) },
-  { code:'DE', flag:'🇩🇪', name:'Germany',        count:9400,  donors: seed(160, 3) },
-  { code:'FR', flag:'🇫🇷', name:'France',         count:7200,  donors: seed(160, 4) },
-  { code:'AU', flag:'🇦🇺', name:'Australia',      count:5800,  donors: seed(160, 5) },
-  { code:'CA', flag:'🇨🇦', name:'Canada',         count:4900,  donors: seed(160, 6) },
-  { code:'NL', flag:'🇳🇱', name:'Netherlands',    count:3900,  donors: seed(160, 7) },
-  { code:'IN', flag:'🇮🇳', name:'India',          count:6200,  donors: seed(160, 8) },
-  { code:'BR', flag:'🇧🇷', name:'Brazil',         count:4100,  donors: seed(160, 9) },
-  { code:'JP', flag:'🇯🇵', name:'Japan',          count:3200,  donors: seed(160, 10) },
-];
+/* Names come from a public table that anyone can write to through the
+   claim form, and every render path below builds HTML strings. Without
+   this, a 30-character name is enough for a stored XSS on the one page
+   the whole product points at ('<img src=x onerror=...>' fits). The RPC
+   also strips angle brackets on the way in — this is the output half, so
+   neither layer is load-bearing on its own. */
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 
-const ALL = [];
-COUNTRIES.forEach(c => c.donors.forEach(d => ALL.push({ ...d, cflag: c.flag, cname: c.name, ccode: c.code })));
+/* Country name → flag, for display only. Unknown/blank countries render
+   without one rather than guessing. */
+const FLAGS = {
+  'ireland':'🇮🇪','united states':'🇺🇸','united states of america':'🇺🇸','usa':'🇺🇸',
+  'united kingdom':'🇬🇧','england':'🇬🇧','scotland':'🇬🇧','wales':'🇬🇧',
+  'germany':'🇩🇪','france':'🇫🇷','australia':'🇦🇺','canada':'🇨🇦','netherlands':'🇳🇱',
+  'india':'🇮🇳','brazil':'🇧🇷','japan':'🇯🇵','spain':'🇪🇸','italy':'🇮🇹',
+  'new zealand':'🇳🇿','south africa':'🇿🇦','portugal':'🇵🇹','poland':'🇵🇱',
+  'sweden':'🇸🇪','norway':'🇳🇴','denmark':'🇩🇰','finland':'🇫🇮','belgium':'🇧🇪',
+  'austria':'🇦🇹','switzerland':'🇨🇭','mexico':'🇲🇽','argentina':'🇦🇷',
+  'singapore':'🇸🇬','philippines':'🇵🇭','nigeria':'🇳🇬','kenya':'🇰🇪',
+  'united arab emirates':'🇦🇪','turkey':'🇹🇷','greece':'🇬🇷','czechia':'🇨🇿',
+  'romania':'🇷🇴','hungary':'🇭🇺','ukraine':'🇺🇦','israel':'🇮🇱','pakistan':'🇵🇰'
+};
+function flagFor(country) {
+  if (!country) return '';
+  return FLAGS[String(country).trim().toLowerCase()] || '';
+}
 
 let state = { country: 'ALL', q: '', page: 0, view: 'list', wallCount: 120 };
+let total = 0;        // rows matching the current filter
+let grandTotal = 0;   // rows in the whole record, unfiltered
+let rowsCache = [];   // the page currently on screen
+let loadFailed = false;
 
-(function initCountries(){
+/* ── QUERY BUILDING ───────────────────────────────────────────────────
+   Filtering and paging happen in Postgres, not in the browser. The old
+   version shipped its whole dataset to the client and sliced it there,
+   which only worked because the dataset was fake and finite. A real
+   record has to stay fast at 10,000 rows and beyond, so nothing
+   unbounded is ever fetched: every read is a .range() of at most 50. */
+function baseQuery(forCount) {
+  const q = sb.from('founders_public').select(
+    forCount ? 'founder_number' : 'founder_number, name, message, country',
+    forCount ? { count: 'exact', head: true } : undefined
+  );
+  if (state.country !== 'ALL') q.eq('country', state.country);
+  if (state.q) q.ilike('name', '%' + state.q.replace(/[%_]/g, '') + '%');
+  return q;
+}
+
+async function fetchTotals() {
+  const { count } = await sb.from('founders_public')
+    .select('founder_number', { count: 'exact', head: true });
+  grandTotal = Number(count) || 0;
+}
+
+async function fetchPage() {
+  const { count } = await baseQuery(true);
+  total = Number(count) || 0;
+  const pages = Math.max(1, Math.ceil(total / PAGE));
+  state.page = Math.min(state.page, pages - 1);
+  const from = state.page * PAGE;
+  const { data, error } = await baseQuery(false)
+    .order('founder_number', { ascending: true })
+    .range(from, from + PAGE - 1);
+  if (error) throw error;
+  rowsCache = data || [];
+}
+
+/* Country filter options are built from countries that actually appear in
+   the record — no pre-baked list of eleven countries with invented totals. */
+async function loadCountries() {
   const sel = document.getElementById('country');
-  [...COUNTRIES].sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
+  const { data } = await sb.from('founders_public')
+    .select('country').not('country', 'is', null).limit(1000);
+  const seen = [...new Set((data || [])
+    .map(r => (r.country || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  seen.forEach(c => {
     const o = document.createElement('option');
-    o.value = c.code; o.textContent = `${c.flag} ${c.name}`;
+    o.value = c;
+    o.textContent = (flagFor(c) ? flagFor(c) + ' ' : '') + c;
     sel.appendChild(o);
   });
-})();
+  sel.parentElement.style.display = seen.length ? '' : 'none';
+}
 
-function getFiltered() {
-  let list = state.country === 'ALL'
-    ? ALL.slice()
-    : ALL.filter(d => d.ccode === state.country);
-  if (state.q) {
-    const q = state.q.toLowerCase();
-    list = list.filter(d => d.name.toLowerCase().includes(q));
-  }
-  list.sort((a, b) => a.rank - b.rank);
-  return list;
+/* ── RENDER ───────────────────────────────────────────────────────────── */
+
+function emptyRecordHtml() {
+  return `<div class="empty-hero">
+    <div class="eh-mark">&euro;</div>
+    <h2>The record is <i>still open at the top.</i></h2>
+    <p>No names have been added yet. The first entry takes the first founder
+       number, permanently &mdash; and every name after it is measured against
+       how early it arrived.</p>
+    <a class="eh-cta" href="/">Claim the first place &rarr;</a>
+  </div>`;
+}
+
+function noMatchHtml() {
+  const scope = state.country === 'ALL' ? 'the record' : esc(state.country);
+  return `<div class="empty">No name matching &ldquo;${esc(state.q)}&rdquo; in ${scope} yet.
+    <br><a href="/" style="color:var(--gold)">Be the one who claims it &rarr;</a></div>`;
 }
 
 function renderList() {
-  const list = getFiltered();
-  const total = list.length;
-  const pages = Math.max(1, Math.ceil(total / PAGE));
-  state.page = Math.min(state.page, pages - 1);
-  const start = state.page * PAGE;
-  const slice = list.slice(start, start + PAGE);
+  const rowsEl = document.getElementById('rows');
+  const pagerEl = document.getElementById('pager');
+  const metaEl = document.getElementById('meta');
 
-  const showGlobalFlag = state.country === 'ALL';
-  const rows = document.getElementById('rows');
+  if (loadFailed) {
+    rowsEl.innerHTML = `<div class="empty">The record could not be loaded just now.
+      <br><button onclick="reload()" style="margin-top:12px;padding:10px 18px;border:1px solid var(--line);
+      border-radius:8px;background:var(--white);font-family:inherit;cursor:pointer">Try again</button></div>`;
+    pagerEl.innerHTML = ''; metaEl.innerHTML = '';
+    return;
+  }
 
-  if (!slice.length) {
-    rows.innerHTML = `<div class="empty">No names match "${state.q}". Be the first — claim it.</div>`;
-    document.getElementById('pager').innerHTML = '';
+  if (grandTotal === 0) {
+    rowsEl.innerHTML = emptyRecordHtml();
+    pagerEl.innerHTML = ''; metaEl.innerHTML = '';
+    return;
+  }
+
+  if (!rowsCache.length) {
+    rowsEl.innerHTML = noMatchHtml();
+    pagerEl.innerHTML = '';
   } else {
-    rows.innerHTML = slice.map((d, i) => {
-      const rank = start + i + 1;
+    const showFlag = state.country === 'ALL';
+    rowsEl.innerHTML = rowsCache.map(d => {
+      /* Rank is the founder's real join order, straight from the identity
+         column — not their offset within the current page. Paging or
+         filtering must never renumber anyone: the number IS the product. */
+      const rank = Number(d.founder_number);
       const isOne = rank === 1;
-      const initials = d.name.split(' ').map(w=>w[0]).slice(0,2).join('');
-      const av = d.avatar
-        ? `<div class="rec-av">${d.avatar}</div>`
-        : `<div class="rec-av">${initials}</div>`;
-      const urlText = d.url ? d.url.replace(/https?:\/\//,'') : '';
-      const urlHtml = d.url ? `<a href="${d.url.startsWith('http')?d.url:'https://'+d.url}" target="_blank" rel="noopener">${urlText}</a>` : '';
-      const meta = [d.msg, urlHtml].filter(Boolean).join(' · ');
-      return `<div class="rec-row${isOne?' r1':''}">
-        <div class="rec-rank${rank<=3?' top':''}">${isOne?'<span class="crown">♛</span>':rank}</div>
-        ${av}
+      const name = esc(d.name);
+      const initials = esc(String(d.name || '?').trim().split(/\s+/)
+        .map(w => w[0]).slice(0, 2).join('').toUpperCase());
+      const flag = showFlag ? flagFor(d.country) : '';
+      const msg = d.message ? esc(d.message) : '';
+      return `<div class="rec-row${isOne ? ' r1' : ''}">
+        <div class="rec-rank${rank <= 3 ? ' top' : ''}">${isOne ? '<span class="crown">&#9819;</span>' : rank.toLocaleString()}</div>
+        <div class="rec-av">${initials}</div>
         <div class="rec-info">
-          <div class="rec-name">${d.name}${showGlobalFlag?` <span class="rec-flag">${d.cflag}</span>`:''}</div>
-          ${meta?`<div class="rec-meta">${meta}</div>`:''}
+          <div class="rec-name">${name}${flag ? ` <span class="rec-flag">${flag}</span>` : ''}</div>
+          ${msg ? `<div class="rec-meta">${msg}</div>` : ''}
         </div>
         <div class="rec-badge">Founding Member</div>
       </div>`;
     }).join('');
-    renderPager(total, pages);
+    renderPager();
   }
-
-  const scope = state.country === 'ALL' ? 'worldwide' : 'in ' + (COUNTRIES.find(c=>c.code===state.country)||{}).name;
-  const realCount = state.country === 'ALL'
-    ? COUNTRIES.reduce((s,c)=>s+c.count,0)
-    : (COUNTRIES.find(c=>c.code===state.country)||{}).count;
-  document.getElementById('meta').innerHTML = state.q
-    ? `<b>${total.toLocaleString()}</b> names match "${state.q}" ${scope}`
-    : `<b>${realCount.toLocaleString()}</b> founding names recorded ${scope}`;
+  paintMeta();
 }
 
-function renderPager(total, pages) {
+function renderPager() {
+  const pages = Math.max(1, Math.ceil(total / PAGE));
   const start = state.page * PAGE;
-  document.getElementById('pager').innerHTML = `
-    <button onclick="turnPage(-1)" ${state.page===0?'disabled':''}>‹ Prev</button>
-    <span class="pg-info">${(start+1).toLocaleString()}–${Math.min(start+PAGE,total).toLocaleString()} of ${total.toLocaleString()}</span>
-    <button onclick="turnPage(1)" ${state.page>=pages-1?'disabled':''}>Next ›</button>`;
+  const el = document.getElementById('pager');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <button onclick="turnPage(-1)" ${state.page === 0 ? 'disabled' : ''}>&lsaquo; Prev</button>
+    <span class="pg-info">${(start + 1).toLocaleString()}&ndash;${Math.min(start + PAGE, total).toLocaleString()} of ${total.toLocaleString()}</span>
+    <button onclick="turnPage(1)" ${state.page >= pages - 1 ? 'disabled' : ''}>Next &rsaquo;</button>`;
 }
-function turnPage(d){ state.page += d; renderList(); window.scrollTo({top:200,behavior:'smooth'}); }
+
+function paintMeta() {
+  const metaEl = document.getElementById('meta');
+  if (grandTotal === 0) { metaEl.innerHTML = ''; return; }
+  const noun = n => n === 1 ? 'name' : 'names';
+  if (state.q) {
+    metaEl.innerHTML = `<b>${total.toLocaleString()}</b> ${noun(total)} match &ldquo;${esc(state.q)}&rdquo;`
+      + (state.country === 'ALL' ? '' : ` in ${esc(state.country)}`);
+  } else if (state.country !== 'ALL') {
+    metaEl.innerHTML = `<b>${total.toLocaleString()}</b> founding ${noun(total)} recorded in ${esc(state.country)}`;
+  } else {
+    metaEl.innerHTML = `<b>${grandTotal.toLocaleString()}</b> founding ${noun(grandTotal)} recorded so far`;
+  }
+}
+
+/* ── MONUMENT WALL ──
+   Reads its own page of rows rather than reusing the list's, and is capped:
+   an unbounded "reveal more" against a growing table is how a phone runs
+   out of memory. */
+let wallRows = [];
+async function fetchWall() {
+  const { data, error } = await baseQuery(false)
+    .order('founder_number', { ascending: true })
+    .range(0, Math.min(state.wallCount, 600) - 1);
+  if (error) throw error;
+  wallRows = data || [];
+}
 
 function renderWall() {
-  const list = getFiltered().slice(0, state.wallCount);
   const grid = document.getElementById('wall-grid');
-  grid.innerHTML = list.map((d, i) => {
+  const moreBtn = document.getElementById('wall-more');
+  if (grandTotal === 0) {
+    grid.innerHTML = emptyRecordHtml();
+    moreBtn.style.display = 'none';
+    document.getElementById('meta').innerHTML = '';
+    return;
+  }
+  grid.innerHTML = wallRows.map((d, i) => {
     let cls = 'tile';
-    if (i === 0) cls += ' t1';
+    if (Number(d.founder_number) === 1) cls += ' t1';
     else if (i < 6) cls += ' t2';
     else if (i < 25) cls += ' t3';
-    return `<span class="${cls}" title="${d.name} · Founding Member · ${d.cname}" style="animation-delay:${Math.min(i*4,600)}ms">${d.name}</span>`;
+    const name = esc(d.name);
+    const title = esc(`${d.name} · Founding Member${d.country ? ' · ' + d.country : ''}`);
+    return `<span class="${cls}" title="${title}" style="animation-delay:${Math.min(i * 4, 600)}ms">${name}</span>`;
   }).join('');
-
-  const scope = state.country === 'ALL' ? 'worldwide' : 'in ' + (COUNTRIES.find(c=>c.code===state.country)||{}).name;
-  const realCount = state.country === 'ALL'
-    ? COUNTRIES.reduce((s,c)=>s+c.count,0)
-    : (COUNTRIES.find(c=>c.code===state.country)||{}).count;
-  document.getElementById('meta').innerHTML = `Showing <b>${Math.min(state.wallCount, list.length).toLocaleString()}</b> of <b>${realCount.toLocaleString()}</b> founding names ${scope}`;
-
-  const moreBtn = document.getElementById('wall-more');
-  moreBtn.style.display = list.length < getFiltered().length ? '' : 'none';
+  document.getElementById('meta').innerHTML =
+    `Showing <b>${wallRows.length.toLocaleString()}</b> of <b>${total.toLocaleString()}</b> founding ${total === 1 ? 'name' : 'names'}`;
+  moreBtn.style.display = (wallRows.length < total && wallRows.length < 600) ? '' : 'none';
 }
-function growWall(){ state.wallCount += 200; renderWall(); }
+
+/* ── CONTROLS ─────────────────────────────────────────────────────────── */
+
+async function refresh() {
+  const rowsEl = document.getElementById('rows');
+  try {
+    if (state.view === 'list') {
+      if (!rowsCache.length) rowsEl.innerHTML = '<div class="rec-skel"></div>'.repeat(6);
+      await fetchPage();
+      renderList();
+    } else {
+      await fetchPage();      // keeps `total` correct for the wall caption
+      await fetchWall();
+      renderWall();
+    }
+  } catch (e) {
+    loadFailed = true;
+    state.view === 'list' ? renderList() : renderWall();
+  }
+}
+
+function turnPage(d) { state.page += d; refresh(); window.scrollTo({ top: 200, behavior: 'smooth' }); }
+function growWall() { state.wallCount = Math.min(state.wallCount + 200, 600); refresh(); }
+
+/* Search hits the database, so it is debounced — one query per pause, not
+   one per keystroke. */
+let searchTimer = null;
+function onSearch(v) {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    state.q = v.trim(); state.page = 0; state.wallCount = 120; refresh();
+  }, 250);
+}
+function onCountry(v) { state.country = v; state.page = 0; state.wallCount = 120; refresh(); }
 
 function setView(v) {
   state.view = v;
-  document.getElementById('btn-list').classList.toggle('active', v==='list');
-  document.getElementById('btn-wall').classList.toggle('active', v==='wall');
-  document.getElementById('list-view').classList.toggle('hidden', v!=='list');
-  document.getElementById('wall-view').classList.toggle('active', v==='wall');
-  if (v === 'wall') { state.wallCount = 120; renderWall(); }
-  else renderList();
+  document.getElementById('btn-list').classList.toggle('active', v === 'list');
+  document.getElementById('btn-wall').classList.toggle('active', v === 'wall');
+  document.getElementById('list-view').classList.toggle('hidden', v !== 'list');
+  document.getElementById('wall-view').classList.toggle('active', v === 'wall');
+  if (v === 'wall') state.wallCount = 120;
+  refresh();
 }
 
-function onSearch(v){ state.q = v.trim(); state.page = 0; state.wallCount = 120; state.view==='list'?renderList():renderWall(); }
-function onCountry(v){ state.country = v; state.page = 0; state.wallCount = 120; state.view==='list'?renderList():renderWall(); }
+function reload() { loadFailed = false; refresh(); }
 
-const params = new URLSearchParams(location.search);
-const startCountry = params.get('c');
-if (startCountry && COUNTRIES.find(c=>c.code===startCountry.toUpperCase())) {
-  state.country = startCountry.toUpperCase();
-  document.getElementById('country').value = state.country;
+/* ── BOOT ─────────────────────────────────────────────────────────────── */
+async function boot() {
+  if (!initSb()) { loadFailed = true; renderList(); return; }
+
+  /* ?c= used to take a two-letter country code against the hard-coded
+     list. Countries are now whatever founders actually typed, so the
+     parameter takes the country name and is only honoured if it exists. */
+  const params = new URLSearchParams(location.search);
+  const wanted = (params.get('c') || '').trim();
+
+  try {
+    await fetchTotals();
+    await loadCountries();
+    if (wanted) {
+      const sel = document.getElementById('country');
+      const match = [...sel.options].find(o =>
+        o.value.toLowerCase() === wanted.toLowerCase());
+      if (match) { state.country = match.value; sel.value = match.value; }
+    }
+    /* With an empty or near-empty record the search and filter bar is
+       noise — hide it until there is something worth searching. */
+    if (grandTotal < 2) document.querySelector('.controls').style.display = 'none';
+    await refresh();
+  } catch (e) {
+    loadFailed = true;
+    renderList();
+  }
 }
-renderList();
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
 </script>
 </body>
 </html>

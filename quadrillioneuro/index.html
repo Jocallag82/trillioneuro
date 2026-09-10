@@ -6,7 +6,7 @@
 
 <!-- Primary SEO -->
 <title>Quadrillioneuro — The Auction for the Top of History</title>
-<meta name="description" content="Trillioneuro gave 10,000 people a permanent, free place in history. Quadrillioneuro is where the single most contested seat — #1 in the world, #1 in your country — gets decided. Register free, no bid yet.">
+<meta name="description" content="Trillioneuro is a free public list where your place is fixed by when you joined. Quadrillioneuro is the opposite: the single most contested seat — #1 in the world, #1 in your country — goes to whoever wants it most. Register free, no bid yet.">
 <meta name="keywords" content="quadrillioneuro, top of history, world number one, country leaderboard, auction, contested seat">
 <meta name="author" content="Quadrillioneuro">
 <meta name="robots" content="index, follow">
@@ -33,6 +33,17 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#060606">
 
+<!-- Vercel Web Analytics + Speed Insights.
+     Neither site had any measurement of any kind: no pageviews, no funnel,
+     no Core Web Vitals. With one signup in three months the open question
+     is *where* people are dropping out — landing without scrolling, opening
+     the form and abandoning it, or never arriving at all — and none of those
+     could be told apart. Both scripts are first-party (served from
+     /_vercel/*, no third-party host, no cookie banner needed as they set no
+     cookies and do not fingerprint) and are already included in the Vercel
+     plan this project is on. -->
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   if (typeof window.supabase === 'undefined') {
@@ -338,7 +349,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
       "@id": "https://quadrillioneuro.com/#website",
       "url": "https://quadrillioneuro.com/",
       "name": "Quadrillioneuro",
-      "description": "Trillioneuro gave 10,000 people a permanent, free place in history. Quadrillioneuro is where the single most contested seat — #1 in the world, #1 in your country — gets decided. Register free, no bid yet.",
+      "description": "Trillioneuro is a free public list where your place is fixed by when you joined. Quadrillioneuro is the opposite: the single most contested seat — #1 in the world, #1 in your country — goes to whoever wants it most. Register free, no bid yet.",
       "inLanguage": "en-IE",
       "publisher": {
         "@id": "https://quadrillioneuro.com/#org"
@@ -362,7 +373,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">Quadrillion<b>€</b>uro</a>
+  <a href="/" class="nav-logo">Quadrillion<b>€</b>uro</a>
   <div class="nav-right">
     <button class="nav-btn" onclick="openModal()">Reserve my bid →</button>
   </div>
@@ -377,7 +388,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
   <div class="badge-live"><span class="badge-dot"></span> The Contested Seats — Registration Open</div>
   <h1>Some places<br><i>are won.</i></h1>
   <p class="hero-sub">
-    Trillioneuro gave 10,000 people a permanent, free place in history. Quadrillioneuro is where the single most contested seat in that history — #1 in the world, #1 in your country — gets decided. One name per seat. Highest bid holds it.
+    Trillioneuro hands out places in the order people arrive, free, and nobody can outrank you by paying. Quadrillioneuro is the exact opposite mechanic: one seat per country plus the World seat, and the highest bid holds it. One name per seat.
   </p>
   <p class="hero-free">Free to register interest. No bid placed, no card charged, until bidding opens.</p>
   <form class="claim-form" onsubmit="event.preventDefault(); openModal();">
@@ -393,7 +404,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 <div class="countdown reveal">
   <div class="countdown-label">The seats open when enough of us show up</div>
   <div class="threshold-statement">One world.<br><i>Every country.</i></div>
-  <p class="countdown-sub">Bidding opens on a seat once <b>1,000 people</b> register interest in it. Until then, every seat is unclaimed — and everything below is a preview of what's coming.</p>
+  <p class="countdown-sub">Bidding opens on a seat once <b>1,000 people</b> register interest in it. Every seat is currently unclaimed, and the counts below are live — so registering is literally what moves a seat toward opening.</p>
 </div>
 
 <!-- SEATS PREVIEW -->
@@ -456,7 +467,7 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 <div class="preview-band reveal">
   <h2>See the seats <i>up close</i></h2>
   <p>Explore how the live board will look once bidding opens for each seat.</p>
-  <a class="btn-outline" href="auction.html">Preview the auction board →</a>
+  <a class="btn-outline" href="/auction">Preview the auction board →</a>
 </div>
 
 <!-- FAQ -->
@@ -493,12 +504,13 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 <footer>
   <div class="footer-brand">Quadrillion<b>€</b>uro</div>
   <div class="footer-links">
-    <a href="auction.html">The Auction</a>
+    <a href="/auction">The Auction</a>
     <a href="#about">About</a>
     <a href="#how-it-works">How it works</a>
     <a href="#faq">FAQ</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="terms.html">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="mailto:hello@quadrillioneuro.com">Contact</a>
   </div>
   <p class="footer-legal">
     Registration is free. No payment is taken and no bid is placed until bidding formally opens for a seat. Quadrillioneuro is a skill-based auction for a symbolic title — not a charity, investment, lottery, or financial product.
@@ -567,6 +579,21 @@ footer { border-top: 1px solid var(--line); padding: 40px 20px; text-align: cent
 </div>
 
 <script>
+
+/* ── FUNNEL EVENTS ──────────────────────────────────────────────────────
+   One helper, so every event name is defined in one place and a missing
+   analytics script can never throw inside a click handler. Events are
+   deliberately few and map to the only funnel that matters here:
+
+     view  →  cta_click  →  form_open  →  register  →  share
+
+   Nothing personal is sent: seat codes and step names only, never a name,
+   email address or referral code. */
+function track(name, data) {
+  try {
+    if (typeof window.va === 'function') window.va('event', { name: name, data: data || {} });
+  } catch (e) { /* analytics must never break the page */ }
+}
 /* ════════════════════════════════════════════════════════════
    SUPABASE CONFIG
 
@@ -707,21 +734,48 @@ detectCountry();
 /* ── MODAL ── */
 let lastFocused = null;
 let selectedSeat = 'WORLD';
+/* Set when the visitor arrives via a specific country card, so clicking
+   "Ireland #1" registers for IE even if the country field is left as the
+   auto-detected value. Cleared when they switch to the World seat. */
+let seatCodeHint = null;
+
+/* Code → display name for the seats the board shows. Used for labels only;
+   the canonical seat code always comes from the database. */
+const SEAT_NAMES = {
+  WORLD:'World #1', IE:'Ireland #1', US:'United States #1', GB:'United Kingdom #1',
+  DE:'Germany #1', FR:'France #1', AU:'Australia #1', CA:'Canada #1',
+  NL:'Netherlands #1', IN:'India #1', BR:'Brazil #1', JP:'Japan #1',
+  ES:'Spain #1', IT:'Italy #1', NZ:'New Zealand #1', ZA:'South Africa #1'
+};
 
 function selectSeat(kind) {
   selectedSeat = kind;
+  if (kind === 'WORLD') seatCodeHint = null;
   document.getElementById('seat-btn-world').classList.toggle('active', kind === 'WORLD');
   document.getElementById('seat-btn-country').classList.toggle('active', kind === 'COUNTRY');
   document.getElementById('f-country-field').style.display = kind === 'COUNTRY' ? '' : 'none';
 }
 
 function openModal(seatHint) {
+  track('form_open', { seat: seatHint || 'WORLD' });
   const he = document.getElementById('hero-email').value.trim();
   if (he) document.getElementById('f-email').value = he;
   lastFocused = document.activeElement;
 
   if (seatHint === 'WORLD') selectSeat('WORLD');
-  else if (seatHint) { selectSeat('COUNTRY'); if (seatHint !== 'OTHER') document.getElementById('f-country').value = seatHint; }
+  else if (seatHint) {
+    selectSeat('COUNTRY');
+    /* seatHint is the card's seat CODE ('IE'), not a country name. Writing
+       it into the country field put "IE" in a box labelled Country; keep
+       the code for the request and show the readable name instead. */
+    if (seatHint !== 'OTHER') {
+      seatCodeHint = seatHint;
+      const nice = (SEAT_NAMES[seatHint] || '').replace(/ #1$/, '');
+      if (nice) document.getElementById('f-country').value = nice;
+    } else {
+      seatCodeHint = null;
+    }
+  }
   else selectSeat('WORLD');
 
   document.getElementById('overlay').classList.add('open');
@@ -769,7 +823,13 @@ function clearError() {
 function captureHeroEmail(email) {
   if (!email || !EMAIL_RE.test(email)) return;
   if (!initSb()) return;
-  sb.from('quad_prewarm').upsert({ email }, { onConflict: 'email', ignoreDuplicates: true }).then(() => {}).catch(() => {});
+  /* Was a direct anon INSERT on quad_prewarm. anon no longer holds any
+     privilege on that table — an unauthenticated, unthrottled write path
+     into a table of email addresses was the cheapest abuse target on the
+     site. capture_email() validates and rate-limits server-side. */
+  sb.rpc('capture_email', { p_email: email, p_site: 'quad' })
+    .then(() => track('email_capture'))
+    .catch(() => {});
 }
 
 async function reserve() {
@@ -778,7 +838,14 @@ async function reserve() {
   const country = document.getElementById('f-country').value.trim();
   const bid = document.getElementById('f-bid').value.trim();
   const btn = document.querySelector('.modal-submit');
-  const seat = selectedSeat === 'WORLD' ? 'WORLD' : (country || detectedCountryName || 'UNKNOWN');
+  /* The seat we ask for, in priority order: the card that was clicked,
+     then whatever country the visitor typed, then the detected country.
+     The database canonicalises whatever it receives (canon_seat) and
+     returns the code it actually stored, so the cards, the cache and the
+     confirmation all agree on one value. */
+  const seat = selectedSeat === 'WORLD'
+    ? 'WORLD'
+    : (seatCodeHint || country || detectedCountryName || 'UNKNOWN');
 
   if (claimInProgress) return;
   clearError();
@@ -799,15 +866,17 @@ async function reserve() {
       if (error) {
         btn.disabled = false; btn.textContent = 'Reserve my place in line';
         claimInProgress = false;
-        showError('Could not reserve your place right now. Please try again in a moment.');
+        showError(...serverError(error));
         return;
       }
       const row = Array.isArray(data) ? data[0] : data;
-      // seat_total comes back from the RPC so the confirmation can state where
-      // the seat now stands. Also folded into the local cache so the seat grid
-      // updates behind the modal without another round trip.
-      if (row?.seat_total != null) { seatCounts[seat] = Number(row.seat_total); paintSeats(); }
-      finishClaim(name, seat, row?.queue_position, row?.ref_code, row?.seat_total);
+      /* seat_code is the seat the database actually stored after
+         canonicalisation ('Ireland' → 'IE'). Keying the cache on the raw
+         string instead is what left every country card reading 0 forever. */
+      const storedSeat = row?.seat_code || seat;
+      if (row?.seat_total != null) { seatCounts[storedSeat] = Number(row.seat_total); paintSeats(); }
+      track('register', { seat: storedSeat });
+      finishClaim(name, storedSeat, row?.queue_position, row?.ref_code, row?.seat_total);
     } catch (e) {
       btn.disabled = false; btn.textContent = 'Reserve my place in line';
       claimInProgress = false;
@@ -848,7 +917,26 @@ async function reserve() {
   btn.disabled = false; btn.textContent = 'Reserve my place in line';
 }
 
-function seatLabel(seat) { return seat === 'WORLD' ? 'World #1' : (seat + ' #1'); }
+/* Codes render as readable names where we know them; an unlisted country
+   falls back to Titlecase rather than shouting its stored code. */
+function seatLabel(seat) {
+  if (!seat) return 'a seat';
+  if (SEAT_NAMES[seat]) return SEAT_NAMES[seat];
+  if (seat === 'UNKNOWN') return 'your country\u2019s #1';
+  return seat.charAt(0) + seat.slice(1).toLowerCase() + ' #1';
+}
+
+/* Server-side validation and rate limiting now reject requests the browser
+   would have let through, so the codes those errors carry get mapped to
+   something a person can act on. Anything unrecognised stays generic — the
+   raw Postgres message is never shown. */
+function serverError(error) {
+  const m = String(error?.message || '');
+  if (/RATE_LIMIT/.test(m))    return ['Too many attempts from your connection. Please try again in a little while.', null];
+  if (/INVALID_EMAIL/.test(m)) return ['That email address does not look right — check it and try again.', 'f-email-wrap'];
+  if (/INVALID_NAME/.test(m))  return ['Enter a name between 1 and 30 characters.', 'f-name-wrap'];
+  return ['Could not reserve your place right now. Please try again in a moment.', null];
+}
 
 /* Tracks the last confirmed seat so the share text can name it and say how far
    off opening it is. */
@@ -897,6 +985,7 @@ function finishClaim(name, seat, position, refCode, seatTotal) {
  * registered for ever happens. Naming the shortfall makes that legible and
  * gives the reader a reason to act rather than just be impressed. */
 function shareX() {
+  track('share', { via: 'x' });
   const seatName = document.getElementById('sc-seat').textContent;
   const link = document.getElementById('ref-link').dataset.link || 'https://quadrillioneuro.com';
   const left = Math.max(THRESHOLD - (lastClaim.total || 0), 0);
@@ -908,6 +997,7 @@ function shareX() {
   window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, '_blank');
 }
 function copyLink() {
+  track('share', { via: 'copy_link' });
   const link = document.getElementById('ref-link').dataset.link || 'https://quadrillioneuro.com';
   navigator.clipboard?.writeText(link).then(() => {
     const b = document.querySelector('.share-copy');
@@ -916,6 +1006,7 @@ function copyLink() {
   });
 }
 function copyRef() {
+  track('share', { via: 'copy_ref' });
   const link = document.getElementById('ref-link').dataset.link || document.getElementById('ref-link').textContent;
   navigator.clipboard?.writeText(link).then(() => {
     const b = document.querySelector('.ref-box button');
