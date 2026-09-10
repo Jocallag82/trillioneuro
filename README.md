@@ -78,9 +78,17 @@ Route groups, in order:
    `/((?!_vercel/).*)`; without that exclusion it rewrote `/_vercel/insights/script.js` into
    a path that does not exist, which would have left analytics silently dead on that domain
    only.
-5. **Clean URLs for trillioneuro.com**, then `.html` → extensionless `308`s. Internal links
-   used `.html` while `sitemap.xml` listed the extensionless form: a redirect hop per click
-   and two URLs per page for search engines.
+5. **`.html` → extensionless `308`s on both hosts**, then **clean URLs for
+   trillioneuro.com**. Internal links used `.html` while `sitemap.xml` listed the
+   extensionless form: a redirect hop per click and two URLs per page for search engines.
+   The quad host's redirects must sit *before* its catch-all or they are never reached.
+
+Two checks guard all of this — run both before pushing a routing change:
+
+```
+node scripts/check-vercel-json.mjs   # schema-legal: no property Vercel would reject
+node scripts/check-routes.mjs        # replays the table in order, asserts every URL
+```
 
 ## Setup / operations
 

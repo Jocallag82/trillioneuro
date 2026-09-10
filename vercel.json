@@ -14,53 +14,204 @@
     },
     {
       "src": "/(.*)\\.(webm|mp4|jpg|jpeg|png|ico|woff2)",
-      "headers": { "Cache-Control": "public, max-age=31536000, immutable" },
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
       "continue": true
     },
-
     {
       "src": "/(.*)",
-      "has": [{ "type": "host", "value": "www.trillioneuro.com" }],
-      "headers": { "Location": "https://trillioneuro.com/$1" },
+      "has": [
+        {
+          "type": "host",
+          "value": "www.trillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://trillioneuro.com/$1"
+      },
       "status": 308
     },
     {
       "src": "/(.*)",
-      "has": [{ "type": "host", "value": "www.quadrillioneuro.com" }],
-      "headers": { "Location": "https://quadrillioneuro.com/$1" },
+      "has": [
+        {
+          "type": "host",
+          "value": "www.quadrillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://quadrillioneuro.com/$1"
+      },
       "status": 308
     },
-
     {
       "src": "/quadrillioneuro/?",
-      "has": [{ "type": "host", "value": "trillioneuro.com" }],
-      "headers": { "Location": "https://quadrillioneuro.com/" },
+      "has": [
+        {
+          "type": "host",
+          "value": "trillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://quadrillioneuro.com/"
+      },
       "status": 308
     },
     {
       "src": "/quadrillioneuro/(.*)",
-      "has": [{ "type": "host", "value": "trillioneuro.com" }],
-      "headers": { "Location": "https://quadrillioneuro.com/$1" },
+      "has": [
+        {
+          "type": "host",
+          "value": "trillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://quadrillioneuro.com/$1"
+      },
       "status": 308
     },
-
-    { "src": "/",           "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/index.html" },
-    { "src": "/auction/?",  "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/auction.html" },
-    { "src": "/privacy/?",  "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/privacy.html" },
-    { "src": "/terms/?",    "has": [{ "type": "host", "value": "quadrillioneuro.com" }], "dest": "/quadrillioneuro/terms.html" },
+    {
+      "src": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "dest": "/quadrillioneuro/index.html"
+    },
+    {
+      "src": "/auction/?",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "dest": "/quadrillioneuro/auction.html"
+    },
+    {
+      "src": "/privacy/?",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "dest": "/quadrillioneuro/privacy.html"
+    },
+    {
+      "src": "/terms/?",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "dest": "/quadrillioneuro/terms.html"
+    },
+    {
+      "src": "/auction\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "/auction"
+      },
+      "status": 308
+    },
+    {
+      "src": "/privacy\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "/privacy"
+      },
+      "status": 308
+    },
+    {
+      "src": "/terms\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "/terms"
+      },
+      "status": 308
+    },
+    {
+      "src": "/index\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "/"
+      },
+      "status": 308
+    },
     {
       "src": "/((?!_vercel/).*)",
-      "has": [{ "type": "host", "value": "quadrillioneuro.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
       "dest": "/quadrillioneuro/$1"
     },
-
-    { "src": "/record/?",  "dest": "/record.html" },
-    { "src": "/privacy/?", "dest": "/privacy.html" },
-    { "src": "/terms/?",   "dest": "/terms.html" },
-
-    { "src": "/record\\.html",  "headers": { "Location": "/record" },  "status": 308 },
-    { "src": "/privacy\\.html", "headers": { "Location": "/privacy" }, "status": 308 },
-    { "src": "/terms\\.html",   "headers": { "Location": "/terms" },   "status": 308 },
-    { "src": "/index\\.html",   "headers": { "Location": "/" },        "status": 308 }
+    {
+      "src": "/record/?",
+      "dest": "/record.html"
+    },
+    {
+      "src": "/privacy/?",
+      "dest": "/privacy.html"
+    },
+    {
+      "src": "/terms/?",
+      "dest": "/terms.html"
+    },
+    {
+      "src": "/record\\.html",
+      "headers": {
+        "Location": "/record"
+      },
+      "status": 308
+    },
+    {
+      "src": "/privacy\\.html",
+      "headers": {
+        "Location": "/privacy"
+      },
+      "status": 308
+    },
+    {
+      "src": "/terms\\.html",
+      "headers": {
+        "Location": "/terms"
+      },
+      "status": 308
+    },
+    {
+      "src": "/index\\.html",
+      "headers": {
+        "Location": "/"
+      },
+      "status": 308
+    }
   ]
 }
