@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Primary SEO -->
+<title>Trillioneuro — Claim Your Number on the Permanent Public List</title>
+<meta name="description" content="One public list, kept in the order people joined. Claim your name and it holds that number permanently. Free — no card, no payment. The earlier you join, the lower your number.">
+<meta name="keywords" content="trillioneuro, be part of history, public record, founding member, leaderboard, trillion euro">
+<meta name="author" content="Trillioneuro">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trillioneuro.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Trillioneuro">
+<meta property="og:url" content="https://trillioneuro.com/">
+<meta property="og:title" content="Claim Your Number on the List — Free">
+<meta property="og:description" content="One public list, kept in join order. Your name holds its number permanently. Free — and #1 can only ever belong to one person.">
+<meta property="og:image" content="https://trillioneuro.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_IE">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@trillioneuro">
+<meta name="twitter:title" content="Claim Your Number on the List — Free">
+<meta name="twitter:description" content="One public list, kept in join order. Your name holds its number permanently. Free.">
+<meta name="twitter:image" content="https://trillioneuro.com/og-image.png">
+
+<!-- Favicon (inline gold € — URL-encoded so it never breaks parsing) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a0a0a">
+
+<!-- Vercel Web Analytics + Speed Insights.
+     Neither site had any measurement of any kind: no pageviews, no funnel,
+     no Core Web Vitals. With one signup in three months the open question
+     is *where* people are dropping out — landing without scrolling, opening
+     the form and abandoning it, or never arriving at all — and none of those
+     could be told apart. Both scripts are first-party (served from
+     /_vercel/*, no third-party host, no cookie banner needed as they set no
+     cookies and do not fingerprint) and are already included in the Vercel
+     plan this project is on. -->
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<!-- Supabase library, with fallback CDN if the first is unreachable -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  if (typeof window.supabase === 'undefined') {
+    document.write('\x3Cscript src="https://unpkg.com/@supabase/supabase-js@2">\x3C/script>');
+  }
+</script>
+<!-- Fonts as real <link> elements, not an @import inside <style>.
+     @import forces a waterfall — HTML, then this stylesheet, then the font
+     CSS, then the font files — and the entire look of this page rests on the
+     Cormorant Garamond headline. Until it arrived the hero rendered in a
+     fallback serif and then reflowed. preconnect opens the two connections
+     during HTML parse so the request starts immediately instead of fourth
+     in line. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap">
+<style>
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white:#ffffff; --off:#f5f5f7; --text:#1d1d1f; --mid:#6e6e73;
+  --faint:#a1a1a6; --line:#d2d2d7; --gold:#b8860b; --goldhi:#c9940d; --gold-bg:#fdf8ee;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  background: var(--white); color: var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100; height: 44px;
+  background: rgba(255,255,255,0.9); backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+}
+.nav-logo { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; }
+.nav-logo b { color: var(--gold); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+/* Padded to a real target. As a bare text button this measured 70x14 —
+   under half the 44px minimum, and the single most important control above
+   the fold on a phone. Negative right margin keeps it optically flush with
+   the nav edge despite the padding. */
+.nav-btn { font-size: 12px; font-weight: 500; color: var(--gold); background: none;
+  border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px;
+  margin-right: -4px; }
+.nav-btn:hover { opacity: 0.7; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; overflow: hidden; background: #0a0a0a; min-height: 94vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 70px 24px 64px;
+}
+.hero::before {
+  content: ''; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 600px;
+  background: radial-gradient(ellipse at center, rgba(184,134,11,0.18) 0%, rgba(184,134,11,0.06) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0; pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: radial-gradient(ellipse 62% 58% at center, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.28) 45%, transparent 78%);
+}
+.hero > *:not(.hero-video) { position: relative; z-index: 2; }
+.badge-founding {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #0a0800; background: linear-gradient(135deg, var(--goldhi), var(--gold));
+  padding: 6px 14px; border-radius: 980px; margin-bottom: 26px;
+  opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 9.5vw, 116px);
+  font-weight: 300; line-height: 0.95; letter-spacing: -0.02em; color: #f0ede8;
+  margin-bottom: 26px; opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+}
+.hero h1 i { font-style: italic; color: var(--gold); }
+.hero-sub {
+  max-width: 540px; font-size: clamp(16px, 2vw, 19px); font-weight: 300; line-height: 1.6;
+  color: rgba(240,237,232,0.7); margin-bottom: 14px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s ease forwards;
+  text-shadow: 0 1px 16px rgba(0,0,0,0.45);
+}
+.hero-free {
+  font-size: 14px; color: var(--gold); font-weight: 500; margin-bottom: 40px;
+  opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+}
+
+/* claim form */
+.claim-form {
+  display: flex; gap: 10px; width: 100%; max-width: 440px; flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0; animation: fadeUp 0.8s 0.5s ease forwards;
+}
+.claim-form input {
+  flex: 1; min-width: 200px; font-family: inherit; font-size: 16px; color: #f0ede8;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 15px 18px; outline: none; transition: border-color 0.15s;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.claim-form input::placeholder { color: rgba(240,237,232,0.35); }
+.claim-form input:focus { border-color: var(--gold); }
+.btn-primary {
+  background: var(--gold); color: #fff; border: none; border-radius: 12px;
+  padding: 15px 28px; font-size: 16px; font-weight: 500; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.1px; transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--goldhi); }
+.btn-primary:active { transform: scale(0.98); }
+.hero-foot {
+  font-size: 12px; color: rgba(240,237,232,0.4); margin-top: 18px;
+  opacity: 0; animation: fadeUp 0.8s 0.6s ease forwards;
+}
+.hero-rule {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,0.4), transparent);
+}
+
+/* ── COUNTDOWN ── */
+.countdown {
+  background: var(--white); border-bottom: 1px solid var(--line);
+  padding: 48px 24px; text-align: center;
+}
+.countdown-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px;
+}
+.threshold-statement {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(42px, 7vw, 88px); font-weight: 300;
+  color: var(--text); line-height: 1.0; letter-spacing: -0.02em;
+}
+.threshold-statement i { font-style: italic; color: var(--gold); }
+.countdown-sub { font-size: 14px; color: var(--mid); margin-top: 24px; max-width: 460px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+.countdown-sub b { color: var(--text); font-weight: 500; }
+
+/* ── PROGRESS ── */
+.progress-section { background: var(--off); border-bottom: 1px solid var(--line); padding: 48px 24px; text-align: center; }
+.progress-inner { max-width: 640px; margin: 0 auto; }
+.progress-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+.progress-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px,4vw,38px); font-weight: 400; color: var(--gold); line-height: 1; }
+.progress-goal { font-size: 13px; color: var(--faint); }
+.progress-track { height: 8px; background: var(--white); border: 1px solid var(--line); border-radius: 100px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold), var(--goldhi));
+  border-radius: 100px; transition: width 1.6s cubic-bezier(0.16,1,0.3,1); }
+.progress-caption { font-size: 13px; color: var(--mid); margin-top: 14px; }
+.progress-caption b { color: var(--text); font-weight: 500; }
+
+/* ── HOW / STAGES ── */
+.stages { max-width: 1000px; margin: 0 auto; padding: 80px 24px; }
+.stages-head { text-align: center; margin-bottom: 56px; }
+.stages-head h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px,5vw,56px); font-weight: 300; letter-spacing: -0.02em; margin-bottom: 12px; }
+.stages-head h2 i { font-style: italic; color: var(--gold); }
+.stages-head p { font-size: 16px; font-weight: 300; color: var(--mid); max-width: 440px; margin: 0 auto; line-height: 1.5; }
+.stage-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.stage { background: var(--white); padding: 32px 28px; }
+.stage-tag {
+  display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 980px; margin-bottom: 18px;
+}
+.stage-tag.now { background: var(--gold); color: #fff; }
+.stage-tag.soon { background: var(--off); color: var(--mid); border: 1px solid var(--line); }
+.stage h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 10px; letter-spacing: -0.01em; }
+.stage h3 .price { color: var(--gold); }
+.stage p { font-size: 14px; font-weight: 300; color: var(--mid); line-height: 1.6; }
+
+/* ── PREVIEW LINK ── */
+.preview-band { background: #0a0a0a; padding: 70px 24px; text-align: center; position: relative; overflow: hidden; }
+.preview-band::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:600px; height:300px; background: radial-gradient(ellipse at top, rgba(184,134,11,0.12) 0%, transparent 70%); }
+.preview-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,5vw,56px); font-weight:300; color:#f0ede8; margin-bottom:14px; position:relative; letter-spacing:-0.02em; }
+.preview-band h2 i { font-style:italic; color:var(--gold); }
+.preview-band p { font-size:16px; font-weight:300; color:rgba(240,237,232,0.5); max-width:420px; margin:0 auto 36px; position:relative; line-height:1.6; }
+.btn-outline {
+  position: relative; display:inline-block; font-family:inherit; font-size:16px; font-weight:400;
+  color: var(--gold); background:none; border:1px solid rgba(184,134,11,0.5);
+  border-radius:980px; padding:14px 30px; cursor:pointer; text-decoration:none; transition:background 0.15s;
+}
+.btn-outline:hover { background: rgba(184,134,11,0.1); }
+
+/* ── FOOTER ── */
+footer { background: var(--off); border-top: 1px solid var(--line); padding: 40px 20px; text-align: center; }
+.footer-brand { font-size: 14px; font-weight: 500; margin-bottom: 14px; }
+.footer-brand b { color: var(--gold); font-weight: 500; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 4px; }
+/* 44px targets. These were ~16px tall, which on a phone means aiming. */
+.footer-links a { font-size: 12px; color: var(--mid); text-decoration: none;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 2px; }
+.footer-links a:hover { color: var(--text); }
+.footer-legal { font-size: 11px; color: var(--faint); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+
+/* ── MODAL (claim) ── */
+.overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.45);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:16px; }
+.overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:18px; padding:32px 28px; width:100%; max-width:420px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.15); animation:modalIn 0.28s cubic-bezier(0.34,1.4,0.64,1); max-height:92vh; overflow-y:auto; }
+@keyframes modalIn { from{opacity:0;transform:translateY(14px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+.modal-kicker { font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.modal h2 { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; letter-spacing:-0.02em; line-height:1.05; margin-bottom:6px; }
+.modal h2 i { font-style:italic; }
+.modal-sub { font-size:13px; font-weight:300; color:var(--mid); line-height:1.5; margin-bottom:22px; }
+.f { margin-bottom:12px; }
+.f label { display:flex; justify-content:space-between; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--mid); margin-bottom:5px; }
+.f label span { font-weight:300; text-transform:none; letter-spacing:0; color:var(--faint); }
+.f input, .f textarea { width:100%; font-family:inherit; font-size:15px; color:var(--text); background:var(--off);
+  border:1px solid var(--line); border-radius:8px; padding:10px 12px; outline:none; resize:none;
+  transition:border-color 0.15s, background 0.15s; -webkit-appearance:none; }
+.f input:focus, .f textarea:focus { border-color:var(--gold); background:var(--white); }
+.f input::placeholder, .f textarea::placeholder { color:var(--faint); }
+.modal-actions { display:flex; gap:8px; margin-top:20px; }
+.modal-submit { flex:1; padding:13px; font-family:inherit; font-size:15px; font-weight:500;
+  background:var(--gold); color:#fff; border:none; border-radius:8px; cursor:pointer; transition:background 0.15s; }
+.modal-submit:hover { background:var(--goldhi); }
+.modal-cancel { padding:13px 16px; font-family:inherit; font-size:14px; font-weight:400; color:var(--mid);
+  background:var(--off); border:1px solid var(--line); border-radius:8px; cursor:pointer; }
+.modal-legal { font-size:11px; color:var(--faint); text-align:center; margin-top:12px; line-height:1.5; }
+
+/* success / share card */
+.modal-ok { display:none; text-align:center; }
+.modal-ok.show { display:block; }
+.modal-form.gone { display:none; }
+.share-card {
+  background: #0a0a0a; border-radius:16px; padding:28px 24px; margin-bottom:20px; position:relative; overflow:hidden;
+}
+.share-card::before { content:''; position:absolute; top:-40%; left:50%; transform:translateX(-50%);
+  width:300px; height:200px; background:radial-gradient(ellipse at center, rgba(184,134,11,0.25) 0%, transparent 70%); }
+.share-card .sc-label { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; position:relative; }
+.share-card .sc-name { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:400; color:#f0ede8; position:relative; margin-bottom:6px; }
+.share-card .sc-rank { font-size:14px; color:rgba(240,237,232,0.6); position:relative; }
+.share-card .sc-rank b { color:var(--gold); font-weight:500; }
+.share-card .sc-brand { font-size:11px; color:rgba(240,237,232,0.4); margin-top:16px; position:relative; }
+.modal-ok h3 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; margin-bottom:8px; }
+.modal-ok > p { font-size:14px; color:var(--mid); line-height:1.6; margin-bottom:16px; }
+.ref-box { background:var(--off); border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+  font-size:12px; color:var(--mid); display:flex; align-items:center; gap:8px; margin-bottom:10px; text-align:left; }
+.ref-box code { flex:1; color:var(--gold); font-family:ui-monospace,monospace; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ref-box button { font-family:inherit; font-size:11px; font-weight:500; color:var(--text); background:var(--white);
+  border:1px solid var(--line); border-radius:6px; padding:6px 10px; cursor:pointer; white-space:nowrap; }
+.ref-count { font-size:12px; color:var(--mid); margin-bottom:16px; min-height:16px; }
+.share-btns { display:flex; gap:8px; }
+.share-btns button { flex:1; font-family:inherit; font-size:14px; font-weight:500; padding:12px; border-radius:8px; cursor:pointer; border:none; transition:background 0.15s; }
+.share-x { background:#0a0a0a; color:#fff; }
+.share-copy { background:var(--off); color:var(--text); border:1px solid var(--line) !important; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* ── ABOUT ── */
+.about-band { max-width: 720px; margin: 0 auto; padding: 70px 24px; text-align: center; }
+.about-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,4.5vw,44px); font-weight:300; letter-spacing:-0.02em; margin-bottom:16px; }
+.about-band h2 i { font-style:italic; color:var(--gold); }
+.about-band p { font-size:15px; font-weight:300; color:var(--mid); line-height:1.7; }
+.about-band p + p { margin-top:12px; }
+.about-band a { color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(184,134,11,0.35); }
+.about-band a:hover { border-color:var(--gold); }
+
+/* ── FAQ ── */
+.faq-band { max-width: 680px; margin: 0 auto; padding: 20px 24px 80px; }
+.faq-band h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,4.5vw,44px); font-weight:300; letter-spacing:-0.02em; margin-bottom:36px; text-align:center; }
+.faq-band h2 i { font-style:italic; color:var(--gold); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary { list-style:none; cursor:pointer; padding:20px 4px; font-size:16px; font-weight:500; color:var(--text);
+  display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.faq-item summary::-webkit-details-marker { display:none; }
+.faq-item summary::after { content:'+'; font-size:22px; font-weight:300; color:var(--gold); flex-shrink:0; transition:transform 0.2s; line-height:1; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.faq-item p { font-size:14px; font-weight:300; color:var(--mid); line-height:1.7; padding:0 28px 22px 4px; }
+
+/* ── ACCESSIBILITY ── */
+.visually-hidden {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+.f input:focus-visible, .f textarea:focus-visible, .claim-form input:focus-visible,
+.nav-btn:focus-visible, .btn-primary:focus-visible, .btn-outline:focus-visible,
+.modal-cancel:focus-visible, .modal-submit:focus-visible, .ref-box button:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 2px;
+}
+
+/* ── INLINE FORM ERROR ── */
+.modal-error {
+  display:none; font-size:12.5px; color:#b3261e; background:#fdecea;
+  border:1px solid #f3c6c1; border-radius:8px; padding:9px 12px; margin-bottom:12px; line-height:1.4;
+}
+.modal-error.show { display:block; }
+.f.invalid input, .f.invalid textarea { border-color:#b3261e; }
+
+@media (max-width:600px){
+  .stage-grid{grid-template-columns:1fr;}
+  /* Stack the claim form rather than squeezing it. Side by side, the input
+     was collapsing to ~168px on a 390px screen — narrow enough that its own
+     placeholder was ellipsised and, once typing started, you could not see
+     the end of your own address. Both controls now get the full width, which
+     is also the better tap target. */
+  .claim-form{flex-direction:column; flex-wrap:nowrap; max-width:360px;}
+  .claim-form input{min-width:0; width:100%;}
+  .claim-form .btn-primary{width:100%;}
+}
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;} .hero-video{display:none;} }
+</style>
+<!-- Structured data. The FAQ answers below are copied verbatim from the
+     visible FAQ section — Google treats FAQ markup that does not match
+     on-page content as a violation, and it is the fastest way to lose a
+     rich result. If the section changes, change this too. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://trillioneuro.com/#website",
+      "url": "https://trillioneuro.com/",
+      "name": "Trillioneuro",
+      "description": "A permanent public record of founding members. Free to claim your place.",
+      "inLanguage": "en-IE",
+      "publisher": {
+        "@id": "https://trillioneuro.com/#org"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://trillioneuro.com/#org",
+      "name": "Trillioneuro",
+      "url": "https://trillioneuro.com/",
+      "logo": "https://trillioneuro.com/og-image.png",
+      "areaServed": "Worldwide",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IE"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://trillioneuro.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this a scam?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. We don't ask for payment, passwords, or ID, and founding membership costs nothing to claim. Trillioneuro is a symbolic public record, not a financial product — there's no investment, no return, and nothing to lose by joining."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the catch?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Founding membership is free for your first year. After that, a small €1/year fee keeps your Founder badge active — your entry on the record is permanent regardless of payment. This part is planned but not yet active: nothing is charged automatically, and we'll email you before any payment is ever requested."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can someone take my rank away from me?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Your entry never disappears — but your rank isn't locked in forever. After year one, anyone can bid to challenge your position and push you down. This part is planned, not live yet, and we'll be upfront about it when it launches."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens to my email address?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's used only to confirm your place and contact you about it — never shown publicly, never sold. Full detail in our Privacy Policy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I remove my name later?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — email privacy@trillioneuro.com any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does sharing my link move me up the ranks?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No — your founder number is your real join order and never changes, which is what lets us promise it's permanent and honest. Sharing your link just lets us credit you for the friends who join through it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who's behind this?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Trillioneuro is a trading name registered in Ireland. See our Terms for the full detail on what founding membership does and doesn't entitle you to."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Trillion<b>€</b>uro</div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="openModal()">Claim free →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline poster="hero-poster.jpg">
+    <source src="hero-bg.webm" type="video/webm">
+    <source src="hero-bg.mp4" type="video/mp4">
+  </video>
+  <div class="badge-founding">✦ Founding Member — Free</div>
+  <h1>Get your name<br><i>on the list.</i></h1>
+  <p class="hero-sub">
+    Trillioneuro is one public list, kept in the exact order people joined it.
+    Add your name and it holds that number permanently — <b>#1</b> can only ever
+    belong to one person.
+  </p>
+  <p class="hero-free">Free. No card, no payment, nothing to buy.</p>
+  <form class="claim-form" onsubmit="event.preventDefault(); openModal();">
+    <label class="visually-hidden" for="hero-email">Your email address</label>
+    <input type="email" id="hero-email" placeholder="Your email address" autocomplete="email" inputmode="email" onblur="captureHeroEmail(this.value)">
+    <button type="submit" class="btn-primary">Claim my name</button>
+  </form>
+  <p class="hero-foot">Every name added takes the next number. The earlier you are, the lower it is — forever.</p>
+  <div class="hero-rule"></div>
+</section>
+
+<!-- THRESHOLD STATEMENT -->
+<div class="countdown reveal">
+  <div class="countdown-label">Be among the first</div>
+  <div class="threshold-statement">The first names<br><i>in history.</i></div>
+  <p class="countdown-sub">The full record opens publicly once <b>10,000 names</b> are on it. Until then every name added takes one of the first numbers — and those are the only ones that can never be beaten.</p>
+</div>
+
+<!-- PROGRESS (hidden until real founder numbers build — re-enable later) -->
+<!--
+<div class="progress-section reveal">
+  <div class="progress-inner">
+    <div class="progress-top">
+      <div class="progress-num" id="prog-n">0 founders</div>
+      <div class="progress-goal">of 10,000 to unlock launch</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+    <p class="progress-caption">When we hit 10,000 reserved founders, the record opens to everyone.</p>
+  </div>
+</div>
+-->
+
+<!-- STAGES -->
+<div class="stages reveal" id="how-it-works">
+  <div class="stages-head">
+    <h2>How your place <i>works</i></h2>
+    <p>Three facts, including the ones most sites would bury. Nothing here costs anything today.</p>
+  </div>
+  <div class="stage-grid">
+    <div class="stage">
+      <span class="stage-tag now">Now — Free</span>
+      <h3>Claim your name</h3>
+      <p>Reserve your permanent entry as a Founding Member. Add your name, an optional message, and your country. Completely free for your first year — no card, no catch.</p>
+    </div>
+    <div class="stage">
+      <span class="stage-tag now">Immediately</span>
+      <h3>Your number is yours</h3>
+      <p>You get the next number on the list and it never changes hands. Not by paying, not by referring anyone, not by us deciding otherwise — the order is simply when you arrived. That is the only thing this record promises, and the reason it is worth anything.</p>
+    </div>
+    <div class="stage">
+      <span class="stage-tag soon">Later, and openly</span>
+      <h3>What changes, what doesn't</h3>
+      <p>Two things are planned and neither is active yet: a €1/year fee to keep the verified Founder badge after year one, and the option to bid for a higher <i>display position</i>. Your name, your number and your place in the order are never affected by either, paid or not. Nothing is ever charged without asking you first.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="about-band reveal" id="about">
+  <h2>What this <i>actually is.</i></h2>
+  <p>Trillioneuro is a numbered public list of people, kept in the order they joined. That is the whole thing. Despite the name there is no money in it, no token, no investment and nothing to buy — the euro sign is the brand, not a claim. What you get is a number that is genuinely scarce, because only one person can ever hold each one.</p>
+  <p>Claiming is free and stays free. Two later additions are planned and openly flagged: a €1/year fee for the verified Founder badge after year one, and paid bidding for display position. Neither can take your name, your number or your place in the order — those are fixed the moment you claim, and no payment protects or threatens them.</p>
+  <p>Want the very top instead of a place in the record? <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a> is the sister project where the single most contested seat — #1 in the world, #1 in your country — is decided by open bidding.</p>
+</div>
+
+<!-- PREVIEW -->
+<div class="preview-band reveal">
+  <h2>See the record <i>taking shape</i></h2>
+  <p>Explore how the live record and monument wall will look when the founding names go live.</p>
+  <a class="btn-outline" href="/record">Preview the record →</a>
+</div>
+
+<!-- FAQ -->
+<div class="faq-band reveal" id="faq">
+  <h2>Questions, <i>answered honestly.</i></h2>
+
+  <details class="faq-item">
+    <summary>Is this a scam?</summary>
+    <p>No. We don't ask for payment, passwords, or ID, and founding membership costs nothing to claim. Trillioneuro is a symbolic public record, not a financial product — there's no investment, no return, and nothing to lose by joining.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What's the catch?</summary>
+    <p>Founding membership is free for your first year. After that, a small €1/year fee keeps your Founder badge active — your entry on the record is permanent regardless of payment. This part is planned but not yet active: nothing is charged automatically, and we'll email you before any payment is ever requested.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can someone take my rank away from me?</summary>
+    <p>Your entry never disappears — but your rank isn't locked in forever. After year one, anyone can bid to challenge your position and push you down, which can ripple to whoever was below you too. This part is planned, not live yet, and we'll be upfront about it when it launches. Whatever happens to your rank, your name, founder number, and place in the record's history are never affected.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens to my email address?</summary>
+    <p>It's used only to confirm your place and contact you about it — never shown publicly, never sold. Full detail in our <a href="/privacy">Privacy Policy</a>.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I remove my name later?</summary>
+    <p>Yes — email <a href="mailto:privacy@trillioneuro.com">privacy@trillioneuro.com</a> any time and we'll delete your entry. Because the record's whole point is permanence, we remove entries rather than editing them; we don't retroactively rewrite history.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Does sharing my link move me up the ranks?</summary>
+    <p>No — your founder number is your real join order and never changes, which is what lets us promise it's permanent and honest. Sharing your link just lets us credit you for the friends who join through it.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Who's behind this?</summary>
+    <p>Trillioneuro is a trading name registered in Ireland. See our <a href="/terms">Terms</a> for the full detail on what founding membership does and doesn't entitle you to.</p>
+  </details>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Trillion<b>€</b>uro</div>
+  <div class="footer-links">
+    <a href="/record">The Record</a>
+    <a href="https://quadrillioneuro.com" target="_blank" rel="noopener">Quadrillioneuro</a>
+    <a href="#about">About</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#faq">FAQ</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="mailto:hello@trillioneuro.com">Contact</a>
+  </div>
+  <p class="footer-legal">
+    Founding membership is free. No payment is taken to reserve your place. Trillioneuro is a celebratory public record, not a charity, investment, or financial product.
+    Trillioneuro is a trading name. Registered in Ireland. &copy; 2025 Trillioneuro.
+  </p>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal-panel">
+    <div class="modal-form" id="mform">
+      <p class="modal-kicker">Founding Member — Free</p>
+      <h2 id="modal-title">Claim your<br><i>place.</i></h2>
+      <p class="modal-sub">Reserve your permanent spot on the record. Free for founding members — we'll email you the moment it goes live.</p>
+      <p class="modal-error" id="modal-err" role="alert"></p>
+      <div class="f" id="f-name-wrap"><label for="f-name">Your name / handle <span>max 30 chars</span></label>
+        <input type="text" id="f-name" maxlength="30" placeholder="e.g. Ciarán Murphy"></div>
+      <div class="f" id="f-email-wrap"><label for="f-email">Email <span>to claim your place</span></label>
+        <input type="email" id="f-email" placeholder="you@email.com" autocomplete="email" inputmode="email"></div>
+      <div class="f"><label for="f-msg">Message <span id="mc">0 / 80</span></label>
+        <textarea id="f-msg" maxlength="80" rows="2" placeholder="Optional — shown below your name"
+          oninput="document.getElementById('mc').textContent=this.value.length+' / 80'"></textarea></div>
+      <div class="f"><label for="f-country">Country <span id="country-hint">auto-detecting…</span></label>
+        <input type="text" id="f-country" placeholder="e.g. Ireland"></div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-submit" onclick="claim()">Reserve my place — free</button>
+      </div>
+      <p class="modal-legal">No payment required. By reserving you agree to your name appearing publicly on the record at launch. We'll only email you about your place.</p>
+    </div>
+    <div class="modal-ok" id="mok" tabindex="-1">
+      <div class="share-card">
+        <div class="sc-label">✦ Founding Member</div>
+        <div class="sc-name" id="sc-name">Your Name</div>
+        <div class="sc-rank">Number <b id="sc-rank">#—</b> on the list</div>
+        <div class="sc-brand">trillioneuro.com</div>
+      </div>
+      <h3>You're a Founder.</h3>
+      <p>Your entry is reserved, permanently. Share your link below and we'll show you how many friends join through it.</p>
+      <div class="ref-box">
+        <code id="ref-link">trillioneuro.com/?r=…</code>
+        <button onclick="copyRef()">Copy</button>
+      </div>
+      <p class="ref-count" id="ref-count"></p>
+      <div class="share-btns">
+        <button class="share-x" onclick="shareX()">Share on X</button>
+        <button class="share-copy" onclick="copyLink()">Copy link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+/* ── FUNNEL EVENTS ──────────────────────────────────────────────────────
+   One helper, so every event name is defined in one place and a missing
+   analytics script can never throw inside a click handler. Events are
+   deliberately few and map to the only funnel that matters here:
+
+     view  →  cta_click  →  form_open  →  claim  →  share
+
+   Nothing personal is sent: seat codes and step names only, never a name,
+   email address or referral code. */
+function track(name, data) {
+  try {
+    if (typeof window.va === 'function') window.va('event', { name: name, data: data || {} });
+  } catch (e) { /* analytics must never break the page */ }
+}
+/* ════════════════════════════════════════════════════════════
+   SUPABASE CONFIG
+   ════════════════════════════════════════════════════════════ */
+const SUPABASE_URL = 'https://kxzywyflylkcqoidiqmo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
+
+let sb = null;
+const LIVE = SUPABASE_URL.indexOf('YOUR-PROJECT') === -1;
+function initSb() {
+  if (LIVE && typeof window.supabase !== 'undefined' && !sb) {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return sb;
+}
+initSb();
+
+/* ── LIVE FOUNDER COUNT ── */
+let founders = 0;
+let displayBase = 0;
+const GOAL = 10000;
+
+function paint() {
+  const n = (LIVE && sb) ? founders : displayBase;
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  // Progress section is intentionally hidden until real founder numbers
+  // are worth showing — see commented .progress-section markup above.
+  setText('prog-n', n.toLocaleString() + ' founders');
+  const fill = document.getElementById('prog-fill');
+  if (fill) fill.style.width = Math.min(n / GOAL * 100, 100) + '%';
+}
+
+async function loadCount() {
+  if (!initSb()) { paint(); return; }
+  try {
+    const { count, error } = await sb.from('founders_public').select('*', { count: 'exact', head: true });
+    if (!error && typeof count === 'number') { founders = count; }
+  } catch (e) { /* network hiccup — keep last known count */ }
+  paint();
+}
+setTimeout(loadCount, 300);
+if (LIVE) setInterval(loadCount, 20000);
+
+/* ── REVEALS ── */
+const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ── REFERRAL CAPTURE ── */
+// Attribution only — a referral never changes anyone's founder_number or
+// rank. It's a permanent, honestly-ordered record; referrals just track
+// who introduced whom.
+const refParams = new URLSearchParams(location.search);
+const refFromLink = refParams.get('r') || '';
+
+/* ── MODAL ── */
+let lastFocused = null;
+
+function openModal() {
+  track('form_open');
+  const he = document.getElementById('hero-email').value.trim();
+  if (he) document.getElementById('f-email').value = he;
+  lastFocused = document.activeElement;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('f-name').focus(), 300);
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('mform').classList.remove('gone');
+  document.getElementById('mok').classList.remove('show');
+  clearError();
+  if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+}
+function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('overlay').classList.contains('open')) closeModal();
+  if (e.key === 'Tab' && document.getElementById('overlay').classList.contains('open')) trapFocus(e);
+});
+
+function trapFocus(e) {
+  const panel = document.getElementById('modal-panel');
+  const focusable = panel.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+  const visible = Array.from(focusable).filter(el => el.offsetParent !== null);
+  if (!visible.length) return;
+  const first = visible[0], last = visible[visible.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/* ── COUNTRY AUTO-DETECT ── */
+let countryDetectStarted = false;
+function detectCountry() {
+  if (countryDetectStarted) return;
+  countryDetectStarted = true;
+  const hint = document.getElementById('country-hint');
+  const field = document.getElementById('f-country');
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeout = controller ? setTimeout(() => controller.abort(), 2500) : null;
+  fetch('https://ipapi.co/json/', controller ? { signal: controller.signal } : {})
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      if (timeout) clearTimeout(timeout);
+      if (data && data.country_name && !field.value) field.value = data.country_name;
+      if (hint) hint.textContent = 'auto-detected';
+    })
+    .catch(() => {
+      if (timeout) clearTimeout(timeout);
+      if (hint) hint.textContent = 'please confirm';
+      if (!field.value) field.placeholder = 'e.g. Ireland';
+    });
+}
+detectCountry();
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+let claimInProgress = false;
+
+function captureHeroEmail(email) {
+  if (!email || !EMAIL_RE.test(email)) return;
+  if (!initSb()) return;
+  /* Was a direct anon INSERT on founder_interests. anon no longer holds any
+     privilege on that table: an unauthenticated, unthrottled write path into
+     a table of email addresses is the cheapest thing on the site to abuse,
+     and it fired on blur of a field with no validation beyond "contains @".
+     capture_email() validates and rate-limits server-side. */
+  sb.rpc('capture_email', { p_email: email, p_site: 'trillion' })
+    .then(() => track('email_capture'))
+    .catch(() => {});
+}
+
+function showError(msg, field) {
+  const err = document.getElementById('modal-err');
+  err.textContent = msg;
+  err.classList.add('show');
+  document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+  if (field) {
+    const wrap = document.getElementById(field);
+    if (wrap) wrap.classList.add('invalid');
+  }
+}
+function clearError() {
+  const err = document.getElementById('modal-err');
+  err.textContent = ''; err.classList.remove('show');
+  document.querySelectorAll('.f.invalid').forEach(f => f.classList.remove('invalid'));
+}
+
+/* The RPC now validates and rate-limits server-side, so it rejects requests
+   the browser would have allowed. Map its codes to something a person can
+   act on, and never surface a raw Postgres message. */
+function serverError(error) {
+  const m = String(error?.message || '');
+  if (/RATE_LIMIT/.test(m))       return ['Too many attempts from your connection. Please try again in a little while.', null];
+  if (/INVALID_EMAIL/.test(m))    return ['That email address does not look right — check it and try again.', 'f-email-wrap'];
+  if (/INVALID_NAME/.test(m))     return ['Enter a name between 1 and 30 characters.', 'f-name-wrap'];
+  if (/unique|duplicate/i.test(m))return ['That email has already claimed a place in history. Check your inbox — or use a different email.', 'f-email-wrap'];
+  return ['Could not reserve your place right now. Please try again in a moment.', null];
+}
+
+async function claim() {
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const msg     = document.getElementById('f-msg').value.trim();
+  const country = document.getElementById('f-country').value.trim();
+  const btn     = document.querySelector('.modal-submit');
+
+  if (claimInProgress) return;
+  clearError();
+
+  if (!name) {
+    showError('Enter your name or handle to claim your place.', 'f-name-wrap');
+    document.getElementById('f-name').focus();
+    return;
+  }
+  if (!email || !EMAIL_RE.test(email)) {
+    showError('Enter a valid email address so we can confirm your place.', 'f-email-wrap');
+    document.getElementById('f-email').focus();
+    return;
+  }
+
+  claimInProgress = true;
+  btn.disabled = true; btn.textContent = 'Reserving…';
+
+  if (initSb()) {
+    try {
+      const { data, error } = await sb.rpc('reserve_founder', {
+        p_name: name,
+        p_email: email,
+        p_message: msg || null,
+        p_country: country || null,
+        p_ref_in: refFromLink || null
+      });
+
+      if (error) {
+        btn.disabled = false; btn.textContent = 'Reserve my place — free';
+        claimInProgress = false;
+        showError(...serverError(error));
+        return;
+      }
+      const row = Array.isArray(data) ? data[0] : data;
+      track('claim', { referred: refFromLink ? 'yes' : 'no' });
+      finishClaim(name, row?.founder_number, row?.ref_code, row?.referral_count);
+      await loadCount();
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Reserve my place — free';
+      claimInProgress = false;
+      showError('Network error — please check your connection and try again.');
+      return;
+    }
+  } else {
+    // Library failed to load — demo fallback so the UX still completes
+    displayBase++; paint();
+    const demoRef = Math.random().toString(36).slice(2, 8);
+    finishClaim(name, displayBase, demoRef, 0);
+  }
+
+  btn.disabled = false; btn.textContent = 'Reserve my place — free';
+}
+
+function finishClaim(name, number, refCode, referralCount) {
+  clearError();
+  const rankText = number ? '#' + Number(number).toLocaleString() : '—';
+  document.getElementById('sc-name').textContent = name;
+  document.getElementById('sc-rank').textContent = rankText;
+  const link = 'https://trillioneuro.com/?r=' + (refCode || '');
+  document.getElementById('ref-link').textContent = link;
+  document.getElementById('ref-link').dataset.link = link;
+  const count = Number(referralCount) || 0;
+  document.getElementById('ref-count').textContent = count > 0
+    ? `${count.toLocaleString()} ${count === 1 ? 'person has' : 'people have'} joined through your link so far.`
+    : '';
+  document.getElementById('mform').classList.add('gone');
+  document.getElementById('mok').classList.add('show');
+  document.getElementById('mok').focus?.();
+}
+
+/* ── SHARE ── */
+function shareX() {
+  track('share', { via: 'x' });
+  const rank = document.getElementById('sc-rank').textContent;
+  const link = document.getElementById('ref-link').dataset.link || 'https://trillioneuro.com';
+  /* The share text is the product's only real distribution channel, so it
+     has to carry the one thing that is actually interesting: the number.
+     It also no longer claims a "trillion-euro record", which invited the
+     scam reading the FAQ then had to spend its first answer denying. */
+  const text = encodeURIComponent(`I'm ${rank} on Trillioneuro — a public list kept in the order people joined, so this number is mine permanently. Yours is free:`);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(link)}`, '_blank');
+}
+function copyLink() {
+  track('share', { via: 'copy_link' });
+  const link = document.getElementById('ref-link').dataset.link || 'https://trillioneuro.com';
+  navigator.clipboard?.writeText(link).then(() => {
+    const b = document.querySelector('.share-copy');
+    const t = b.textContent; b.textContent = 'Copied ✓';
+    setTimeout(() => b.textContent = t, 1500);
+  });
+}
+function copyRef() {
+  track('share', { via: 'copy_ref' });
+  const link = document.getElementById('ref-link').dataset.link || document.getElementById('ref-link').textContent;
+  navigator.clipboard?.writeText(link).then(() => {
+    const b = document.querySelector('.ref-box button');
+    const t = b.textContent; b.textContent = 'Copied';
+    setTimeout(() => b.textContent = t, 1500);
+  });
+}
+</script>
+</body>
+</html>

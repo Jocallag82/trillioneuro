@@ -164,6 +164,29 @@
       "status": 308
     },
     {
+      "src": "/seats/?",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "dest": "/quadrillioneuro/seats.html"
+    },
+    {
+      "src": "/seats\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "quadrillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "/seats"
+      },
+      "status": 308
+    },
+    {
       "src": "/((?!_vercel/).*)",
       "has": [
         {
@@ -178,6 +201,10 @@
       "dest": "/record.html"
     },
     {
+      "src": "/claim/?",
+      "dest": "/claim.html"
+    },
+    {
       "src": "/privacy/?",
       "dest": "/privacy.html"
     },
@@ -189,6 +216,13 @@
       "src": "/record\\.html",
       "headers": {
         "Location": "/record"
+      },
+      "status": 308
+    },
+    {
+      "src": "/claim\\.html",
+      "headers": {
+        "Location": "/claim"
       },
       "status": 308
     },

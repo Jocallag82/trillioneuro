@@ -5,23 +5,21 @@ Two products, one repo, one Vercel project, one Supabase project — routed by h
 
 | | **trillioneuro.com** | **quadrillioneuro.com** |
 |---|---|---|
-| What it is | A numbered public list, kept in join order | An auction for the top position |
-| Files | repo root | `quadrillioneuro/` |
-| Primary action | Claim your number (free) | Register interest in a seat (free) |
-| Role in the funnel | Audience — free, wide, shareable | Revenue — one buyer per seat |
-| Status | Live | **DNS not configured — see below** |
+| What it is | Scale intelligence for one ambitious idea | Civilisation-scale scenario engine |
+| Core tools | Scale ladder, unit-economics analyser, sourced trillion-scale facts | AI electricity, EV takeover, clean-energy investment, any-market-at-scale, the quadrillion clock |
+| Files | `index.html`, `lib/scale.js` | `quadrillioneuro/index.html`, `quadrillioneuro/lib/scenario.js` |
+| Kept | `/claim` (numbered list) and `/record` — every claimed number keeps its place | `/seats` (seat registration) and `/auction`, unlinked |
 
-## How they relate
+## The rule both sites live by
 
-Quadrillioneuro is not a separate business. It is the monetisation layer for the audience
-Trillioneuro builds: Trillioneuro answers "were you here", Quadrillioneuro answers "were you
-first", and only the second one has anyone willing to pay real money. They therefore share
-infrastructure deliberately (one database, one deployment, one keep-alive) while keeping
-separate branding, separate legal pages and separate canonical domains.
+Every number is labelled: **Fact** (published, source and date named — see `FACTS` in the two
+`lib/` modules), **Estimate** (derived from facts, with the working shown), **Assumption** (the
+visitor's input or an editable default) or **Scenario/Calculated** (arithmetic on those — never a
+forecast). Nothing is stored server-side; saved analyses live in the visitor's browser and share
+links carry assumptions in the URL hash.
 
-Consequence worth remembering: **do not put the revenue mechanic behind the free product's
-signup.** Trillioneuro stays free and stays wide; the €1/year badge is disclosed but is not
-the business.
+Tests: `node --test scripts/scale.test.mjs` · routing: `node scripts/check-routes.mjs` ·
+`node scripts/check-vercel-json.mjs`.
 
 ## Stack
 - **Frontend** — plain HTML/CSS/JS. No framework, no build step, no `package.json`.
