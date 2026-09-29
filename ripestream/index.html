@@ -101,7 +101,33 @@ section{position:relative}
 
 /* ── hero ────────────────────────────────── */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 0;overflow:hidden;isolation:isolate}
-.hero::before{content:'';position:absolute;inset:auto -10% -30% -10%;height:70%;background:radial-gradient(60% 60% at 50% 100%,rgba(255,91,31,.22),transparent 70%);z-index:-1;pointer-events:none}
+.hero::before{content:'';position:absolute;inset:auto -10% -30% -10%;height:70%;background:radial-gradient(60% 60% at 50% 100%,rgba(255,91,31,.22),transparent 70%);z-index:-3;pointer-events:none}
+#flow{position:absolute;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none;opacity:0;transition:opacity 1.6s ease}
+#flow.on{opacity:1}
+.grain{position:relative;isolation:isolate}
+.grain::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.09;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 28% 40%,rgba(12,10,9,.7),transparent 75%)}
+.wordmark .ch{display:inline-block;transform:translateY(.5em) rotate(6deg);opacity:0;animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--i) * 45ms + .1s)}
+.wordmark .ch.r{color:var(--ripe)}
+@keyframes rise{to{transform:none;opacity:1}}
+.ticker{background:var(--ripe);color:var(--ink);overflow:hidden;border-block:1px solid rgba(12,10,9,.15);position:relative;z-index:2}
+.ticker.tilt{transform:rotate(-1.6deg) scale(1.04);margin:-28px 0}
+.ticker .run{display:flex;width:max-content;animation:flow 38s linear infinite}
+.ticker span{font-family:var(--display);font-weight:800;font-size:clamp(28px,4.4vw,56px);letter-spacing:-.04em;line-height:1;padding:18px 0;white-space:nowrap;display:flex;align-items:center}
+.ticker span::after{content:'';width:.5em;height:.5em;margin:0 .6em;border-radius:50%;background:var(--ink);display:inline-block}
+.ticker span:nth-child(even)::after{background:var(--lime);box-shadow:0 0 0 .08em var(--ink)}
+.ticker .o{-webkit-text-stroke:1.5px var(--ink);color:transparent}
+.spot{--mx:50%;--my:50%}
+.spot::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(255,255,255,.14),transparent 45%);z-index:1}
+.spot:hover::before{opacity:1}
+.cell.spot:not(.inkc):not(.ripec)::before{background:radial-gradient(420px circle at var(--mx) var(--my),rgba(255,91,31,.10),transparent 45%)}
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion:no-preference) and (min-width:761px){
+    .concept .app-wrap{perspective:1600px}
+    .js .concept .app.rv{opacity:1;transform:none;transition:none;animation:tiltin linear both;animation-timeline:view();animation-range:entry 0% cover 36%}
+    @keyframes tiltin{from{transform:rotateX(22deg) scale(.9) translateY(40px)}to{transform:none}}
+  }
+}
 .hero-status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;border:1px solid var(--line-d2);border-radius:999px;font-size:13px;color:var(--mute-d);margin-bottom:clamp(24px,4vw,40px)}
 .hero-status b{color:var(--cream);font-weight:600}
 .hero h1{display:block}
@@ -112,7 +138,7 @@ section{position:relative}
 .headline em::after{content:'';position:absolute;left:0;right:0;bottom:.02em;height:.12em;background:var(--ripe);border-radius:2px;transform-origin:left;transform:scaleX(0);animation:underline 1s .9s var(--ease) forwards}
 @keyframes underline{to{transform:scaleX(1)}}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px 64px;align-items:end;margin-top:clamp(28px,4vw,44px)}
-.hero-copy{font-size:clamp(17px,1.5vw,20px);color:var(--mute-d);max-width:560px;line-height:1.55}
+.hero-copy{text-shadow:0 1px 14px rgba(12,10,9,.95);font-size:clamp(17px,1.5vw,20px);color:var(--mute-d);max-width:560px;line-height:1.55}
 .hero-cta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 @media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-cta .btn{flex:1 1 100%}}
 .hero-enter>*{opacity:0;transform:translateY(24px);animation:enter 1s var(--ease) forwards}
@@ -501,7 +527,7 @@ fieldset{border:0}
 .ai-lead span{color:var(--lime)}
 .ai-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(40px,6vw,72px)}
 @media(max-width:980px){.ai-grid{grid-template-columns:1fr}}
-.demo{background:var(--ink2);border:1px solid var(--line-d);border-radius:24px;padding:22px;display:flex;flex-direction:column}
+.demo{position:relative;background:var(--ink2);border:1px solid var(--line-d);border-radius:24px;padding:22px;display:flex;flex-direction:column}
 .demo .k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d);margin-bottom:14px}
 .demo h3{font-family:var(--display);font-size:20px;letter-spacing:-.02em;line-height:1.2;margin-bottom:6px}
 .demo .meta{font-size:13px;color:var(--mute-d);margin-bottom:16px}
@@ -552,7 +578,8 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
-  .lane{animation:none!important}
+  .lane,.ticker .run{animation:none!important}
+  .wordmark .ch{opacity:1;transform:none}
   .stream{transform:rotate(-3deg)}
   .edge.flow{animation:none}
 }
@@ -590,11 +617,12 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
 <main id="main">
 
 <!-- ═════════ HERO ═════════ -->
-<section class="hero dark" aria-labelledby="hero-title">
+<section class="hero dark grain" aria-labelledby="hero-title">
+  <canvas id="flow" aria-hidden="true"></canvas><div class="hero-shade" aria-hidden="true"></div>
   <div class="wrap hero-enter">
     <p class="hero-status"><span class="dot" aria-hidden="true"></span><span><b>In development.</b> The early interest list is open.</span></p>
     <h1 id="hero-title" class="display">
-      <span class="wordmark">Ripe<span class="r">Stream</span></span>
+      <span class="sr">RipeStream. </span><span class="wordmark" aria-hidden="true"><span class="ch" style="--i:0">R</span><span class="ch" style="--i:1">i</span><span class="ch" style="--i:2">p</span><span class="ch" style="--i:3">e</span><span class="ch r" style="--i:4">S</span><span class="ch r" style="--i:5">t</span><span class="ch r" style="--i:6">r</span><span class="ch r" style="--i:7">e</span><span class="ch r" style="--i:8">a</span><span class="ch r" style="--i:9">m</span></span>
       <span class="headline">Social, but <em>actually yours.</em></span>
     </h1>
     <div class="hero-grid">
@@ -687,6 +715,8 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
   </div>
 </section>
 
+<div class="ticker tilt" aria-hidden="true"><div class="run"><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Something new is coming</span><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Something new is coming</span></div></div>
+
 <!-- ═════════ BIG IDEA ═════════ -->
 <section class="idea dark pad" id="about" aria-labelledby="idea-title">
   <div class="wrap">
@@ -728,7 +758,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
       <p class="lede">A concept of the direction — not a screenshot of a finished product. Details will change. The idea won't.</p>
     </div>
 
-    <div class="app rv" role="img" aria-label="Concept design of the RipeStream app: a feed with a photo post, a community discussion with a summary, a poll, a creator video, trending topics, local events and a suggested community.">
+    <div class="app-wrap"><div class="app rv" role="img" aria-label="Concept design of the RipeStream app: a feed with a photo post, a community discussion with a summary, a poll, a creator video, trending topics, local events and a suggested community.">
       <div class="app-bar" aria-hidden="true"><i></i><i></i><i></i><span class="url">ripestream.com</span><span class="tag-concept">Concept</span></div>
       <div class="app-body" aria-hidden="true">
         <div class="rail">
@@ -798,6 +828,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         </div>
       </div>
     </div>
+    </div>
     <p class="concept-note">Concept design. People, communities and content shown are illustrative examples.</p>
   </div>
 </section>
@@ -810,7 +841,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <p class="lede rv">Seven ideas shaping RipeStream. Some are being designed, some are being built, all of them are the point.</p>
 
     <div class="bento">
-      <article class="cell w5 rv">
+      <article class="spot cell w5 rv">
         <span class="k">01 · Your feed</span>
         <h3>The people you actually care about.</h3>
         <p>A feed that starts with the people and spaces you chose — not whatever happens to be loudest today.</p>
@@ -821,7 +852,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         </div>
       </article>
 
-      <article class="cell w7 inkc rv" style="--d:.08s" data-reveal>
+      <article class="spot cell w7 inkc rv" style="--d:.08s" data-reveal>
         <span class="k">02 · Your algorithm</span>
         <h3>An algorithm you can actually see.</h3>
         <p>The goal: meaningful control over how your feed works, in plain language — instead of a black box deciding for you.</p>
@@ -833,28 +864,28 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         </div>
       </article>
 
-      <article class="cell rv">
+      <article class="spot cell rv">
         <span class="k">03 · Discover</span>
         <h3>Find what you didn't know you were looking for.</h3>
         <p>New people, communities, ideas and content — on your terms.</p>
         <div class="viz tags" aria-hidden="true"><span class="on">Night swimming</span><span>Synth DIY</span><span class="on">Urban sketching</span><span>Trail running</span><span>Sourdough</span><span>Chess</span></div>
       </article>
 
-      <article class="cell ripec rv" style="--d:.08s">
+      <article class="spot cell ripec rv" style="--d:.08s">
         <span class="k">04 · Communities</span>
         <h3>Spaces around anything.</h3>
         <p>Create or join a community for whatever you're into. Big, small, public or private.</p>
         <div class="viz circles" aria-hidden="true"><span style="background:#f3eee6">📷</span><span style="background:#c8f55a">🎮</span><span style="background:#ffd166">🍜</span><span style="background:#b69cff">🎧</span><span style="background:#9fd4ff">🏃</span></div>
       </article>
 
-      <article class="cell rv" style="--d:.16s">
+      <article class="spot cell rv" style="--d:.16s">
         <span class="k">05 · Local</span>
         <h3>What's happening around you.</h3>
         <p>Events, places, people and conversations nearby — wherever you are.</p>
         <div class="viz pins" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="none"><path d="M0 70 C60 60 100 90 200 50" stroke="rgba(12,10,9,.15)" stroke-width="10" fill="none"/><path d="M30 0 L60 120 M120 0 L100 120 M0 25 L200 35" stroke="rgba(12,10,9,.1)" stroke-width="2"/></svg><i style="left:22%;top:30%"></i><i style="left:55%;top:58%;background:var(--ripe-deep)"></i><i style="left:78%;top:22%"></i></div>
       </article>
 
-      <article class="cell w6 inkc rv">
+      <article class="spot cell w6 inkc rv">
         <span class="k">06 · Conversations</span>
         <h3>Better discussions. Less comment chaos.</h3>
         <p>Threads that stay readable, replies that stay on topic, and tools that reward people adding something.</p>
@@ -865,7 +896,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         </div>
       </article>
 
-      <article class="cell w6 rv" style="--d:.08s">
+      <article class="spot cell w6 rv" style="--d:.08s">
         <span class="k">07 · AI-powered discovery</span>
         <h3>Find it, understand it, get through it.</h3>
         <p>Help navigating huge amounts of content — without replacing the people who create it.</p>
@@ -975,19 +1006,19 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <p class="lede rv">Whatever you're into, there should be a place for it — and it should be easy to find. The kinds of spaces RipeStream is being designed for:</p>
 
     <ul class="tiles" role="list">
-      <li class="tile t1 big rv"><span class="em" aria-hidden="true">📷</span><span class="cat">Photography</span><div><h3>35mm &amp; Film</h3><p>Scans, stocks, light leaks, and the shots that almost worked. Critique that's actually useful.</p></div></li>
-      <li class="tile t3 rv" style="--d:.05s"><span class="em" aria-hidden="true">🏁</span><span class="cat">Cars</span><div><h3>Track Day Regulars</h3><p>Lap times, tyre talk, early starts.</p></div></li>
-      <li class="tile t2 rv" style="--d:.1s"><span class="em" aria-hidden="true">🏋️</span><span class="cat">Fitness</span><div><h3>5am Club</h3><p>For people who train before work.</p></div></li>
-      <li class="tile t4 wide rv"><span class="em" aria-hidden="true">🖥️</span><span class="cat">Technology</span><div><h3>Home Lab</h3><p>Racks, routers, and one more Raspberry Pi than anyone needs.</p></div></li>
-      <li class="tile t5 rv" style="--d:.05s"><span class="em" aria-hidden="true">🎮</span><span class="cat">Gaming</span><div><h3>Retro Handhelds</h3><p>Battery mods and cartridge hunts.</p></div></li>
-      <li class="tile t6 rv" style="--d:.1s"><span class="em" aria-hidden="true">🎧</span><span class="cat">Music</span><div><h3>Bedroom Producers</h3><p>Share the loop. Get honest ears.</p></div></li>
-      <li class="tile t7 rv"><span class="em" aria-hidden="true">🏡</span><span class="cat">Local</span><div><h3>Your Street</h3><p>Lost cats, new cafés, road closures.</p></div></li>
-      <li class="tile t8 rv" style="--d:.05s"><span class="em" aria-hidden="true">⚽</span><span class="cat">Sport</span><div><h3>Sunday League</h3><p>Fixtures, lifts to away games, a keeper at short notice.</p></div></li>
-      <li class="tile t9 wide rv" style="--d:.1s"><span class="em" aria-hidden="true">🌮</span><span class="cat">Food</span><div><h3>Street Food Hunters</h3><p>The stall with no sign and a queue round the corner. Share it or keep it — your call.</p></div></li>
-      <li class="tile t10 rv"><span class="em" aria-hidden="true">🧳</span><span class="cat">Travel</span><div><h3>Carry-on Only</h3><p>Two weeks, one bag, zero regrets.</p></div></li>
-      <li class="tile t11 rv" style="--d:.05s"><span class="em" aria-hidden="true">🍼</span><span class="cat">Parenting</span><div><h3>New Parents, No Sleep</h3><p>3am questions, answered by people who get it.</p></div></li>
-      <li class="tile t12 rv" style="--d:.1s"><span class="em" aria-hidden="true">📈</span><span class="cat">Business</span><div><h3>Bootstrapped Founders</h3><p>Revenue, not hype. Real numbers, real advice.</p></div></li>
-      <li class="tile t13 wide rv"><span class="cat">Anything else</span><div><h3>Start your own.</h3><p>If it matters to you, it deserves a home.</p></div></li>
+      <li class="spot tile t1 big rv"><span class="em" aria-hidden="true">📷</span><span class="cat">Photography</span><div><h3>35mm &amp; Film</h3><p>Scans, stocks, light leaks, and the shots that almost worked. Critique that's actually useful.</p></div></li>
+      <li class="spot tile t3 rv" style="--d:.05s"><span class="em" aria-hidden="true">🏁</span><span class="cat">Cars</span><div><h3>Track Day Regulars</h3><p>Lap times, tyre talk, early starts.</p></div></li>
+      <li class="spot tile t2 rv" style="--d:.1s"><span class="em" aria-hidden="true">🏋️</span><span class="cat">Fitness</span><div><h3>5am Club</h3><p>For people who train before work.</p></div></li>
+      <li class="spot tile t4 wide rv"><span class="em" aria-hidden="true">🖥️</span><span class="cat">Technology</span><div><h3>Home Lab</h3><p>Racks, routers, and one more Raspberry Pi than anyone needs.</p></div></li>
+      <li class="spot tile t5 rv" style="--d:.05s"><span class="em" aria-hidden="true">🎮</span><span class="cat">Gaming</span><div><h3>Retro Handhelds</h3><p>Battery mods and cartridge hunts.</p></div></li>
+      <li class="spot tile t6 rv" style="--d:.1s"><span class="em" aria-hidden="true">🎧</span><span class="cat">Music</span><div><h3>Bedroom Producers</h3><p>Share the loop. Get honest ears.</p></div></li>
+      <li class="spot tile t7 rv"><span class="em" aria-hidden="true">🏡</span><span class="cat">Local</span><div><h3>Your Street</h3><p>Lost cats, new cafés, road closures.</p></div></li>
+      <li class="spot tile t8 rv" style="--d:.05s"><span class="em" aria-hidden="true">⚽</span><span class="cat">Sport</span><div><h3>Sunday League</h3><p>Fixtures, lifts to away games, a keeper at short notice.</p></div></li>
+      <li class="spot tile t9 wide rv" style="--d:.1s"><span class="em" aria-hidden="true">🌮</span><span class="cat">Food</span><div><h3>Street Food Hunters</h3><p>The stall with no sign and a queue round the corner. Share it or keep it — your call.</p></div></li>
+      <li class="spot tile t10 rv"><span class="em" aria-hidden="true">🧳</span><span class="cat">Travel</span><div><h3>Carry-on Only</h3><p>Two weeks, one bag, zero regrets.</p></div></li>
+      <li class="spot tile t11 rv" style="--d:.05s"><span class="em" aria-hidden="true">🍼</span><span class="cat">Parenting</span><div><h3>New Parents, No Sleep</h3><p>3am questions, answered by people who get it.</p></div></li>
+      <li class="spot tile t12 rv" style="--d:.1s"><span class="em" aria-hidden="true">📈</span><span class="cat">Business</span><div><h3>Bootstrapped Founders</h3><p>Revenue, not hype. Real numbers, real advice.</p></div></li>
+      <li class="spot tile t13 wide rv"><span class="cat">Anything else</span><div><h3>Start your own.</h3><p>If it matters to you, it deserves a home.</p></div></li>
     </ul>
     <p class="small-note">Examples for illustration — these communities don't exist yet. You could be the one who starts them.</p>
   </div>
@@ -1033,7 +1064,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <p class="ai-lead rv">AI helps you navigate the social network. <span>It doesn't replace the social network.</span></p>
 
     <div class="ai-grid">
-      <div class="demo rv">
+      <div class="spot demo rv">
         <span class="k">Summarise</span>
         <h3>Is it worth learning to develop film at home?</h3>
         <p class="meta">in 35mm &amp; Film · 212 replies</p>
@@ -1047,14 +1078,14 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         <button type="button" class="act" id="sum-btn" aria-controls="sum-out" aria-expanded="false"><svg aria-hidden="true"><use href="#i-lines"/></svg><span>Summarise 212 replies</span></button>
       </div>
 
-      <div class="demo rv" style="--d:.08s">
+      <div class="spot demo rv" style="--d:.08s">
         <span class="k">Translate</span>
         <div class="bubble"><small id="tr-meta">Inês · Lisbon · Portuguese</small><span id="tr-text" class="fade-swap">Alguém sabe onde se come o melhor pastel de nata fora das zonas turísticas?</span></div>
         <div class="bubble" style="border-radius:16px 16px 4px 16px;background:rgba(255,91,31,.14);margin-left:24px"><small>Daniel · Toronto</small>Following — I'm there in May.</div>
         <button type="button" class="act" id="tr-btn" aria-pressed="false" style="margin-top:14px"><span>Translate to English</span></button>
       </div>
 
-      <div class="demo rv" style="--d:.16s">
+      <div class="spot demo rv" style="--d:.16s">
         <span class="k">Catch up</span>
         <h3>While you were away</h3>
         <p class="meta">3 things from people you follow</p>

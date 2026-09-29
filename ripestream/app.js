@@ -33,6 +33,111 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  /* ── hero: the stream (generative flow field) ──────── */
+  /* A river of light that runs through the hero, carrying the post cards.
+     Canvas 2D, no library. Pauses off-screen and in background tabs; with
+     reduced motion it paints one still frame. */
+  (function () {
+    var cv = $('#flow');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    var hero = cv.parentNode, lanes = $('.stream', hero);
+    var small = window.innerWidth < 760;
+    var DPR = Math.min(window.devicePixelRatio || 1, small ? 1.25 : 1.5);
+    var W = 0, H = 0, band = 0, spread = 0, t = 0, running = false, raf = 0;
+    var mouse = { x: -9999, y: -9999 };
+    // Colour groups: one path + one stroke per group per frame (cheap).
+    var GROUPS = [
+      ['255,91,31', .55, 1.3], ['255,91,31', .32, 2.6], ['255,120,60', .45, 1],
+      ['255,179,138', .38, 1], ['200,245,90', .5, 1.1], ['243,238,230', .28, .8]
+    ];
+    var WEIGHTS = [0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 5];
+    var N = small ? 320 : 760, P = [];
+
+    function size() {
+      var r = hero.getBoundingClientRect();
+      W = r.width; H = r.height;
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      // The river enters bottom-left under the post cards and sweeps up to the right.
+      band = lanes ? lanes.offsetTop + lanes.offsetHeight * 0.4 : H * 0.72;
+      spread = Math.max(80, H * (small ? 0.13 : 0.15));
+    }
+    function centreAt(x) { return band - (x / W) * H * (small ? 0.22 : 0.42) + Math.sin(x * 0.0042 + t * 0.012) * spread * 0.45; }
+    function spawn(p, anywhere) {
+      p.x = anywhere ? Math.random() * W : -20 - Math.random() * 120;
+      var g = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;   // ~gaussian
+      p.y = centreAt(p.x) + g * spread * (0.6 + Math.random() * 0.8);
+      p.v = 1 + Math.random() * 2.2;
+      p.g = WEIGHTS[(Math.random() * WEIGHTS.length) | 0];
+      p.o = Math.random() * 6.28;
+      return p;
+    }
+    function step() {
+      t += 1;
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0,0,0,0.06)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.lineCap = 'round';
+      var paths = GROUPS.map(function () { return []; });
+      for (var i = 0; i < N; i++) {
+        var p = P[i], x0 = p.x, y0 = p.y;
+        var c = centreAt(p.x), slope = (centreAt(p.x + 30) - c) / 30;
+        var ang = Math.atan(slope) + Math.sin(p.x * 0.006 + p.o + t * 0.01) * 0.22;
+        var vx = Math.cos(ang) * p.v * 1.7, vy = Math.sin(ang) * p.v * 1.7 + (c - p.y) * 0.0035;
+        var dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < 26000) { var f = (26000 - d2) / 26000; vx += dx * f * 0.03; vy += dy * f * 0.06; }
+        p.x += vx; p.y += vy;
+        paths[p.g].push(x0, y0, p.x, p.y);
+        if (p.x > W + 20 || p.y < -60 || p.y > H + 60) spawn(p, false);
+      }
+      for (var g = 0; g < GROUPS.length; g++) {
+        var seg = paths[g]; if (!seg.length) continue;
+        ctx.strokeStyle = 'rgba(' + GROUPS[g][0] + ',' + GROUPS[g][1] + ')';
+        ctx.lineWidth = GROUPS[g][2];
+        ctx.beginPath();
+        for (var j = 0; j < seg.length; j += 4) { ctx.moveTo(seg[j], seg[j + 1]); ctx.lineTo(seg[j + 2], seg[j + 3]); }
+        ctx.stroke();
+      }
+    }
+    function loop() { step(); raf = requestAnimationFrame(loop); }
+    function start() { if (!running && !reduced) { running = true; raf = requestAnimationFrame(loop); } }
+    function stop() { running = false; cancelAnimationFrame(raf); }
+
+    size();
+    for (var i = 0; i < N; i++) P.push(spawn({}, true));
+    if (reduced) { for (var k = 0; k < 140; k++) step(); }
+    cv.classList.add('on');
+
+    var rt; window.addEventListener('resize', function () {
+      clearTimeout(rt); rt = setTimeout(function () {
+        var oldW = W; size();
+        if (Math.abs(oldW - W) > 40) P.forEach(function (p) { spawn(p, true); });
+        if (reduced) for (var k = 0; k < 140; k++) step();
+      }, 150);
+    });
+    if (finePointer) {
+      hero.addEventListener('pointermove', function (e) {
+        var r = hero.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+      });
+      hero.addEventListener('pointerleave', function () { mouse.x = mouse.y = -9999; });
+    }
+    var visible = true;
+    if (hasIO) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; visible && !document.hidden ? start() : stop(); }).observe(hero);
+    document.addEventListener('visibilitychange', function () { !document.hidden && visible ? start() : stop(); });
+    start();
+  })();
+
+  /* ── cursor spotlight on cards ─────────────────────── */
+  if (finePointer) $$('.spot').forEach(function (el) {
+    el.addEventListener('pointermove', function (e) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
   /* ── reveal on scroll ──────────────────────────────── */
   var revealables = $$('.rv, [data-reveal]');
   if (!hasIO || reduced) {

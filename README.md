@@ -71,6 +71,13 @@ Same stack and rules as the other two sites: plain HTML/CSS/JS, no build step.
   rewrite to `/ripestream/*`; `trillioneuro.com/ripestream/*` 308s to the real domain.
   `check-routes.mjs` now understands `inc`/`eq` host matchers.
 - **Mail**: `hello@` and `privacy@ripestream.com` are published — set up forwarding.
+- **Emails on sign-up**: an `AFTER INSERT` trigger on `rs_interests` calls the Edge Function
+  `supabase/functions/rs-notify` (via `pg_net`), which sends the registrant a confirmation and
+  the owner an alert through Resend, then stamps `notified_at` (one-shot, so replays send
+  nothing). Needs Supabase secrets `RESEND_API_KEY` and `ADMIN_EMAIL`, and ripestream.com
+  verified in Resend. Rows that arrived before that: `select public.rs_notify_backlog();`
+- **Hero**: `#flow` is a canvas flow field (no video file, ~2 KB of JS) — pauses off-screen,
+  one still frame under reduced motion.
 
 ## Routing (`vercel.json`)
 

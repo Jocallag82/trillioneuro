@@ -558,6 +558,50 @@ end $$;
 revoke all on function public.rs_register_interest(text,text,text) from public;
 grant execute on function public.rs_register_interest(text,text,text) to anon;
 
+-- ── RipeStream emails ───────────────────────────────────────────────
+--  Every new row fires the rs-notify Edge Function (supabase/functions/
+--  rs-notify) through pg_net. It sends the confirmation + owner alert via
+--  Resend and stamps notified_at. Duplicates never insert, so never email.
+--  If RESEND_API_KEY isn't set yet, rows stay notified_at = null; once it
+--  is, send the backlog with:
+--    select public.rs_notify_backlog();
+create extension if not exists pg_net with schema extensions;
+alter table public.rs_interests add column if not exists notified_at timestamptz;
+
+create or replace function public.rs_notify_row()
+returns trigger language plpgsql security definer
+set search_path = public, pg_temp as $$
+begin
+  perform net.http_post(
+    url     := 'https://kxzywyflylkcqoidiqmo.supabase.co/functions/v1/rs-notify',
+    body    := jsonb_build_object('id', new.id),
+    headers := '{"Content-Type":"application/json"}'::jsonb);
+  return new;
+exception when others then
+  return new;          -- an email problem must never block a registration
+end $$;
+revoke all on function public.rs_notify_row() from public, anon, authenticated;
+
+drop trigger if exists rs_interests_notify on public.rs_interests;
+create trigger rs_interests_notify after insert on public.rs_interests
+  for each row execute function public.rs_notify_row();
+
+create or replace function public.rs_notify_backlog()
+returns integer language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare n integer := 0; r record;
+begin
+  for r in select id from public.rs_interests where notified_at is null order by created_at loop
+    perform net.http_post(
+      url     := 'https://kxzywyflylkcqoidiqmo.supabase.co/functions/v1/rs-notify',
+      body    := jsonb_build_object('id', r.id),
+      headers := '{"Content-Type":"application/json"}'::jsonb);
+    n := n + 1;
+  end loop;
+  return n;
+end $$;
+revoke all on function public.rs_notify_backlog() from public, anon, authenticated;
+
 -- ════════════════════════════════════════════════════════════════════
 --  VERIFY  — run this any time; every value must read as stated.
 -- ════════════════════════════════════════════════════════════════════
