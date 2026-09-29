@@ -47,9 +47,8 @@
       });
     }, function (e) { clearTimeout(timer); throw e; });
   }
-  var nf = function (n) { return Number(n).toLocaleString('en-GB'); };
 
-  /* ── founding state: open (places left) or closed (invite-only) ─
+  /* ── founding state: open or closed (invite-only) ────
      Everything written in two versions carries data-when="open|closed".
      The default (open) is what no-JS visitors see; the counter below flips
      it from the live number. The server refuses a join without an
@@ -65,48 +64,11 @@
     $$('.rs-form').forEach(function (f) { syncForm(f); });
   }
 
+  /* The claimed/remaining count is deliberately never shown. The page only
+     uses the server's open/closed flag and the invitation settings. */
   function renderCounter(st) {
-    var limit = st.limit, claimed = st.claimed, left = st.remaining;
-    var pct = limit ? Math.min(100, claimed / limit * 100) : 0;
-    $$('[data-fm-fill]').forEach(function (i) {
-      i.style.width = pct.toFixed(3) + '%';
-      i.classList.toggle('min', claimed > 0);        // one claimed place still shows
-    });
     $$('[data-fm-per-month]').forEach(function (el) { el.textContent = st.invites_per_month; });
     $$('[data-fm-ttl]').forEach(function (el) { if (st.invite_ttl_days) el.textContent = st.invite_ttl_days; });
-
-    var line = $('[data-fm-line]');
-    if (line) {
-      if (!st.open) line.innerHTML = '<b>All ' + nf(limit) + ' founding places have been claimed.</b>';
-      else if (claimed === 0) line.innerHTML = '<b>' + nf(limit) + ' founding places.</b> None claimed yet — every one is still open.';
-      else line.innerHTML = '<b>' + nf(claimed) + ' / ' + nf(limit) + '</b> founding places claimed · ' + nf(left) + ' remaining';
-    }
-    var card = $('[data-fm-card]');
-    if (card) {
-      card.classList.toggle('closed', !st.open);
-      $('[data-fm-big]', card).textContent = st.open ? nf(claimed) : 'Closed';
-      $('[data-fm-of]', card).innerHTML = st.open
-        ? 'of ' + nf(limit) + ' claimed · <b>' + nf(left) + ' remaining</b>'
-        : '<b>Founding membership is now closed.</b> RipeStream is currently invite-only.';
-      $('[data-fm-note]', card).textContent = st.open
-        ? (claimed === 0
-            ? 'Counted live from confirmed members. No one has confirmed yet — the first founding place is still waiting.'
-            : 'Counted live from confirmed members. Nothing here is estimated or rounded up.')
-        : 'All ' + nf(limit) + ' founding places were claimed. Founding Members keep their status for good; new members join by invitation.';
-    }
-  }
-
-  function counterError() {
-    // Say nothing we can't back up: no number, keep the static copy.
-    $$('[data-fm-meter]').forEach(function (m) { m.classList.add('fm-err'); });
-    var line = $('[data-fm-line]');
-    if (line) line.textContent = "Live count unavailable right now — it'll be back shortly.";
-    var card = $('[data-fm-card]');
-    if (card) {
-      card.classList.add('fm-err');
-      $('[data-fm-big]', card).textContent = '—';
-      $('[data-fm-note]', card).textContent = "We couldn't load the live count. It's counted from confirmed members only — never estimated.";
-    }
   }
 
   var lastFetch = 0;
@@ -115,10 +77,9 @@
     return rpc('rs_founding_status', {}, 10000).then(function (st) {
       if (!st || typeof st.claimed !== 'number') throw new Error('bad status');
       founding.state = st;
-      $$('[data-fm-meter],[data-fm-card]').forEach(function (m) { m.classList.remove('fm-err'); });
       renderCounter(st);
       setPhase(!!st.open);
-    }).catch(counterError);
+    }).catch(function () { /* keep the static copy; the server still enforces the rules */ });
   }
   loadFounding();
   document.addEventListener('visibilitychange', function () {

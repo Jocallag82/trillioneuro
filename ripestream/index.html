@@ -209,16 +209,6 @@ main,footer{overflow-x:clip}
 /* ── founding: meter, badge ──────────────── */
 .hero-found{margin-top:22px;max-width:560px;font-size:15.5px;color:var(--mute-d);text-shadow:0 1px 14px rgba(12,10,9,.95)}
 .hero-found b{color:var(--cream);font-weight:600}
-.fm-meter{margin-top:16px;max-width:420px}
-.fm-bar{height:6px;border-radius:99px;background:rgba(243,238,230,.12);overflow:hidden}
-.fm-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--ripe),var(--lime));transition:width 1.4s var(--ease)}
-.fm-bar i.min{min-width:6px}
-.fm-line{margin-top:10px;font-size:13.5px;color:var(--mute-d);font-variant-numeric:tabular-nums}
-.fm-line b{color:var(--cream);font-weight:600}
-.fm-skel{display:inline-block;color:transparent;background:linear-gradient(90deg,rgba(243,238,230,.08),rgba(243,238,230,.16),rgba(243,238,230,.08));background-size:200% 100%;border-radius:6px;animation:skel 1.4s linear infinite}
-.light .fm-skel{background:linear-gradient(90deg,rgba(12,10,9,.06),rgba(12,10,9,.12),rgba(12,10,9,.06));background-size:200% 100%}
-@keyframes skel{to{background-position:-200% 0}}
-.fm-err .fm-bar{display:none}
 .fm-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 4px;border-radius:999px;border:1px solid rgba(200,245,90,.35);background:rgba(200,245,90,.07);color:var(--lime);font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;vertical-align:1px;white-space:nowrap}
 .fm-badge svg{width:15px;height:15px}
 .fm-badge.sm{font-size:9.5px;padding:2px 7px 2px 3px;gap:4px;margin-left:4px}.fm-badge.sm svg{width:12px;height:12px}
@@ -232,17 +222,10 @@ main,footer{overflow-x:clip}
 @media(max-width:900px){.fd-head{grid-template-columns:1fr}}
 .fd-head h2{margin-top:22px}
 .fd-head h2 span{color:var(--ripe-deep)}
-.fd-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px;margin-top:clamp(40px,6vw,72px)}
-@media(max-width:900px){.fd-grid{grid-template-columns:1fr}}
-.fd-count{position:relative;background:var(--ink);color:var(--cream);border-radius:28px;padding:clamp(24px,3.4vw,40px);display:flex;flex-direction:column;overflow:hidden;isolation:isolate}
-.fd-count::after{content:'';position:absolute;right:-30%;bottom:-40%;width:90%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,91,31,.22),transparent 65%);z-index:-1}
-.fd-count .k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d)}
-.fd-num{font-family:var(--display);font-weight:800;font-size:clamp(64px,9vw,128px);letter-spacing:-.05em;line-height:.9;margin-top:auto;padding-top:48px;font-variant-numeric:tabular-nums}
-.fd-num .fm-skel{min-width:2.4em}
-.fd-of{font-size:17px;color:var(--mute-d);margin:10px 0 22px}
-.fd-of b{color:var(--cream);font-weight:600}
-.fd-note{font-size:13px;color:var(--mute-d);margin-top:14px}
-.fd-count.closed .fd-num{font-size:clamp(40px,5vw,64px);line-height:1}
+.fd-grid{margin-top:clamp(40px,6vw,72px)}
+.fd-perks{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fd-perks li:last-child{grid-column:1/-1}
+@media(max-width:760px){.fd-perks{grid-template-columns:1fr}}
 .fd-perks{list-style:none;display:grid;gap:1px;background:var(--line-l);border:1px solid var(--line-l);border-radius:28px;overflow:hidden}
 .fd-perks li{background:#fff;padding:20px 24px 20px 58px;position:relative}
 .fd-perks li::before{content:'';position:absolute;left:24px;top:25px;width:14px;height:14px;border-radius:50%;background:var(--ripe);box-shadow:0 0 0 4px rgba(255,91,31,.14)}
@@ -697,10 +680,6 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         <div class="hero-found">
           <p data-when="open"><b>Be one of the first 10,000.</b> The first 10,000 members become Founding Members. Once those places are gone, RipeStream becomes invite-only.</p>
           <p data-when="closed" hidden><b>Founding membership is now closed.</b> RipeStream is currently invite-only — you'll need an invitation from a member to join.</p>
-          <div class="fm-meter" data-fm-meter aria-live="polite">
-            <div class="fm-bar" aria-hidden="true"><i data-fm-fill></i></div>
-            <p class="fm-line" data-fm-line><span class="fm-skel">Checking founding places…</span></p>
-          </div>
         </div>
       </div>
       <div class="hero-cta">
@@ -1162,15 +1141,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     </div>
 
     <div class="fd-grid">
-      <div class="fd-count rv" data-fm-card aria-live="polite">
-        <p class="k">Founding places</p>
-        <p class="fd-num" data-fm-big><span class="fm-skel">—</span></p>
-        <p class="fd-of" data-fm-of>of 10,000 claimed</p>
-        <div class="fm-bar" aria-hidden="true"><i data-fm-fill></i></div>
-        <p class="fd-note" data-fm-note>Counted live from confirmed members. Nothing here is estimated or rounded up.</p>
-      </div>
-
-      <ul class="fd-perks rv" style="--d:.08s" role="list">
+      <ul class="fd-perks rv" role="list">
         <li><b>Permanent Founding Member status</b><span>Numbered in the order members confirm, and kept for good — it doesn't lapse when the founding phase ends.</span></li>
         <li><b>Early access</b><span>You're in before RipeStream opens to anyone else.</span></li>
         <li><b>A real voice in shaping it</b><span>Founding Members are asked first about features, feed defaults and community rules.</span></li>

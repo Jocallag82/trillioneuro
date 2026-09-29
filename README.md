@@ -70,7 +70,7 @@ platform in development. Same stack and rules as the other two sites: plain HTML
     (row-locked → sequential, never past the limit, never reused). Founding numbers and member
     status are immutable (trigger). Once `issued = founding_limit` (10,000), `rs_join` refuses
     anyone without a valid invitation (`INVITE_REQUIRED`); the page flips to invite-only from
-    `rs_founding_status()` — the only number the counter shows. No numbers are invented.
+    `rs_founding_status()`. The page never shows how many places are claimed or remain — only open vs. invite-only.
   - Invitations: `rs_create_invite` / `rs_revoke_invite` — `invites_per_month` (5) per calendar
     month UTC, single-use 8-char codes, expire after `invite_ttl_days` (30), inviter recorded as
     `invited_by`. Change limits live: `update rs_settings set value = … where key = …`.
