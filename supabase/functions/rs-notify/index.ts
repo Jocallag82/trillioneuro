@@ -1,7 +1,7 @@
 // rs-notify — emails for the RipeStream interest list.
 //
 // Called by the rs_interests AFTER INSERT trigger (pg_net) with {"id": "<uuid>"}.
-// Sends the registrant a confirmation and the owner an alert, via Resend.
+// Sends the registrant a confirmation and the owner an alert.
 //
 // Deployed with verify_jwt = false, so anyone can call the URL. That is safe
 // because the body carries only a row id (an unguessable uuid) and the row's
@@ -9,22 +9,27 @@
 // nothing to send. The email address is always read from the database, never
 // taken from the request.
 //
-// Secrets (Supabase → Edge Functions → Secrets):
-//   RESEND_API_KEY   required — without it the function returns 503 and leaves
-//                    notified_at null, so the row is picked up by a backfill later
-//   ADMIN_EMAIL      where the "new sign-up" alert goes (optional)
-//   RS_FROM          default: RipeStream <hello@ripestream.com> (domain must be
-//                    verified in Resend)
+// Sends through Google Workspace SMTP (smtp.gmail.com:465 — Edge Functions
+// block 25/587). Credentials live in Supabase Vault, read by the service-role-
+// only RPC rs_mail_config(); nothing secret is in this file or the repo:
+//   rs_smtp_user     Workspace account that authenticates (e.g. hello@conjora.ie)
+//   rs_smtp_pass     its Google app password
+//   rs_admin_email   where the "new sign-up" alert goes
+//   rs_from          From header; hello@ripestream.com must be a "Send mail as"
+//                    alias on that account or Gmail rewrites it to the account
+// Missing password -> 503 and notified_at stays null; rs_notify_backlog()
+// sends those later.
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import nodemailer from "npm:nodemailer@6.9.16";
 
 const db = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   { auth: { persistSession: false } },
 );
-const KEY = Deno.env.get("RESEND_API_KEY");
-const ADMIN = Deno.env.get("ADMIN_EMAIL");
-const FROM = Deno.env.get("RS_FROM") ?? "RipeStream <hello@ripestream.com>";
+type Cfg = { smtp_user: string | null; smtp_pass: string | null; admin_email: string | null; mail_from: string | null };
+let cfg: Cfg | null = null;
+let mailer: ReturnType<typeof nodemailer.createTransport> | null = null;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const json = (status: number, body: unknown) =>
@@ -40,13 +45,12 @@ const tidy = (n: string | null) => {
   return t === t.toUpperCase() || t === t.toLowerCase() ? t.charAt(0).toUpperCase() + t.slice(1).toLowerCase() : t;
 };
 
-async function send(msg: Record<string, unknown>) {
-  const r = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: FROM, reply_to: "hello@ripestream.com", ...msg }),
+async function send(msg: { to: string; subject: string; html: string; text: string }) {
+  await mailer!.sendMail({
+    from: cfg!.mail_from || `RipeStream <${cfg!.smtp_user}>`,
+    replyTo: "hello@ripestream.com",
+    ...msg,
   });
-  if (!r.ok) throw new Error(`resend ${r.status}: ${await r.text()}`);
 }
 
 function welcome(name: string) {
@@ -86,7 +90,16 @@ Deno.serve(async (req) => {
   let id: unknown;
   try { ({ id } = await req.json()); } catch { return json(400, { error: "body" }); }
   if (typeof id !== "string" || !UUID.test(id)) return json(400, { error: "id" });
-  if (!KEY) return json(503, { error: "RESEND_API_KEY not set" });
+  if (!cfg) {
+    const { data, error: e } = await db.rpc("rs_mail_config");
+    if (e) return json(500, { error: e.message });
+    cfg = (Array.isArray(data) ? data[0] : data) as Cfg;
+  }
+  if (!cfg?.smtp_user || !cfg?.smtp_pass) { cfg = null; return json(503, { error: "SMTP credentials not in Vault" }); }
+  mailer ??= nodemailer.createTransport({
+    host: "smtp.gmail.com", port: 465, secure: true,
+    auth: { user: cfg.smtp_user, pass: cfg.smtp_pass },
+  });
 
   const { data: row, error } = await db.from("rs_interests")
     .select("id,email,first_name,source,created_at").eq("id", id).is("notified_at", null).maybeSingle();
@@ -107,6 +120,7 @@ Deno.serve(async (req) => {
     return json(502, { error: String(e) });
   }
 
+  const ADMIN = cfg.admin_email;
   if (ADMIN) {
     const { count } = await db.from("rs_interests").select("id", { count: "exact", head: true });
     const who = `${name || "(no name)"} <${row.email}>`;

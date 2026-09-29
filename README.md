@@ -73,9 +73,10 @@ Same stack and rules as the other two sites: plain HTML/CSS/JS, no build step.
 - **Mail**: `hello@` and `privacy@ripestream.com` are published — set up forwarding.
 - **Emails on sign-up**: an `AFTER INSERT` trigger on `rs_interests` calls the Edge Function
   `supabase/functions/rs-notify` (via `pg_net`), which sends the registrant a confirmation and
-  the owner an alert through Resend, then stamps `notified_at` (one-shot, so replays send
-  nothing). Needs Supabase secrets `RESEND_API_KEY` and `ADMIN_EMAIL`, and ripestream.com
-  verified in Resend. Rows that arrived before that: `select public.rs_notify_backlog();`
+  the owner an alert over Google Workspace SMTP (`smtp.gmail.com:465`), then stamps
+  `notified_at` (one-shot, so replays send nothing). Credentials are Vault secrets
+  `rs_smtp_user`, `rs_smtp_pass`, `rs_admin_email`, `rs_from`, read only by the service role.
+  Rows that arrived before the password was set: `select public.rs_notify_backlog();`
 - **Hero**: `#flow` is a canvas flow field (no video file, ~2 KB of JS) — pauses off-screen,
   one still frame under reduced motion.
 

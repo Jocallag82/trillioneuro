@@ -560,9 +560,9 @@ grant execute on function public.rs_register_interest(text,text,text) to anon;
 
 -- ── RipeStream emails ───────────────────────────────────────────────
 --  Every new row fires the rs-notify Edge Function (supabase/functions/
---  rs-notify) through pg_net. It sends the confirmation + owner alert via
---  Resend and stamps notified_at. Duplicates never insert, so never email.
---  If RESEND_API_KEY isn't set yet, rows stay notified_at = null; once it
+--  rs-notify) through pg_net. It sends the confirmation + owner alert over
+--  Google Workspace SMTP and stamps notified_at. Duplicates never insert, so never email.
+--  If the SMTP password isn't in Vault yet, rows stay notified_at = null; once it
 --  is, send the backlog with:
 --    select public.rs_notify_backlog();
 create extension if not exists pg_net with schema extensions;
@@ -601,6 +601,22 @@ begin
   return n;
 end $$;
 revoke all on function public.rs_notify_backlog() from public, anon, authenticated;
+
+-- Mail credentials for rs-notify live in Supabase Vault, never in the repo.
+-- Only the service role (the Edge Function) can read them:
+--   select vault.create_secret('<google app password>', 'rs_smtp_pass');
+create or replace function public.rs_mail_config()
+returns table(smtp_user text, smtp_pass text, admin_email text, mail_from text)
+language sql stable security definer
+set search_path = public, pg_temp as $$
+  select
+    (select decrypted_secret from vault.decrypted_secrets where name = 'rs_smtp_user'),
+    (select decrypted_secret from vault.decrypted_secrets where name = 'rs_smtp_pass'),
+    (select decrypted_secret from vault.decrypted_secrets where name = 'rs_admin_email'),
+    (select decrypted_secret from vault.decrypted_secrets where name = 'rs_from');
+$$;
+revoke all on function public.rs_mail_config() from public, anon, authenticated;
+grant execute on function public.rs_mail_config() to service_role;
 
 -- ════════════════════════════════════════════════════════════════════
 --  VERIFY  — run this any time; every value must read as stated.
