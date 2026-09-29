@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RipeStream — A New Way to Be Social</title>
-<meta name="description" content="RipeStream is a new kind of social network, bringing people, communities, creators and discovery together in one place. Register your interest.">
+<title>RipeStream — Social, but actually yours.</title>
+<meta name="description" content="A new social network where you control your feed, your communities and your experience. The first 10,000 members become Founding Members — then RipeStream is invite-only.">
 <link rel="canonical" href="https://ripestream.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RipeStream">
 <meta property="og:url" content="https://ripestream.com/">
 <meta property="og:title" content="RipeStream — Social, but actually yours.">
-<meta property="og:description" content="A new kind of social network is being built. People, communities, creators, local and discovery in one stream — with you in control. Register your interest.">
+<meta property="og:description" content="A new social network where you control your feed, your communities and your experience. The first 10,000 members become Founding Members.">
 <meta property="og:image" content="https://ripestream.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -18,7 +18,7 @@
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="RipeStream — Social, but actually yours.">
-<meta name="twitter:description" content="A new kind of social network is being built. Register your interest.">
+<meta name="twitter:description" content="The first 10,000 members become Founding Members. Then RipeStream is invite-only.">
 <meta name="twitter:image" content="https://ripestream.com/og-image.png">
 <meta name="theme-color" content="#0c0a09">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -30,7 +30,7 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Organization","name":"RipeStream","url":"https://ripestream.com/","logo":"https://ripestream.com/apple-touch-icon.png","email":"hello@ripestream.com"},
-{"@type":"WebSite","name":"RipeStream","url":"https://ripestream.com/","description":"A new kind of social network, currently in development. Register your interest."}
+{"@type":"WebSite","name":"RipeStream","url":"https://ripestream.com/","description":"A new social network designed around user control, currently in development. The first 10,000 members become Founding Members."}
 ]}
 </script>
 <style>
@@ -57,6 +57,7 @@ button{cursor:pointer;background:none;border:0}
 .light :focus-visible,.final :focus-visible{outline-color:var(--ink)}
 .skip{position:absolute;left:12px;top:-60px;z-index:200;background:var(--lime);color:var(--ink);padding:10px 14px;border-radius:8px;font-weight:600;text-decoration:none}
 .skip:focus{top:12px}
+[hidden]{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
 .display{font-family:var(--display);font-weight:700;letter-spacing:-.035em;line-height:.95;font-optical-sizing:auto}
@@ -65,6 +66,7 @@ button{cursor:pointer;background:none;border:0}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(200,245,90,.6);animation:ping 2.4s var(--ease) infinite}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(200,245,90,.55)}70%,100%{box-shadow:0 0 0 10px rgba(200,245,90,0)}}
 section{position:relative}
+main,footer{overflow-x:clip}
 .light{background:var(--paper);color:var(--ink)}
 .h2{font-size:clamp(40px,7vw,96px)}
 .lede{font-size:clamp(17px,1.6vw,20px);line-height:1.55;max-width:620px}
@@ -96,8 +98,9 @@ section{position:relative}
 .nav-links a{display:block;padding:10px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--mute-d);text-decoration:none;transition:color .2s,background-color .2s}
 .nav-links a:hover{color:var(--cream);background:rgba(243,238,230,.06)}
 @media(max-width:900px){.nav-links{display:none}}
-@media(max-width:420px){.nav .btn-sm{padding:0 14px;font-size:13px}.nav .btn-sm .long{display:none}}
-@media(min-width:421px){.nav .btn-sm .short{display:none}}
+@media(max-width:420px){.nav .btn-sm{padding:0 14px;font-size:13px}}
+@media(max-width:1100px){.nav .btn-sm .long{display:none!important}}
+@media(min-width:1101px){.nav .btn-sm .short{display:none}}
 
 /* ── hero ────────────────────────────────── */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 0;overflow:hidden;isolation:isolate}
@@ -165,15 +168,6 @@ section{position:relative}
 .js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
 .js .rv.in{opacity:1;transform:none}
 
-/* ── join ────────────────────────────────── */
-.join .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:center}
-@media(max-width:900px){.join .wrap{grid-template-columns:1fr}}
-.join .eyebrow{color:var(--ripe-deep)}
-.join h2{margin:22px 0 24px}
-.join h2 span{color:var(--ripe-deep)}
-.honest{display:flex;gap:12px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line-l);font-size:14px;color:var(--mute-l);max-width:520px}
-.honest svg{flex:none;width:20px;height:20px;margin-top:2px;color:var(--ripe-deep)}
-
 /* form card */
 .card-form{position:relative;background:var(--ink);color:var(--cream);border-radius:28px;padding:clamp(24px,4vw,44px);box-shadow:0 40px 80px -40px rgba(12,10,9,.55)}
 .card-form::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(160deg,rgba(255,91,31,.7),transparent 40%,transparent 70%,rgba(200,245,90,.4));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
@@ -210,6 +204,76 @@ section{position:relative}
 .share span{font-size:14px;color:var(--mute-d)}
 .share .btn{height:44px;font-size:14px;padding:0 18px;background:rgba(243,238,230,.08);color:var(--cream);text-transform:none;letter-spacing:0;width:auto;margin:0}
 .share .btn:hover{background:rgba(243,238,230,.14)}
+
+
+/* ── founding: meter, badge ──────────────── */
+.hero-found{margin-top:22px;max-width:560px;font-size:15.5px;color:var(--mute-d);text-shadow:0 1px 14px rgba(12,10,9,.95)}
+.hero-found b{color:var(--cream);font-weight:600}
+.fm-meter{margin-top:16px;max-width:420px}
+.fm-bar{height:6px;border-radius:99px;background:rgba(243,238,230,.12);overflow:hidden}
+.fm-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--ripe),var(--lime));transition:width 1.4s var(--ease)}
+.fm-bar i.min{min-width:6px}
+.fm-line{margin-top:10px;font-size:13.5px;color:var(--mute-d);font-variant-numeric:tabular-nums}
+.fm-line b{color:var(--cream);font-weight:600}
+.fm-skel{display:inline-block;color:transparent;background:linear-gradient(90deg,rgba(243,238,230,.08),rgba(243,238,230,.16),rgba(243,238,230,.08));background-size:200% 100%;border-radius:6px;animation:skel 1.4s linear infinite}
+.light .fm-skel{background:linear-gradient(90deg,rgba(12,10,9,.06),rgba(12,10,9,.12),rgba(12,10,9,.06));background-size:200% 100%}
+@keyframes skel{to{background-position:-200% 0}}
+.fm-err .fm-bar{display:none}
+.fm-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 4px;border-radius:999px;border:1px solid rgba(200,245,90,.35);background:rgba(200,245,90,.07);color:var(--lime);font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;vertical-align:1px;white-space:nowrap}
+.fm-badge svg{width:15px;height:15px}
+.fm-badge.sm{font-size:9.5px;padding:2px 7px 2px 3px;gap:4px;margin-left:4px}.fm-badge.sm svg{width:12px;height:12px}
+.invite-banner{display:flex;width:fit-content;max-width:100%;align-items:center;gap:10px;margin:0 0 12px;padding:9px 16px;border-radius:999px;background:var(--lime);color:var(--ink);font-size:14px;font-weight:500}
+.invite-banner b{font-weight:700}
+.invite-banner.bad{background:rgba(255,143,143,.14);color:#ffc2c2;border:1px solid rgba(255,143,143,.35)}
+
+/* ── founding section ────────────────────── */
+.founding .eyebrow{color:var(--ripe-deep)}
+.fd-head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px clamp(32px,6vw,96px);align-items:end}
+@media(max-width:900px){.fd-head{grid-template-columns:1fr}}
+.fd-head h2{margin-top:22px}
+.fd-head h2 span{color:var(--ripe-deep)}
+.fd-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px;margin-top:clamp(40px,6vw,72px)}
+@media(max-width:900px){.fd-grid{grid-template-columns:1fr}}
+.fd-count{position:relative;background:var(--ink);color:var(--cream);border-radius:28px;padding:clamp(24px,3.4vw,40px);display:flex;flex-direction:column;overflow:hidden;isolation:isolate}
+.fd-count::after{content:'';position:absolute;right:-30%;bottom:-40%;width:90%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,91,31,.22),transparent 65%);z-index:-1}
+.fd-count .k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d)}
+.fd-num{font-family:var(--display);font-weight:800;font-size:clamp(64px,9vw,128px);letter-spacing:-.05em;line-height:.9;margin-top:auto;padding-top:48px;font-variant-numeric:tabular-nums}
+.fd-num .fm-skel{min-width:2.4em}
+.fd-of{font-size:17px;color:var(--mute-d);margin:10px 0 22px}
+.fd-of b{color:var(--cream);font-weight:600}
+.fd-note{font-size:13px;color:var(--mute-d);margin-top:14px}
+.fd-count.closed .fd-num{font-size:clamp(40px,5vw,64px);line-height:1}
+.fd-perks{list-style:none;display:grid;gap:1px;background:var(--line-l);border:1px solid var(--line-l);border-radius:28px;overflow:hidden}
+.fd-perks li{background:#fff;padding:20px 24px 20px 58px;position:relative}
+.fd-perks li::before{content:'';position:absolute;left:24px;top:25px;width:14px;height:14px;border-radius:50%;background:var(--ripe);box-shadow:0 0 0 4px rgba(255,91,31,.14)}
+.fd-perks b{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em;line-height:1.2;margin-bottom:4px}
+.fd-perks span{font-size:14.5px;color:var(--mute-l)}
+.fd-how{margin-top:clamp(56px,8vw,96px);padding-top:clamp(32px,4vw,48px);border-top:1px solid var(--line-l)}
+.fd-how h3{font-size:clamp(34px,4.6vw,60px);margin-bottom:clamp(24px,3vw,36px)}
+.fd-how ol{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media(max-width:900px){.fd-how ol{grid-template-columns:1fr}}
+.fd-how li{display:flex;gap:16px;align-items:flex-start;padding:22px;border-radius:22px;border:1.5px solid var(--line-l)}
+.fd-how .n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--cream);font-weight:700;font-size:14px}
+.fd-how b{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em;margin-bottom:4px}
+.fd-how p{font-size:14.5px;color:var(--mute-l)}
+.fd-fine{margin-top:22px;font-size:14px;color:var(--mute-l)}
+
+/* invitation field + after-join */
+.invite-field{margin:2px 0 16px}
+.invite-field summary{cursor:pointer;font-size:14px;font-weight:500;color:var(--mute-d);padding:6px 0;list-style:none;display:inline-flex;align-items:center;gap:8px}
+.invite-field summary::-webkit-details-marker{display:none}
+.invite-field summary::before{content:'+';display:grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line-d2);font-size:14px;line-height:1}
+.invite-field[open] summary::before{content:'–'}
+.invite-field summary:hover{color:var(--cream)}
+.invite-field .field{margin:10px 0 0}
+.invite-field input{text-transform:uppercase;letter-spacing:.12em;font-variant-numeric:tabular-nums}
+.invite-field input::placeholder{letter-spacing:.12em}
+.invite-msg{font-size:13.5px;margin-top:8px;color:var(--mute-d)}
+.invite-msg:empty{display:none}
+.invite-msg.ok{color:var(--lime)}.invite-msg.bad{color:#ff8f8f}
+.invite-field.req summary{display:none}
+.done-small{font-size:14px!important;margin-top:18px}
+.done-small a{color:var(--cream)}
 
 /* ── big idea ────────────────────────────── */
 .idea .eyebrow{color:var(--ripe)}
@@ -549,7 +613,7 @@ fieldset{border:0}
 .people-line b{color:var(--cream)}
 
 /* ── final ───────────────────────────────── */
-.final{background:var(--ripe);color:var(--ink);overflow:hidden;isolation:isolate}
+.final{background:var(--ripe);color:var(--ink);overflow:hidden;overflow:clip;isolation:isolate}
 .final::before{content:'';position:absolute;inset:-20% -10% auto auto;width:70vw;max-width:900px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,200,150,.55),transparent 65%);z-index:-1}
 .final .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:end}
 @media(max-width:900px){.final .wrap{grid-template-columns:1fr}}
@@ -608,9 +672,10 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         <li><a href="#control">Control</a></li>
         <li><a href="#local">Local</a></li>
         <li><a href="#ai">AI</a></li>
+        <li><a href="#founding">Founding</a></li>
       </ul>
     </nav>
-    <a class="btn btn-ripe btn-sm" href="#join" data-focus-form><span class="long">Get early access</span><span class="short">Join</span></a>
+    <a class="btn btn-ripe btn-sm" href="#join" data-focus-form data-nav-cta><span class="long" data-when="open">Join the Founding Members</span><span class="long" data-when="closed" hidden>Join with an invitation</span><span class="short" data-when="open">Join</span><span class="short" data-when="closed" hidden>Join by invitation</span></a>
   </div>
 </header>
 
@@ -620,16 +685,27 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
 <section class="hero dark grain" aria-labelledby="hero-title">
   <canvas id="flow" aria-hidden="true"></canvas><div class="hero-shade" aria-hidden="true"></div>
   <div class="wrap hero-enter">
-    <p class="hero-status"><span class="dot" aria-hidden="true"></span><span><b>In development.</b> The early interest list is open.</span></p>
+    <p class="invite-banner" id="invite-banner" role="status" hidden></p>
+    <p class="hero-status" id="hero-status"><span class="dot" aria-hidden="true"></span><span><b>In development.</b> <span data-when="open">Founding places are open.</span><span data-when="closed" hidden>Currently invite-only.</span></span></p>
     <h1 id="hero-title" class="display">
       <span class="sr">RipeStream. </span><span class="wordmark" aria-hidden="true"><span class="ch" style="--i:0">R</span><span class="ch" style="--i:1">i</span><span class="ch" style="--i:2">p</span><span class="ch" style="--i:3">e</span><span class="ch r" style="--i:4">S</span><span class="ch r" style="--i:5">t</span><span class="ch r" style="--i:6">r</span><span class="ch r" style="--i:7">e</span><span class="ch r" style="--i:8">a</span><span class="ch r" style="--i:9">m</span></span>
       <span class="headline">Social, but <em>actually yours.</em></span>
     </h1>
     <div class="hero-grid">
-      <p class="hero-copy">RipeStream is a new kind of social network — bringing together the best parts of social media while giving you more control over what you see, who you connect with and how you experience it.</p>
+      <div>
+        <p class="hero-copy">A new social network where you control your feed, your communities and your experience.</p>
+        <div class="hero-found">
+          <p data-when="open"><b>Be one of the first 10,000.</b> The first 10,000 members become Founding Members. Once those places are gone, RipeStream becomes invite-only.</p>
+          <p data-when="closed" hidden><b>Founding membership is now closed.</b> RipeStream is currently invite-only — you'll need an invitation from a member to join.</p>
+          <div class="fm-meter" data-fm-meter aria-live="polite">
+            <div class="fm-bar" aria-hidden="true"><i data-fm-fill></i></div>
+            <p class="fm-line" data-fm-line><span class="fm-skel">Checking founding places…</span></p>
+          </div>
+        </div>
+      </div>
       <div class="hero-cta">
-        <a class="btn btn-ripe" href="#join" data-focus-form>Register your interest <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="ghost-link" href="#about">See what's coming <span aria-hidden="true">↓</span></a>
+        <a class="btn btn-ripe" href="#join" data-focus-form><span data-when="open">Join the Founding Members</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="ghost-link" href="#about">See what you'd control <span aria-hidden="true">↓</span></a>
       </div>
     </div>
   </div>
@@ -685,37 +761,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
   </div>
 </section>
 
-<!-- ═════════ JOIN ═════════ -->
-<section class="join light pad" id="join" aria-labelledby="join-title">
-  <div class="wrap">
-    <div class="rv">
-      <p class="eyebrow">Early access</p>
-      <h2 id="join-title" class="display h2">Get in <span>early.</span></h2>
-      <p class="lede">Put your name down and you'll hear about RipeStream first — the first previews, the progress, and the moment there's something you can actually try.</p>
-      <p class="honest"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Straight with you: this is an interest list, not an account. RipeStream is still being built. Registering doesn't sign you up to anything else, and you can ask to be removed at any time.</span></p>
-    </div>
-    <div class="card-form rv" style="--d:.1s" data-form-host>
-      <form class="rs-form" data-source="join" novalidate>
-        <h3>Register your interest</h3>
-        <p class="intro">Takes ten seconds. First name is optional.</p>
-        <div class="field">
-          <label for="join-name">First name <span>Optional</span></label>
-          <input id="join-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" placeholder="Alex">
-        </div>
-        <div class="field">
-          <label for="join-email">Email address</label>
-          <input id="join-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com" aria-describedby="join-err">
-        </div>
-        <div class="hp" aria-hidden="true"><label for="join-web">Leave this empty</label><input id="join-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <button class="btn btn-ripe" type="submit"><span class="lbl">Get early access</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
-        <p class="err" id="join-err" aria-live="polite"></p>
-        <p class="fine">We'll only email you about RipeStream. No spam, no selling your address. <a href="/privacy">Privacy</a></p>
-      </form>
-    </div>
-  </div>
-</section>
-
-<div class="ticker tilt" aria-hidden="true"><div class="run"><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Something new is coming</span><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Something new is coming</span></div></div>
+<div class="ticker tilt" aria-hidden="true"><div class="run"><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Your algorithm</span><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Your algorithm</span></div></div>
 
 <!-- ═════════ BIG IDEA ═════════ -->
 <section class="idea dark pad" id="about" aria-labelledby="idea-title">
@@ -777,7 +823,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
           <div class="tabs"><span class="on">Following</span><span>Communities</span><span>Local</span><span>Discover</span></div>
 
           <article class="post">
-            <div class="p-head"><span class="av g1">AB</span><div><b>Aoife Brennan</b><small>in 35mm &amp; Film · 12m</small></div><span class="pill">You follow</span></div>
+            <div class="p-head"><span class="av g1">AB</span><div><b>Aoife Brennan <span class="fm-badge sm" title="Founding Member"><svg><use href="#mark"/></svg>Founding</span></b><small>in 35mm &amp; Film · 12m</small></div><span class="pill">You follow</span></div>
             <p>Golden hour on the pier. Didn't expect the whole sky to do that. Portra 400, no edits.</p>
             <div class="photo"><span class="pier"></span></div>
             <div class="p-act"><span><svg><use href="#i-heart"/></svg>48</span><span><svg><use href="#i-reply"/></svg>6</span><span><svg><use href="#i-share"/></svg>Share</span></div>
@@ -1104,29 +1150,79 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
   </div>
 </section>
 
-<!-- ═════════ FINAL ═════════ -->
-<section class="final pad" id="final" aria-labelledby="final-title">
+<!-- ═════════ FOUNDING ═════════ -->
+<section class="founding light pad" id="founding" aria-labelledby="founding-title">
+  <div class="wrap">
+    <div class="fd-head">
+      <div class="rv">
+        <p class="eyebrow">Founding Members</p>
+        <h2 id="founding-title" class="display h2">Be here from the <span>beginning.</span></h2>
+      </div>
+      <p class="lede rv" style="--d:.08s">The first 10,000 members become Founding Members. Not a tier you buy or a badge you grind for — just a permanent record that you were here first, and helped decide what this became.</p>
+    </div>
+
+    <div class="fd-grid">
+      <div class="fd-count rv" data-fm-card aria-live="polite">
+        <p class="k">Founding places</p>
+        <p class="fd-num" data-fm-big><span class="fm-skel">—</span></p>
+        <p class="fd-of" data-fm-of>of 10,000 claimed</p>
+        <div class="fm-bar" aria-hidden="true"><i data-fm-fill></i></div>
+        <p class="fd-note" data-fm-note>Counted live from confirmed members. Nothing here is estimated or rounded up.</p>
+      </div>
+
+      <ul class="fd-perks rv" style="--d:.08s" role="list">
+        <li><b>Permanent Founding Member status</b><span>Numbered in the order members confirm, and kept for good — it doesn't lapse when the founding phase ends.</span></li>
+        <li><b>Early access</b><span>You're in before RipeStream opens to anyone else.</span></li>
+        <li><b>A real voice in shaping it</b><span>Founding Members are asked first about features, feed defaults and community rules.</span></li>
+        <li><b>The early community</b><span>A place alongside the other founders and the people building RipeStream.</span></li>
+        <li><b>Invitations for people you trust</b><span><span data-fm-per-month>5</span> a month, to bring in the people you actually want here.</span></li>
+      </ul>
+    </div>
+
+    <div class="fd-how rv">
+      <h3 class="display">Then it's invite-only.</h3>
+      <ol role="list">
+        <li><span class="n">1</span><div><b>10,000 founding places</b><p>Claimed in the order people confirm their email. When the last one goes, founding membership closes for good.</p></div></li>
+        <li><span class="n">2</span><div><b>Every new member is invited</b><p>After that, joining needs an invitation from someone already here. Everyone arrives knowing someone.</p></div></li>
+        <li><span class="n">3</span><div><b><span data-fm-per-month>5</span> invitations a month</b><p>Each code works once, for one person, and expires after <span data-fm-ttl>30</span> days. No points, no rewards, no leaderboard.</p></div></li>
+      </ol>
+      <p class="fd-fine">No payment, no tokens, no waiting-list games. Founding status is recognition, not something for sale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ JOIN ═════════ -->
+<section class="final pad" id="join" aria-labelledby="final-title">
   <div class="wrap">
     <div class="rv">
-      <h2 id="final-title" class="display">Be there from the beginning.</h2>
-      <p class="lede">RipeStream is being built right now. If you want to see where this goes, register your interest.</p>
+      <h2 id="final-title" class="display"><span data-when="open">Join the Founding Members.</span><span data-when="closed" hidden>Join with an invitation.</span></h2>
+      <p class="lede" data-when="open">Your social world. Your feed. Your rules. Claim a founding place now — it's confirmed the moment you open the link we email you.</p>
+      <p class="lede" data-when="closed" hidden>Founding membership is now closed and RipeStream is currently invite-only. If a member has invited you, use their code below.</p>
     </div>
     <div class="card-form rv" style="--d:.1s" data-form-host>
-      <form class="rs-form" data-source="final" novalidate>
-        <h3>Register your interest</h3>
-        <p class="intro">We'll tell you when there's something worth seeing.</p>
+      <form class="rs-form" data-source="join" novalidate>
+        <h3><span data-when="open">Claim your founding place</span><span data-when="closed" hidden>Join with an invitation</span></h3>
+        <p class="intro" data-invite-intro>Takes ten seconds. No password — we email you a link.</p>
         <div class="field">
-          <label for="final-name">First name <span>Optional</span></label>
-          <input id="final-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" placeholder="Alex">
+          <label for="join-name">First name <span>Optional</span></label>
+          <input id="join-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" placeholder="Alex">
         </div>
         <div class="field">
-          <label for="final-email">Email address</label>
-          <input id="final-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com" aria-describedby="final-err">
+          <label for="join-email">Email address</label>
+          <input id="join-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com" aria-describedby="join-err">
         </div>
-        <div class="hp" aria-hidden="true"><label for="final-web">Leave this empty</label><input id="final-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <button class="btn btn-ripe" type="submit"><span class="lbl">Register your interest</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
-        <p class="err" id="final-err" aria-live="polite"></p>
-        <p class="fine">We'll only email you about RipeStream. <a href="/privacy">Privacy</a></p>
+        <details class="invite-field" data-invite-field>
+          <summary>Have an invitation code?</summary>
+          <div class="field">
+            <label for="join-invite">Invitation code <span data-invite-opt>Optional</span></label>
+            <input id="join-invite" name="invite" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" placeholder="ABCD-2345" aria-describedby="join-invite-msg">
+            <p class="invite-msg" id="join-invite-msg" aria-live="polite"></p>
+          </div>
+        </details>
+        <div class="hp" aria-hidden="true"><label for="join-web">Leave this empty</label><input id="join-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <button class="btn btn-ripe" type="submit"><span class="lbl" data-label-open="Join the Founding Members" data-label-closed="Join RipeStream">Join the Founding Members</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
+        <p class="err" id="join-err" aria-live="polite"></p>
+        <p class="fine">We'll only email you about RipeStream. No spam, never sold. <a href="/privacy">Privacy</a> · Already joined? <a href="/member">Get your member link</a></p>
       </form>
     </div>
   </div>
@@ -1139,7 +1235,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <div class="foot">
       <div>
         <a class="logo" href="/"><svg aria-hidden="true"><use href="#mark"/></svg>RipeStream</a>
-        <p class="tagline">Something new<br>is <span>coming.</span></p>
+        <p class="tagline">Social, but<br>actually <span>yours.</span></p>
       </div>
       <nav aria-label="Footer">
         <ul>
@@ -1154,15 +1250,14 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
   </div>
 </footer>
 
-<div class="dock" id="dock"><a class="btn btn-ripe" href="#join" data-focus-form>Register your interest <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+<div class="dock" id="dock"><a class="btn btn-ripe" href="#join" data-focus-form><span data-when="open">Join the Founding Members</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
 
 <template id="done-tpl">
   <div class="done" tabindex="-1">
     <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <h3 data-title>You're on the list.</h3>
-    <p>You're officially interested in RipeStream.</p>
-    <p>We'll let you know when there's something worth seeing.</p>
-    <div class="share"><span>Know someone who'd want in?</span><button type="button" class="btn" data-share>Share RipeStream</button></div>
+    <h3 data-title>Check your inbox.</h3>
+    <p data-body>We've emailed you a link. Open it to confirm your email — that's the moment your place is claimed.</p>
+    <p class="done-small">Nothing there in a few minutes? Check spam, or <a href="/member">send the link again</a>.</p>
   </div>
 </template>
 

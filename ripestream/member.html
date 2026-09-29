@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your membership — RipeStream</title>
+<meta name="description" content="Your RipeStream membership and invitations.">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://ripestream.com/member">
+<meta name="theme-color" content="#0c0a09">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script>document.documentElement.classList.add('js')</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preload" href="/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(/fonts/bricolage-grotesque.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0c0a09;--ink2:#161312;--ink3:#211d1b;--line-d:rgba(243,238,230,.10);--line-d2:rgba(243,238,230,.18);
+  --cream:#f3eee6;--mute-d:#a8a096;--ripe:#ff5b1f;--ripe-hi:#ff7a45;--lime:#c8f55a;
+  --display:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+[hidden]{display:none!important}
+body{font-family:var(--sans);background:var(--ink);color:var(--cream);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100svh;display:flex;flex-direction:column}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.bar,main,footer{width:100%;max-width:880px;margin:0 auto;padding-left:clamp(16px,5vw,32px);padding-right:clamp(16px,5vw,32px)}
+.bar{display:flex;justify-content:space-between;align-items:center;padding-top:22px;padding-bottom:22px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.03em}
+.logo svg{width:28px;height:28px}
+.bar a.home{font-size:14px;color:var(--mute-d);text-decoration:none;padding:8px 0}
+.bar a.home:hover{color:var(--cream)}
+main{flex:1;padding-top:clamp(24px,5vw,56px);padding-bottom:80px}
+.display{font-family:var(--display);font-weight:700;letter-spacing:-.04em;line-height:1}
+h1.display{font-size:clamp(38px,6.4vw,72px);margin-bottom:18px}
+h2.display{font-size:clamp(28px,4vw,44px);margin-bottom:10px}
+.lede{font-size:clamp(17px,1.8vw,19px);color:var(--mute-d);max-width:620px}
+.lede b{color:var(--cream);font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 26px;border-radius:999px;font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;white-space:nowrap;background:var(--ripe);color:var(--ink);box-shadow:0 10px 30px -10px rgba(255,91,31,.7);transition:transform .3s var(--ease),background-color .2s}
+.btn:hover{background:var(--ripe-hi);transform:translateY(-2px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.busy{cursor:progress}
+.btn.quiet{background:rgba(243,238,230,.08);color:var(--cream);box-shadow:none;height:40px;padding:0 16px;font-size:13px;letter-spacing:0;text-transform:none}
+.btn.quiet:hover{background:rgba(243,238,230,.14)}
+.card{background:var(--ink2);border:1px solid var(--line-d);border-radius:28px;padding:clamp(22px,4vw,40px)}
+.stack>*+*{margin-top:14px}
+
+/* identity */
+.id{position:relative;overflow:hidden;isolation:isolate}
+.id::after{content:'';position:absolute;right:-20%;top:-50%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,91,31,.22),transparent 65%);z-index:-1}
+.fm-badge{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 5px;border-radius:999px;border:1px solid rgba(200,245,90,.35);background:rgba(200,245,90,.07);color:var(--lime);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px}
+.fm-badge svg{width:18px;height:18px}
+.fm-no{font-family:var(--display);font-weight:800;font-size:clamp(46px,9vw,104px);letter-spacing:-.05em;line-height:.9;margin:26px 0 6px;font-variant-numeric:tabular-nums}
+.fm-no small{display:block;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d);margin-bottom:10px}
+.meta{font-size:14px;color:var(--mute-d);margin-top:14px}
+
+/* invitations */
+.inv{margin-top:14px}
+.inv-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.avail{font-family:var(--display);font-size:clamp(22px,3vw,30px);letter-spacing:-.03em;font-weight:700;margin-top:4px}
+.avail b{color:var(--lime)}
+.k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d)}
+.inv .sub{color:var(--mute-d);font-size:15px;margin-top:6px;max-width:520px}
+.make{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:24px;padding-top:24px;border-top:1px solid var(--line-d)}
+.make .field{flex:1 1 240px}
+.field label{display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:8px}
+.field label span{color:var(--mute-d);font-weight:400}
+.field input{width:100%;height:56px;padding:0 18px;border-radius:14px;border:1.5px solid var(--line-d2);background:var(--ink);font-size:16px;transition:border-color .2s,box-shadow .2s}
+.field input::placeholder{color:#7b746c}
+.field input:focus{outline:none;border-color:var(--ripe);box-shadow:0 0 0 4px rgba(255,91,31,.18)}
+.field input[aria-invalid=true]{border-color:#ff6b6b}
+.err{font-size:14px;color:#ff8f8f;margin-top:12px}.err:empty{display:none}
+.ok{font-size:14px;color:var(--lime);margin-top:12px}.ok:empty{display:none}
+.exhausted{margin-top:24px;padding:16px 18px;border-radius:16px;border:1px dashed var(--line-d2);color:var(--mute-d);font-size:14.5px}
+.list{list-style:none;display:grid;gap:10px;margin-top:22px}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;align-items:center;padding:16px 18px;border-radius:18px;background:var(--ink3);border:1px solid var(--line-d)}
+.item .code{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.item .who{font-size:14px;color:var(--mute-d);margin-top:2px}
+.item .acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-left:8px;vertical-align:3px;letter-spacing:0;font-family:var(--sans)}
+.chip::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.open{color:var(--lime);background:rgba(200,245,90,.08)}
+.chip.used{color:#9fd4ff;background:rgba(111,182,255,.1)}
+.chip.expired,.chip.revoked{color:var(--mute-d);background:rgba(243,238,230,.06)}
+.item.dim{opacity:.62}
+@media(max-width:600px){.item{grid-template-columns:1fr}.item .acts{justify-content:flex-start}}
+.empty{margin-top:22px;padding:22px;border-radius:18px;border:1px dashed var(--line-d2);color:var(--mute-d);font-size:14.5px;text-align:center}
+.note{margin-top:14px;display:flex;gap:12px;padding:18px 20px;border-radius:18px;border:1px solid var(--line-d);font-size:14px;color:var(--mute-d)}
+.note svg{flex:none;width:20px;height:20px;margin-top:1px;color:var(--ripe)}
+.foot-acts{margin-top:28px;font-size:14px;color:var(--mute-d)}
+.foot-acts button{color:var(--mute-d);text-decoration:underline;text-underline-offset:3px}
+.foot-acts button:hover{color:var(--cream)}
+
+/* states */
+.skel{display:block;border-radius:12px;background:linear-gradient(90deg,rgba(243,238,230,.06),rgba(243,238,230,.12),rgba(243,238,230,.06));background-size:200% 100%;animation:skel 1.4s linear infinite}
+@keyframes skel{to{background-position:-200% 0}}
+.linkform{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:28px;max-width:560px}
+.linkform .field{flex:1 1 260px}
+footer{border-top:1px solid var(--line-d);padding-top:28px;padding-bottom:calc(40px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--mute-d)}
+footer nav{display:flex;gap:20px}
+footer a{color:var(--mute-d);text-decoration:none}footer a:hover{color:var(--cream)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 32 32"><circle cx="16" cy="17" r="15" fill="#ff5b1f"/><path d="M17.5 3.2c2.2-2.4 6.2-2.6 8.3-.9-2.1 2.6-5.7 3-8.3.9z" fill="#c8f55a"/><path d="M5 17.5c3.7-3.6 7.3-3.6 11 0s7.3 3.6 11 0" stroke="#0c0a09" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M8.5 24c2.5-2.3 5-2.3 7.5 0s5 2.3 7.5 0" stroke="#0c0a09" stroke-width="2.8" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+</svg>
+<header class="bar"><a class="logo" href="/"><svg aria-hidden="true"><use href="#mark"/></svg>RipeStream</a><a class="home" href="/">ripestream.com</a></header>
+
+<main id="main" aria-live="polite">
+  <!-- Rendered by member.js. Without JavaScript: -->
+  <noscript>
+    <h1 class="display">Your membership</h1>
+    <p class="lede">This page needs JavaScript to open your member link and manage your invitations.</p>
+  </noscript>
+  <div id="app" class="stack" aria-busy="true">
+    <div class="card"><span class="skel" style="height:28px;width:40%"></span><span class="skel" style="height:64px;width:80%;margin-top:22px"></span><span class="skel" style="height:18px;width:60%;margin-top:18px"></span></div>
+    <div class="card"><span class="skel" style="height:22px;width:30%"></span><span class="skel" style="height:56px;width:100%;margin-top:22px"></span></div>
+    <p class="sr">Loading your membership…</p>
+  </div>
+</main>
+
+<footer><span>© 2026 RipeStream</span><nav aria-label="Footer"><a href="/">Home</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:hello@ripestream.com">Contact</a></nav></footer>
+<script src="/member.js" defer></script>
+</body>
+</html>

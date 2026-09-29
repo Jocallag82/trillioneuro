@@ -619,6 +619,542 @@ revoke all on function public.rs_mail_config() from public, anon, authenticated;
 grant execute on function public.rs_mail_config() to service_role;
 
 -- ════════════════════════════════════════════════════════════════════
+--  RIPESTREAM — FOUNDING MEMBERS + INVITATIONS
+--
+--  The launch model, enforced here and nowhere else:
+--    • The first `founding_limit` (10,000) members to CONFIRM their email
+--      become Founding Members, numbered 1…10,000 in confirmation order.
+--      The number is issued from a single counter row under a row lock, so
+--      it is sequential, gap-free and can never be issued twice or past
+--      the limit — not even by two confirmations in the same millisecond.
+--    • Founding status is permanent: a trigger refuses any change to a
+--      founding_number once issued. Numbers are never reused, even if a
+--      member is later deleted (the counter only ever goes up).
+--    • Once the counter reaches the limit, rs_join() refuses anyone without
+--      a valid invitation (INVITE_REQUIRED). The page reads the same
+--      counter through rs_founding_status(), so it cannot keep claiming
+--      places exist after they're gone.
+--    • Every member gets `invites_per_month` (5) invitations per calendar
+--      month (UTC). Each code works once, expires after `invite_ttl_days`,
+--      and records who invited whom. Limits live in rs_settings — change
+--      them with an UPDATE, no deploy needed.
+--
+--  No accounts/passwords exist yet. A member proves who they are with a
+--  member key: 256 random bits, emailed as a link (…/member#k=…), stored
+--  here only as a SHA-256 hash. Only the service role (the rs-member Edge
+--  Function) can mint one, so the email round-trip is also the email
+--  verification: nobody claims a founding place with an address they
+--  can't read.
+--
+--  anon can call exactly: rs_founding_status, rs_check_invite, rs_join,
+--  rs_request_link, rs_member_open, rs_create_invite, rs_revoke_invite.
+--  All are SECURITY DEFINER, pinned search_path, validated, rate-limited.
+-- ════════════════════════════════════════════════════════════════════
+
+create table if not exists public.rs_settings (
+  key   text primary key,
+  value integer not null check (value >= 0),
+  note  text
+);
+alter table public.rs_settings enable row level security;
+revoke all on public.rs_settings from anon, authenticated;
+insert into public.rs_settings (key, value, note) values
+  ('founding_limit',    10000, 'Founding places. A public promise: never raise it once places are claimed.'),
+  ('invites_per_month',     5, 'Invitations each member can create per calendar month (UTC).'),
+  ('invite_ttl_days',      30, 'Days before an unused invitation expires.')
+on conflict (key) do nothing;
+
+create or replace function public.rs_setting(p_key text, p_default integer)
+returns integer language sql stable security definer
+set search_path = public, pg_temp as $$
+  select coalesce((select value from public.rs_settings where key = p_key), p_default);
+$$;
+revoke all on function public.rs_setting(text,integer) from public, anon, authenticated;
+
+-- The one counter founding numbers come from. Single row, only ever increments.
+create table if not exists public.rs_founding (
+  id     boolean primary key default true check (id),
+  issued integer not null default 0 check (issued >= 0)
+);
+alter table public.rs_founding enable row level security;
+revoke all on public.rs_founding from anon, authenticated;
+insert into public.rs_founding (id) values (true) on conflict (id) do nothing;
+
+create table if not exists public.rs_members (
+  id              uuid primary key default gen_random_uuid(),
+  email           text not null unique check (char_length(email) <= 254),
+  first_name      text check (first_name is null or char_length(first_name) between 1 and 40),
+  -- pending  = joined, email not yet confirmed (holds no place)
+  -- member   = confirmed; founding_number set if they were in the first 10,000
+  -- waitlist = confirmed after founding closed, with no invitation
+  status          text not null default 'pending' check (status in ('pending','member','waitlist')),
+  founding_number integer unique check (founding_number is null or founding_number > 0),
+  invited_by      uuid references public.rs_members(id) on delete set null,
+  source          text,
+  mail_kind       text check (mail_kind in ('confirm','link')),   -- queued email, cleared by rs-member
+  mailed_at       timestamptz,
+  created_at      timestamptz not null default now(),
+  confirmed_at    timestamptz,
+  constraint rs_members_founding_is_member check (founding_number is null or status = 'member')
+);
+alter table public.rs_members enable row level security;
+revoke all on public.rs_members from anon, authenticated;
+create index if not exists rs_members_invited_by_idx on public.rs_members (invited_by);
+
+create table if not exists public.rs_member_keys (
+  key_hash     bytea primary key,
+  member_id    uuid not null references public.rs_members(id) on delete cascade,
+  created_at   timestamptz not null default now(),
+  last_used_at timestamptz
+);
+alter table public.rs_member_keys enable row level security;
+revoke all on public.rs_member_keys from anon, authenticated;
+create index if not exists rs_member_keys_member_idx on public.rs_member_keys (member_id, created_at desc);
+
+create table if not exists public.rs_invitations (
+  id         uuid primary key default gen_random_uuid(),
+  code       text not null unique check (code ~ '^[A-HJ-NP-Z2-9]{8}$'),
+  inviter_id uuid not null references public.rs_members(id) on delete cascade,
+  label      text check (label is null or char_length(label) <= 40),
+  status     text not null default 'open' check (status in ('open','used','revoked')),
+  created_at timestamptz not null default now(),
+  expires_at timestamptz not null,
+  used_by    uuid references public.rs_members(id) on delete set null,
+  used_at    timestamptz,
+  constraint rs_invitations_used_has_time check ((status = 'used') = (used_at is not null))
+);
+alter table public.rs_invitations enable row level security;
+revoke all on public.rs_invitations from anon, authenticated;
+create index if not exists rs_invitations_inviter_idx on public.rs_invitations (inviter_id, created_at desc);
+create index if not exists rs_invitations_used_by_idx on public.rs_invitations (used_by);
+
+-- Permanence, enforced below the functions so even a hand-written UPDATE can't break it.
+create or replace function public.rs_members_guard()
+returns trigger language plpgsql
+set search_path = public, pg_temp as $$
+begin
+  if old.founding_number is not null and new.founding_number is distinct from old.founding_number then
+    raise exception 'Founding numbers are permanent' using errcode = '42501';
+  end if;
+  if old.status <> 'pending' and new.status = 'pending' then
+    raise exception 'A confirmed member cannot return to pending' using errcode = '42501';
+  end if;
+  if old.status = 'member' and new.status <> 'member' then
+    raise exception 'Membership cannot be downgraded' using errcode = '42501';
+  end if;
+  return new;
+end $$;
+drop trigger if exists rs_members_guard on public.rs_members;
+create trigger rs_members_guard before update on public.rs_members
+  for each row execute function public.rs_members_guard();
+
+create or replace function public.rs_invitations_guard()
+returns trigger language plpgsql
+set search_path = public, pg_temp as $$
+begin
+  if old.status <> 'open' and new.status is distinct from old.status then
+    raise exception 'A used or revoked invitation is final' using errcode = '42501';
+  end if;
+  if new.code <> old.code or new.inviter_id <> old.inviter_id then
+    raise exception 'Invitation identity is immutable' using errcode = '42501';
+  end if;
+  return new;
+end $$;
+drop trigger if exists rs_invitations_guard on public.rs_invitations;
+create trigger rs_invitations_guard before update on public.rs_invitations
+  for each row execute function public.rs_invitations_guard();
+
+-- ── internal helpers (not callable by anon) ─────────────────────────
+create or replace function public.rs_norm_code(p_raw text)
+returns text language sql immutable
+set search_path = public, pg_temp as $$
+  select upper(regexp_replace(coalesce(p_raw, ''), '[^A-Za-z0-9]', '', 'g'));
+$$;
+
+-- 8 characters from a 32-symbol alphabet with no 0/O/1/I: 2^40 codes.
+create or replace function public.rs_new_code()
+returns text language plpgsql volatile
+set search_path = public, pg_temp as $$
+declare a text := 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; b bytea; c text; i int;
+begin
+  loop
+    b := extensions.gen_random_bytes(8); c := '';
+    for i in 0..7 loop c := c || substr(a, (get_byte(b, i) % 32) + 1, 1); end loop;
+    exit when not exists (select 1 from public.rs_invitations where code = c);
+  end loop;
+  return c;
+end $$;
+revoke all on function public.rs_new_code() from public, anon, authenticated;
+
+create or replace function public.rs_fmt_code(p_code text)
+returns text language sql immutable
+set search_path = public, pg_temp as $$ select substr(p_code, 1, 4) || '-' || substr(p_code, 5, 4); $$;
+
+create or replace function public.rs_member_from_key(p_key text)
+returns uuid language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_id uuid;
+begin
+  if p_key is null or p_key !~ '^[A-Za-z0-9_-]{40,64}$' then return null; end if;
+  update public.rs_member_keys set last_used_at = now()
+   where key_hash = extensions.digest(p_key, 'sha256')
+  returning member_id into v_id;
+  return v_id;
+end $$;
+revoke all on function public.rs_member_from_key(text) from public, anon, authenticated;
+
+create or replace function public.rs_month_start()
+returns timestamptz language sql stable
+set search_path = public, pg_temp as $$ select date_trunc('month', now() at time zone 'UTC') at time zone 'UTC'; $$;
+revoke all on function public.rs_month_start() from public, anon, authenticated;
+revoke all on function public.rs_norm_code(text) from public, anon, authenticated;
+revoke all on function public.rs_fmt_code(text) from public, anon, authenticated;
+revoke all on function public.rs_members_guard() from public, anon, authenticated;
+revoke all on function public.rs_invitations_guard() from public, anon, authenticated;
+
+create or replace function public.rs_member_payload(p_id uuid)
+returns jsonb language plpgsql stable security definer
+set search_path = public, pg_temp as $$
+declare m public.rs_members; v_quota int; v_used int; v_inv jsonb;
+begin
+  select * into m from public.rs_members where id = p_id;
+  if not found then return null; end if;
+
+  if m.status = 'member' then
+    v_quota := public.rs_setting('invites_per_month', 5);
+    select count(*) into v_used from public.rs_invitations
+     where inviter_id = m.id and status <> 'revoked' and created_at >= public.rs_month_start();
+    select coalesce(jsonb_agg(x order by x->>'created_at' desc), '[]'::jsonb) into v_inv from (
+      select jsonb_build_object(
+        'code',       public.rs_fmt_code(i.code),
+        'label',      i.label,
+        'status',     case when i.status = 'open' and i.expires_at <= now() then 'expired' else i.status end,
+        'created_at', i.created_at,
+        'expires_at', i.expires_at,
+        'used_at',    i.used_at,
+        'used_by',    u.first_name,
+        'joined',     u.status = 'member') as x
+      from public.rs_invitations i
+      left join public.rs_members u on u.id = i.used_by
+      where i.inviter_id = m.id
+      order by i.created_at desc limit 60) s;
+  end if;
+
+  return jsonb_build_object(
+    'first_name',      m.first_name,
+    'status',          m.status,
+    'founding',        m.founding_number is not null,
+    'founding_number', m.founding_number,
+    'founding_limit',  public.rs_setting('founding_limit', 10000),
+    'confirmed_at',    m.confirmed_at,
+    'invited_by',      (select first_name from public.rs_members where id = m.invited_by),
+    'invites', case when m.status = 'member' then jsonb_build_object(
+        'per_month', v_quota,
+        'used',      v_used,
+        'available', greatest(v_quota - v_used, 0),
+        'resets_at', public.rs_month_start() + interval '1 month',
+        'ttl_days',  public.rs_setting('invite_ttl_days', 30)) end,
+    'invitations', coalesce(v_inv, '[]'::jsonb));
+end $$;
+revoke all on function public.rs_member_payload(uuid) from public, anon, authenticated;
+
+-- ── public: the live counter ────────────────────────────────────────
+create or replace function public.rs_founding_status()
+returns jsonb language sql stable security definer
+set search_path = public, pg_temp as $$
+  select jsonb_build_object(
+    'limit',             l.v,
+    'claimed',           least(f.issued, l.v),
+    'remaining',         greatest(l.v - f.issued, 0),
+    'open',              f.issued < l.v,
+    'invite_only',       f.issued >= l.v,
+    'invites_per_month', public.rs_setting('invites_per_month', 5),
+    'invite_ttl_days',   public.rs_setting('invite_ttl_days', 30))
+  from public.rs_founding f, (select public.rs_setting('founding_limit', 10000) as v) l;
+$$;
+revoke all on function public.rs_founding_status() from public;
+grant execute on function public.rs_founding_status() to anon, authenticated;
+
+-- ── public: is this invitation usable? (for the landing page banner) ─
+create or replace function public.rs_check_invite(p_code text)
+returns jsonb language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_code text; i public.rs_invitations; v_name text;
+begin
+  if not public.rl_allow('rs_check_invite', 60, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+  v_code := public.rs_norm_code(p_code);
+  if v_code !~ '^[A-HJ-NP-Z2-9]{8}$' then return jsonb_build_object('status', 'invalid'); end if;
+  select * into i from public.rs_invitations where code = v_code;
+  if not found then return jsonb_build_object('status', 'invalid'); end if;
+  if i.status <> 'open' then return jsonb_build_object('status', i.status); end if;
+  if i.expires_at <= now() then return jsonb_build_object('status', 'expired'); end if;
+  select first_name into v_name from public.rs_members where id = i.inviter_id;
+  return jsonb_build_object('status', 'valid', 'code', public.rs_fmt_code(i.code), 'inviter', v_name);
+end $$;
+revoke all on function public.rs_check_invite(text) from public;
+grant execute on function public.rs_check_invite(text) to anon, authenticated;
+
+-- ── public: join (claim a founding place, or join with an invitation) ─
+--  Same response whether the email is new or already known, so it can't be
+--  used to test who is a member. A known email just gets its link resent
+--  (at most once per 5 minutes).
+create or replace function public.rs_join(
+  p_email text, p_first_name text default null, p_invite text default null, p_source text default null
+) returns jsonb
+language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare
+  v_email text; v_name text; v_source text; v_code text;
+  inv public.rs_invitations; v_has_inv boolean := false;
+  m public.rs_members; v_open boolean;
+begin
+  if not public.rl_allow('rs_join', 10, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+
+  v_email  := lower(trim(coalesce(p_email, '')));
+  v_name   := left(public.clean_text(p_first_name), 40);
+  v_source := left(coalesce(public.clean_text(p_source), ''), 20);
+  if v_email !~ '^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$' or char_length(v_email) > 254 then
+    raise exception 'INVALID_EMAIL: that email address is not valid' using errcode = '22023';
+  end if;
+
+  v_code := nullif(public.rs_norm_code(p_invite), '');
+  if v_code is not null then
+    select * into inv from public.rs_invitations where code = v_code for update;
+    if not found then
+      raise exception 'INVITE_INVALID: that invitation code does not exist' using errcode = '22023';
+    elsif inv.status = 'used' then
+      raise exception 'INVITE_USED: that invitation has already been used' using errcode = '22023';
+    elsif inv.status = 'revoked' then
+      raise exception 'INVITE_REVOKED: that invitation was withdrawn' using errcode = '22023';
+    elsif inv.expires_at <= now() then
+      raise exception 'INVITE_EXPIRED: that invitation has expired' using errcode = '22023';
+    end if;
+    v_has_inv := true;
+  end if;
+
+  select issued < public.rs_setting('founding_limit', 10000) into v_open from public.rs_founding;
+  if not v_open and not v_has_inv then
+    raise exception 'INVITE_REQUIRED: founding membership is closed; joining needs an invitation' using errcode = '22023';
+  end if;
+
+  select * into m from public.rs_members where email = v_email for update;
+  if not found then
+    insert into public.rs_members (email, first_name, source, invited_by, mail_kind)
+    values (v_email, v_name, nullif(v_source, ''), case when v_has_inv then inv.inviter_id end, 'confirm')
+    returning * into m;
+    if v_has_inv then
+      update public.rs_invitations set status = 'used', used_by = m.id, used_at = now() where id = inv.id;
+    end if;
+    return jsonb_build_object('ok', true);
+  end if;
+
+  -- Known email. An invitation only gets spent if it changes something:
+  -- it lets a waitlisted person in, or backs a pending one with no inviter.
+  if v_has_inv and inv.inviter_id <> m.id and m.status <> 'member'
+     and not exists (select 1 from public.rs_invitations where used_by = m.id) then
+    update public.rs_invitations set status = 'used', used_by = m.id, used_at = now() where id = inv.id;
+    update public.rs_members
+       set invited_by = coalesce(invited_by, inv.inviter_id),
+           status     = case when status = 'waitlist' then 'member' else status end
+     where id = m.id
+    returning * into m;
+    update public.rs_members set mail_kind = case when m.status = 'pending' then 'confirm' else 'link' end
+     where id = m.id;
+    return jsonb_build_object('ok', true);
+  end if;
+
+  if m.mailed_at is null or m.mailed_at < now() - interval '5 minutes' then
+    update public.rs_members set mail_kind = case when m.status = 'pending' then 'confirm' else 'link' end
+     where id = m.id;
+  end if;
+  return jsonb_build_object('ok', true);
+end $$;
+revoke all on function public.rs_join(text,text,text,text) from public;
+grant execute on function public.rs_join(text,text,text,text) to anon, authenticated;
+
+-- ── public: "email me my link" ──────────────────────────────────────
+create or replace function public.rs_request_link(p_email text)
+returns boolean language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_email text; m public.rs_members;
+begin
+  if not public.rl_allow('rs_request_link', 5, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+  v_email := lower(trim(coalesce(p_email, '')));
+  if v_email !~ '^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$' or char_length(v_email) > 254 then
+    raise exception 'INVALID_EMAIL: that email address is not valid' using errcode = '22023';
+  end if;
+  select * into m from public.rs_members where email = v_email for update;
+  if found and (m.mailed_at is null or m.mailed_at < now() - interval '5 minutes') then
+    update public.rs_members set mail_kind = case when m.status = 'pending' then 'confirm' else 'link' end
+     where id = m.id;
+  end if;
+  return true;                                   -- same answer either way
+end $$;
+revoke all on function public.rs_request_link(text) from public;
+grant execute on function public.rs_request_link(text) to anon, authenticated;
+
+-- ── member: open the member area (first open = email confirmed) ─────
+create or replace function public.rs_member_open(p_key text)
+returns jsonb language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_id uuid; m public.rs_members; v_num int;
+begin
+  if not public.rl_allow('rs_member', 120, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+  v_id := public.rs_member_from_key(p_key);
+  if v_id is null then
+    raise exception 'INVALID_KEY: that member link is not valid' using errcode = '28000';
+  end if;
+
+  select * into m from public.rs_members where id = v_id for update;
+  if m.status = 'pending' then
+    -- The only place a founding number is ever issued. The UPDATE takes the
+    -- counter row's lock, so concurrent confirmations queue here and the
+    -- `issued < limit` test is re-checked against the committed value.
+    update public.rs_founding set issued = issued + 1
+     where id and issued < public.rs_setting('founding_limit', 10000)
+    returning issued into v_num;
+
+    update public.rs_members set
+      founding_number = v_num,
+      status = case when v_num is not null
+                      or exists (select 1 from public.rs_invitations where used_by = m.id)
+                    then 'member' else 'waitlist' end,
+      confirmed_at = now()
+    where id = m.id;
+  end if;
+  return public.rs_member_payload(v_id);
+end $$;
+revoke all on function public.rs_member_open(text) from public;
+grant execute on function public.rs_member_open(text) to anon, authenticated;
+
+-- ── member: create / withdraw an invitation ─────────────────────────
+create or replace function public.rs_create_invite(p_key text, p_label text default null)
+returns jsonb language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_id uuid; m public.rs_members; v_quota int; v_used int;
+begin
+  if not public.rl_allow('rs_invite', 30, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+  v_id := public.rs_member_from_key(p_key);
+  if v_id is null then
+    raise exception 'INVALID_KEY: that member link is not valid' using errcode = '28000';
+  end if;
+  -- Row lock on the member serialises their invite creation: two parallel
+  -- requests can't both see "4 used" and make a 6th.
+  select * into m from public.rs_members where id = v_id for update;
+  if m.status <> 'member' then
+    raise exception 'NOT_MEMBER: only confirmed members can invite' using errcode = '42501';
+  end if;
+  v_quota := public.rs_setting('invites_per_month', 5);
+  select count(*) into v_used from public.rs_invitations
+   where inviter_id = m.id and status <> 'revoked' and created_at >= public.rs_month_start();
+  if v_used >= v_quota then
+    raise exception 'INVITES_EXHAUSTED: no invitations left this month' using errcode = '54000';
+  end if;
+  insert into public.rs_invitations (code, inviter_id, label, expires_at)
+  values (public.rs_new_code(), m.id, left(public.clean_text(p_label), 40),
+          now() + make_interval(days => public.rs_setting('invite_ttl_days', 30)));
+  return public.rs_member_payload(m.id);
+end $$;
+revoke all on function public.rs_create_invite(text,text) from public;
+grant execute on function public.rs_create_invite(text,text) to anon, authenticated;
+
+create or replace function public.rs_revoke_invite(p_key text, p_code text)
+returns jsonb language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_id uuid; n int;
+begin
+  if not public.rl_allow('rs_invite', 30, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+  v_id := public.rs_member_from_key(p_key);
+  if v_id is null then
+    raise exception 'INVALID_KEY: that member link is not valid' using errcode = '28000';
+  end if;
+  update public.rs_invitations set status = 'revoked'
+   where inviter_id = v_id and code = public.rs_norm_code(p_code) and status = 'open' and expires_at > now();
+  get diagnostics n = row_count;
+  if n = 0 then
+    raise exception 'INVITE_NOT_OPEN: that invitation can no longer be withdrawn' using errcode = '22023';
+  end if;
+  return public.rs_member_payload(v_id);
+end $$;
+revoke all on function public.rs_revoke_invite(text,text) from public;
+grant execute on function public.rs_revoke_invite(text,text) to anon, authenticated;
+
+-- ── service role only: mint a member key (called by rs-member) ──────
+create or replace function public.rs_issue_member_key(p_member uuid)
+returns text language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_key text;
+begin
+  v_key := rtrim(translate(encode(extensions.gen_random_bytes(32), 'base64'), '+/', '-_'), '=');
+  insert into public.rs_member_keys (key_hash, member_id) values (extensions.digest(v_key, 'sha256'), p_member);
+  -- Keep the five most recent links working; older ones stop.
+  delete from public.rs_member_keys where member_id = p_member and key_hash not in (
+    select key_hash from public.rs_member_keys where member_id = p_member order by created_at desc limit 5);
+  return v_key;
+end $$;
+revoke all on function public.rs_issue_member_key(uuid) from public, anon, authenticated;
+grant execute on function public.rs_issue_member_key(uuid) to service_role;
+
+-- ── member emails: queue → rs-member Edge Function ──────────────────
+--  Setting mail_kind queues an email; this trigger pokes rs-member via
+--  pg_net with only the row id. rs-member claims the row (clears
+--  mail_kind), mints a key and sends. No SMTP password yet → it answers
+--  503 and leaves mail_kind set; send the queue later with:
+--    select public.rs_member_mail_backlog();
+create or replace function public.rs_member_mail_row()
+returns trigger language plpgsql security definer
+set search_path = public, pg_temp as $$
+begin
+  perform net.http_post(
+    url     := 'https://kxzywyflylkcqoidiqmo.supabase.co/functions/v1/rs-member',
+    body    := jsonb_build_object('id', new.id),
+    headers := '{"Content-Type":"application/json"}'::jsonb);
+  return new;
+exception when others then
+  return new;          -- a mail problem must never block a join
+end $$;
+revoke all on function public.rs_member_mail_row() from public, anon, authenticated;
+
+drop trigger if exists rs_members_mail on public.rs_members;
+create trigger rs_members_mail after insert or update of mail_kind on public.rs_members
+  for each row when (new.mail_kind is not null) execute function public.rs_member_mail_row();
+
+create or replace function public.rs_member_mail_backlog()
+returns integer language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare n integer;
+begin
+  -- Re-setting mail_kind re-fires the trigger for every queued row, and
+  -- queues a confirmation for pending members who were never emailed
+  -- (e.g. people carried over from the old interest list).
+  update public.rs_members
+     set mail_kind = coalesce(mail_kind, 'confirm')
+   where mail_kind is not null or (status = 'pending' and mailed_at is null);
+  get diagnostics n = row_count;
+  return n;
+end $$;
+revoke all on function public.rs_member_mail_backlog() from public, anon, authenticated;
+
+-- The interest list predates membership. Carry its people over as pending
+-- members (same order, same timestamps) WITHOUT emailing anyone: they
+-- hold no place until they confirm. rs_member_mail_backlog() invites them.
+insert into public.rs_members (email, first_name, source, created_at)
+select email, first_name, 'interest-list', created_at from public.rs_interests
+on conflict (email) do nothing;
+
+-- ════════════════════════════════════════════════════════════════════
 --  VERIFY  — run this any time; every value must read as stated.
 -- ════════════════════════════════════════════════════════════════════
 select
@@ -636,13 +1172,25 @@ select
        then 'ok: markup stripped'           else 'FAIL: sanitiser changed' end          as check_6,
   case when has_table_privilege('anon','public.rs_interests','SELECT')
          or has_table_privilege('anon','public.rs_interests','INSERT')
-       then 'FAIL: rs_interests reachable'  else 'ok: rs_interests RPC-only' end        as check_7;
+       then 'FAIL: rs_interests reachable'  else 'ok: rs_interests RPC-only' end        as check_7,
+  case when has_table_privilege('anon','public.rs_members','SELECT')
+         or has_table_privilege('anon','public.rs_invitations','SELECT')
+         or has_table_privilege('anon','public.rs_member_keys','SELECT')
+         or has_table_privilege('anon','public.rs_founding','UPDATE')
+         or has_function_privilege('anon','public.rs_issue_member_key(uuid)','EXECUTE')
+       then 'FAIL: membership tables reachable' else 'ok: membership RPC-only' end      as check_8,
+  case when (select issued from public.rs_founding) <= public.rs_setting('founding_limit', 10000)
+        and (select count(*) from public.rs_members where founding_number is not null)
+            = (select issued from public.rs_founding)
+       then 'ok: founding counter consistent' else 'FAIL: founding counter drift' end   as check_9;
 
 -- ─────────────────────────────────────────────────────────────────────
 --  EXPORT THE LISTS
 --    select name, email, country, created_at from founders order by founder_number;
 --    select seat, name, email, max_bid_hint, created_at from quad_interests order by created_at;
 --    select email, first_name, source, created_at from rs_interests order by created_at;
+--    select founding_number, first_name, email, status, confirmed_at from rs_members
+--      order by founding_number nulls last, created_at;
 --
 --  STILL TO BUILD (deliberately not built yet):
 --   • Transactional email. Both sites promise "we'll email you"; nothing

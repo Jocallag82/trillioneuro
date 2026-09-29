@@ -274,6 +274,21 @@
       "dest": "/ripestream/terms.html"
     },
     {
+      "src": "/member/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/ripestream/member.html"
+    },
+    {
       "src": "/privacy\\.html",
       "has": [
         {
@@ -306,6 +321,24 @@
       ],
       "headers": {
         "Location": "/terms"
+      },
+      "status": 308
+    },
+    {
+      "src": "/member\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/member"
       },
       "status": 308
     },

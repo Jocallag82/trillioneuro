@@ -1,16 +1,18 @@
 /* RipeStream landing — progressive enhancement only. The page reads fully
    without this file; everything here adds motion, the interactive concept
-   demos and the interest-registration submit. No dependencies. */
+   demos, the live founding-place counter and the join submit. No dependencies. */
 (function () {
   'use strict';
 
   /* Same Supabase project as the other sites in this repo. Publishable key:
-     meant to ship in the browser. anon can do exactly one thing with it
-     here — call rs_register_interest(), which validates, rate-limits and
-     de-duplicates server-side (see supabase-setup.sql, RIPESTREAM). */
-  var API = 'https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/rs_register_interest';
+     meant to ship in the browser. anon can only call the rs_* RPCs, which
+     validate, rate-limit and enforce every rule server-side — founding
+     places, invitations, limits (see supabase-setup.sql, FOUNDING MEMBERS).
+     Nothing this file decides is trusted by the database. */
+  var RPC = 'https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/';
   var KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
-  var STORE = 'rs_interest_v1';
+  var STORE = 'rs_join_v1';
+  var MEMBER_KEY = 'rs_member_key';
   var EMAIL_RE = /^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$/;
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -27,8 +29,157 @@
   }
   var registered = store(true);
 
+  function rpc(name, args, timeoutMs) {
+    var ctrl = 'AbortController' in window ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, timeoutMs || 15000);
+    return fetch(RPC + name, {
+      method: 'POST',
+      headers: { 'apikey': KEY, 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(args || {}),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function (res) {
+      clearTimeout(timer);
+      return res.json().catch(function () { return null; }).then(function (body) {
+        if (res.ok) return body;
+        var err = new Error((body && body.message) || 'HTTP ' + res.status);
+        err.code = body && body.code;
+        throw err;
+      });
+    }, function (e) { clearTimeout(timer); throw e; });
+  }
+  var nf = function (n) { return Number(n).toLocaleString('en-GB'); };
+
+  /* ── founding state: open (places left) or closed (invite-only) ─
+     Everything written in two versions carries data-when="open|closed".
+     The default (open) is what no-JS visitors see; the counter below flips
+     it from the live number. The server refuses a join without an
+     invitation once places are gone, whatever this page shows. */
+  var founding = { state: null, open: true };
+  function setPhase(open) {
+    founding.open = open;
+    document.documentElement.classList.toggle('fm-closed', !open);
+    $$('[data-when]').forEach(function (el) {
+      var want = el.getAttribute('data-when') === 'open';
+      if (want === open) el.removeAttribute('hidden'); else el.setAttribute('hidden', '');
+    });
+    $$('.rs-form').forEach(function (f) { syncForm(f); });
+  }
+
+  function renderCounter(st) {
+    var limit = st.limit, claimed = st.claimed, left = st.remaining;
+    var pct = limit ? Math.min(100, claimed / limit * 100) : 0;
+    $$('[data-fm-fill]').forEach(function (i) {
+      i.style.width = pct.toFixed(3) + '%';
+      i.classList.toggle('min', claimed > 0);        // one claimed place still shows
+    });
+    $$('[data-fm-per-month]').forEach(function (el) { el.textContent = st.invites_per_month; });
+    $$('[data-fm-ttl]').forEach(function (el) { if (st.invite_ttl_days) el.textContent = st.invite_ttl_days; });
+
+    var line = $('[data-fm-line]');
+    if (line) {
+      if (!st.open) line.innerHTML = '<b>All ' + nf(limit) + ' founding places have been claimed.</b>';
+      else if (claimed === 0) line.innerHTML = '<b>' + nf(limit) + ' founding places.</b> None claimed yet — every one is still open.';
+      else line.innerHTML = '<b>' + nf(claimed) + ' / ' + nf(limit) + '</b> founding places claimed · ' + nf(left) + ' remaining';
+    }
+    var card = $('[data-fm-card]');
+    if (card) {
+      card.classList.toggle('closed', !st.open);
+      $('[data-fm-big]', card).textContent = st.open ? nf(claimed) : 'Closed';
+      $('[data-fm-of]', card).innerHTML = st.open
+        ? 'of ' + nf(limit) + ' claimed · <b>' + nf(left) + ' remaining</b>'
+        : '<b>Founding membership is now closed.</b> RipeStream is currently invite-only.';
+      $('[data-fm-note]', card).textContent = st.open
+        ? (claimed === 0
+            ? 'Counted live from confirmed members. No one has confirmed yet — the first founding place is still waiting.'
+            : 'Counted live from confirmed members. Nothing here is estimated or rounded up.')
+        : 'All ' + nf(limit) + ' founding places were claimed. Founding Members keep their status for good; new members join by invitation.';
+    }
+  }
+
+  function counterError() {
+    // Say nothing we can't back up: no number, keep the static copy.
+    $$('[data-fm-meter]').forEach(function (m) { m.classList.add('fm-err'); });
+    var line = $('[data-fm-line]');
+    if (line) line.textContent = "Live count unavailable right now — it'll be back shortly.";
+    var card = $('[data-fm-card]');
+    if (card) {
+      card.classList.add('fm-err');
+      $('[data-fm-big]', card).textContent = '—';
+      $('[data-fm-note]', card).textContent = "We couldn't load the live count. It's counted from confirmed members only — never estimated.";
+    }
+  }
+
+  var lastFetch = 0;
+  function loadFounding() {
+    lastFetch = Date.now();
+    return rpc('rs_founding_status', {}, 10000).then(function (st) {
+      if (!st || typeof st.claimed !== 'number') throw new Error('bad status');
+      founding.state = st;
+      $$('[data-fm-meter],[data-fm-card]').forEach(function (m) { m.classList.remove('fm-err'); });
+      renderCounter(st);
+      setPhase(!!st.open);
+    }).catch(counterError);
+  }
+  loadFounding();
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden && Date.now() - lastFetch > 60000) loadFounding();
+  });
+
+  /* ── invitation from the link (?invite=CODE) ──────── */
+  var INVITE_MSG = {
+    used: 'That invitation has already been used. Each one works once.',
+    expired: 'That invitation has expired. Ask whoever sent it for a new one.',
+    revoked: 'That invitation was withdrawn by the person who sent it.',
+    invalid: "That invitation code doesn't exist. Check it was copied in full."
+  };
+  var inviteFromUrl = null;
+  try { inviteFromUrl = new URLSearchParams(location.search).get('invite'); } catch (e) {}
+  function normCode(v) {
+    var c = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return c.length === 8 ? c.slice(0, 4) + '-' + c.slice(4) : c;
+  }
+  if (inviteFromUrl) {
+    var code = normCode(inviteFromUrl);
+    $$('input[name=invite]').forEach(function (i) { i.value = code; });
+    $$('[data-invite-field]').forEach(function (d) { d.open = true; });
+    rpc('rs_check_invite', { p_code: code }, 10000).then(function (r) {
+      var banner = $('#invite-banner');
+      if (r && r.status === 'valid') {
+        var who = r.inviter ? String(r.inviter).replace(/[<>&"]/g, '') : 'A member';
+        if (banner) { banner.innerHTML = '<span><b>' + who + '</b> invited you to RipeStream.</span>'; banner.hidden = false; }
+        $$('[data-invite-intro]').forEach(function (p) { p.textContent = who + "'s invitation is ready below. Add your email to use it."; });
+        setInviteMsg(who + "'s invitation · " + code, 'ok');
+      } else {
+        var msg = INVITE_MSG[r && r.status] || INVITE_MSG.invalid;
+        if (banner) { banner.textContent = msg; banner.classList.add('bad'); banner.hidden = false; }
+        setInviteMsg(msg, 'bad');
+      }
+    }).catch(function () { /* the join call re-checks it anyway */ });
+  }
+  function setInviteMsg(text, cls) {
+    $$('.invite-msg').forEach(function (m) { m.textContent = text || ''; m.className = 'invite-msg' + (cls ? ' ' + cls : ''); });
+  }
+
+  // Closed phase: the invitation field is required and always open.
+  function syncForm(form) {
+    var d = $('[data-invite-field]', form), inp = $('input[name=invite]', form);
+    if (d) { d.classList.toggle('req', !founding.open); if (!founding.open) d.open = true; }
+    if (inp) { if (founding.open) inp.removeAttribute('required'); else inp.setAttribute('required', ''); }
+    var opt = $('[data-invite-opt]', form); if (opt) opt.textContent = founding.open ? 'Optional' : 'Required';
+    var lbl = $('.lbl', form);
+    if (lbl && !$('button[type=submit]', form).disabled) {
+      lbl.textContent = lbl.getAttribute(founding.open ? 'data-label-open' : 'data-label-closed');
+    }
+  }
+
   /* ── nav ───────────────────────────────────────────── */
   var nav = $('#nav');
+  try {
+    if (localStorage.getItem(MEMBER_KEY)) {       // a member on this device: straight to their invitations
+      var cta = $('[data-nav-cta]');
+      if (cta) { cta.href = '/member'; cta.removeAttribute('data-focus-form'); cta.removeAttribute('data-nav-cta'); cta.innerHTML = '<span>Your invitations</span>'; }
+    }
+  } catch (e) {}
   function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 24); }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
@@ -182,25 +333,24 @@
     dock.hideForGood = function () { registered = registered || {}; update(); };
   }
 
-  /* ── interest registration ─────────────────────────── */
+  /* ── join ──────────────────────────────────────────── */
   var tpl = $('#done-tpl');
 
-  function showDone(host, name, already) {
+  function showDone(host, d) {
     var node = tpl.content.firstElementChild.cloneNode(true);
-    var title = $('[data-title]', node);
-    if (already) title.textContent = "You're already on the list.";
-    else if (name) title.textContent = "You're on the list, " + name + '.';
+    var title = $('[data-title]', node), body = $('[data-body]', node);
+    if (d.already) {
+      title.textContent = 'You already started joining.';
+      body.textContent = "If you haven't confirmed yet, the link in your email still works — or ask for a fresh one below.";
+    } else {
+      title.textContent = d.name ? 'Check your inbox, ' + d.name + '.' : 'Check your inbox.';
+      body.textContent = d.invite
+        ? "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email and take the place your invitation holds.'
+        : "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email — that\'s the moment your founding place is claimed. Places go in the order people confirm.';
+    }
     host.innerHTML = '';
     host.appendChild(node);
-    wireShare($('[data-share]', node));
     return node;
-  }
-
-  function markAllDone(exceptHost, name) {
-    $$('[data-form-host]').forEach(function (h) {
-      if (h !== exceptHost && $('form', h)) showDone(h, name, false);
-    });
-    if (dock && dock.hideForGood) dock.hideForGood();
   }
 
   function setError(form, msg, field) {
@@ -211,21 +361,24 @@
   }
 
   function setLoading(form, on) {
-    var btn = $('button[type=submit]', form);
+    var btn = $('button[type=submit]', form), lbl = $('.lbl', btn);
     btn.disabled = on;
     btn.classList.toggle('loading', on);
     btn.setAttribute('aria-busy', on ? 'true' : 'false');
-    $('.lbl', btn).textContent = on ? 'Adding you…' : btn.getAttribute('data-label');
+    lbl.textContent = on ? 'Joining…' : lbl.getAttribute(founding.open ? 'data-label-open' : 'data-label-closed');
   }
 
   $$('.rs-form').forEach(function (form) {
-    var btn = $('button[type=submit]', form);
-    btn.setAttribute('data-label', $('.lbl', btn).textContent);
     var email = $('input[name=email]', form);
+    var invite = $('input[name=invite]', form);
     var busy = false;
+    syncForm(form);
 
     email.addEventListener('input', function () {
       if (email.getAttribute('aria-invalid') && EMAIL_RE.test(email.value.trim())) setError(form, '');
+    });
+    if (invite) invite.addEventListener('input', function () {
+      if (invite.getAttribute('aria-invalid')) { invite.removeAttribute('aria-invalid'); setError(form, ''); setInviteMsg(''); }
     });
 
     form.addEventListener('submit', function (e) {
@@ -235,73 +388,64 @@
       var host = form.closest('[data-form-host]');
       var value = email.value.trim();
       var name = $('input[name=first_name]', form).value.replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 40);
+      var code = invite ? normCode(invite.value) : '';
 
       if (!value) return setError(form, 'Enter your email address.', email);
       if (!EMAIL_RE.test(value) || value.length > 254) {
         return setError(form, "That doesn't look like a valid email address.", email);
       }
+      if (code && !/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) {
+        $('[data-invite-field]', form).open = true;
+        return setError(form, 'Invitation codes look like ABCD-2345.', invite);
+      }
+      if (!code && !founding.open) {
+        $('[data-invite-field]', form).open = true;
+        return setError(form, 'Founding membership is closed, so joining needs an invitation code from a member.', invite);
+      }
       setError(form, '');
 
       // Honeypot filled: a bot. Look successful, send nothing.
-      if ($('input[name=website]', form).value) { showDone(host, name, false); return; }
+      if ($('input[name=website]', form).value) { showDone(host, { name: name }); return; }
 
       busy = true;
       setLoading(form, true);
-      var ctrl = 'AbortController' in window ? new AbortController() : null;
-      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
-
-      fetch(API, {
-        method: 'POST',
-        headers: { 'apikey': KEY, 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ p_email: value, p_first_name: name || null, p_source: form.getAttribute('data-source') }),
-        signal: ctrl ? ctrl.signal : undefined
-      }).then(function (res) {
-        if (res.ok) return null;
-        return res.json().catch(function () { return {}; }).then(function (body) {
-          var err = new Error((body && body.message) || 'HTTP ' + res.status);
-          err.code = body && body.code;
-          throw err;
-        });
-      }).then(function () {
-        clearTimeout(timer);
+      rpc('rs_join', { p_email: value, p_first_name: name || null, p_invite: code || null, p_source: form.getAttribute('data-source') })
+      .then(function () {
         registered = { name: name, at: Date.now() };
         store(false, registered);
-        var done = showDone(host, name, false);
+        var done = showDone(host, { name: name, email: value, invite: !!code });
         done.focus({ preventScroll: true });
-        markAllDone(host, name);
-        if (window.va) window.va('event', { name: 'interest_registered', data: { source: form.getAttribute('data-source') } });
+        if (dock && dock.hideForGood) dock.hideForGood();
+        if (window.va) window.va('event', { name: 'founding_join', data: { source: form.getAttribute('data-source'), invited: !!code } });
       }).catch(function (err) {
-        clearTimeout(timer);
         busy = false;
         setLoading(form, false);
         var msg = String(err && err.message || '');
+        var inv = msg.match(/^INVITE_(USED|EXPIRED|REVOKED|INVALID)/);
         if (err && err.code === '54000' || msg.indexOf('RATE_LIMIT') === 0) {
           setError(form, 'Too many attempts from this connection. Give it a few minutes and try again.');
         } else if (msg.indexOf('INVALID_EMAIL') === 0) {
           setError(form, "That doesn't look like a valid email address.", email);
+        } else if (inv) {
+          $('[data-invite-field]', form).open = true;
+          setError(form, INVITE_MSG[inv[1].toLowerCase()], invite);
+        } else if (msg.indexOf('INVITE_REQUIRED') === 0) {
+          // The last founding place went while this page was open.
+          loadFounding();
+          setPhase(false);
+          setError(form, 'The last founding place has just been claimed. RipeStream is now invite-only — add an invitation code from a member to join.', invite);
         } else if (err && err.name === 'AbortError') {
           setError(form, 'That took too long. Check your connection and try again.');
         } else if (err instanceof TypeError) {
           setError(form, "Couldn't reach us. Check your connection and try again.");
         } else {
-          setError(form, "Something went wrong on our side. Please try again in a moment.");
+          setError(form, 'Something went wrong on our side. Please try again in a moment.');
         }
       });
     });
   });
 
-  if (registered) $$('[data-form-host]').forEach(function (h) { showDone(h, registered.name, true); });
-
-  function wireShare(b) {
-    if (!b) return;
-    b.addEventListener('click', function () {
-      var data = { title: 'RipeStream', text: 'A new kind of social network is being built. Register your interest:', url: 'https://ripestream.com/' };
-      if (navigator.share) { navigator.share(data).catch(function () {}); return; }
-      var done = function () { b.textContent = 'Link copied'; setTimeout(function () { b.textContent = 'Share RipeStream'; }, 2200); };
-      if (navigator.clipboard) navigator.clipboard.writeText(data.url).then(done, function () { b.textContent = 'ripestream.com'; });
-      else b.textContent = 'ripestream.com';
-    });
-  }
+  if (registered && !inviteFromUrl) $$('[data-form-host]').forEach(function (h) { showDone(h, { already: true }); });
 
   /* ── social graph ──────────────────────────────────── */
   var graph = $('#graph');

@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /member
 
 Sitemap: https://ripestream.com/sitemap.xml

@@ -50,18 +50,36 @@ locations because host routing serves each site from its own folder.
 
 ## RipeStream (`ripestream/`)
 
-**ripestream.com** — landing page and interest list for a social platform in development.
-Same stack and rules as the other two sites: plain HTML/CSS/JS, no build step.
+**ripestream.com** — landing page and Founding Member / invite-only launch for a social
+platform in development. Same stack and rules as the other two sites: plain HTML/CSS/JS, no build step.
 
 | File | What it is |
 |---|---|
 | `ripestream/index.html` | The page. All CSS inline (no render-blocking stylesheet). Readable with JS off. |
-| `ripestream/app.js` | Progressive enhancement: reveal-on-scroll, concept demos, the registration submit |
+| `ripestream/app.js` | Progressive enhancement: reveal-on-scroll, concept demos, live founding counter, join submit, `?invite=` handling |
+| `ripestream/member.html` / `member.js` | `/member` — Founding Member status + invitations (create, copy, share, withdraw) |
 | `ripestream/privacy.html` / `terms.html` | Legal, scoped to the interest list |
 | `ripestream/fonts/` | Self-hosted Bricolage Grotesque + Inter (latin, variable weight, OFL) — no Google Fonts request |
 | `ripestream/og-image.png`, `favicon.svg`, `apple-touch-icon.png` | Share card and icons |
 
-- **Registrations** go to `rs_interests` via `rs_register_interest(email, first_name, source)` —
+- **Launch model** (all enforced in Postgres — see *RIPESTREAM — FOUNDING MEMBERS* in
+  `supabase-setup.sql`, tested incl. 30 concurrent confirmations at #9,991–#10,000):
+  - `rs_join(email, first_name, invite, source)` creates a *pending* member and emails a link.
+    Nobody holds a place until they open it: `rs_member_open(key)` confirms the email and, while
+    places remain, issues the next **founding number** from the single `rs_founding` counter row
+    (row-locked → sequential, never past the limit, never reused). Founding numbers and member
+    status are immutable (trigger). Once `issued = founding_limit` (10,000), `rs_join` refuses
+    anyone without a valid invitation (`INVITE_REQUIRED`); the page flips to invite-only from
+    `rs_founding_status()` — the only number the counter shows. No numbers are invented.
+  - Invitations: `rs_create_invite` / `rs_revoke_invite` — `invites_per_month` (5) per calendar
+    month UTC, single-use 8-char codes, expire after `invite_ttl_days` (30), inviter recorded as
+    `invited_by`. Change limits live: `update rs_settings set value = … where key = …`.
+  - No passwords yet: members hold a 256-bit key emailed as `/member#k=…`; only its SHA-256 is
+    stored and only the service role can mint one (Edge Function `rs-member`).
+  - **Emails need the SMTP password in Vault** (`rs_smtp_pass`). Until it's set, joins queue with
+    `mail_kind` set and nobody can confirm. After setting it: `select public.rs_member_mail_backlog();`
+    — this also emails the people carried over from the old interest list.
+- **Legacy registrations** went to `rs_interests` via `rs_register_interest(email, first_name, source)` —
   the only thing anon can do. Validated, sanitised, rate-limited (10/hour/IP), and a repeat
   email is a silent no-op that returns the same response, so the endpoint can't be used to
   check whether someone is on the list. Export: see the bottom of `supabase-setup.sql`.
