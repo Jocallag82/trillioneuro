@@ -14,7 +14,7 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "X-Frame-Options": "SAMEORIGIN",
         "Permissions-Policy": "geolocation=(), microphone=(), camera=(), payment=()",
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://kxzywyflylkcqoidiqmo.supabase.co https://ipapi.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://kxzywyflylkcqoidiqmo.supabase.co https://ipapi.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
       },
       "continue": true
     },
@@ -74,6 +74,32 @@
       ],
       "headers": {
         "Location": "https://quadrillioneuro.com/$1"
+      },
+      "status": 308
+    },
+    {
+      "src": "/ripestream/?",
+      "has": [
+        {
+          "type": "host",
+          "value": "trillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://ripestream.com/"
+      },
+      "status": 308
+    },
+    {
+      "src": "/ripestream/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "trillioneuro.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://ripestream.com/$1"
       },
       "status": 308
     },
@@ -201,6 +227,120 @@
         }
       ],
       "dest": "/quadrillioneuro/$1"
+    },
+    {
+      "src": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/ripestream/index.html"
+    },
+    {
+      "src": "/privacy/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/ripestream/privacy.html"
+    },
+    {
+      "src": "/terms/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/ripestream/terms.html"
+    },
+    {
+      "src": "/privacy\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/privacy"
+      },
+      "status": 308
+    },
+    {
+      "src": "/terms\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/terms"
+      },
+      "status": 308
+    },
+    {
+      "src": "/index\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/"
+      },
+      "status": 308
+    },
+    {
+      "src": "/((?!_vercel/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/ripestream/$1"
     },
     {
       "src": "/record/?",

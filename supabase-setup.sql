@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════
---  TRILLIONEURO + QUADRILLIONEURO — SUPABASE SETUP
+--  TRILLIONEURO + QUADRILLIONEURO + RIPESTREAM — SUPABASE SETUP
 --
 --  Run this whole file in: Supabase dashboard → SQL Editor → New query → Run.
 --  Idempotent: safe to re-run against the live project.
@@ -511,6 +511,54 @@ revoke all on function public.capture_email(text,text) from public;
 grant execute on function public.capture_email(text,text) to anon;
 
 -- ════════════════════════════════════════════════════════════════════
+--  RIPESTREAM
+--
+--  Interest list only. rs_*-prefixed like quad_*. Same model as the other
+--  two sites: anon holds no privilege on the table, the single write path
+--  is rs_register_interest(), which validates, sanitises and rate-limits.
+--  A repeat email is a silent no-op (the original row, and its first
+--  name, are kept) and returns the same response, so the endpoint cannot
+--  be used to test whether someone is on the list.
+-- ════════════════════════════════════════════════════════════════════
+create table if not exists public.rs_interests (
+  id          uuid primary key default gen_random_uuid(),
+  email       text not null unique check (char_length(email) <= 254),
+  first_name  text check (first_name is null or char_length(first_name) between 1 and 40),
+  source      text,                    -- which form: hero / join / final
+  created_at  timestamptz not null default now()
+);
+alter table public.rs_interests enable row level security;
+revoke all on public.rs_interests from anon, authenticated;
+
+create or replace function public.rs_register_interest(
+  p_email text, p_first_name text default null, p_source text default null
+) returns boolean
+language plpgsql security definer
+set search_path = public, pg_temp as $$
+declare v_email text; v_name text; v_source text;
+begin
+  if not public.rl_allow('rs_register_interest', 10, interval '1 hour') then
+    raise exception 'RATE_LIMIT: too many attempts from this connection' using errcode = '54000';
+  end if;
+
+  v_email  := lower(trim(coalesce(p_email, '')));
+  v_name   := left(public.clean_text(p_first_name), 40);
+  v_source := left(coalesce(public.clean_text(p_source), ''), 20);
+
+  if v_email !~ '^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$' or char_length(v_email) > 254 then
+    raise exception 'INVALID_EMAIL: that email address is not valid' using errcode = '22023';
+  end if;
+
+  insert into public.rs_interests (email, first_name, source)
+  values (v_email, v_name, nullif(v_source, ''))
+  on conflict (email) do nothing;
+  return true;
+end $$;
+
+revoke all on function public.rs_register_interest(text,text,text) from public;
+grant execute on function public.rs_register_interest(text,text,text) to anon;
+
+-- ════════════════════════════════════════════════════════════════════
 --  VERIFY  — run this any time; every value must read as stated.
 -- ════════════════════════════════════════════════════════════════════
 select
@@ -525,12 +573,16 @@ select
   case when public.canon_seat('Ireland') = 'IE' and public.canon_seat('ireland') = 'IE'
        then 'ok: seats canonicalise'        else 'FAIL: seat mapping broken' end        as check_5,
   case when public.clean_text('<b>x</b>') = 'bx/b'
-       then 'ok: markup stripped'           else 'FAIL: sanitiser changed' end          as check_6;
+       then 'ok: markup stripped'           else 'FAIL: sanitiser changed' end          as check_6,
+  case when has_table_privilege('anon','public.rs_interests','SELECT')
+         or has_table_privilege('anon','public.rs_interests','INSERT')
+       then 'FAIL: rs_interests reachable'  else 'ok: rs_interests RPC-only' end        as check_7;
 
 -- ─────────────────────────────────────────────────────────────────────
 --  EXPORT THE LISTS
 --    select name, email, country, created_at from founders order by founder_number;
 --    select seat, name, email, max_bid_hint, created_at from quad_interests order by created_at;
+--    select email, first_name, source, created_at from rs_interests order by created_at;
 --
 --  STILL TO BUILD (deliberately not built yet):
 --   • Transactional email. Both sites promise "we'll email you"; nothing

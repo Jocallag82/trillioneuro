@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RipeStream — A New Way to Be Social</title>
+<meta name="description" content="RipeStream is a new kind of social network, bringing people, communities, creators and discovery together in one place. Register your interest.">
+<link rel="canonical" href="https://ripestream.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RipeStream">
+<meta property="og:url" content="https://ripestream.com/">
+<meta property="og:title" content="RipeStream — Social, but actually yours.">
+<meta property="og:description" content="A new kind of social network is being built. People, communities, creators, local and discovery in one stream — with you in control. Register your interest.">
+<meta property="og:image" content="https://ripestream.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="RipeStream — Social, but actually yours.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RipeStream — Social, but actually yours.">
+<meta name="twitter:description" content="A new kind of social network is being built. Register your interest.">
+<meta name="twitter:image" content="https://ripestream.com/og-image.png">
+<meta name="theme-color" content="#0c0a09">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script>document.documentElement.classList.add('js')</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<link rel="preload" href="/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","name":"RipeStream","url":"https://ripestream.com/","logo":"https://ripestream.com/apple-touch-icon.png","email":"hello@ripestream.com"},
+{"@type":"WebSite","name":"RipeStream","url":"https://ripestream.com/","description":"A new kind of social network, currently in development. Register your interest."}
+]}
+</script>
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(/fonts/bricolage-grotesque.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0c0a09;--ink2:#161312;--ink3:#211d1b;--line-d:rgba(243,238,230,.10);--line-d2:rgba(243,238,230,.18);
+  --paper:#f3eee6;--paper2:#e9e2d6;--line-l:rgba(12,10,9,.10);
+  --cream:#f3eee6;--mute-d:#a8a096;--mute-l:#5f5850;
+  --ripe:#ff5b1f;--ripe-hi:#ff7a45;--ripe-deep:#b83a0c;--lime:#c8f55a;--plum:#6b3fa0;--sky:#6fb6ff;
+  --display:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --gut:clamp(20px,5vw,56px);--max:1240px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+body{font-family:var(--sans);background:var(--ink);color:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5;text-rendering:optimizeLegibility}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:6px}
+.light :focus-visible,.final :focus-visible{outline-color:var(--ink)}
+.skip{position:absolute;left:12px;top:-60px;z-index:200;background:var(--lime);color:var(--ink);padding:10px 14px;border-radius:8px;font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+.display{font-family:var(--display);font-weight:700;letter-spacing:-.035em;line-height:.95;font-optical-sizing:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow::before{content:'';width:18px;height:2px;background:currentColor}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(200,245,90,.6);animation:ping 2.4s var(--ease) infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(200,245,90,.55)}70%,100%{box-shadow:0 0 0 10px rgba(200,245,90,0)}}
+section{position:relative}
+.light{background:var(--paper);color:var(--ink)}
+.h2{font-size:clamp(40px,7vw,96px)}
+.lede{font-size:clamp(17px,1.6vw,20px);line-height:1.55;max-width:620px}
+.dark .lede{color:var(--mute-d)}.light .lede{color:var(--mute-l)}
+.pad{padding:clamp(88px,12vw,168px) 0}
+
+/* ── buttons ─────────────────────────────── */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;height:60px;padding:0 28px;border-radius:999px;font-weight:600;font-size:16px;letter-spacing:.01em;text-decoration:none;white-space:nowrap;transition:transform .35s var(--ease),background-color .25s,box-shadow .35s var(--ease);-webkit-tap-highlight-color:transparent}
+.btn-ripe{background:var(--ripe);color:var(--ink);box-shadow:0 10px 30px -10px rgba(255,91,31,.7),inset 0 -2px 0 rgba(0,0,0,.12)}
+.btn-ripe:hover{background:var(--ripe-hi);transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(255,91,31,.8),inset 0 -2px 0 rgba(0,0,0,.12)}
+.btn-ripe:active{transform:translateY(0) scale(.98)}
+.btn-ink{background:var(--ink);color:var(--cream)}
+.btn-ink:hover{transform:translateY(-2px);background:#000}
+.btn .arr{display:inline-block;transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn-sm{height:42px;padding:0 18px;font-size:14px}
+.ghost-link{display:inline-flex;align-items:center;gap:8px;font-weight:500;color:var(--mute-d);text-decoration:none;padding:12px 4px;transition:color .2s}
+.ghost-link:hover{color:var(--cream)}
+.ghost-link span{display:inline-block;transition:transform .3s var(--ease)}
+.ghost-link:hover span{transform:translateY(3px)}
+
+/* ── nav ─────────────────────────────────── */
+.nav{position:fixed;inset:0 0 auto;z-index:100;transition:background-color .3s,border-color .3s,transform .4s var(--ease);border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(12,10,9,.78);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border-color:var(--line-d)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.03em}
+.logo svg{width:30px;height:30px}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{display:block;padding:10px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--mute-d);text-decoration:none;transition:color .2s,background-color .2s}
+.nav-links a:hover{color:var(--cream);background:rgba(243,238,230,.06)}
+@media(max-width:900px){.nav-links{display:none}}
+@media(max-width:420px){.nav .btn-sm{padding:0 14px;font-size:13px}.nav .btn-sm .long{display:none}}
+@media(min-width:421px){.nav .btn-sm .short{display:none}}
+
+/* ── hero ────────────────────────────────── */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 0;overflow:hidden;isolation:isolate}
+.hero::before{content:'';position:absolute;inset:auto -10% -30% -10%;height:70%;background:radial-gradient(60% 60% at 50% 100%,rgba(255,91,31,.22),transparent 70%);z-index:-1;pointer-events:none}
+.hero-status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;border:1px solid var(--line-d2);border-radius:999px;font-size:13px;color:var(--mute-d);margin-bottom:clamp(24px,4vw,40px)}
+.hero-status b{color:var(--cream);font-weight:600}
+.hero h1{display:block}
+.wordmark{display:block;font-size:clamp(52px,calc((100vw - 2 * var(--gut)) / 5.35),210px);line-height:.82;letter-spacing:-.055em;font-weight:800;margin-left:-.04em}
+.wordmark .r{color:var(--ripe)}
+.headline{display:block;font-size:clamp(34px,5.6vw,80px);line-height:1;letter-spacing:-.04em;font-weight:600;margin-top:clamp(16px,2.4vw,28px)}
+.headline em{font-style:normal;position:relative;white-space:nowrap}
+.headline em::after{content:'';position:absolute;left:0;right:0;bottom:.02em;height:.12em;background:var(--ripe);border-radius:2px;transform-origin:left;transform:scaleX(0);animation:underline 1s .9s var(--ease) forwards}
+@keyframes underline{to{transform:scaleX(1)}}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px 64px;align-items:end;margin-top:clamp(28px,4vw,44px)}
+.hero-copy{font-size:clamp(17px,1.5vw,20px);color:var(--mute-d);max-width:560px;line-height:1.55}
+.hero-cta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-cta .btn{flex:1 1 100%}}
+.hero-enter>*{opacity:0;transform:translateY(24px);animation:enter 1s var(--ease) forwards}
+.hero-enter>*:nth-child(2){animation-delay:.08s}.hero-enter>*:nth-child(3){animation-delay:.18s}.hero-enter>*:nth-child(4){animation-delay:.28s}
+@keyframes enter{to{opacity:1;transform:none}}
+
+/* the stream */
+.stream{position:relative;margin-top:clamp(56px,8vw,96px);padding:10px 0 clamp(40px,6vw,72px);transform:rotate(-3deg) scale(1.06);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.lane{display:flex;gap:14px;width:max-content;padding:7px 0;animation:flow var(--dur,60s) linear infinite}
+.lane.rev{animation-direction:reverse}
+.stream:hover .lane{animation-play-state:paused}
+@keyframes flow{to{transform:translateX(-50%)}}
+.frag{display:flex;align-items:center;gap:12px;padding:12px 18px 12px 12px;border-radius:16px;background:var(--ink2);border:1px solid var(--line-d);font-size:15px;white-space:nowrap;color:var(--cream)}
+.frag small{display:block;font-size:12px;color:var(--mute-d);margin-top:1px}
+.frag .av{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink)}
+.frag.hot{background:var(--ripe);color:var(--ink);border-color:transparent}.frag.hot small{color:rgba(12,10,9,.7)}
+.frag.lime{background:var(--lime);color:var(--ink);border-color:transparent}.frag.lime small{color:rgba(12,10,9,.65)}
+.frag.out{background:transparent;border-color:var(--line-d2)}
+.g1{background:linear-gradient(135deg,#ffb38a,#ff5b1f)}.g2{background:linear-gradient(135deg,#c8f55a,#5fd38d)}.g3{background:linear-gradient(135deg,#b69cff,#6b3fa0)}.g4{background:linear-gradient(135deg,#9fd4ff,#3a7bd5)}.g5{background:linear-gradient(135deg,#ffe07a,#f3a712)}.g6{background:linear-gradient(135deg,#ff9fc6,#d9407a)}
+.ico{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(243,238,230,.07);font-size:17px}
+.frag.hot .ico,.frag.lime .ico{background:rgba(12,10,9,.1)}
+
+/* ── reveal ──────────────────────────────── */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+
+/* ── join ────────────────────────────────── */
+.join .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:center}
+@media(max-width:900px){.join .wrap{grid-template-columns:1fr}}
+.join .eyebrow{color:var(--ripe-deep)}
+.join h2{margin:22px 0 24px}
+.join h2 span{color:var(--ripe-deep)}
+.honest{display:flex;gap:12px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line-l);font-size:14px;color:var(--mute-l);max-width:520px}
+.honest svg{flex:none;width:20px;height:20px;margin-top:2px;color:var(--ripe-deep)}
+
+/* form card */
+.card-form{position:relative;background:var(--ink);color:var(--cream);border-radius:28px;padding:clamp(24px,4vw,44px);box-shadow:0 40px 80px -40px rgba(12,10,9,.55)}
+.card-form::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(160deg,rgba(255,91,31,.7),transparent 40%,transparent 70%,rgba(200,245,90,.4));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.card-form h3{font-family:var(--display);font-size:clamp(26px,3vw,34px);letter-spacing:-.03em;font-weight:700;line-height:1.05;margin-bottom:8px}
+.card-form .intro{color:var(--mute-d);font-size:15px;margin-bottom:26px}
+.field{margin-bottom:16px}
+.field label{display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:8px}
+.field label span{color:var(--mute-d);font-weight:400}
+.field input{width:100%;height:58px;padding:0 18px;border-radius:14px;border:1.5px solid var(--line-d2);background:var(--ink2);font-size:17px;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.field input::placeholder{color:#7b746c}
+.field input:hover{border-color:rgba(243,238,230,.3)}
+.field input:focus{outline:none;border-color:var(--ripe);background:var(--ink3);box-shadow:0 0 0 4px rgba(255,91,31,.18)}
+.field input[aria-invalid=true]{border-color:#ff6b6b}
+.rs-form .btn{width:100%;margin-top:6px;height:62px;font-size:16px;text-transform:uppercase;letter-spacing:.06em}
+.rs-form .btn[disabled]{cursor:progress}
+.spin{display:none;width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(12,10,9,.25);border-top-color:var(--ink);animation:spin .7s linear infinite}
+.loading .spin{display:inline-block}.loading .arr{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{min-height:0;font-size:14px;color:#ff8f8f;margin-top:10px}
+.err:empty{display:none}
+.fine{font-size:13px;color:var(--mute-d);margin-top:16px;line-height:1.5}
+.fine a{color:var(--cream)}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.done{text-align:left}
+.done .tick{width:56px;height:56px;border-radius:50%;background:var(--lime);display:grid;place-items:center;margin-bottom:22px;animation:pop .6s var(--ease)}
+.done .tick svg{width:26px;height:26px;color:var(--ink)}
+.done .tick path{stroke-dasharray:30;stroke-dashoffset:30;animation:draw .5s .25s var(--ease) forwards}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:none;opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done h3{font-family:var(--display);font-size:clamp(30px,3.6vw,42px);letter-spacing:-.035em;line-height:1;font-weight:700;margin-bottom:14px}
+.done p{color:var(--mute-d);font-size:16px;margin-bottom:10px;max-width:420px}
+.done:focus{outline:none}
+.share{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:24px;padding-top:22px;border-top:1px solid var(--line-d)}
+.share span{font-size:14px;color:var(--mute-d)}
+.share .btn{height:44px;font-size:14px;padding:0 18px;background:rgba(243,238,230,.08);color:var(--cream);text-transform:none;letter-spacing:0;width:auto;margin:0}
+.share .btn:hover{background:rgba(243,238,230,.14)}
+
+/* ── big idea ────────────────────────────── */
+.idea .eyebrow{color:var(--ripe)}
+.idea h2{margin:24px 0 clamp(40px,6vw,72px);max-width:900px}
+.cloud{display:flex;flex-wrap:wrap;gap:clamp(10px,1.4vw,16px);align-items:center;max-width:1100px}
+.chip{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-size:clamp(20px,3.2vw,40px);font-weight:600;letter-spacing:-.03em;padding:.28em .7em;border-radius:999px;border:1.5px solid var(--line-d2);color:var(--cream);transition:transform .5s var(--ease),background-color .3s,color .3s,border-color .3s}
+.chip:hover{transform:translateY(-4px) rotate(-1.5deg)}
+.chip.f{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.chip.o{background:var(--ripe);color:var(--ink);border-color:var(--ripe)}
+.chip.l{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+.chip.p{background:var(--plum);border-color:var(--plum)}
+.chip.i{font-style:italic;font-weight:400}
+.js .cloud .chip{opacity:0;transform:translate(var(--x,0),var(--y,40px)) rotate(var(--r,0deg)) scale(.9);transition:opacity .8s var(--ease),transform 1.1s var(--ease);transition-delay:var(--d,0s)}
+.js .cloud.in .chip{opacity:1;transform:none}
+.js .cloud.in .chip:hover{transform:translateY(-4px) rotate(-1.5deg)}
+.why{margin-top:clamp(80px,12vw,160px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:end}
+@media(max-width:900px){.why{grid-template-columns:1fr}}
+.why h3{font-size:clamp(46px,7.6vw,112px)}
+.why h3 span{color:var(--ripe)}
+.why p{color:var(--mute-d);font-size:clamp(17px,1.5vw,19px);margin-bottom:16px}
+.why p strong{color:var(--cream);font-weight:600}
+
+/* ── concept ─────────────────────────────── */
+.concept .eyebrow{color:var(--ripe-deep)}
+.concept-head{display:flex;justify-content:space-between;align-items:end;gap:24px 48px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,64px)}
+.concept-head h2{margin-top:22px}
+.tag-concept{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:7px 12px;border:1.5px dashed currentColor;border-radius:8px;color:var(--mute-l)}
+.app{position:relative;background:var(--ink);color:var(--cream);border-radius:28px;padding:10px;box-shadow:0 60px 120px -50px rgba(12,10,9,.6),0 0 0 1px rgba(12,10,9,.08)}
+.app-bar{display:flex;align-items:center;gap:8px;padding:10px 14px 14px}
+.app-bar i{width:11px;height:11px;border-radius:50%;background:var(--ink3)}
+.app-bar .url{margin:0 auto;font-size:12px;color:var(--mute-d);background:var(--ink2);padding:6px 16px;border-radius:999px}
+.app-bar .tag-concept{color:var(--lime);border-color:var(--lime);padding:4px 9px;font-size:10px}
+.app-body{display:grid;grid-template-columns:220px minmax(0,1fr) 300px;gap:10px;background:#100d0c;border-radius:20px;padding:10px;min-height:640px}
+.rail{padding:14px 10px;display:flex;flex-direction:column;gap:4px}
+.rail .logo{font-size:18px;padding:0 10px 18px}.rail .logo svg{width:26px;height:26px}
+.rail a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;font-size:15px;color:var(--mute-d);text-decoration:none;pointer-events:none}
+.rail a.on{background:var(--ink2);color:var(--cream);font-weight:600}
+.rail a svg{width:19px;height:19px}
+.rail .mode{margin-top:auto;padding:14px;border-radius:14px;background:var(--ink2);font-size:13px;color:var(--mute-d)}
+.rail .mode b{display:block;color:var(--lime);font-weight:600;margin-top:2px}
+.feed{display:flex;flex-direction:column;gap:10px;min-width:0}
+.compose{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:var(--ink2);color:var(--mute-d);font-size:15px}
+.tabs{display:flex;gap:6px;padding:2px}
+.tabs span{padding:8px 14px;border-radius:999px;font-size:13px;font-weight:500;color:var(--mute-d)}
+.tabs span.on{background:var(--cream);color:var(--ink)}
+.post{background:var(--ink2);border-radius:18px;padding:16px;border:1px solid var(--line-d)}
+.p-head{display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:10px}
+.p-head .av{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--ink)}
+.p-head b{font-weight:600}.p-head small{display:block;color:var(--mute-d);font-size:12px}
+.p-head .pill{margin-left:auto;font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(243,238,230,.08);color:var(--mute-d);white-space:nowrap}
+.post p{font-size:15px;line-height:1.5}
+.post .ttl{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;line-height:1.2;margin-bottom:6px}
+.p-act{display:flex;gap:22px;margin-top:12px;font-size:13px;color:var(--mute-d)}
+.p-act span{display:inline-flex;align-items:center;gap:6px}
+.p-act svg{width:16px;height:16px}
+.photo{position:relative;margin-top:12px;border-radius:14px;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(180deg,#2b1b3d 0%,#8a3b52 34%,#ff7a45 58%,#ffc27a 66%,#3a5a78 66.5%,#1e3350 100%)}
+.photo::before{content:'';position:absolute;left:46%;top:44%;width:14%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff3d1,#ffd08a 55%,rgba(255,208,138,0) 70%);transform:translate(-50%,-50%)}
+.photo::after{content:'';position:absolute;inset:66% 0 0;background:repeating-linear-gradient(180deg,rgba(255,194,122,.35) 0 2px,transparent 2px 9px);-webkit-mask-image:linear-gradient(90deg,transparent 30%,#000 44%,#000 52%,transparent 66%);mask-image:linear-gradient(90deg,transparent 30%,#000 44%,#000 52%,transparent 66%)}
+.photo .pier{position:absolute;left:0;bottom:30%;width:62%;height:4%;background:#140c14}
+.photo .pier::after{content:'';position:absolute;right:0;bottom:100%;width:3%;height:320%;background:#140c14;border-radius:2px 2px 0 0}
+.ai-sum{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(200,245,90,.08);border:1px solid rgba(200,245,90,.22);font-size:13.5px;line-height:1.5;color:#dfe9c8}
+.ai-sum b{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-bottom:4px}
+.poll{display:grid;gap:8px;margin-top:12px}
+.poll div{position:relative;display:flex;justify-content:space-between;padding:11px 14px;border-radius:10px;font-size:14px;background:rgba(243,238,230,.05);overflow:hidden}
+.poll div::before{content:'';position:absolute;inset:0 auto 0 0;width:var(--w);background:rgba(255,91,31,.22);transform-origin:left;transform:scaleX(0);transition:transform 1.4s var(--ease) .3s}
+.in .poll div::before,html:not(.js) .poll div::before{transform:scaleX(1)}
+.poll div.win::before{background:rgba(255,91,31,.5)}
+.poll span{position:relative}
+.vid{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:center}
+.vid-art{position:relative;aspect-ratio:9/14;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,#6b3fa0,#1a1033 60%,#ff5b1f 140%)}
+.vid-art .wave{position:absolute;left:10%;right:10%;bottom:22%;height:30%;display:flex;align-items:center;gap:3px}
+.vid-art .wave i{flex:1;background:var(--lime);border-radius:2px;height:var(--h);animation:eq 1.2s ease-in-out infinite alternate;animation-delay:var(--dl)}
+@keyframes eq{to{transform:scaleY(.35)}}
+.vid-art .play{position:absolute;left:50%;top:36%;width:44px;height:44px;border-radius:50%;background:rgba(243,238,230,.92);transform:translate(-50%,-50%);display:grid;place-items:center}
+.vid-art .play::after{content:'';border-left:13px solid var(--ink);border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.vid-art .len{position:absolute;right:8px;bottom:8px;font-size:11px;font-weight:600;background:rgba(0,0,0,.55);padding:2px 6px;border-radius:6px}
+.side{display:flex;flex-direction:column;gap:10px;position:sticky;top:10px;align-self:start}
+.widget{background:var(--ink2);border-radius:18px;padding:16px;border:1px solid var(--line-d)}
+.widget .wh{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mute-d);margin-bottom:12px;display:flex;justify-content:space-between}
+.trend{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-top:1px solid var(--line-d);font-size:14px}
+.trend:first-of-type{border-top:0;padding-top:0}
+.trend small{color:var(--mute-d);font-size:12px}
+.trend b{font-weight:600}
+.loc-card{position:relative;border-radius:12px;overflow:hidden;height:120px;margin-bottom:12px;background:#1b1715}
+.loc-card svg{position:absolute;inset:0;width:100%;height:100%}
+.loc-card .pin{position:absolute;left:58%;top:46%;width:14px;height:14px;border-radius:50%;background:var(--ripe);box-shadow:0 0 0 6px rgba(255,91,31,.25);animation:ping2 2.2s var(--ease) infinite}
+@keyframes ping2{50%{box-shadow:0 0 0 12px rgba(255,91,31,0)}}
+.ev{display:flex;gap:12px;align-items:center;padding:8px 0;font-size:14px}
+.ev .date{flex:none;width:44px;text-align:center;border-radius:10px;background:var(--ink3);padding:5px 0;font-size:11px;color:var(--mute-d);line-height:1.15}
+.ev .date b{display:block;font-size:17px;color:var(--cream)}
+.ev small{display:block;color:var(--mute-d);font-size:12px}
+.join-c{display:flex;align-items:center;gap:12px}
+.join-c .sq{width:44px;height:44px;border-radius:12px;flex:none;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,#3a7bd5,#6fb6ff)}
+.join-c small{display:block;color:var(--mute-d);font-size:12px}
+.join-c .mini{margin-left:auto;font-size:12px;font-weight:600;background:var(--cream);color:var(--ink);padding:6px 12px;border-radius:999px}
+.floaty{animation:floaty 7s ease-in-out infinite}
+.floaty.b{animation-delay:-2.5s}.floaty.c{animation-delay:-5s}
+@keyframes floaty{50%{transform:translateY(-6px)}}
+@media(max-width:1100px){.app-body{grid-template-columns:minmax(0,1fr) 280px}.rail{display:none}}
+@media(max-width:760px){
+  .app{border-radius:34px;padding:8px;max-width:440px;margin:0 auto}
+  .app-bar .url,.app-bar i{display:none}.app-bar{justify-content:flex-end;padding:8px 12px 10px}
+  .app-body{grid-template-columns:1fr;padding:8px;border-radius:26px;min-height:0}
+  .side{order:-1;position:static;flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;gap:8px;margin:0 -8px;padding:0 8px;scrollbar-width:none}
+  .side::-webkit-scrollbar{display:none}
+  .side{align-items:flex-start}.side .widget{flex:0 0 84%;scroll-snap-align:start}
+  .tabs{overflow-x:auto;scrollbar-width:none;margin-right:-8px}.tabs span{flex:none}
+  .vid{grid-template-columns:110px minmax(0,1fr)}
+}
+.concept-note{margin-top:22px;font-size:14px;color:var(--mute-l);text-align:center}
+
+/* ── features ────────────────────────────── */
+.features .eyebrow{color:var(--ripe-deep)}
+.features h2{margin:22px 0 20px}
+.bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;margin-top:clamp(40px,6vw,72px)}
+.cell{position:relative;grid-column:span 4;border-radius:24px;padding:clamp(22px,2.4vw,30px);background:#fff;border:1px solid var(--line-l);overflow:hidden;display:flex;flex-direction:column;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.cell:hover{transform:translateY(-4px);box-shadow:0 30px 60px -30px rgba(12,10,9,.25)}
+.cell.w5{grid-column:span 5}.cell.w7{grid-column:span 7}.cell.w6{grid-column:span 6}
+.cell.inkc{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.cell.ripec{background:var(--ripe);border-color:var(--ripe)}
+.cell h3{font-family:var(--display);font-size:clamp(26px,2.6vw,34px);letter-spacing:-.035em;line-height:1;font-weight:700;margin-bottom:10px}
+.cell p{font-size:15.5px;color:var(--mute-l);max-width:420px}
+.cell.inkc p{color:var(--mute-d)}.cell.ripec p{color:rgba(12,10,9,.78)}
+.cell .k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-l);margin-bottom:auto;padding-bottom:28px}
+.cell.inkc .k{color:var(--mute-d)}.cell.ripec .k{color:rgba(12,10,9,.7)}
+.viz{margin-top:26px}
+@media(max-width:980px){.cell,.cell.w5,.cell.w7,.cell.w6{grid-column:span 6}}
+@media(max-width:640px){.bento{grid-template-columns:1fr}.cell,.cell.w5,.cell.w7,.cell.w6{grid-column:auto}}
+.sl{display:grid;gap:14px}
+.sl div{display:grid;grid-template-columns:120px minmax(0,1fr) 36px;align-items:center;gap:12px;font-size:14px;font-weight:500}
+.sl .track{height:8px;border-radius:99px;background:rgba(243,238,230,.12);position:relative}
+.sl .track i{position:absolute;inset:0 auto 0 0;width:var(--v);border-radius:inherit;background:var(--lime);transform-origin:left;transform:scaleX(0);transition:transform 1.4s var(--ease) var(--d,0s)}
+.sl .track i::after{content:'';position:absolute;right:-8px;top:50%;width:18px;height:18px;border-radius:50%;background:var(--cream);transform:translateY(-50%);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.in .sl .track i,html:not(.js) .sl .track i{transform:scaleX(1)}
+.sl em{font-style:normal;color:var(--mute-d);font-size:13px;text-align:right}
+.mini-feed{display:grid;gap:8px}
+.mini-feed div{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--paper);font-size:14px}
+.mini-feed .av{width:28px;height:28px;border-radius:50%;flex:none}
+.mini-feed small{margin-left:auto;font-size:11px;font-weight:600;color:var(--ripe-deep);white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{padding:7px 12px;border-radius:999px;border:1.5px solid var(--line-l);font-size:13px;font-weight:500}
+.tags span.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.thread{display:grid;gap:8px;font-size:14px}
+.thread div{padding:10px 12px;border-radius:12px;background:rgba(243,238,230,.07)}
+.thread div.r{margin-left:22px;border-left:2px solid var(--ripe);border-radius:0 12px 12px 0}
+.thread div.r2{margin-left:44px;border-left:2px solid var(--lime);border-radius:0 12px 12px 0}
+.thread b{font-weight:600}
+.search{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:14px;background:var(--paper);font-size:14.5px}
+.search svg{width:18px;height:18px;flex:none}
+.search .cur{display:inline-block;width:2px;height:1.1em;background:var(--ripe);vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.results{display:grid;gap:6px;margin-top:10px;font-size:13.5px}
+.results div{display:flex;gap:10px;padding:8px 12px;border-radius:10px;border:1px solid var(--line-l)}
+.results small{margin-left:auto;color:var(--mute-l);white-space:nowrap}
+.pins{position:relative;height:120px;border-radius:14px;background:rgba(12,10,9,.08);overflow:hidden}
+.pins svg{position:absolute;inset:0;width:100%;height:100%}
+.pins i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 5px rgba(12,10,9,.12)}
+.circles{display:flex}
+.circles span{width:46px;height:46px;border-radius:50%;border:3px solid #fff;margin-left:-10px;display:grid;place-items:center;font-size:18px}
+.circles span:first-child{margin-left:0}
+
+/* ── social world ────────────────────────── */
+.world{overflow:hidden}
+.world .eyebrow{color:var(--lime)}
+.world-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,80px);align-items:center}
+@media(max-width:980px){.world-grid{grid-template-columns:1fr}}
+.world h2{margin:22px 0 24px}
+.world h2{font-size:clamp(40px,5.2vw,76px)}
+.world h2 span{display:block}
+.world h2 span:nth-child(2){color:var(--mute-d)}
+.world h2 span:nth-child(3){color:var(--ripe)}
+.graph{position:relative;aspect-ratio:1/0.82;width:100%}
+.graph svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.edge{stroke:rgba(243,238,230,.16);stroke-width:1.5;fill:none;transition:stroke .3s,stroke-width .3s}
+.edge.flow{stroke:rgba(255,91,31,.55);stroke-dasharray:4 10;animation:dash 2.4s linear infinite}
+.edge.x{stroke-dasharray:2 6}
+.edge.on{stroke:var(--lime);stroke-width:2.5}
+@keyframes dash{to{stroke-dashoffset:-28}}
+.js .graph .edge{opacity:0;transition:opacity 1s var(--ease) var(--d,0s),stroke .3s}
+.js .graph.in .edge{opacity:1}
+.node{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);display:flex;align-items:center;gap:8px;padding:10px 16px 10px 10px;border-radius:999px;background:var(--ink2);border:1.5px solid var(--line-d2);font-size:15px;font-weight:600;white-space:nowrap;transition:background-color .25s,border-color .25s,transform .4s var(--ease),opacity .6s var(--ease)}
+.node i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:14px}
+.node:hover,.node[aria-pressed=true]{border-color:var(--lime);background:var(--ink3);transform:translate(-50%,-50%) scale(1.06)}
+.js .graph .node{opacity:0}
+.js .graph.in .node{opacity:1;transition-delay:var(--d,0s)}
+.node.me{padding:0;width:clamp(84px,12vw,120px);height:clamp(84px,12vw,120px);justify-content:center;border-radius:50%;background:var(--ripe);color:var(--ink);border:0;font-family:var(--display);font-size:clamp(20px,2.4vw,28px);letter-spacing:-.03em;box-shadow:0 0 0 12px rgba(255,91,31,.12),0 0 0 26px rgba(255,91,31,.06);animation:breathe 4s ease-in-out infinite}
+.node.me:hover,.node.me[aria-pressed=true]{background:var(--ripe-hi);border:0}
+@keyframes breathe{50%{box-shadow:0 0 0 16px rgba(255,91,31,.14),0 0 0 34px rgba(255,91,31,.04)}}
+@media(max-width:560px){.node{font-size:12.5px;padding:7px 11px 7px 7px;gap:6px}.node i{width:20px;height:20px;font-size:11px}.graph{aspect-ratio:1/1.05}}
+.caption{margin-top:28px;min-height:96px;padding:20px 22px;border-radius:18px;background:var(--ink2);border:1px solid var(--line-d)}
+.caption b{display:block;font-family:var(--display);font-size:22px;letter-spacing:-.02em;margin-bottom:4px}
+.caption p{color:var(--mute-d);font-size:15.5px}
+.hint{font-size:13px;color:var(--mute-d);margin-top:12px}
+
+/* ── control ─────────────────────────────── */
+.control .eyebrow{color:var(--ripe-deep)}
+.control h2{margin:22px 0 24px;max-width:1000px}
+.ctl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:14px;margin-top:clamp(40px,6vw,72px)}
+@media(max-width:900px){.ctl{grid-template-columns:1fr}}
+.panel{border-radius:24px;padding:clamp(20px,2.6vw,32px)}
+.panel.settings{background:#fff;border:1px solid var(--line-l)}
+.panel.preview{background:var(--ink);color:var(--cream)}
+.panel h3{font-family:var(--display);font-size:22px;letter-spacing:-.02em;margin-bottom:4px}
+.panel .sub{font-size:14px;color:var(--mute-l);margin-bottom:22px}
+.panel.preview .sub{color:var(--mute-d)}
+.grp{padding:18px 0;border-top:1px solid var(--line-l)}
+.grp legend{float:left;width:100%;font-size:13px;font-weight:600;margin-bottom:12px}
+.grp legend+*{clear:both}
+fieldset{border:0}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);padding:4px;border-radius:14px;background:var(--paper)}
+.seg button{padding:11px 8px;border-radius:10px;font-size:14px;font-weight:600;color:var(--mute-l);transition:background-color .25s,color .25s,box-shadow .25s}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 2px 10px rgba(12,10,9,.12)}
+.toggles{display:flex;flex-wrap:wrap;gap:8px}
+.tg{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line-l);font-size:14px;font-weight:500;transition:all .25s var(--ease)}
+.tg::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--line-l);transition:background-color .25s}
+.tg[aria-pressed=true]{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.tg[aria-pressed=true]::before{background:var(--lime)}
+.tg[aria-pressed=false]{color:var(--mute-l);text-decoration:line-through;text-decoration-thickness:1.5px}
+.sw{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:15px;font-weight:500;padding:4px 0}
+.sw small{display:block;font-size:13px;color:var(--mute-l);font-weight:400}
+.switch{position:relative;flex:none;width:52px;height:30px;border-radius:99px;background:var(--paper2);transition:background-color .25s}
+.switch::after{content:'';position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .3s var(--ease)}
+.switch[aria-checked=true]{background:var(--ripe)}
+.switch[aria-checked=true]::after{transform:translateX(22px)}
+.pv{display:grid;gap:8px}
+.pv-item{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:14px;border-radius:16px;background:var(--ink2);border:1px solid var(--line-d);animation:pvin .5s var(--ease) both;animation-delay:var(--d,0s)}
+@keyframes pvin{from{opacity:0;transform:translateY(10px)}}
+.pv-item .av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--ink)}
+.pv-item b{font-weight:600;font-size:14px}
+.pv-item b span{font-weight:400;color:var(--mute-d)}
+.pv-item p{font-size:14.5px;margin:2px 0 8px}
+.why-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--lime);font-weight:500}
+.why-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.why-tag.d{color:var(--sky)}
+.pv-empty{padding:28px;text-align:center;color:var(--mute-d);font-size:14px;border:1px dashed var(--line-d2);border-radius:16px}
+.pv-foot{display:flex;justify-content:space-between;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line-d);font-size:13px;color:var(--mute-d)}
+.pv-foot b{color:var(--cream);font-weight:600}
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line-l);border-radius:24px;overflow:hidden;margin-top:14px;border:1px solid var(--line-l)}
+.principles div{background:var(--paper);padding:22px}
+.principles b{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em;margin-bottom:6px}
+.principles p{font-size:14px;color:var(--mute-l)}
+@media(max-width:980px){.principles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.principles{grid-template-columns:1fr}}
+.philo{margin-top:clamp(40px,6vw,64px);font-family:var(--display);font-size:clamp(24px,3vw,38px);letter-spacing:-.03em;line-height:1.15;max-width:960px;font-weight:600}
+.philo span{color:var(--ripe-deep)}
+
+/* ── communities ─────────────────────────── */
+.comm .eyebrow{color:var(--ripe)}
+.comm h2{margin:22px 0 22px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(190px,auto);grid-auto-flow:dense;gap:12px;margin-top:clamp(40px,6vw,72px)}
+.tile{position:relative;border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;isolation:isolate;transition:transform .5s var(--ease)}
+.tile:hover{transform:translateY(-5px) rotate(-.6deg)}
+.tile.big{grid-column:span 2;grid-row:span 2}
+.tile.wide{grid-column:span 2}
+.tile .cat{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.75}
+.tile h3{font-family:var(--display);font-size:clamp(24px,2.4vw,32px);line-height:1;letter-spacing:-.035em;font-weight:700;margin:14px 0 8px}
+.tile.big h3{font-size:clamp(34px,4.4vw,60px)}
+.tile p{font-size:14.5px;opacity:.82;max-width:320px}
+.tile .em{position:absolute;right:16px;top:14px;font-size:30px;line-height:1}
+.tile.big .em{font-size:54px}
+.t1{background:#f3eee6;color:var(--ink)}
+.t1::after{content:'';position:absolute;right:-40px;bottom:-40px;width:260px;height:260px;border-radius:50%;background:repeating-radial-gradient(circle,var(--ink) 0 2px,transparent 2px 14px);opacity:.14;z-index:-1}
+.t2{background:#1f3b2c;color:#d9f5c4}
+.t3{background:var(--ripe);color:var(--ink)}
+.t4{background:#1d2a44;color:#cfe3ff}
+.t4::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(207,227,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(207,227,255,.08) 1px,transparent 1px);background-size:22px 22px;z-index:-1}
+.t5{background:var(--plum);color:#f1e6ff}
+.t6{background:#2a1a12;color:#ffd9b8}
+.t6::after{content:'';position:absolute;left:0;right:0;bottom:0;height:46%;background:repeating-linear-gradient(90deg,rgba(255,217,184,.2) 0 3px,transparent 3px 9px);-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000);z-index:-1}
+.t7{background:var(--lime);color:var(--ink)}
+.t8{background:#123c3a;color:#bff1e8}
+.t9{background:#ffd166;color:var(--ink)}
+.t10{background:#e7f0ff;color:#15233d}
+.t11{background:#ffc6d9;color:#3d0f1f}
+.t12{background:var(--ink3);color:var(--cream);border:1px solid var(--line-d2)}
+.t13{background:transparent;color:var(--cream);border:1.5px dashed var(--line-d2);justify-content:center;align-items:flex-start}
+.t13 h3{color:var(--ripe)}
+.tile.t13{grid-column:span 3}
+@media(max-width:980px){.tile.t13,.tile.t12{grid-column:span 2}}
+@media(max-width:980px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.tiles{grid-auto-rows:minmax(160px,auto);gap:10px}.tile{padding:18px;border-radius:18px}.tile.big{grid-row:span 1}.tile .em{font-size:24px}.tile.big .em{font-size:38px}.tile p{font-size:13.5px}}
+.small-note{margin-top:20px;font-size:13px;color:var(--mute-d)}
+.light .small-note{color:var(--mute-l)}
+
+/* ── local ───────────────────────────────── */
+.local .eyebrow{color:var(--ripe-deep)}
+.local h2{margin:22px 0 22px}
+.cities{display:flex;gap:8px;flex-wrap:wrap;margin:clamp(32px,5vw,48px) 0 18px}
+.cities button{padding:11px 18px;border-radius:999px;border:1.5px solid var(--line-l);font-size:15px;font-weight:600;transition:all .25s var(--ease)}
+.cities button:hover{border-color:var(--ink)}
+.cities button[aria-pressed=true]{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+@media(max-width:560px){.cities{flex-wrap:nowrap;overflow-x:auto;margin-left:calc(var(--gut) * -1);margin-right:calc(var(--gut) * -1);padding:0 var(--gut);scrollbar-width:none}.cities::-webkit-scrollbar{display:none}.cities button{flex:none}}
+.localfeed{position:relative;border-radius:28px;background:var(--ink);color:var(--cream);overflow:hidden;padding:clamp(20px,3vw,36px);isolation:isolate}
+.localfeed .map{position:absolute;inset:0;z-index:-1;opacity:.55}
+.localfeed .map svg{width:100%;height:100%}
+.lf-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.lf-city{font-family:var(--display);font-size:clamp(32px,4.4vw,56px);letter-spacing:-.04em;font-weight:700;line-height:1;display:flex;align-items:center;gap:14px}
+.lf-city .pin{width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--ripe);box-shadow:0 0 0 8px rgba(255,91,31,.18)}
+.lf-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:900px){.lf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.lf-grid{grid-template-columns:1fr}}
+.lf{background:rgba(22,19,18,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line-d);border-radius:18px;padding:18px;transition:opacity .35s,transform .35s var(--ease)}
+.lf h3{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.lf h3::before{content:'';width:7px;height:7px;border-radius:2px;background:var(--c,var(--ripe))}
+.lf ul{list-style:none;display:grid;gap:10px}
+.lf li{font-size:15px;line-height:1.35}
+.lf li small{display:block;color:var(--mute-d);font-size:13px;margin-top:2px}
+.swap .lf{opacity:0;transform:translateY(8px)}
+.transl{display:inline-block;font-size:11px;font-weight:600;color:var(--lime);margin-top:4px}
+
+/* ── ai ──────────────────────────────────── */
+.ai .eyebrow{color:var(--lime)}
+.ai h2{margin:22px 0 24px}
+.ai-lead{font-family:var(--display);font-size:clamp(24px,2.8vw,36px);letter-spacing:-.03em;line-height:1.15;font-weight:600;max-width:820px}
+.ai-lead span{color:var(--lime)}
+.ai-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(40px,6vw,72px)}
+@media(max-width:980px){.ai-grid{grid-template-columns:1fr}}
+.demo{background:var(--ink2);border:1px solid var(--line-d);border-radius:24px;padding:22px;display:flex;flex-direction:column}
+.demo .k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d);margin-bottom:14px}
+.demo h3{font-family:var(--display);font-size:20px;letter-spacing:-.02em;line-height:1.2;margin-bottom:6px}
+.demo .meta{font-size:13px;color:var(--mute-d);margin-bottom:16px}
+.demo .act{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--cream);color:var(--ink);font-size:14px;font-weight:600;transition:transform .3s var(--ease),background-color .2s}
+.demo .act:hover{transform:translateY(-2px);background:#fff}
+.demo .act svg{width:16px;height:16px}
+.out{margin:0 0 16px;padding:14px 16px;border-radius:14px;background:rgba(200,245,90,.07);border:1px solid rgba(200,245,90,.2);font-size:14.5px;line-height:1.5;color:#e4edcf}
+.out ul{padding-left:18px;display:grid;gap:6px}
+.out[hidden]{display:none}
+.bubble{padding:14px 16px;border-radius:16px 16px 16px 4px;background:var(--ink3);font-size:15px;margin-bottom:10px}
+.bubble small{display:block;font-size:12px;color:var(--mute-d);margin-bottom:4px}
+.fade-swap{transition:opacity .25s}
+.catch{list-style:none;display:grid;gap:8px;margin-bottom:16px}
+.catch li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;padding:10px 12px;border-radius:12px;background:var(--ink3)}
+.catch .av{width:26px;height:26px;border-radius:50%;flex:none}
+.caps{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(32px,4vw,48px)}
+.caps span{padding:10px 16px;border-radius:999px;border:1.5px solid var(--line-d2);font-size:14.5px;font-weight:500;color:var(--mute-d)}
+.people-line{margin-top:clamp(40px,6vw,64px);padding-top:28px;border-top:1px solid var(--line-d);display:flex;gap:18px;align-items:flex-start;max-width:820px;color:var(--mute-d);font-size:16px}
+.people-line b{color:var(--cream)}
+
+/* ── final ───────────────────────────────── */
+.final{background:var(--ripe);color:var(--ink);overflow:hidden;isolation:isolate}
+.final::before{content:'';position:absolute;inset:-20% -10% auto auto;width:70vw;max-width:900px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,200,150,.55),transparent 65%);z-index:-1}
+.final .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:end}
+@media(max-width:900px){.final .wrap{grid-template-columns:1fr}}
+.final h2{font-size:clamp(52px,7.4vw,118px);line-height:.86;letter-spacing:-.055em;font-weight:800}
+.final .lede{color:rgba(12,10,9,.78);margin-top:28px;font-size:clamp(18px,1.7vw,21px)}
+.final .card-form{box-shadow:0 40px 90px -40px rgba(80,20,0,.7)}
+.final .card-form::before{display:none}
+
+/* ── footer ──────────────────────────────── */
+footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
+.foot{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end}
+@media(max-width:700px){.foot{grid-template-columns:1fr}}
+.foot .tagline{font-family:var(--display);font-size:clamp(28px,4vw,48px);letter-spacing:-.04em;font-weight:700;line-height:1;margin-top:22px}
+.foot .tagline span{color:var(--ripe)}
+.foot nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px 26px}
+.foot nav a{font-size:15px;color:var(--mute-d);text-decoration:none;padding:8px 0;display:inline-block}
+.foot nav a:hover{color:var(--cream)}
+.legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:48px;padding-top:24px;border-top:1px solid var(--line-d);font-size:13px;color:var(--mute-d)}
+
+/* ── sticky mobile cta ───────────────────── */
+.dock{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;display:none;transform:translateY(140%);transition:transform .5s var(--ease)}
+.dock .btn{width:100%;height:56px}
+.dock.show{transform:none}
+@media(max-width:760px){.dock{display:block}}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  .lane{animation:none!important}
+  .stream{transform:rotate(-3deg)}
+  .edge.flow{animation:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 32 32"><circle cx="16" cy="17" r="15" fill="#ff5b1f"/><path d="M17.5 3.2c2.2-2.4 6.2-2.6 8.3-.9-2.1 2.6-5.7 3-8.3.9z" fill="#c8f55a"/><path d="M5 17.5c3.7-3.6 7.3-3.6 11 0s7.3 3.6 11 0" stroke="#0c0a09" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M8.5 24c2.5-2.3 5-2.3 7.5 0s5 2.3 7.5 0" stroke="#0c0a09" stroke-width="2.8" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 20 20"><path d="M4 10h11m-4.5-5L15 10l-4.5 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 20 20"><path d="M10 17s-6.5-4-6.5-8.6A3.5 3.5 0 0 1 10 6.3a3.5 3.5 0 0 1 6.5 2.1C16.5 13 10 17 10 17z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="i-reply" viewBox="0 0 20 20"><path d="M3.5 15.5V5.8c0-1 .8-1.8 1.8-1.8h9.4c1 0 1.8.8 1.8 1.8v5.9c0 1-.8 1.8-1.8 1.8H7.2z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 20 20"><path d="M10 3v10M6 7l4-4 4 4M4 12v3.5c0 .8.7 1.5 1.5 1.5h9c.8 0 1.5-.7 1.5-1.5V12" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-lines" viewBox="0 0 20 20"><path d="M4 5h12M4 10h8M4 15h5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="/" aria-label="RipeStream home"><svg aria-hidden="true"><use href="#mark"/></svg>RipeStream</a>
+    <nav aria-label="Primary">
+      <ul class="nav-links">
+        <li><a href="#about">The idea</a></li>
+        <li><a href="#concept">Concept</a></li>
+        <li><a href="#control">Control</a></li>
+        <li><a href="#local">Local</a></li>
+        <li><a href="#ai">AI</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-ripe btn-sm" href="#join" data-focus-form><span class="long">Get early access</span><span class="short">Join</span></a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ═════════ HERO ═════════ -->
+<section class="hero dark" aria-labelledby="hero-title">
+  <div class="wrap hero-enter">
+    <p class="hero-status"><span class="dot" aria-hidden="true"></span><span><b>In development.</b> The early interest list is open.</span></p>
+    <h1 id="hero-title" class="display">
+      <span class="wordmark">Ripe<span class="r">Stream</span></span>
+      <span class="headline">Social, but <em>actually yours.</em></span>
+    </h1>
+    <div class="hero-grid">
+      <p class="hero-copy">RipeStream is a new kind of social network — bringing together the best parts of social media while giving you more control over what you see, who you connect with and how you experience it.</p>
+      <div class="hero-cta">
+        <a class="btn btn-ripe" href="#join" data-focus-form>Register your interest <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="ghost-link" href="#about">See what's coming <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="stream" aria-hidden="true">
+    <div class="lane" style="--dur:70s">
+      <div class="frag"><span class="av g1">AB</span><div>Aoife shared a photo<small>in 35mm &amp; Film</small></div></div>
+      <div class="frag hot"><span class="ico">📍</span><div>Dublin · What's on tonight<small>Local</small></div></div>
+      <div class="frag"><span class="ico">📊</span><div>Kick-off time next season?<small>Poll · Sunday League</small></div></div>
+      <div class="frag out"><span class="av g3">KM</span><div>Kofi posted a new beat<small>Creator · 58s</small></div></div>
+      <div class="frag lime"><span class="ico">≡</span><div>212 replies → 3 key points<small>Thread summary</small></div></div>
+      <div class="frag"><span class="av g4">PR</span><div>Priya answered your question<small>Conversations</small></div></div>
+      <div class="frag"><span class="ico">🎟</span><div>Night run along the canal<small>Event · Thu 7pm</small></div></div>
+      <!-- duplicate for seamless loop -->
+      <div class="frag"><span class="av g1">AB</span><div>Aoife shared a photo<small>in 35mm &amp; Film</small></div></div>
+      <div class="frag hot"><span class="ico">📍</span><div>Dublin · What's on tonight<small>Local</small></div></div>
+      <div class="frag"><span class="ico">📊</span><div>Kick-off time next season?<small>Poll · Sunday League</small></div></div>
+      <div class="frag out"><span class="av g3">KM</span><div>Kofi posted a new beat<small>Creator · 58s</small></div></div>
+      <div class="frag lime"><span class="ico">≡</span><div>212 replies → 3 key points<small>Thread summary</small></div></div>
+      <div class="frag"><span class="av g4">PR</span><div>Priya answered your question<small>Conversations</small></div></div>
+      <div class="frag"><span class="ico">🎟</span><div>Night run along the canal<small>Event · Thu 7pm</small></div></div>
+    </div>
+    <div class="lane rev" style="--dur:84s">
+      <div class="frag out"><span class="ico">🔕</span><div>Muted: celebrity gossip<small>Your controls</small></div></div>
+      <div class="frag"><span class="av g2">IN</span><div>Inês started Carry-on Only<small>New community</small></div></div>
+      <div class="frag"><span class="ico">🌐</span><div>“Onde se come o melhor pastel de nata?”<small>Translated from Portuguese</small></div></div>
+      <div class="frag lime"><span class="ico">↺</span><div>Following first<small>Feed mode · on</small></div></div>
+      <div class="frag"><span class="av g5">TO</span><div>Tomás: my home lab, finally racked<small>in Home Lab</small></div></div>
+      <div class="frag hot"><span class="ico">🧤</span><div>Sunday League needs a keeper<small>Local · Sport</small></div></div>
+      <div class="frag out"><span class="ico">↻</span><div>Catch up: 9 posts from people you follow<small>While you were away</small></div></div>
+      <div class="frag out"><span class="ico">🔕</span><div>Muted: celebrity gossip<small>Your controls</small></div></div>
+      <div class="frag"><span class="av g2">IN</span><div>Inês started Carry-on Only<small>New community</small></div></div>
+      <div class="frag"><span class="ico">🌐</span><div>“Onde se come o melhor pastel de nata?”<small>Translated from Portuguese</small></div></div>
+      <div class="frag lime"><span class="ico">↺</span><div>Following first<small>Feed mode · on</small></div></div>
+      <div class="frag"><span class="av g5">TO</span><div>Tomás: my home lab, finally racked<small>in Home Lab</small></div></div>
+      <div class="frag hot"><span class="ico">🧤</span><div>Sunday League needs a keeper<small>Local · Sport</small></div></div>
+      <div class="frag out"><span class="ico">↻</span><div>Catch up: 9 posts from people you follow<small>While you were away</small></div></div>
+    </div>
+    <div class="lane" style="--dur:96s">
+      <div class="frag"><span class="av g6">SL</span><div>Sofia is going to Rooftop Cinema<small>Event · Sat 8pm</small></div></div>
+      <div class="frag"><span class="ico">🔥</span><div>#GoldenHour<small>Trending near you</small></div></div>
+      <div class="frag hot"><span class="ico">✓</span><div>Only people I follow can reply<small>Audience controls</small></div></div>
+      <div class="frag"><span class="av g3">DK</span><div>Daniel joined Bedroom Producers<small>Community</small></div></div>
+      <div class="frag out"><span class="ico">🍜</span><div>New ramen spot near you<small>Local · Food</small></div></div>
+      <div class="frag"><span class="av g1">MJ</span><div>Mina: marathon training, week 9<small>in 5am Club</small></div></div>
+      <div class="frag"><span class="av g6">SL</span><div>Sofia is going to Rooftop Cinema<small>Event · Sat 8pm</small></div></div>
+      <div class="frag"><span class="ico">🔥</span><div>#GoldenHour<small>Trending near you</small></div></div>
+      <div class="frag hot"><span class="ico">✓</span><div>Only people I follow can reply<small>Audience controls</small></div></div>
+      <div class="frag"><span class="av g3">DK</span><div>Daniel joined Bedroom Producers<small>Community</small></div></div>
+      <div class="frag out"><span class="ico">🍜</span><div>New ramen spot near you<small>Local · Food</small></div></div>
+      <div class="frag"><span class="av g1">MJ</span><div>Mina: marathon training, week 9<small>in 5am Club</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ JOIN ═════════ -->
+<section class="join light pad" id="join" aria-labelledby="join-title">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow">Early access</p>
+      <h2 id="join-title" class="display h2">Get in <span>early.</span></h2>
+      <p class="lede">Put your name down and you'll hear about RipeStream first — the first previews, the progress, and the moment there's something you can actually try.</p>
+      <p class="honest"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Straight with you: this is an interest list, not an account. RipeStream is still being built. Registering doesn't sign you up to anything else, and you can ask to be removed at any time.</span></p>
+    </div>
+    <div class="card-form rv" style="--d:.1s" data-form-host>
+      <form class="rs-form" data-source="join" novalidate>
+        <h3>Register your interest</h3>
+        <p class="intro">Takes ten seconds. First name is optional.</p>
+        <div class="field">
+          <label for="join-name">First name <span>Optional</span></label>
+          <input id="join-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" placeholder="Alex">
+        </div>
+        <div class="field">
+          <label for="join-email">Email address</label>
+          <input id="join-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com" aria-describedby="join-err">
+        </div>
+        <div class="hp" aria-hidden="true"><label for="join-web">Leave this empty</label><input id="join-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <button class="btn btn-ripe" type="submit"><span class="lbl">Get early access</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
+        <p class="err" id="join-err" aria-live="polite"></p>
+        <p class="fine">We'll only email you about RipeStream. No spam, no selling your address. <a href="/privacy">Privacy</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ BIG IDEA ═════════ -->
+<section class="idea dark pad" id="about" aria-labelledby="idea-title">
+  <div class="wrap">
+    <p class="eyebrow rv">The idea</p>
+    <h2 id="idea-title" class="display h2 rv">Social media has become a lot of things.</h2>
+    <ul class="cloud" role="list" data-reveal>
+      <li class="chip f" style="--x:-40px;--y:30px;--r:-6deg;--d:0s">Following</li>
+      <li class="chip" style="--x:30px;--y:50px;--r:5deg;--d:.05s">Communities</li>
+      <li class="chip o" style="--x:60px;--y:-20px;--r:8deg;--d:.1s">Short video</li>
+      <li class="chip i" style="--x:-20px;--y:60px;--r:-4deg;--d:.15s">Stories</li>
+      <li class="chip" style="--x:40px;--y:20px;--r:6deg;--d:.2s">Discussions</li>
+      <li class="chip l" style="--x:-50px;--y:40px;--r:-8deg;--d:.25s">Messaging</li>
+      <li class="chip p" style="--x:20px;--y:70px;--r:4deg;--d:.3s">Discovery</li>
+      <li class="chip i" style="--x:-30px;--y:30px;--r:-5deg;--d:.35s">Local</li>
+      <li class="chip f" style="--x:50px;--y:50px;--r:7deg;--d:.4s">Events</li>
+      <li class="chip" style="--x:-60px;--y:20px;--r:-7deg;--d:.45s">Creators</li>
+      <li class="chip o" style="--x:30px;--y:60px;--r:5deg;--d:.5s">Groups</li>
+      <li class="chip" style="--x:-20px;--y:40px;--r:-3deg;--d:.55s">AI-powered discovery</li>
+    </ul>
+    <div class="why">
+      <h3 class="display rv">Why shouldn't they work <span>together?</span></h3>
+      <div class="rv" style="--d:.1s">
+        <p>Right now your social life is scattered. Friends in one app. Communities in another. Local news in a group chat. Events somewhere else entirely.</p>
+        <p><strong>Imagine one place where it all connects</strong> — without turning into one giant, noisy feed.</p>
+        <p>RipeStream is being built to bring the best parts of modern social into one coherent experience. That's the goal. This is where we're heading.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CONCEPT ═════════ -->
+<section class="concept light pad" id="concept" aria-labelledby="concept-title">
+  <div class="wrap">
+    <div class="concept-head rv">
+      <div>
+        <p class="eyebrow">A first look</p>
+        <h2 id="concept-title" class="display h2">Everything, in one stream.</h2>
+      </div>
+      <p class="lede">A concept of the direction — not a screenshot of a finished product. Details will change. The idea won't.</p>
+    </div>
+
+    <div class="app rv" role="img" aria-label="Concept design of the RipeStream app: a feed with a photo post, a community discussion with a summary, a poll, a creator video, trending topics, local events and a suggested community.">
+      <div class="app-bar" aria-hidden="true"><i></i><i></i><i></i><span class="url">ripestream.com</span><span class="tag-concept">Concept</span></div>
+      <div class="app-body" aria-hidden="true">
+        <div class="rail">
+          <span class="logo"><svg><use href="#mark"/></svg>RipeStream</span>
+          <a class="on"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Stream</a>
+          <a><svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Discover</a>
+          <a><svg viewBox="0 0 20 20"><circle cx="7" cy="8" r="3" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="14" cy="9" r="2.4" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M2.5 16c.6-2.6 2.4-4 4.5-4s3.9 1.4 4.5 4M12 13c2.6-.4 4.6.6 5.5 3" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Communities</a>
+          <a><svg viewBox="0 0 20 20"><path d="M10 18s-5.5-5.4-5.5-9.5a5.5 5.5 0 0 1 11 0C15.5 12.6 10 18 10 18z" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="10" cy="8.5" r="2" fill="currentColor"/></svg>Local</a>
+          <a><svg viewBox="0 0 20 20"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M3 8.5h14M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Events</a>
+          <a><svg viewBox="0 0 20 20"><path d="M3.5 15.5V5.8c0-1 .8-1.8 1.8-1.8h9.4c1 0 1.8.8 1.8 1.8v5.9c0 1-.8 1.8-1.8 1.8H7.2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>Messages</a>
+          <div class="mode">Your feed<b>Following first</b></div>
+        </div>
+
+        <div class="feed">
+          <div class="compose"><span class="av g2" style="width:36px;height:36px;border-radius:50%;flex:none"></span>Share something with your people…</div>
+          <div class="tabs"><span class="on">Following</span><span>Communities</span><span>Local</span><span>Discover</span></div>
+
+          <article class="post">
+            <div class="p-head"><span class="av g1">AB</span><div><b>Aoife Brennan</b><small>in 35mm &amp; Film · 12m</small></div><span class="pill">You follow</span></div>
+            <p>Golden hour on the pier. Didn't expect the whole sky to do that. Portra 400, no edits.</p>
+            <div class="photo"><span class="pier"></span></div>
+            <div class="p-act"><span><svg><use href="#i-heart"/></svg>48</span><span><svg><use href="#i-reply"/></svg>6</span><span><svg><use href="#i-share"/></svg>Share</span></div>
+          </article>
+
+          <article class="post">
+            <div class="p-head"><span class="av g4">HL</span><div><b>Home Lab</b><small>Community discussion · 86 replies</small></div><span class="pill">Joined</span></div>
+            <p class="ttl">What's the quietest mini PC you've actually lived with?</p>
+            <p>Mine sits on a bookshelf in the living room. Fan noise is the only thing that matters now.</p>
+            <div class="ai-sum"><b>Summary of 86 replies</b>Most people recommend fanless boxes for living rooms. A few warn they throttle under sustained load. Two long threads on undervolting.</div>
+          </article>
+
+          <article class="post">
+            <div class="p-head"><span class="av g5">SL</span><div><b>Sunday League · Dublin 8</b><small>Poll · closes in 2 days</small></div><span class="pill">Local</span></div>
+            <p>Kick-off time for next season? Be honest about how you feel on Sunday mornings.</p>
+            <div class="poll"><div style="--w:31%"><span>10:00</span><span>31%</span></div><div class="win" style="--w:54%"><span>11:30</span><span>54%</span></div><div style="--w:15%"><span>13:00</span><span>15%</span></div></div>
+          </article>
+
+          <article class="post">
+            <div class="vid">
+              <div class="vid-art"><span class="play"></span><div class="wave"><i style="--h:40%;--dl:0s"></i><i style="--h:80%;--dl:-.3s"></i><i style="--h:55%;--dl:-.6s"></i><i style="--h:100%;--dl:-.2s"></i><i style="--h:65%;--dl:-.8s"></i><i style="--h:90%;--dl:-.5s"></i><i style="--h:45%;--dl:-.1s"></i><i style="--h:75%;--dl:-.7s"></i></div><span class="len">0:58</span></div>
+              <div>
+                <div class="p-head"><span class="av g3">KM</span><div><b>Kofi Mensah</b><small>Creator · 1h</small></div></div>
+                <p>I recorded the bus stop outside my flat for ten minutes and made a whole beat out of it. Stems in the comments if you want to flip it.</p>
+                <div class="p-act"><span><svg><use href="#i-heart"/></svg>312</span><span><svg><use href="#i-reply"/></svg>41</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="side">
+          <div class="widget floaty">
+            <p class="wh">Trending near you <span>📍 Dublin</span></p>
+            <div class="trend"><div><b>#GoldenHour</b><small> · Photography</small></div><small>↑</small></div>
+            <div class="trend"><div><b>Sea swim season</b><small> · Local</small></div><small>↑</small></div>
+            <div class="trend"><div><b>Rack builds</b><small> · Home Lab</small></div><small>↑</small></div>
+          </div>
+          <div class="widget floaty b">
+            <p class="wh">Around you</p>
+            <div class="loc-card"><svg viewBox="0 0 300 120" preserveAspectRatio="none"><path d="M0 80 C80 70 120 100 300 60" stroke="#2c4a66" stroke-width="14" fill="none"/><path d="M40 0 L90 120 M180 0 L150 120 M0 30 L300 40 M230 0 L270 120" stroke="#2a2522" stroke-width="3"/><path d="M0 100 L300 95 M120 0 L110 120" stroke="#2a2522" stroke-width="2"/></svg><span class="pin"></span></div>
+            <div class="ev"><span class="date">THU<b>16</b></span><div>Outdoor film night<small>Event · 8pm · 0.8 km</small></div></div>
+            <div class="ev"><span class="date">SAT<b>18</b></span><div>Canal clean-up<small>Local community · 10am</small></div></div>
+          </div>
+          <div class="widget floaty c">
+            <p class="wh">Suggested for you</p>
+            <div class="join-c"><span class="sq">🏃</span><div><b>Northside Runners</b><small>Because you follow 3 members</small></div><span class="mini">Join</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="concept-note">Concept design. People, communities and content shown are illustrative examples.</p>
+  </div>
+</section>
+
+<!-- ═════════ FEATURES ═════════ -->
+<section class="features light pad" id="features" aria-labelledby="feat-title" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow rv">What we're building towards</p>
+    <h2 id="feat-title" class="display h2 rv">One stream.<br>A lot more control.</h2>
+    <p class="lede rv">Seven ideas shaping RipeStream. Some are being designed, some are being built, all of them are the point.</p>
+
+    <div class="bento">
+      <article class="cell w5 rv">
+        <span class="k">01 · Your feed</span>
+        <h3>The people you actually care about.</h3>
+        <p>A feed that starts with the people and spaces you chose — not whatever happens to be loudest today.</p>
+        <div class="viz mini-feed" aria-hidden="true">
+          <div><span class="av g1"></span>Aoife posted 3 photos<small>You follow</small></div>
+          <div><span class="av g2"></span>New in Carry-on Only<small>Joined</small></div>
+          <div><span class="av g5"></span>Your brother shared a video<small>You follow</small></div>
+        </div>
+      </article>
+
+      <article class="cell w7 inkc rv" style="--d:.08s" data-reveal>
+        <span class="k">02 · Your algorithm</span>
+        <h3>An algorithm you can actually see.</h3>
+        <p>The goal: meaningful control over how your feed works, in plain language — instead of a black box deciding for you.</p>
+        <div class="viz sl" aria-hidden="true">
+          <div><span>People I follow</span><span class="track"><i style="--v:88%"></i></span><em>High</em></div>
+          <div><span>My communities</span><span class="track"><i style="--v:66%;--d:.1s"></i></span><em>Med</em></div>
+          <div><span>New voices</span><span class="track"><i style="--v:38%;--d:.2s"></i></span><em>Some</em></div>
+          <div><span>Trending</span><span class="track"><i style="--v:14%;--d:.3s"></i></span><em>Low</em></div>
+        </div>
+      </article>
+
+      <article class="cell rv">
+        <span class="k">03 · Discover</span>
+        <h3>Find what you didn't know you were looking for.</h3>
+        <p>New people, communities, ideas and content — on your terms.</p>
+        <div class="viz tags" aria-hidden="true"><span class="on">Night swimming</span><span>Synth DIY</span><span class="on">Urban sketching</span><span>Trail running</span><span>Sourdough</span><span>Chess</span></div>
+      </article>
+
+      <article class="cell ripec rv" style="--d:.08s">
+        <span class="k">04 · Communities</span>
+        <h3>Spaces around anything.</h3>
+        <p>Create or join a community for whatever you're into. Big, small, public or private.</p>
+        <div class="viz circles" aria-hidden="true"><span style="background:#f3eee6">📷</span><span style="background:#c8f55a">🎮</span><span style="background:#ffd166">🍜</span><span style="background:#b69cff">🎧</span><span style="background:#9fd4ff">🏃</span></div>
+      </article>
+
+      <article class="cell rv" style="--d:.16s">
+        <span class="k">05 · Local</span>
+        <h3>What's happening around you.</h3>
+        <p>Events, places, people and conversations nearby — wherever you are.</p>
+        <div class="viz pins" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="none"><path d="M0 70 C60 60 100 90 200 50" stroke="rgba(12,10,9,.15)" stroke-width="10" fill="none"/><path d="M30 0 L60 120 M120 0 L100 120 M0 25 L200 35" stroke="rgba(12,10,9,.1)" stroke-width="2"/></svg><i style="left:22%;top:30%"></i><i style="left:55%;top:58%;background:var(--ripe-deep)"></i><i style="left:78%;top:22%"></i></div>
+      </article>
+
+      <article class="cell w6 inkc rv">
+        <span class="k">06 · Conversations</span>
+        <h3>Better discussions. Less comment chaos.</h3>
+        <p>Threads that stay readable, replies that stay on topic, and tools that reward people adding something.</p>
+        <div class="viz thread" aria-hidden="true">
+          <div><b>Maya:</b> Is it worth developing film at home?</div>
+          <div class="r"><b>Tom:</b> Black &amp; white, absolutely. Colour takes patience.</div>
+          <div class="r2"><b>Maya:</b> Patience I have. Space I don't 😅</div>
+        </div>
+      </article>
+
+      <article class="cell w6 rv" style="--d:.08s">
+        <span class="k">07 · AI-powered discovery</span>
+        <h3>Find it, understand it, get through it.</h3>
+        <p>Help navigating huge amounts of content — without replacing the people who create it.</p>
+        <div class="viz" aria-hidden="true">
+          <div class="search"><svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>film cameras under €200 that people actually recommend<span class="cur"></span></span></div>
+          <div class="results"><div>📷 35mm &amp; Film · “Best budget SLRs” thread<small>142 replies</small></div><div>🗨️ Aoife's guide to buying second-hand<small>Post</small></div></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ SOCIAL WORLD ═════════ -->
+<section class="world dark pad" id="world" aria-labelledby="world-title">
+  <div class="wrap world-grid">
+    <div class="rv">
+      <p class="eyebrow">Your social world</p>
+      <h2 id="world-title" class="display h2"><span>One account.</span><span>One identity.</span><span>Your social world.</span></h2>
+      <p class="lede">No more rebuilding yourself in every app. One profile that connects the people, places and things you care about — and lets you decide who sees which part.</p>
+      <div class="caption" id="world-cap" aria-live="polite"><b>You</b><p>At the centre. Everything connects through you — and only as much as you choose.</p></div>
+      <p class="hint">Tap a node to explore.</p>
+    </div>
+    <div class="graph rv" style="--d:.1s" data-reveal id="graph">
+      <svg viewBox="0 0 100 82" preserveAspectRatio="none" aria-hidden="true">
+        <g id="edges"></g>
+      </svg>
+      <!-- nodes rendered from this markup; edges drawn by JS from data-links -->
+      <button class="node me" type="button" style="--x:50%;--y:50%" data-k="you" aria-pressed="true">You</button>
+      <button class="node" type="button" style="--x:20%;--y:17%;--d:.1s" data-k="people"><i class="g1">👋</i>People</button>
+      <button class="node" type="button" style="--x:80%;--y:22%;--d:.2s" data-k="communities"><i class="g2">🫶</i>Communities</button>
+      <button class="node" type="button" style="--x:90%;--y:48%;--d:.3s" data-k="creators"><i class="g3">🎬</i>Creators</button>
+      <button class="node" type="button" style="--x:76%;--y:86%;--d:.4s" data-k="events"><i class="g5">🎟</i>Events</button>
+      <button class="node" type="button" style="--x:30%;--y:88%;--d:.5s" data-k="local"><i class="g4">📍</i>Local</button>
+      <button class="node" type="button" style="--x:11%;--y:55%;--d:.6s" data-k="interests"><i class="g6">✳</i>Interests</button>
+      <button class="node" type="button" style="--x:46%;--y:7%;--d:.7s" data-k="conversations"><i class="g2">💬</i>Conversations</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CONTROL ═════════ -->
+<section class="control light pad" id="control" aria-labelledby="control-title">
+  <div class="wrap">
+    <p class="eyebrow rv">Control</p>
+    <h2 id="control-title" class="display h2 rv">Your feed shouldn't feel like someone else's decision.</h2>
+    <p class="lede rv">RipeStream is being built around the idea that users should have meaningful control over their experience. Not buried six menus deep. Right there, in plain language. Try it:</p>
+
+    <div class="ctl rv">
+      <div class="panel settings">
+        <h3>Your stream settings</h3>
+        <p class="sub">A working sketch of the idea.</p>
+        <fieldset class="grp">
+          <legend>What comes first</legend>
+          <div class="seg" id="mode">
+            <button type="button" data-mode="following" aria-pressed="true">Following first</button>
+            <button type="button" data-mode="balanced" aria-pressed="false">Balanced</button>
+            <button type="button" data-mode="discovery" aria-pressed="false">Discovery</button>
+          </div>
+        </fieldset>
+        <fieldset class="grp">
+          <legend>Topics</legend>
+          <div class="toggles" id="topics">
+            <button type="button" class="tg" data-topic="Photography" aria-pressed="true">Photography</button>
+            <button type="button" class="tg" data-topic="Football" aria-pressed="true">Football</button>
+            <button type="button" class="tg" data-topic="Tech" aria-pressed="true">Tech</button>
+            <button type="button" class="tg" data-topic="Food" aria-pressed="true">Food</button>
+            <button type="button" class="tg" data-topic="Celebrity" aria-pressed="false">Celebrity gossip</button>
+          </div>
+        </fieldset>
+        <div class="grp">
+          <div class="sw"><span id="sw-video-l">Short video<small>Include clips in my stream</small></span><button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="sw-video-l" id="sw-video"></button></div>
+        </div>
+        <fieldset class="grp">
+          <legend>Who can reply to my posts</legend>
+          <div class="seg" id="reply">
+            <button type="button" data-reply="Everyone" aria-pressed="true">Everyone</button>
+            <button type="button" data-reply="People I follow" aria-pressed="false">Following</button>
+            <button type="button" data-reply="Mentioned only" aria-pressed="false">Mentioned</button>
+          </div>
+        </fieldset>
+      </div>
+      <div class="panel preview">
+        <h3>Your stream</h3>
+        <p class="sub">Every item tells you why it's there.</p>
+        <div class="pv" id="pv" aria-live="polite"></div>
+        <div class="pv-foot"><span>Replies: <b id="pv-reply">Everyone</b></span><span>Mode: <b id="pv-mode">Following first</b></span></div>
+      </div>
+    </div>
+
+    <div class="principles rv">
+      <div><b>Following-first feed</b><p>The people you chose come before anything else.</p></div>
+      <div><b>Personalised discovery</b><p>Turn new stuff up, down or off. Your call.</p></div>
+      <div><b>Topic controls</b><p>More of what you love. None of what you don't.</p></div>
+      <div><b>Community controls</b><p>Tune each community's place in your stream.</p></div>
+      <div><b>Content preferences</b><p>Short video, long reads, photos — choose the mix.</p></div>
+      <div><b>Mute &amp; block</b><p>Quick, quiet and reversible. Words, people or topics.</p></div>
+      <div><b>Audience controls</b><p>Decide who sees each post and who can reply.</p></div>
+      <div><b>Why am I seeing this?</b><p>A plain answer on every recommendation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ COMMUNITIES ═════════ -->
+<section class="comm dark pad" id="communities" aria-labelledby="comm-title">
+  <div class="wrap">
+    <p class="eyebrow rv">Communities</p>
+    <h2 id="comm-title" class="display h2 rv">Find your people.</h2>
+    <p class="lede rv">Whatever you're into, there should be a place for it — and it should be easy to find. The kinds of spaces RipeStream is being designed for:</p>
+
+    <ul class="tiles" role="list">
+      <li class="tile t1 big rv"><span class="em" aria-hidden="true">📷</span><span class="cat">Photography</span><div><h3>35mm &amp; Film</h3><p>Scans, stocks, light leaks, and the shots that almost worked. Critique that's actually useful.</p></div></li>
+      <li class="tile t3 rv" style="--d:.05s"><span class="em" aria-hidden="true">🏁</span><span class="cat">Cars</span><div><h3>Track Day Regulars</h3><p>Lap times, tyre talk, early starts.</p></div></li>
+      <li class="tile t2 rv" style="--d:.1s"><span class="em" aria-hidden="true">🏋️</span><span class="cat">Fitness</span><div><h3>5am Club</h3><p>For people who train before work.</p></div></li>
+      <li class="tile t4 wide rv"><span class="em" aria-hidden="true">🖥️</span><span class="cat">Technology</span><div><h3>Home Lab</h3><p>Racks, routers, and one more Raspberry Pi than anyone needs.</p></div></li>
+      <li class="tile t5 rv" style="--d:.05s"><span class="em" aria-hidden="true">🎮</span><span class="cat">Gaming</span><div><h3>Retro Handhelds</h3><p>Battery mods and cartridge hunts.</p></div></li>
+      <li class="tile t6 rv" style="--d:.1s"><span class="em" aria-hidden="true">🎧</span><span class="cat">Music</span><div><h3>Bedroom Producers</h3><p>Share the loop. Get honest ears.</p></div></li>
+      <li class="tile t7 rv"><span class="em" aria-hidden="true">🏡</span><span class="cat">Local</span><div><h3>Your Street</h3><p>Lost cats, new cafés, road closures.</p></div></li>
+      <li class="tile t8 rv" style="--d:.05s"><span class="em" aria-hidden="true">⚽</span><span class="cat">Sport</span><div><h3>Sunday League</h3><p>Fixtures, lifts to away games, a keeper at short notice.</p></div></li>
+      <li class="tile t9 wide rv" style="--d:.1s"><span class="em" aria-hidden="true">🌮</span><span class="cat">Food</span><div><h3>Street Food Hunters</h3><p>The stall with no sign and a queue round the corner. Share it or keep it — your call.</p></div></li>
+      <li class="tile t10 rv"><span class="em" aria-hidden="true">🧳</span><span class="cat">Travel</span><div><h3>Carry-on Only</h3><p>Two weeks, one bag, zero regrets.</p></div></li>
+      <li class="tile t11 rv" style="--d:.05s"><span class="em" aria-hidden="true">🍼</span><span class="cat">Parenting</span><div><h3>New Parents, No Sleep</h3><p>3am questions, answered by people who get it.</p></div></li>
+      <li class="tile t12 rv" style="--d:.1s"><span class="em" aria-hidden="true">📈</span><span class="cat">Business</span><div><h3>Bootstrapped Founders</h3><p>Revenue, not hype. Real numbers, real advice.</p></div></li>
+      <li class="tile t13 wide rv"><span class="cat">Anything else</span><div><h3>Start your own.</h3><p>If it matters to you, it deserves a home.</p></div></li>
+    </ul>
+    <p class="small-note">Examples for illustration — these communities don't exist yet. You could be the one who starts them.</p>
+  </div>
+</section>
+
+<!-- ═════════ LOCAL ═════════ -->
+<section class="local light pad" id="local" aria-labelledby="local-title">
+  <div class="wrap">
+    <p class="eyebrow rv">Local</p>
+    <h2 id="local-title" class="display h2 rv">What's happening around you?</h2>
+    <p class="lede rv">Local isn't a filter bolted on. It's a whole layer of your social world — events, places, people and conversations near you. And it should work anywhere: a capital city or a small town.</p>
+
+    <div class="cities rv" id="cities" role="group" aria-label="Choose an example city">
+      <button type="button" data-city="dublin" aria-pressed="true">Dublin</button>
+      <button type="button" data-city="lagos" aria-pressed="false">Lagos</button>
+      <button type="button" data-city="lisbon" aria-pressed="false">Lisbon</button>
+      <button type="button" data-city="toronto" aria-pressed="false">Toronto</button>
+      <button type="button" data-city="melbourne" aria-pressed="false">Melbourne</button>
+      <button type="button" data-city="seoul" aria-pressed="false">Seoul</button>
+    </div>
+
+    <div class="localfeed rv" id="localfeed" aria-live="polite">
+      <div class="map" aria-hidden="true"><svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice"><path d="M-20 420 C200 380 360 470 620 400 S1000 330 1220 380" stroke="#1f3550" stroke-width="46" fill="none"/><g stroke="#241f1c" stroke-width="5" fill="none"><path d="M100 0 L220 600"/><path d="M380 0 L330 600"/><path d="M620 0 L700 600"/><path d="M900 0 L840 600"/><path d="M1100 0 L1150 600"/><path d="M0 120 L1200 160"/><path d="M0 260 L1200 230"/><path d="M0 540 L1200 520"/></g><g stroke="#1c1816" stroke-width="2" fill="none"><path d="M240 0 L280 600"/><path d="M500 0 L520 600"/><path d="M760 0 L740 600"/><path d="M0 60 L1200 80"/><path d="M0 330 L1200 320"/><path d="M0 480 L1200 470"/></g></svg></div>
+      <div class="lf-head"><p class="lf-city"><span class="pin" aria-hidden="true"></span><span id="lf-name">Dublin</span></p><span class="tag-concept" style="color:var(--mute-d)">Concept · example content</span></div>
+      <div class="lf-grid" id="lf-grid">
+        <div class="lf" style="--c:var(--ripe)"><h3>Trending locally</h3><ul><li>#SeaSwimSeason<small>Photos from the morning swimmers</small></li><li>New cycle lane<small>The debate continues</small></li></ul></div>
+        <div class="lf" style="--c:var(--lime)"><h3>Events</h3><ul><li>Outdoor film night<small>Thu · 8pm · 0.8 km</small></li><li>Saturday food market<small>Sat · 10am</small></li></ul></div>
+        <div class="lf" style="--c:var(--sky)"><h3>Local communities</h3><ul><li>Sea Swimmers<small>Tide times, meet-ups, bravery</small></li><li>Northside Runners<small>Easy pace, every Tuesday</small></li></ul></div>
+        <div class="lf" style="--c:#ffd166"><h3>Businesses</h3><ul><li>A bike repair pop-up by the canal<small>Open weekends</small></li></ul></div>
+        <div class="lf" style="--c:#b69cff"><h3>Discussions</h3><ul><li>“Where's a quiet pint that isn't a tourist trap?”<small>Local discussion</small></li></ul></div>
+        <div class="lf" style="--c:#ff9fc6"><h3>People</h3><ul><li>Photographers near you<small>Who share what you shoot</small></li></ul></div>
+      </div>
+    </div>
+    <p class="small-note">Six cities as examples. The idea is that local works wherever you are.</p>
+  </div>
+</section>
+
+<!-- ═════════ AI ═════════ -->
+<section class="ai dark pad" id="ai" aria-labelledby="ai-title">
+  <div class="wrap">
+    <p class="eyebrow rv">Discovery</p>
+    <h2 id="ai-title" class="display h2 rv">Smarter discovery.<br>Less noise.</h2>
+    <p class="ai-lead rv">AI helps you navigate the social network. <span>It doesn't replace the social network.</span></p>
+
+    <div class="ai-grid">
+      <div class="demo rv">
+        <span class="k">Summarise</span>
+        <h3>Is it worth learning to develop film at home?</h3>
+        <p class="meta">in 35mm &amp; Film · 212 replies</p>
+        <div class="out" id="sum-out" hidden>
+          <ul>
+            <li>Black &amp; white at home: most say yes — cheap, forgiving, fun.</li>
+            <li>Colour: doable, but temperature control is the hard part.</li>
+            <li>Top tip repeated 30+ times: start with a changing bag, not a darkroom.</li>
+          </ul>
+        </div>
+        <button type="button" class="act" id="sum-btn" aria-controls="sum-out" aria-expanded="false"><svg aria-hidden="true"><use href="#i-lines"/></svg><span>Summarise 212 replies</span></button>
+      </div>
+
+      <div class="demo rv" style="--d:.08s">
+        <span class="k">Translate</span>
+        <div class="bubble"><small id="tr-meta">Inês · Lisbon · Portuguese</small><span id="tr-text" class="fade-swap">Alguém sabe onde se come o melhor pastel de nata fora das zonas turísticas?</span></div>
+        <div class="bubble" style="border-radius:16px 16px 4px 16px;background:rgba(255,91,31,.14);margin-left:24px"><small>Daniel · Toronto</small>Following — I'm there in May.</div>
+        <button type="button" class="act" id="tr-btn" aria-pressed="false" style="margin-top:14px"><span>Translate to English</span></button>
+      </div>
+
+      <div class="demo rv" style="--d:.16s">
+        <span class="k">Catch up</span>
+        <h3>While you were away</h3>
+        <p class="meta">3 things from people you follow</p>
+        <ul class="catch">
+          <li><span class="av g1"></span>Aoife's pier photo is getting a lot of love.</li>
+          <li><span class="av g5"></span>Sunday League moved kick-off to 11:30.</li>
+          <li><span class="av g4"></span>Home Lab picked a favourite mini PC. Finally.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="caps rv" aria-label="Ways AI could help">
+      <span>Summarise long discussions</span><span>Translate conversations</span><span>Find relevant posts</span><span>Discover communities</span><span>Catch up on what you missed</span><span>Help moderators</span><span>Navigate a lot of content, fast</span>
+    </div>
+    <p class="people-line rv"><span><b>Everything you see is still made by people.</b> AI just helps you find it, understand it and get through it.</span></p>
+  </div>
+</section>
+
+<!-- ═════════ FINAL ═════════ -->
+<section class="final pad" id="final" aria-labelledby="final-title">
+  <div class="wrap">
+    <div class="rv">
+      <h2 id="final-title" class="display">Be there from the beginning.</h2>
+      <p class="lede">RipeStream is being built right now. If you want to see where this goes, register your interest.</p>
+    </div>
+    <div class="card-form rv" style="--d:.1s" data-form-host>
+      <form class="rs-form" data-source="final" novalidate>
+        <h3>Register your interest</h3>
+        <p class="intro">We'll tell you when there's something worth seeing.</p>
+        <div class="field">
+          <label for="final-name">First name <span>Optional</span></label>
+          <input id="final-name" name="first_name" type="text" autocomplete="given-name" maxlength="40" placeholder="Alex">
+        </div>
+        <div class="field">
+          <label for="final-email">Email address</label>
+          <input id="final-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com" aria-describedby="final-err">
+        </div>
+        <div class="hp" aria-hidden="true"><label for="final-web">Leave this empty</label><input id="final-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <button class="btn btn-ripe" type="submit"><span class="lbl">Register your interest</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
+        <p class="err" id="final-err" aria-live="polite"></p>
+        <p class="fine">We'll only email you about RipeStream. <a href="/privacy">Privacy</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="dark">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="/"><svg aria-hidden="true"><use href="#mark"/></svg>RipeStream</a>
+        <p class="tagline">Something new<br>is <span>coming.</span></p>
+      </div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="mailto:hello@ripestream.com">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="legal"><span>© 2026 RipeStream. All rights reserved.</span><span>Social accounts coming soon.</span></div>
+  </div>
+</footer>
+
+<div class="dock" id="dock"><a class="btn btn-ripe" href="#join" data-focus-form>Register your interest <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+
+<template id="done-tpl">
+  <div class="done" tabindex="-1">
+    <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h3 data-title>You're on the list.</h3>
+    <p>You're officially interested in RipeStream.</p>
+    <p>We'll let you know when there's something worth seeing.</p>
+    <div class="share"><span>Know someone who'd want in?</span><button type="button" class="btn" data-share>Share RipeStream</button></div>
+  </div>
+</template>
+
+<script src="/app.js" defer></script>
+</body>
+</html>

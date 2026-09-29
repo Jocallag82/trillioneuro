@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — RipeStream</title>
+<meta name="description" content="How RipeStream handles the information you give us when you register your interest.">
+<link rel="canonical" href="https://ripestream.com/privacy">
+<meta name="theme-color" content="#0c0a09">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preload" href="/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(/fonts/bricolage-grotesque.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0c0a09;--cream:#f3eee6;--mute:#a8a096;--line:rgba(243,238,230,.1);--ripe:#ff5b1f;--lime:#c8f55a}
+body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--ink);color:var(--cream);-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:var(--cream)}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:4px}
+.bar{display:flex;justify-content:space-between;align-items:center;max-width:760px;margin:0 auto;padding:22px 24px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;letter-spacing:-.03em}
+.logo img{width:28px;height:28px}
+.cta{font-size:14px;font-weight:600;background:var(--ripe);color:var(--ink);text-decoration:none;padding:10px 16px;border-radius:999px}
+main{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(40px,7vw,68px);letter-spacing:-.04em;line-height:1;margin-bottom:12px}
+.upd{color:var(--mute);font-size:14px;margin-bottom:36px}
+h2{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;letter-spacing:-.02em;margin:36px 0 10px}
+p,li{color:#cfc8bd;font-size:16px}
+ul{margin:8px 0 8px 22px;display:grid;gap:6px}
+.note{border:1px solid var(--line);border-radius:16px;padding:16px 18px;font-size:14px;color:var(--mute);margin-bottom:28px}
+footer{border-top:1px solid var(--line);max-width:760px;margin:0 auto;padding:28px 24px 48px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--mute)}
+footer nav{display:flex;gap:20px}
+footer a{color:var(--mute);text-decoration:none}footer a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+<header class="bar"><a class="logo" href="/"><img src="/favicon.svg" alt="" width="28" height="28">RipeStream</a><a class="cta" href="/#join">Register your interest</a></header>
+<main>
+<h1>Privacy</h1>
+<p class="upd">Last updated: 29 September 2026</p>
+<p class="note">A plain-English summary of what we collect and why. RipeStream is in development; this page covers the interest list only and will be replaced with a full policy before anything launches.</p>
+<h2>What we collect</h2>
+<p>When you register your interest, we store:</p>
+<ul>
+<li>Your email address (required)</li>
+<li>Your first name, if you choose to give it</li>
+<li>Which form on the page you used, and when</li>
+</ul>
+<p>We don't ask for a password, a phone number, payment details or your location. We don't set advertising or tracking cookies. We use cookie-free, first-party page analytics (Vercel Web Analytics) to count visits.</p>
+<h2>What we use it for</h2>
+<p>Only to tell you about RipeStream — progress, previews and when there's something you can try. We don't sell, rent or share your email address with anyone for their own marketing.</p>
+<h2>Where it's stored</h2>
+<p>With Supabase (a hosted Postgres database) in the EU (Ireland). The table holding your email cannot be read by the public website at all — the site can only add a registration, never read one back.</p>
+<h2>How long we keep it</h2>
+<p>Until you ask us to remove it, or until we decide not to continue with RipeStream — in which case we delete the list.</p>
+<h2>Your rights</h2>
+<p>You can ask to see, correct or delete what we hold about you at any time. Email <a href="mailto:privacy@ripestream.com">privacy@ripestream.com</a> and we'll act on it within 30 days. You also have the right to complain to your local data protection authority — in Ireland, the Data Protection Commission.</p>
+<h2>Legal basis</h2>
+<p>Your consent, given when you submit the form. You can withdraw it at any time by asking us to remove you.</p>
+</main>
+<footer><span>© 2026 RipeStream</span><nav aria-label="Footer"><a href="/">Home</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:hello@ripestream.com">Contact</a></nav></footer>
+</body>
+</html>

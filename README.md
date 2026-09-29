@@ -1,6 +1,6 @@
-# Trillioneuro + Quadrillioneuro
+# Trillioneuro + Quadrillioneuro + RipeStream
 
-Two products, one repo, one Vercel project, one Supabase project — routed by hostname
+Three products, one repo, one Vercel project, one Supabase project — routed by hostname
 (see `vercel.json`).
 
 | | **trillioneuro.com** | **quadrillioneuro.com** |
@@ -47,6 +47,30 @@ Tests: `node --test scripts/scale.test.mjs` · routing: `node scripts/check-rout
 
 Media (`hero-bg.webm`/`.mp4`, `hero-poster.jpg`, `og-image.png`) is duplicated in both
 locations because host routing serves each site from its own folder.
+
+## RipeStream (`ripestream/`)
+
+**ripestream.com** — landing page and interest list for a social platform in development.
+Same stack and rules as the other two sites: plain HTML/CSS/JS, no build step.
+
+| File | What it is |
+|---|---|
+| `ripestream/index.html` | The page. All CSS inline (no render-blocking stylesheet). Readable with JS off. |
+| `ripestream/app.js` | Progressive enhancement: reveal-on-scroll, concept demos, the registration submit |
+| `ripestream/privacy.html` / `terms.html` | Legal, scoped to the interest list |
+| `ripestream/fonts/` | Self-hosted Bricolage Grotesque + Inter (latin, variable weight, OFL) — no Google Fonts request |
+| `ripestream/og-image.png`, `favicon.svg`, `apple-touch-icon.png` | Share card and icons |
+
+- **Registrations** go to `rs_interests` via `rs_register_interest(email, first_name, source)` —
+  the only thing anon can do. Validated, sanitised, rate-limited (10/hour/IP), and a repeat
+  email is a silent no-op that returns the same response, so the endpoint can't be used to
+  check whether someone is on the list. Export: see the bottom of `supabase-setup.sql`.
+- **Honesty rule** (same spirit as the other sites): no invented users, dates, press or
+  features. Everything product-shaped on the page is labelled concept / example.
+- **Routing**: host `ripestream.com` and `www.ripestream.com` (matched with `{"inc": [...]}`)
+  rewrite to `/ripestream/*`; `trillioneuro.com/ripestream/*` 308s to the real domain.
+  `check-routes.mjs` now understands `inc`/`eq` host matchers.
+- **Mail**: `hello@` and `privacy@ripestream.com` are published — set up forwarding.
 
 ## Routing (`vercel.json`)
 

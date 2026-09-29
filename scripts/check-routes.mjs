@@ -7,12 +7,20 @@ import { readFileSync, existsSync } from 'node:fs';
 const cfg = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
 const root = new URL('../', import.meta.url);
 
+// `has.value` is either a plain string (exact) or a Vercel MatchableValue.
+function hostMatches(v, host) {
+  if (typeof v === 'string') return v === host;
+  if (v.eq !== undefined) return v.eq === host;
+  if (v.inc) return v.inc.includes(host);
+  throw new Error('check-routes: unsupported host matcher ' + JSON.stringify(v));
+}
+
 function resolve(host, path) {
   let current = path;
   for (const r of cfg.routes) {
     if (r.has) {
       const hostRule = r.has.find(h => h.type === 'host');
-      if (hostRule && hostRule.value !== host) continue;
+      if (hostRule && !hostMatches(hostRule.value, host)) continue;
     }
     const re = new RegExp('^' + r.src + '$');
     const m = current.match(re);
@@ -34,7 +42,7 @@ function resolve(host, path) {
   return { kind: 'serve', file: current };
 }
 
-const T = 'trillioneuro.com', Q = 'quadrillioneuro.com';
+const T = 'trillioneuro.com', Q = 'quadrillioneuro.com', R = 'ripestream.com', RW = 'www.ripestream.com';
 const cases = [
   // [host, path, expected kind, expected target]
   [T, '/',              'serve',    '/'],
@@ -72,6 +80,23 @@ const cases = [
   [Q, '/index.html',   'redirect', '/'],
   [Q, '/privacy.html', 'redirect', '/privacy'],
   [Q, '/terms.html',   'redirect', '/terms'],
+
+  [R,  '/',              'serve',    '/ripestream/index.html'],
+  [RW, '/',              'serve',    '/ripestream/index.html'],
+  [R,  '/privacy',       'serve',    '/ripestream/privacy.html'],
+  [RW, '/terms',         'serve',    '/ripestream/terms.html'],
+  [R,  '/privacy.html',  'redirect', '/privacy'],
+  [R,  '/index.html',    'redirect', '/'],
+  [R,  '/app.js',        'serve',    '/ripestream/app.js'],
+  [R,  '/favicon.svg',   'serve',    '/ripestream/favicon.svg'],
+  [RW, '/og-image.png',  'serve',    '/ripestream/og-image.png'],
+  [R,  '/apple-touch-icon.png', 'serve', '/ripestream/apple-touch-icon.png'],
+  [R,  '/sitemap.xml',   'serve',    '/ripestream/sitemap.xml'],
+  [R,  '/robots.txt',    'serve',    '/ripestream/robots.txt'],
+  [R,  '/_vercel/insights/script.js', 'serve', '/_vercel/insights/script.js'],
+  [T,  '/ripestream/',   'redirect', 'https://ripestream.com/'],
+  [T,  '/ripestream/terms.html', 'redirect', 'https://ripestream.com/terms.html'],
+  [T,  '/privacy',       'serve',    '/privacy.html'],
 ];
 
 let bad = 0;
