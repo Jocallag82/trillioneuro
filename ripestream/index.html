@@ -90,7 +90,7 @@ main,footer{overflow-x:clip}
 
 /* ── nav ─────────────────────────────────── */
 .nav{position:fixed;inset:0 0 auto;z-index:100;transition:background-color .3s,border-color .3s,transform .4s var(--ease);border-bottom:1px solid transparent}
-.nav.scrolled{background:rgba(12,10,9,.78);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border-color:var(--line-d)}
+.nav.scrolled{background:rgba(12,10,9,.94);border-color:var(--line-d)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:20px}
 .logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.03em}
 .logo svg{width:30px;height:30px}
@@ -108,7 +108,7 @@ main,footer{overflow-x:clip}
 #flow{position:absolute;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none;opacity:0;transition:opacity 1.6s ease}
 #flow.on{opacity:1}
 .grain{position:relative;isolation:isolate}
-.grain::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.09;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .hero-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 28% 40%,rgba(12,10,9,.7),transparent 75%)}
 .wordmark .ch{display:inline-block;transform:translateY(.5em) rotate(6deg);opacity:0;animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--i) * 45ms + .1s)}
 .wordmark .ch.r{color:var(--ripe)}
@@ -558,7 +558,7 @@ fieldset{border:0}
 .lf-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 @media(max-width:900px){.lf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.lf-grid{grid-template-columns:1fr}}
-.lf{background:rgba(22,19,18,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line-d);border-radius:18px;padding:18px;transition:opacity .35s,transform .35s var(--ease)}
+.lf{background:rgba(22,19,18,.9);border:1px solid var(--line-d);border-radius:18px;padding:18px;transition:opacity .35s,transform .35s var(--ease)}
 .lf h3{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-d);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .lf h3::before{content:'';width:7px;height:7px;border-radius:2px;background:var(--c,var(--ripe))}
 .lf ul{list-style:none;display:grid;gap:10px}

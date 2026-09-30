@@ -155,8 +155,10 @@
     var ctx = cv.getContext('2d');
     var hero = cv.parentNode, lanes = $('.stream', hero);
     var small = window.innerWidth < 760;
-    var DPR = Math.min(window.devicePixelRatio || 1, small ? 1.25 : 1.5);
-    var W = 0, H = 0, band = 0, spread = 0, t = 0, running = false, raf = 0;
+    // Soft glowing strokes gain nothing from extra pixels; a full-res canvas at
+    // 125–150% Windows scaling is what made desktops stutter.
+    var DPR = small ? Math.min(window.devicePixelRatio || 1, 1.25) : 1;
+    var W = 0, H = 0, band = 0, spread = 0, t = 0, running = false, raf = 0, last = 0, acc = 0;
     var mouse = { x: -9999, y: -9999 };
     // Colour groups: one path + one stroke per group per frame (cheap).
     var GROUPS = [
@@ -213,8 +215,17 @@
         ctx.stroke();
       }
     }
-    function loop() { step(); raf = requestAnimationFrame(loop); }
-    function start() { if (!running && !reduced) { running = true; raf = requestAnimationFrame(loop); } }
+    // Fixed 60 steps/s whatever the display rate: 120/144 Hz laptop panels
+    // otherwise run the field faster and pay for twice the frames.
+    var STEP = 1000 / 60;
+    function loop(ts) {
+      raf = requestAnimationFrame(loop);
+      acc = Math.min(acc + (last ? ts - last : STEP), STEP * 3); last = ts;
+      if (acc < STEP - 1) return;
+      acc = Math.max(0, acc - STEP);
+      step();
+    }
+    function start() { if (!running && !reduced) { running = true; last = 0; acc = 0; raf = requestAnimationFrame(loop); } }
     function stop() { running = false; cancelAnimationFrame(raf); }
 
     size();
@@ -242,11 +253,18 @@
   })();
 
   /* ── cursor spotlight on cards ─────────────────────── */
+  // One style write per frame, not per mouse event (mice report at 125–1000 Hz).
   if (finePointer) $$('.spot').forEach(function (el) {
-    el.addEventListener('pointermove', function (e) {
+    var px = 0, py = 0, queued = false;
+    function paint() {
+      queued = false;
       var r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      el.style.setProperty('--mx', (px - r.left) + 'px');
+      el.style.setProperty('--my', (py - r.top) + 'px');
+    }
+    el.addEventListener('pointermove', function (e) {
+      px = e.clientX; py = e.clientY;
+      if (!queued) { queued = true; requestAnimationFrame(paint); }
     });
   });
 
