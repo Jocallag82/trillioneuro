@@ -149,7 +149,11 @@ main,footer{overflow-x:clip}
 @keyframes enter{to{opacity:1;transform:none}}
 
 /* the stream */
-.stream{position:relative;margin-top:clamp(56px,8vw,96px);padding:10px 0 clamp(40px,6vw,72px);transform:rotate(-3deg) scale(1.06);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.stream{position:relative;margin-top:clamp(56px,8vw,96px);padding:10px 0 clamp(40px,6vw,72px);transform:rotate(-3deg) scale(1.06)}
+/* Edge fade as overlays, not mask-image: a mask over moving lanes re-renders the whole band every frame. */
+.stream::before,.stream::after{content:'';position:absolute;top:-24px;bottom:-24px;width:12%;z-index:1;pointer-events:none}
+.stream::before{left:0;background:linear-gradient(90deg,var(--ink),rgba(12,10,9,0))}
+.stream::after{right:0;background:linear-gradient(270deg,var(--ink),rgba(12,10,9,0))}
 .lane{display:flex;gap:14px;width:max-content;padding:7px 0;animation:flow var(--dur,60s) linear infinite}
 .lane.rev{animation-direction:reverse}
 .stream:hover .lane{animation-play-state:paused}
@@ -167,6 +171,8 @@ main,footer{overflow-x:clip}
 /* ── reveal ──────────────────────────────── */
 .js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
 .js .rv.in{opacity:1;transform:none}
+/* Looping decoration stops while its section is off-screen (app.js). */
+.idle *,.idle *::before,.idle *::after{animation-play-state:paused!important}
 
 /* form card */
 .card-form{position:relative;background:var(--ink);color:var(--cream);border-radius:28px;padding:clamp(24px,4vw,44px);box-shadow:0 40px 80px -40px rgba(12,10,9,.55)}

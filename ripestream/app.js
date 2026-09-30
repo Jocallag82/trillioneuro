@@ -146,110 +146,71 @@
   onScroll();
 
   /* ── hero: the stream (generative flow field) ──────── */
-  /* A river of light that runs through the hero, carrying the post cards.
-     Canvas 2D, no library. Pauses off-screen and in background tabs; with
-     reduced motion it paints one still frame. */
+  /* Drawing lives in flow.js, in a worker on an OffscreenCanvas where
+     supported, so it never competes with scrolling. Pauses off-screen and in
+     background tabs; with reduced motion it paints one still frame. */
   (function () {
     var cv = $('#flow');
     if (!cv || !cv.getContext) return;
-    var ctx = cv.getContext('2d');
     var hero = cv.parentNode, lanes = $('.stream', hero);
     var small = window.innerWidth < 760;
-    // Soft glowing strokes gain nothing from extra pixels; a full-res canvas at
-    // 125–150% Windows scaling is what made desktops stutter.
+    // Soft glowing strokes gain nothing from extra pixels; a full-res canvas
+    // at 125–150% Windows scaling is what made desktops stutter.
     var DPR = small ? Math.min(window.devicePixelRatio || 1, 1.25) : 1;
-    var W = 0, H = 0, band = 0, spread = 0, t = 0, running = false, raf = 0, last = 0, acc = 0;
-    var mouse = { x: -9999, y: -9999 };
-    // Colour groups: one path + one stroke per group per frame (cheap).
-    var GROUPS = [
-      ['255,91,31', .55, 1.3], ['255,91,31', .32, 2.6], ['255,120,60', .45, 1],
-      ['255,179,138', .38, 1], ['200,245,90', .5, 1.1], ['243,238,230', .28, .8]
-    ];
-    var WEIGHTS = [0, 0, 0, 0, 1, 2, 2, 3, 3, 4, 5];
-    var N = small ? 320 : 760, P = [];
-
-    function size() {
+    function dims() {
       var r = hero.getBoundingClientRect();
-      W = r.width; H = r.height;
-      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      // The river enters bottom-left under the post cards and sweeps up to the right.
-      band = lanes ? lanes.offsetTop + lanes.offsetHeight * 0.4 : H * 0.72;
-      spread = Math.max(80, H * (small ? 0.13 : 0.15));
+      return { w: r.width, h: r.height, band: lanes ? lanes.offsetTop + lanes.offsetHeight * 0.4 : 0 };
     }
-    function centreAt(x) { return band - (x / W) * H * (small ? 0.22 : 0.42) + Math.sin(x * 0.0042 + t * 0.012) * spread * 0.45; }
-    function spawn(p, anywhere) {
-      p.x = anywhere ? Math.random() * W : -20 - Math.random() * 120;
-      var g = (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;   // ~gaussian
-      p.y = centreAt(p.x) + g * spread * (0.6 + Math.random() * 0.8);
-      p.v = 1 + Math.random() * 2.2;
-      p.g = WEIGHTS[(Math.random() * WEIGHTS.length) | 0];
-      p.o = Math.random() * 6.28;
-      return p;
-    }
-    function step() {
-      t += 1;
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0,0,0,0.06)';
-      ctx.fillRect(0, 0, W, H);
-      ctx.globalCompositeOperation = 'lighter';
-      ctx.lineCap = 'round';
-      var paths = GROUPS.map(function () { return []; });
-      for (var i = 0; i < N; i++) {
-        var p = P[i], x0 = p.x, y0 = p.y;
-        var c = centreAt(p.x), slope = (centreAt(p.x + 30) - c) / 30;
-        var ang = Math.atan(slope) + Math.sin(p.x * 0.006 + p.o + t * 0.01) * 0.22;
-        var vx = Math.cos(ang) * p.v * 1.7, vy = Math.sin(ang) * p.v * 1.7 + (c - p.y) * 0.0035;
-        var dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
-        if (d2 < 26000) { var f = (26000 - d2) / 26000; vx += dx * f * 0.03; vy += dy * f * 0.06; }
-        p.x += vx; p.y += vy;
-        paths[p.g].push(x0, y0, p.x, p.y);
-        if (p.x > W + 20 || p.y < -60 || p.y > H + 60) spawn(p, false);
-      }
-      for (var g = 0; g < GROUPS.length; g++) {
-        var seg = paths[g]; if (!seg.length) continue;
-        ctx.strokeStyle = 'rgba(' + GROUPS[g][0] + ',' + GROUPS[g][1] + ')';
-        ctx.lineWidth = GROUPS[g][2];
-        ctx.beginPath();
-        for (var j = 0; j < seg.length; j += 4) { ctx.moveTo(seg[j], seg[j + 1]); ctx.lineTo(seg[j + 2], seg[j + 3]); }
-        ctx.stroke();
-      }
-    }
-    // Fixed 60 steps/s whatever the display rate: 120/144 Hz laptop panels
-    // otherwise run the field faster and pay for twice the frames.
-    var STEP = 1000 / 60;
-    function loop(ts) {
-      raf = requestAnimationFrame(loop);
-      acc = Math.min(acc + (last ? ts - last : STEP), STEP * 3); last = ts;
-      if (acc < STEP - 1) return;
-      acc = Math.max(0, acc - STEP);
-      step();
-    }
-    function start() { if (!running && !reduced) { running = true; last = 0; acc = 0; raf = requestAnimationFrame(loop); } }
-    function stop() { running = false; cancelAnimationFrame(raf); }
+    var send, flow;
+    var init = dims();
+    init.small = small; init.reduced = reduced; init.dpr = DPR;
 
-    size();
-    for (var i = 0; i < N; i++) P.push(spawn({}, true));
-    if (reduced) { for (var k = 0; k < 140; k++) step(); }
-    cv.classList.add('on');
+    if (cv.transferControlToOffscreen && window.Worker) {
+      try {
+        var off = cv.transferControlToOffscreen();
+        var w = new Worker('/flow.js');
+        init.type = 'init'; init.canvas = off;
+        w.postMessage(init, [off]);
+        send = function (m) { w.postMessage(m); };
+      } catch (e) { send = null; }
+    }
+    if (!send) {
+      var s = document.createElement('script');
+      s.src = '/flow.js';
+      s.onload = function () { flow = window.RSFlow(cv, init); ready(); };
+      document.head.appendChild(s);
+      send = function (m) {
+        if (!flow) return;
+        if (m.type === 'resize') flow.resize(m);
+        else if (m.type === 'mouse') flow.mouse(m.x, m.y);
+        else if (m.type === 'run') flow.run(m.on);
+      };
+    } else ready();
 
-    var rt; window.addEventListener('resize', function () {
-      clearTimeout(rt); rt = setTimeout(function () {
-        var oldW = W; size();
-        if (Math.abs(oldW - W) > 40) P.forEach(function (p) { spawn(p, true); });
-        if (reduced) for (var k = 0; k < 140; k++) step();
-      }, 150);
-    });
-    if (finePointer) {
-      hero.addEventListener('pointermove', function (e) {
-        var r = hero.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+    function ready() {
+      cv.classList.add('on');
+      var rt; window.addEventListener('resize', function () {
+        clearTimeout(rt); rt = setTimeout(function () { var d = dims(); d.type = 'resize'; send(d); }, 150);
       });
-      hero.addEventListener('pointerleave', function () { mouse.x = mouse.y = -9999; });
+      if (finePointer) {
+        var mx = 0, my = 0, queued = false;
+        var push = function () {
+          queued = false;
+          var r = hero.getBoundingClientRect();
+          send({ type: 'mouse', x: mx - r.left, y: my - r.top });
+        };
+        hero.addEventListener('pointermove', function (e) {
+          mx = e.clientX; my = e.clientY;
+          if (!queued) { queued = true; requestAnimationFrame(push); }
+        });
+        hero.addEventListener('pointerleave', function () { send({ type: 'mouse', x: -9999, y: -9999 }); });
+      }
+      var visible = true;
+      var sync = function () { send({ type: 'run', on: visible && !document.hidden }); };
+      if (hasIO) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; sync(); }).observe(hero);
+      document.addEventListener('visibilitychange', sync);
+      sync();
     }
-    var visible = true;
-    if (hasIO) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; visible && !document.hidden ? start() : stop(); }).observe(hero);
-    document.addEventListener('visibilitychange', function () { !document.hidden && visible ? start() : stop(); });
-    start();
   })();
 
   /* ── cursor spotlight on cards ─────────────────────── */
@@ -267,6 +228,14 @@
       if (!queued) { queued = true; requestAnimationFrame(paint); }
     });
   });
+
+  /* ── pause looping animations in off-screen sections ─ */
+  if (hasIO) {
+    var idleIO = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.target.classList.toggle('idle', !e.isIntersecting); });
+    }, { rootMargin: '200px 0px' });
+    $$('main > section, .ticker').forEach(function (el) { idleIO.observe(el); });
+  }
 
   /* ── reveal on scroll ──────────────────────────────── */
   var revealables = $$('.rv, [data-reveal]');
