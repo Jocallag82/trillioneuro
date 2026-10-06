@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RipeStream — Social, but actually yours.</title>
-<meta name="description" content="A new social network where you control your feed, your communities and your experience. The first 10,000 members become Founding Members — then RipeStream is invite-only.">
+<title>RipeStream — Social media you control.</title>
+<meta name="description" content="Social media you control. See why every post is in your feed and change it. Communities and local content, starting in Ireland.">
 <link rel="canonical" href="https://ripestream.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RipeStream">
 <meta property="og:url" content="https://ripestream.com/">
-<meta property="og:title" content="RipeStream — Social, but actually yours.">
+<meta property="og:title" content="RipeStream — Social media you control.">
 <meta property="og:description" content="A new social network where you control your feed, your communities and your experience. The first 10,000 members become Founding Members.">
 <meta property="og:image" content="https://ripestream.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="RipeStream — Social, but actually yours.">
+<meta property="og:image:alt" content="RipeStream — Social media you control.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RipeStream — Social, but actually yours.">
+<meta name="twitter:title" content="RipeStream — Social media you control.">
 <meta name="twitter:description" content="The first 10,000 members become Founding Members. Then RipeStream is invite-only.">
 <meta name="twitter:image" content="https://ripestream.com/og-image.png">
 <meta name="theme-color" content="#0c0a09">
@@ -636,6 +636,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
   .stream{transform:rotate(-3deg)}
   .edge.flow{animation:none}
 }
+.rs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:40px}.rs-card{background:#fff;border:1px solid var(--line-l);border-radius:18px;padding:22px}.rs-card h3{font-family:var(--display);font-size:21px;margin-bottom:8px}.rs-card p{color:var(--mute-l)}.fine-print{font-size:14px;color:var(--mute-l);margin-top:12px}#how .lede{max-width:820px}
 </style>
 </head>
 <body>
@@ -656,12 +657,10 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <a class="logo" href="/" aria-label="RipeStream home"><svg aria-hidden="true"><use href="#mark"/></svg>RipeStream</a>
     <nav aria-label="Primary">
       <ul class="nav-links">
-        <li><a href="#about">The idea</a></li>
-        <li><a href="#concept">Concept</a></li>
-        <li><a href="#control">Control</a></li>
-        <li><a href="#local">Local</a></li>
-        <li><a href="#ai">AI</a></li>
-        <li><a href="#founding">Founding</a></li>
+        <li><a href="#why">Why</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#ireland">Ireland first</a></li>
+        <li><a href="/app/">Try the preview</a></li>
       </ul>
     </nav>
     <a class="btn btn-ripe btn-sm" href="#join" data-focus-form data-nav-cta><span class="long" data-when="open">Join the Founding Members</span><span class="long" data-when="closed" hidden>Join with an invitation</span><span class="short" data-when="open">Join</span><span class="short" data-when="closed" hidden>Join by invitation</span></a>
@@ -678,11 +677,11 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <p class="hero-status" id="hero-status"><span class="dot" aria-hidden="true"></span><span><b>In development.</b> <span data-when="open">Founding places are open.</span><span data-when="closed" hidden>Currently invite-only.</span></span></p>
     <h1 id="hero-title" class="display">
       <span class="sr">RipeStream. </span><span class="wordmark" aria-hidden="true"><span class="ch" style="--i:0">R</span><span class="ch" style="--i:1">i</span><span class="ch" style="--i:2">p</span><span class="ch" style="--i:3">e</span><span class="ch r" style="--i:4">S</span><span class="ch r" style="--i:5">t</span><span class="ch r" style="--i:6">r</span><span class="ch r" style="--i:7">e</span><span class="ch r" style="--i:8">a</span><span class="ch r" style="--i:9">m</span></span>
-      <span class="headline">Social, but <em>actually yours.</em></span>
+      <span class="headline">Social media <em>you control.</em></span>
     </h1>
     <div class="hero-grid">
       <div>
-        <p class="hero-copy">A new social network where you control your feed, your communities and your experience.</p>
+        <p class="hero-copy">Your feed. Your interests. Your communities. Your algorithm. Every post tells you why it's there — and you can change it. Starting in Ireland.</p>
         <div class="hero-found">
           <p data-when="open"><b>Be one of the first 10,000.</b> The first 10,000 members become Founding Members. Once those places are gone, RipeStream becomes invite-only.</p>
           <p data-when="closed" hidden><b>Founding membership is now closed.</b> RipeStream is currently invite-only — you'll need an invitation from a member to join.</p>
@@ -690,452 +689,46 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
       </div>
       <div class="hero-cta">
         <a class="btn btn-ripe" href="#join" data-focus-form><span data-when="open">Join the Founding Members</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="ghost-link" href="#about">See what you'd control <span aria-hidden="true">↓</span></a>
+        <a class="ghost-link" href="/app/">Try the working preview <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </div>
 
-  <div class="stream" aria-hidden="true">
-    <div class="lane" style="--dur:70s">
-      <div class="frag"><span class="av g1">AB</span><div>Aoife shared a photo<small>in 35mm &amp; Film</small></div></div>
-      <div class="frag hot"><span class="ico">📍</span><div>Dublin · What's on tonight<small>Local</small></div></div>
-      <div class="frag"><span class="ico">📊</span><div>Kick-off time next season?<small>Poll · Sunday League</small></div></div>
-      <div class="frag out"><span class="av g3">KM</span><div>Kofi posted a new beat<small>Creator · 58s</small></div></div>
-      <div class="frag lime"><span class="ico">≡</span><div>212 replies → 3 key points<small>Thread summary</small></div></div>
-      <div class="frag"><span class="av g4">PR</span><div>Priya answered your question<small>Conversations</small></div></div>
-      <div class="frag"><span class="ico">🎟</span><div>Night run along the canal<small>Event · Thu 7pm</small></div></div>
-      <!-- duplicate for seamless loop -->
-      <div class="frag"><span class="av g1">AB</span><div>Aoife shared a photo<small>in 35mm &amp; Film</small></div></div>
-      <div class="frag hot"><span class="ico">📍</span><div>Dublin · What's on tonight<small>Local</small></div></div>
-      <div class="frag"><span class="ico">📊</span><div>Kick-off time next season?<small>Poll · Sunday League</small></div></div>
-      <div class="frag out"><span class="av g3">KM</span><div>Kofi posted a new beat<small>Creator · 58s</small></div></div>
-      <div class="frag lime"><span class="ico">≡</span><div>212 replies → 3 key points<small>Thread summary</small></div></div>
-      <div class="frag"><span class="av g4">PR</span><div>Priya answered your question<small>Conversations</small></div></div>
-      <div class="frag"><span class="ico">🎟</span><div>Night run along the canal<small>Event · Thu 7pm</small></div></div>
-    </div>
-    <div class="lane rev" style="--dur:84s">
-      <div class="frag out"><span class="ico">🔕</span><div>Muted: celebrity gossip<small>Your controls</small></div></div>
-      <div class="frag"><span class="av g2">IN</span><div>Inês started Carry-on Only<small>New community</small></div></div>
-      <div class="frag"><span class="ico">🌐</span><div>“Onde se come o melhor pastel de nata?”<small>Translated from Portuguese</small></div></div>
-      <div class="frag lime"><span class="ico">↺</span><div>Following first<small>Feed mode · on</small></div></div>
-      <div class="frag"><span class="av g5">TO</span><div>Tomás: my home lab, finally racked<small>in Home Lab</small></div></div>
-      <div class="frag hot"><span class="ico">🧤</span><div>Sunday League needs a keeper<small>Local · Sport</small></div></div>
-      <div class="frag out"><span class="ico">↻</span><div>Catch up: 9 posts from people you follow<small>While you were away</small></div></div>
-      <div class="frag out"><span class="ico">🔕</span><div>Muted: celebrity gossip<small>Your controls</small></div></div>
-      <div class="frag"><span class="av g2">IN</span><div>Inês started Carry-on Only<small>New community</small></div></div>
-      <div class="frag"><span class="ico">🌐</span><div>“Onde se come o melhor pastel de nata?”<small>Translated from Portuguese</small></div></div>
-      <div class="frag lime"><span class="ico">↺</span><div>Following first<small>Feed mode · on</small></div></div>
-      <div class="frag"><span class="av g5">TO</span><div>Tomás: my home lab, finally racked<small>in Home Lab</small></div></div>
-      <div class="frag hot"><span class="ico">🧤</span><div>Sunday League needs a keeper<small>Local · Sport</small></div></div>
-      <div class="frag out"><span class="ico">↻</span><div>Catch up: 9 posts from people you follow<small>While you were away</small></div></div>
-    </div>
-    <div class="lane" style="--dur:96s">
-      <div class="frag"><span class="av g6">SL</span><div>Sofia is going to Rooftop Cinema<small>Event · Sat 8pm</small></div></div>
-      <div class="frag"><span class="ico">🔥</span><div>#GoldenHour<small>Trending near you</small></div></div>
-      <div class="frag hot"><span class="ico">✓</span><div>Only people I follow can reply<small>Audience controls</small></div></div>
-      <div class="frag"><span class="av g3">DK</span><div>Daniel joined Bedroom Producers<small>Community</small></div></div>
-      <div class="frag out"><span class="ico">🍜</span><div>New ramen spot near you<small>Local · Food</small></div></div>
-      <div class="frag"><span class="av g1">MJ</span><div>Mina: marathon training, week 9<small>in 5am Club</small></div></div>
-      <div class="frag"><span class="av g6">SL</span><div>Sofia is going to Rooftop Cinema<small>Event · Sat 8pm</small></div></div>
-      <div class="frag"><span class="ico">🔥</span><div>#GoldenHour<small>Trending near you</small></div></div>
-      <div class="frag hot"><span class="ico">✓</span><div>Only people I follow can reply<small>Audience controls</small></div></div>
-      <div class="frag"><span class="av g3">DK</span><div>Daniel joined Bedroom Producers<small>Community</small></div></div>
-      <div class="frag out"><span class="ico">🍜</span><div>New ramen spot near you<small>Local · Food</small></div></div>
-      <div class="frag"><span class="av g1">MJ</span><div>Mina: marathon training, week 9<small>in 5am Club</small></div></div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<div class="ticker tilt" aria-hidden="true"><div class="run"><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Your algorithm</span><span>Social, but actually yours</span><span class="o">One stream</span><span>Your people</span><span class="o">Your rules</span><span>Your feed, your call</span><span class="o">Your algorithm</span></div></div>
+<div class="ticker tilt" aria-hidden="true"><div class="run"><span>Your feed</span><span class="o">Your interests</span><span>Your communities</span><span class="o">Your algorithm</span><span>Your feed</span><span class="o">Your interests</span><span>Your communities</span><span class="o">Your algorithm</span></div></div>
 
 <!-- ═════════ BIG IDEA ═════════ -->
-<section class="idea dark pad" id="about" aria-labelledby="idea-title">
+<section class="light pad" id="why" aria-labelledby="why-title">
   <div class="wrap">
-    <p class="eyebrow rv">The idea</p>
-    <h2 id="idea-title" class="display h2 rv">Social media has become a lot of things.</h2>
-    <ul class="cloud" role="list" data-reveal>
-      <li class="chip f" style="--x:-40px;--y:30px;--r:-6deg;--d:0s">Following</li>
-      <li class="chip" style="--x:30px;--y:50px;--r:5deg;--d:.05s">Communities</li>
-      <li class="chip o" style="--x:60px;--y:-20px;--r:8deg;--d:.1s">Short video</li>
-      <li class="chip i" style="--x:-20px;--y:60px;--r:-4deg;--d:.15s">Stories</li>
-      <li class="chip" style="--x:40px;--y:20px;--r:6deg;--d:.2s">Discussions</li>
-      <li class="chip l" style="--x:-50px;--y:40px;--r:-8deg;--d:.25s">Messaging</li>
-      <li class="chip p" style="--x:20px;--y:70px;--r:4deg;--d:.3s">Discovery</li>
-      <li class="chip i" style="--x:-30px;--y:30px;--r:-5deg;--d:.35s">Local</li>
-      <li class="chip f" style="--x:50px;--y:50px;--r:7deg;--d:.4s">Events</li>
-      <li class="chip" style="--x:-60px;--y:20px;--r:-7deg;--d:.45s">Creators</li>
-      <li class="chip o" style="--x:30px;--y:60px;--r:5deg;--d:.5s">Groups</li>
-      <li class="chip" style="--x:-20px;--y:40px;--r:-3deg;--d:.55s">AI-powered discovery</li>
-    </ul>
-    <div class="why">
-      <h3 class="display rv">Why shouldn't they work <span>together?</span></h3>
-      <div class="rv" style="--d:.1s">
-        <p>Right now your social life is scattered. Friends in one app. Communities in another. Local news in a group chat. Events somewhere else entirely.</p>
-        <p><strong>Imagine one place where it all connects</strong> — without turning into one giant, noisy feed.</p>
-        <p>RipeStream is being built to bring the best parts of modern social into one coherent experience. That's the goal. This is where we're heading.</p>
-      </div>
+    <p class="eyebrow">Why RipeStream</p>
+    <h2 id="why-title" class="display h2">You can see the algorithm.<br>And you can change it.</h2>
+    <p class="lede">Every big platform ranks your feed. None of them show you how. On RipeStream, every recommended post carries a plain answer — <b>"You joined Running Ireland"</b>, <b>"Posted in Clondalkin, your area"</b> — and one tap shows the full score and lets you turn it up, down or off.</p>
+    <div class="rs-grid">
+      <div class="rs-card"><h3>Four feeds, not one black box</h3><p><b>Following</b> (chronological, no ranking), <b>Communities</b>, <b>Local</b>, <b>Discover</b> — or your own mix, e.g. 60 / 25 / 10 / 5.</p></div>
+      <div class="rs-card"><h3>More, less, never</h3><p>Tune any topic, community or person. Mute without them knowing. Block in one tap.</p></div>
+      <div class="rs-card"><h3>Reset my feed</h3><p>Wipe everything it learned about you and rebuild from your own choices. One button.</p></div>
+      <div class="rs-card"><h3>No dark patterns</h3><p>No autoplay, no paid boosts in your feed, no "you might like" notifications, account deletion in two taps.</p></div>
     </div>
   </div>
 </section>
-
-<!-- ═════════ CONCEPT ═════════ -->
-<section class="concept light pad" id="concept" aria-labelledby="concept-title">
+<section class="dark pad" id="how" aria-labelledby="how-title">
   <div class="wrap">
-    <div class="concept-head rv">
-      <div>
-        <p class="eyebrow">A first look</p>
-        <h2 id="concept-title" class="display h2">Everything, in one stream.</h2>
-      </div>
-      <p class="lede">A concept of the direction — not a screenshot of a finished product. Details will change. The idea won't.</p>
-    </div>
-
-    <div class="app-wrap"><div class="app rv" role="img" aria-label="Concept design of the RipeStream app: a feed with a photo post, a community discussion with a summary, a poll, a creator video, trending topics, local events and a suggested community.">
-      <div class="app-bar" aria-hidden="true"><i></i><i></i><i></i><span class="url">ripestream.com</span><span class="tag-concept">Concept</span></div>
-      <div class="app-body" aria-hidden="true">
-        <div class="rail">
-          <span class="logo"><svg><use href="#mark"/></svg>RipeStream</span>
-          <a class="on"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Stream</a>
-          <a><svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Discover</a>
-          <a><svg viewBox="0 0 20 20"><circle cx="7" cy="8" r="3" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="14" cy="9" r="2.4" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M2.5 16c.6-2.6 2.4-4 4.5-4s3.9 1.4 4.5 4M12 13c2.6-.4 4.6.6 5.5 3" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Communities</a>
-          <a><svg viewBox="0 0 20 20"><path d="M10 18s-5.5-5.4-5.5-9.5a5.5 5.5 0 0 1 11 0C15.5 12.6 10 18 10 18z" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="10" cy="8.5" r="2" fill="currentColor"/></svg>Local</a>
-          <a><svg viewBox="0 0 20 20"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M3 8.5h14M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Events</a>
-          <a><svg viewBox="0 0 20 20"><path d="M3.5 15.5V5.8c0-1 .8-1.8 1.8-1.8h9.4c1 0 1.8.8 1.8 1.8v5.9c0 1-.8 1.8-1.8 1.8H7.2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>Messages</a>
-          <div class="mode">Your feed<b>Following first</b></div>
-        </div>
-
-        <div class="feed">
-          <div class="compose"><span class="av g2" style="width:36px;height:36px;border-radius:50%;flex:none"></span>Share something with your people…</div>
-          <div class="tabs"><span class="on">Following</span><span>Communities</span><span>Local</span><span>Discover</span></div>
-
-          <article class="post">
-            <div class="p-head"><span class="av g1">AB</span><div><b>Aoife Brennan <span class="fm-badge sm" title="Founding Member"><svg><use href="#mark"/></svg>Founding</span></b><small>in 35mm &amp; Film · 12m</small></div><span class="pill">You follow</span></div>
-            <p>Golden hour on the pier. Didn't expect the whole sky to do that. Portra 400, no edits.</p>
-            <div class="photo"><span class="pier"></span></div>
-            <div class="p-act"><span><svg><use href="#i-heart"/></svg>48</span><span><svg><use href="#i-reply"/></svg>6</span><span><svg><use href="#i-share"/></svg>Share</span></div>
-          </article>
-
-          <article class="post">
-            <div class="p-head"><span class="av g4">HL</span><div><b>Home Lab</b><small>Community discussion · 86 replies</small></div><span class="pill">Joined</span></div>
-            <p class="ttl">What's the quietest mini PC you've actually lived with?</p>
-            <p>Mine sits on a bookshelf in the living room. Fan noise is the only thing that matters now.</p>
-            <div class="ai-sum"><b>Summary of 86 replies</b>Most people recommend fanless boxes for living rooms. A few warn they throttle under sustained load. Two long threads on undervolting.</div>
-          </article>
-
-          <article class="post">
-            <div class="p-head"><span class="av g5">SL</span><div><b>Sunday League · Dublin 8</b><small>Poll · closes in 2 days</small></div><span class="pill">Local</span></div>
-            <p>Kick-off time for next season? Be honest about how you feel on Sunday mornings.</p>
-            <div class="poll"><div style="--w:31%"><span>10:00</span><span>31%</span></div><div class="win" style="--w:54%"><span>11:30</span><span>54%</span></div><div style="--w:15%"><span>13:00</span><span>15%</span></div></div>
-          </article>
-
-          <article class="post">
-            <div class="vid">
-              <div class="vid-art"><span class="play"></span><div class="wave"><i style="--h:40%;--dl:0s"></i><i style="--h:80%;--dl:-.3s"></i><i style="--h:55%;--dl:-.6s"></i><i style="--h:100%;--dl:-.2s"></i><i style="--h:65%;--dl:-.8s"></i><i style="--h:90%;--dl:-.5s"></i><i style="--h:45%;--dl:-.1s"></i><i style="--h:75%;--dl:-.7s"></i></div><span class="len">0:58</span></div>
-              <div>
-                <div class="p-head"><span class="av g3">KM</span><div><b>Kofi Mensah</b><small>Creator · 1h</small></div></div>
-                <p>I recorded the bus stop outside my flat for ten minutes and made a whole beat out of it. Stems in the comments if you want to flip it.</p>
-                <div class="p-act"><span><svg><use href="#i-heart"/></svg>312</span><span><svg><use href="#i-reply"/></svg>41</span></div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div class="side">
-          <div class="widget floaty">
-            <p class="wh">Trending near you <span>📍 Dublin</span></p>
-            <div class="trend"><div><b>#GoldenHour</b><small> · Photography</small></div><small>↑</small></div>
-            <div class="trend"><div><b>Sea swim season</b><small> · Local</small></div><small>↑</small></div>
-            <div class="trend"><div><b>Rack builds</b><small> · Home Lab</small></div><small>↑</small></div>
-          </div>
-          <div class="widget floaty b">
-            <p class="wh">Around you</p>
-            <div class="loc-card"><svg viewBox="0 0 300 120" preserveAspectRatio="none"><path d="M0 80 C80 70 120 100 300 60" stroke="#2c4a66" stroke-width="14" fill="none"/><path d="M40 0 L90 120 M180 0 L150 120 M0 30 L300 40 M230 0 L270 120" stroke="#2a2522" stroke-width="3"/><path d="M0 100 L300 95 M120 0 L110 120" stroke="#2a2522" stroke-width="2"/></svg><span class="pin"></span></div>
-            <div class="ev"><span class="date">THU<b>16</b></span><div>Outdoor film night<small>Event · 8pm · 0.8 km</small></div></div>
-            <div class="ev"><span class="date">SAT<b>18</b></span><div>Canal clean-up<small>Local community · 10am</small></div></div>
-          </div>
-          <div class="widget floaty c">
-            <p class="wh">Suggested for you</p>
-            <div class="join-c"><span class="sq">🏃</span><div><b>Northside Runners</b><small>Because you follow 3 members</small></div><span class="mini">Join</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-    <p class="concept-note">Concept design. People, communities and content shown are illustrative examples.</p>
+    <p class="eyebrow">How it works</p>
+    <h2 id="how-title" class="display h2">The whole formula, in public.</h2>
+    <p class="lede">Posts score points for: you follow the author (35) · from a community you joined (25) · matches your interests (20) · near your area (15) · you've engaged with the author (15) · popular (10). Then freshness halves the score every 18 hours, and your "more / less" settings multiply it. That's it. No AI decides your feed and no AI writes posts.</p>
   </div>
 </section>
-
-<!-- ═════════ FEATURES ═════════ -->
-<section class="features light pad" id="features" aria-labelledby="feat-title" style="padding-top:0">
+<section class="light pad" id="ireland" aria-labelledby="ire-title">
   <div class="wrap">
-    <p class="eyebrow rv">What we're building towards</p>
-    <h2 id="feat-title" class="display h2 rv">One stream.<br>A lot more control.</h2>
-    <p class="lede rv">Seven ideas shaping RipeStream. Some are being designed, some are being built, all of them are the point.</p>
-
-    <div class="bento">
-      <article class="spot cell w5 rv">
-        <span class="k">01 · Your feed</span>
-        <h3>The people you actually care about.</h3>
-        <p>A feed that starts with the people and spaces you chose — not whatever happens to be loudest today.</p>
-        <div class="viz mini-feed" aria-hidden="true">
-          <div><span class="av g1"></span>Aoife posted 3 photos<small>You follow</small></div>
-          <div><span class="av g2"></span>New in Carry-on Only<small>Joined</small></div>
-          <div><span class="av g5"></span>Your brother shared a video<small>You follow</small></div>
-        </div>
-      </article>
-
-      <article class="spot cell w7 inkc rv" style="--d:.08s" data-reveal>
-        <span class="k">02 · Your algorithm</span>
-        <h3>An algorithm you can actually see.</h3>
-        <p>The goal: meaningful control over how your feed works, in plain language — instead of a black box deciding for you.</p>
-        <div class="viz sl" aria-hidden="true">
-          <div><span>People I follow</span><span class="track"><i style="--v:88%"></i></span><em>High</em></div>
-          <div><span>My communities</span><span class="track"><i style="--v:66%;--d:.1s"></i></span><em>Med</em></div>
-          <div><span>New voices</span><span class="track"><i style="--v:38%;--d:.2s"></i></span><em>Some</em></div>
-          <div><span>Trending</span><span class="track"><i style="--v:14%;--d:.3s"></i></span><em>Low</em></div>
-        </div>
-      </article>
-
-      <article class="spot cell rv">
-        <span class="k">03 · Discover</span>
-        <h3>Find what you didn't know you were looking for.</h3>
-        <p>New people, communities, ideas and content — on your terms.</p>
-        <div class="viz tags" aria-hidden="true"><span class="on">Night swimming</span><span>Synth DIY</span><span class="on">Urban sketching</span><span>Trail running</span><span>Sourdough</span><span>Chess</span></div>
-      </article>
-
-      <article class="spot cell ripec rv" style="--d:.08s">
-        <span class="k">04 · Communities</span>
-        <h3>Spaces around anything.</h3>
-        <p>Create or join a community for whatever you're into. Big, small, public or private.</p>
-        <div class="viz circles" aria-hidden="true"><span style="background:#f3eee6">📷</span><span style="background:#c8f55a">🎮</span><span style="background:#ffd166">🍜</span><span style="background:#b69cff">🎧</span><span style="background:#9fd4ff">🏃</span></div>
-      </article>
-
-      <article class="spot cell rv" style="--d:.16s">
-        <span class="k">05 · Local</span>
-        <h3>What's happening around you.</h3>
-        <p>Events, places, people and conversations nearby — wherever you are.</p>
-        <div class="viz pins" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="none"><path d="M0 70 C60 60 100 90 200 50" stroke="rgba(12,10,9,.15)" stroke-width="10" fill="none"/><path d="M30 0 L60 120 M120 0 L100 120 M0 25 L200 35" stroke="rgba(12,10,9,.1)" stroke-width="2"/></svg><i style="left:22%;top:30%"></i><i style="left:55%;top:58%;background:var(--ripe-deep)"></i><i style="left:78%;top:22%"></i></div>
-      </article>
-
-      <article class="spot cell w6 inkc rv">
-        <span class="k">06 · Conversations</span>
-        <h3>Better discussions. Less comment chaos.</h3>
-        <p>Threads that stay readable, replies that stay on topic, and tools that reward people adding something.</p>
-        <div class="viz thread" aria-hidden="true">
-          <div><b>Maya:</b> Is it worth developing film at home?</div>
-          <div class="r"><b>Tom:</b> Black &amp; white, absolutely. Colour takes patience.</div>
-          <div class="r2"><b>Maya:</b> Patience I have. Space I don't 😅</div>
-        </div>
-      </article>
-
-      <article class="spot cell w6 rv" style="--d:.08s">
-        <span class="k">07 · AI-powered discovery</span>
-        <h3>Find it, understand it, get through it.</h3>
-        <p>Help navigating huge amounts of content — without replacing the people who create it.</p>
-        <div class="viz" aria-hidden="true">
-          <div class="search"><svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>film cameras under €200 that people actually recommend<span class="cur"></span></span></div>
-          <div class="results"><div>📷 35mm &amp; Film · “Best budget SLRs” thread<small>142 replies</small></div><div>🗨️ Aoife's guide to buying second-hand<small>Post</small></div></div>
-        </div>
-      </article>
-    </div>
+    <p class="eyebrow">Ireland first</p>
+    <h2 id="ire-title" class="display h2">Start local. Stay human.</h2>
+    <p class="lede">RipeStream launches in Ireland with a small set of communities that actually have people in them — Running, Cars, GAA, League of Ireland, Tech, Parents, Food, and local ones for Dublin, Clondalkin, Tallaght, Lucan, Cork and Galway. Pick your area (never your exact location) and get local questions, events, clubs, lost &amp; found and transport updates from people nearby.</p>
+    <p class="lede"><a class="btn btn-ripe" href="/app/">Try the preview <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+    <p class="fine-print">The preview is fully working but stores everything in your own browser. Founding Members get the real launch first.</p>
   </div>
 </section>
 
-<!-- ═════════ SOCIAL WORLD ═════════ -->
-<section class="world dark pad" id="world" aria-labelledby="world-title">
-  <div class="wrap world-grid">
-    <div class="rv">
-      <p class="eyebrow">Your social world</p>
-      <h2 id="world-title" class="display h2"><span>One account.</span><span>One identity.</span><span>Your social world.</span></h2>
-      <p class="lede">No more rebuilding yourself in every app. One profile that connects the people, places and things you care about — and lets you decide who sees which part.</p>
-      <div class="caption" id="world-cap" aria-live="polite"><b>You</b><p>At the centre. Everything connects through you — and only as much as you choose.</p></div>
-      <p class="hint">Tap a node to explore.</p>
-    </div>
-    <div class="graph rv" style="--d:.1s" data-reveal id="graph">
-      <svg viewBox="0 0 100 82" preserveAspectRatio="none" aria-hidden="true">
-        <g id="edges"></g>
-      </svg>
-      <!-- nodes rendered from this markup; edges drawn by JS from data-links -->
-      <button class="node me" type="button" style="--x:50%;--y:50%" data-k="you" aria-pressed="true">You</button>
-      <button class="node" type="button" style="--x:20%;--y:17%;--d:.1s" data-k="people"><i class="g1">👋</i>People</button>
-      <button class="node" type="button" style="--x:80%;--y:22%;--d:.2s" data-k="communities"><i class="g2">🫶</i>Communities</button>
-      <button class="node" type="button" style="--x:90%;--y:48%;--d:.3s" data-k="creators"><i class="g3">🎬</i>Creators</button>
-      <button class="node" type="button" style="--x:76%;--y:86%;--d:.4s" data-k="events"><i class="g5">🎟</i>Events</button>
-      <button class="node" type="button" style="--x:30%;--y:88%;--d:.5s" data-k="local"><i class="g4">📍</i>Local</button>
-      <button class="node" type="button" style="--x:11%;--y:55%;--d:.6s" data-k="interests"><i class="g6">✳</i>Interests</button>
-      <button class="node" type="button" style="--x:46%;--y:7%;--d:.7s" data-k="conversations"><i class="g2">💬</i>Conversations</button>
-    </div>
-  </div>
-</section>
-
-<!-- ═════════ CONTROL ═════════ -->
-<section class="control light pad" id="control" aria-labelledby="control-title">
-  <div class="wrap">
-    <p class="eyebrow rv">Control</p>
-    <h2 id="control-title" class="display h2 rv">Your feed shouldn't feel like someone else's decision.</h2>
-    <p class="lede rv">RipeStream is being built around the idea that users should have meaningful control over their experience. Not buried six menus deep. Right there, in plain language. Try it:</p>
-
-    <div class="ctl rv">
-      <div class="panel settings">
-        <h3>Your stream settings</h3>
-        <p class="sub">A working sketch of the idea.</p>
-        <fieldset class="grp">
-          <legend>What comes first</legend>
-          <div class="seg" id="mode">
-            <button type="button" data-mode="following" aria-pressed="true">Following first</button>
-            <button type="button" data-mode="balanced" aria-pressed="false">Balanced</button>
-            <button type="button" data-mode="discovery" aria-pressed="false">Discovery</button>
-          </div>
-        </fieldset>
-        <fieldset class="grp">
-          <legend>Topics</legend>
-          <div class="toggles" id="topics">
-            <button type="button" class="tg" data-topic="Photography" aria-pressed="true">Photography</button>
-            <button type="button" class="tg" data-topic="Football" aria-pressed="true">Football</button>
-            <button type="button" class="tg" data-topic="Tech" aria-pressed="true">Tech</button>
-            <button type="button" class="tg" data-topic="Food" aria-pressed="true">Food</button>
-            <button type="button" class="tg" data-topic="Celebrity" aria-pressed="false">Celebrity gossip</button>
-          </div>
-        </fieldset>
-        <div class="grp">
-          <div class="sw"><span id="sw-video-l">Short video<small>Include clips in my stream</small></span><button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="sw-video-l" id="sw-video"></button></div>
-        </div>
-        <fieldset class="grp">
-          <legend>Who can reply to my posts</legend>
-          <div class="seg" id="reply">
-            <button type="button" data-reply="Everyone" aria-pressed="true">Everyone</button>
-            <button type="button" data-reply="People I follow" aria-pressed="false">Following</button>
-            <button type="button" data-reply="Mentioned only" aria-pressed="false">Mentioned</button>
-          </div>
-        </fieldset>
-      </div>
-      <div class="panel preview">
-        <h3>Your stream</h3>
-        <p class="sub">Every item tells you why it's there.</p>
-        <div class="pv" id="pv" aria-live="polite"></div>
-        <div class="pv-foot"><span>Replies: <b id="pv-reply">Everyone</b></span><span>Mode: <b id="pv-mode">Following first</b></span></div>
-      </div>
-    </div>
-
-    <div class="principles rv">
-      <div><b>Following-first feed</b><p>The people you chose come before anything else.</p></div>
-      <div><b>Personalised discovery</b><p>Turn new stuff up, down or off. Your call.</p></div>
-      <div><b>Topic controls</b><p>More of what you love. None of what you don't.</p></div>
-      <div><b>Community controls</b><p>Tune each community's place in your stream.</p></div>
-      <div><b>Content preferences</b><p>Short video, long reads, photos — choose the mix.</p></div>
-      <div><b>Mute &amp; block</b><p>Quick, quiet and reversible. Words, people or topics.</p></div>
-      <div><b>Audience controls</b><p>Decide who sees each post and who can reply.</p></div>
-      <div><b>Why am I seeing this?</b><p>A plain answer on every recommendation.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═════════ COMMUNITIES ═════════ -->
-<section class="comm dark pad" id="communities" aria-labelledby="comm-title">
-  <div class="wrap">
-    <p class="eyebrow rv">Communities</p>
-    <h2 id="comm-title" class="display h2 rv">Find your people.</h2>
-    <p class="lede rv">Whatever you're into, there should be a place for it — and it should be easy to find. The kinds of spaces RipeStream is being designed for:</p>
-
-    <ul class="tiles" role="list">
-      <li class="spot tile t1 big rv"><span class="em" aria-hidden="true">📷</span><span class="cat">Photography</span><div><h3>35mm &amp; Film</h3><p>Scans, stocks, light leaks, and the shots that almost worked. Critique that's actually useful.</p></div></li>
-      <li class="spot tile t3 rv" style="--d:.05s"><span class="em" aria-hidden="true">🏁</span><span class="cat">Cars</span><div><h3>Track Day Regulars</h3><p>Lap times, tyre talk, early starts.</p></div></li>
-      <li class="spot tile t2 rv" style="--d:.1s"><span class="em" aria-hidden="true">🏋️</span><span class="cat">Fitness</span><div><h3>5am Club</h3><p>For people who train before work.</p></div></li>
-      <li class="spot tile t4 wide rv"><span class="em" aria-hidden="true">🖥️</span><span class="cat">Technology</span><div><h3>Home Lab</h3><p>Racks, routers, and one more Raspberry Pi than anyone needs.</p></div></li>
-      <li class="spot tile t5 rv" style="--d:.05s"><span class="em" aria-hidden="true">🎮</span><span class="cat">Gaming</span><div><h3>Retro Handhelds</h3><p>Battery mods and cartridge hunts.</p></div></li>
-      <li class="spot tile t6 rv" style="--d:.1s"><span class="em" aria-hidden="true">🎧</span><span class="cat">Music</span><div><h3>Bedroom Producers</h3><p>Share the loop. Get honest ears.</p></div></li>
-      <li class="spot tile t7 rv"><span class="em" aria-hidden="true">🏡</span><span class="cat">Local</span><div><h3>Your Street</h3><p>Lost cats, new cafés, road closures.</p></div></li>
-      <li class="spot tile t8 rv" style="--d:.05s"><span class="em" aria-hidden="true">⚽</span><span class="cat">Sport</span><div><h3>Sunday League</h3><p>Fixtures, lifts to away games, a keeper at short notice.</p></div></li>
-      <li class="spot tile t9 wide rv" style="--d:.1s"><span class="em" aria-hidden="true">🌮</span><span class="cat">Food</span><div><h3>Street Food Hunters</h3><p>The stall with no sign and a queue round the corner. Share it or keep it — your call.</p></div></li>
-      <li class="spot tile t10 rv"><span class="em" aria-hidden="true">🧳</span><span class="cat">Travel</span><div><h3>Carry-on Only</h3><p>Two weeks, one bag, zero regrets.</p></div></li>
-      <li class="spot tile t11 rv" style="--d:.05s"><span class="em" aria-hidden="true">🍼</span><span class="cat">Parenting</span><div><h3>New Parents, No Sleep</h3><p>3am questions, answered by people who get it.</p></div></li>
-      <li class="spot tile t12 rv" style="--d:.1s"><span class="em" aria-hidden="true">📈</span><span class="cat">Business</span><div><h3>Bootstrapped Founders</h3><p>Revenue, not hype. Real numbers, real advice.</p></div></li>
-      <li class="spot tile t13 wide rv"><span class="cat">Anything else</span><div><h3>Start your own.</h3><p>If it matters to you, it deserves a home.</p></div></li>
-    </ul>
-    <p class="small-note">Examples for illustration — these communities don't exist yet. You could be the one who starts them.</p>
-  </div>
-</section>
-
-<!-- ═════════ LOCAL ═════════ -->
-<section class="local light pad" id="local" aria-labelledby="local-title">
-  <div class="wrap">
-    <p class="eyebrow rv">Local</p>
-    <h2 id="local-title" class="display h2 rv">What's happening around you?</h2>
-    <p class="lede rv">Local isn't a filter bolted on. It's a whole layer of your social world — events, places, people and conversations near you. And it should work anywhere: a capital city or a small town.</p>
-
-    <div class="cities rv" id="cities" role="group" aria-label="Choose an example city">
-      <button type="button" data-city="dublin" aria-pressed="true">Dublin</button>
-      <button type="button" data-city="lagos" aria-pressed="false">Lagos</button>
-      <button type="button" data-city="lisbon" aria-pressed="false">Lisbon</button>
-      <button type="button" data-city="toronto" aria-pressed="false">Toronto</button>
-      <button type="button" data-city="melbourne" aria-pressed="false">Melbourne</button>
-      <button type="button" data-city="seoul" aria-pressed="false">Seoul</button>
-    </div>
-
-    <div class="localfeed rv" id="localfeed" aria-live="polite">
-      <div class="map" aria-hidden="true"><svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice"><path d="M-20 420 C200 380 360 470 620 400 S1000 330 1220 380" stroke="#1f3550" stroke-width="46" fill="none"/><g stroke="#241f1c" stroke-width="5" fill="none"><path d="M100 0 L220 600"/><path d="M380 0 L330 600"/><path d="M620 0 L700 600"/><path d="M900 0 L840 600"/><path d="M1100 0 L1150 600"/><path d="M0 120 L1200 160"/><path d="M0 260 L1200 230"/><path d="M0 540 L1200 520"/></g><g stroke="#1c1816" stroke-width="2" fill="none"><path d="M240 0 L280 600"/><path d="M500 0 L520 600"/><path d="M760 0 L740 600"/><path d="M0 60 L1200 80"/><path d="M0 330 L1200 320"/><path d="M0 480 L1200 470"/></g></svg></div>
-      <div class="lf-head"><p class="lf-city"><span class="pin" aria-hidden="true"></span><span id="lf-name">Dublin</span></p><span class="tag-concept" style="color:var(--mute-d)">Concept · example content</span></div>
-      <div class="lf-grid" id="lf-grid">
-        <div class="lf" style="--c:var(--ripe)"><h3>Trending locally</h3><ul><li>#SeaSwimSeason<small>Photos from the morning swimmers</small></li><li>New cycle lane<small>The debate continues</small></li></ul></div>
-        <div class="lf" style="--c:var(--lime)"><h3>Events</h3><ul><li>Outdoor film night<small>Thu · 8pm · 0.8 km</small></li><li>Saturday food market<small>Sat · 10am</small></li></ul></div>
-        <div class="lf" style="--c:var(--sky)"><h3>Local communities</h3><ul><li>Sea Swimmers<small>Tide times, meet-ups, bravery</small></li><li>Northside Runners<small>Easy pace, every Tuesday</small></li></ul></div>
-        <div class="lf" style="--c:#ffd166"><h3>Businesses</h3><ul><li>A bike repair pop-up by the canal<small>Open weekends</small></li></ul></div>
-        <div class="lf" style="--c:#b69cff"><h3>Discussions</h3><ul><li>“Where's a quiet pint that isn't a tourist trap?”<small>Local discussion</small></li></ul></div>
-        <div class="lf" style="--c:#ff9fc6"><h3>People</h3><ul><li>Photographers near you<small>Who share what you shoot</small></li></ul></div>
-      </div>
-    </div>
-    <p class="small-note">Six cities as examples. The idea is that local works wherever you are.</p>
-  </div>
-</section>
-
-<!-- ═════════ AI ═════════ -->
-<section class="ai dark pad" id="ai" aria-labelledby="ai-title">
-  <div class="wrap">
-    <p class="eyebrow rv">Discovery</p>
-    <h2 id="ai-title" class="display h2 rv">Smarter discovery.<br>Less noise.</h2>
-    <p class="ai-lead rv">AI helps you navigate the social network. <span>It doesn't replace the social network.</span></p>
-
-    <div class="ai-grid">
-      <div class="spot demo rv">
-        <span class="k">Summarise</span>
-        <h3>Is it worth learning to develop film at home?</h3>
-        <p class="meta">in 35mm &amp; Film · 212 replies</p>
-        <div class="out" id="sum-out" hidden>
-          <ul>
-            <li>Black &amp; white at home: most say yes — cheap, forgiving, fun.</li>
-            <li>Colour: doable, but temperature control is the hard part.</li>
-            <li>Top tip repeated 30+ times: start with a changing bag, not a darkroom.</li>
-          </ul>
-        </div>
-        <button type="button" class="act" id="sum-btn" aria-controls="sum-out" aria-expanded="false"><svg aria-hidden="true"><use href="#i-lines"/></svg><span>Summarise 212 replies</span></button>
-      </div>
-
-      <div class="spot demo rv" style="--d:.08s">
-        <span class="k">Translate</span>
-        <div class="bubble"><small id="tr-meta">Inês · Lisbon · Portuguese</small><span id="tr-text" class="fade-swap">Alguém sabe onde se come o melhor pastel de nata fora das zonas turísticas?</span></div>
-        <div class="bubble" style="border-radius:16px 16px 4px 16px;background:rgba(255,91,31,.14);margin-left:24px"><small>Daniel · Toronto</small>Following — I'm there in May.</div>
-        <button type="button" class="act" id="tr-btn" aria-pressed="false" style="margin-top:14px"><span>Translate to English</span></button>
-      </div>
-
-      <div class="spot demo rv" style="--d:.16s">
-        <span class="k">Catch up</span>
-        <h3>While you were away</h3>
-        <p class="meta">3 things from people you follow</p>
-        <ul class="catch">
-          <li><span class="av g1"></span>Aoife's pier photo is getting a lot of love.</li>
-          <li><span class="av g5"></span>Sunday League moved kick-off to 11:30.</li>
-          <li><span class="av g4"></span>Home Lab picked a favourite mini PC. Finally.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="caps rv" aria-label="Ways AI could help">
-      <span>Summarise long discussions</span><span>Translate conversations</span><span>Find relevant posts</span><span>Discover communities</span><span>Catch up on what you missed</span><span>Help moderators</span><span>Navigate a lot of content, fast</span>
-    </div>
-    <p class="people-line rv"><span><b>Everything you see is still made by people.</b> AI just helps you find it, understand it and get through it.</span></p>
-  </div>
-</section>
-
-<!-- ═════════ FOUNDING ═════════ -->
 <section class="founding light pad" id="founding" aria-labelledby="founding-title">
   <div class="wrap">
     <div class="fd-head">
@@ -1212,7 +805,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
     <div class="foot">
       <div>
         <a class="logo" href="/"><svg aria-hidden="true"><use href="#mark"/></svg>RipeStream</a>
-        <p class="tagline">Social, but<br>actually <span>yours.</span></p>
+        <p class="tagline">Social media<br>you <span>control.</span></p>
       </div>
       <nav aria-label="Footer">
         <ul>
@@ -1223,7 +816,7 @@ footer{padding:64px 0 calc(40px + env(safe-area-inset-bottom))}
         </ul>
       </nav>
     </div>
-    <div class="legal"><span>© 2026 RipeStream. All rights reserved.</span><span>Social accounts coming soon.</span></div>
+    <div class="legal"><span>© 2026 RipeStream. All rights reserved.</span><span><a href="/app/">Try the preview</a></span></div>
   </div>
 </footer>
 

@@ -95,6 +95,20 @@ platform in development. Same stack and rules as the other two sites: plain HTML
   `notified_at` (one-shot, so replays send nothing). Credentials are Vault secrets
   `rs_smtp_user`, `rs_smtp_pass`, `rs_admin_email`, `rs_from`, read only by the service role.
   Rows that arrived before the password was set: `select public.rs_notify_backlog();`
+### RipeStream V1 app (`ripestream/app/`, served at `ripestream.com/app/`)
+
+Positioning: **social media you control.** The feed is the product: every post says why it's there, one tap shows the full score, and the user can change it.
+
+| File | What it is |
+|---|---|
+| `app/js/rank.js` | Pure ranking engine. Weighted sum (follow 35 · community 25 · interest 20 · local 15 · interaction 15 · popularity 10 · base 5) × freshness (18h half-life) × user more/less settings. Returns factors + plain-language reasons per post. Modes: mix / following (chronological) / communities / local / discover. Tested in `scripts/rank.test.mjs`. |
+| `app/js/store.js` | **Preview** data adapter (localStorage). Same concepts as the SQL schema; swap for a Supabase adapter without touching UI. Includes rate limits, rule-based spam checks, 3-report auto-hold, notifications, invites, data export/delete, network-health metrics. |
+| `app/js/seed.js` | Irish areas (broad only), 20 curated communities, starter posts from badged **Team** accounts, each labelled **Starter**. No invented members. |
+| `app/js/ui.js` | Hash-routed UI: onboarding (<1 min), feed, why-panel, composer (text/photo/question/event), communities, local, search, profiles, notifications, settings (mix, mutes, reset feed, privacy, export, delete), how-it-works, invites, moderation + health dashboard. |
+| `supabase/ripestream-app.sql` | Production schema (`rsa` schema, RLS everywhere, trigger-written notifications, report auto-hold, bounded `feed_candidates`). **Not applied yet.** Verified idempotent + RLS on local Postgres. |
+
+The preview is `noindex` and disallowed in robots.txt. Run locally: `python3 -m http.server 8787 --directory ripestream` → `http://localhost:8787/app/`.
+
 - **Hero**: `#flow` is a canvas flow field (no video file, ~2 KB of JS) — pauses off-screen,
   one still frame under reduced motion.
 

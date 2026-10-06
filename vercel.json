@@ -274,6 +274,21 @@
       "dest": "/ripestream/terms.html"
     },
     {
+      "src": "/app/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/ripestream/app/index.html"
+    },
+    {
       "src": "/member/?",
       "has": [
         {
