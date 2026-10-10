@@ -1,11 +1,10 @@
 # Red Teddy Tutor landing page
 
-Static page served for `redteddytutor.com` (see `vercel.json`).
+Static page served for `redteddytutor.com` (see root `vercel.json`).
 
 ## Early-access form
-Not connected. `ENDPOINT` in `index.html` is empty, so submissions are validated
-but NOT sent or stored, and the form tells the visitor so.
-
-To connect: set `ENDPOINT` to an HTTPS URL that accepts
-`POST {email, audience, consent}` as JSON, and add that origin to `connect-src`
-in the root `vercel.json` CSP. Only collect email + optional audience (children may use the site).
+Posts `{p_email, p_audience}` to the Supabase RPC `rtt_join` (project `trillioneuro`),
+which inserts into `public.rtt_waitlist`. The table is RLS-locked with no anon grants;
+the function validates, de-duplicates, rate-limits (5/hour/IP) and is the only anon entry point.
+View sign-ups in the Supabase dashboard: Table editor -> `rtt_waitlist`.
+Only email + optional audience are collected.

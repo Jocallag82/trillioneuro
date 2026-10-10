@@ -297,9 +297,9 @@ footer{background:var(--navy);color:var(--mute-d);padding:56px 0;font-size:.92re
 
 <script>
 (function(){
-  /* Early-access endpoint. Leave empty until a real service is connected (see redteddytutor/README.md).
-     While empty, NOTHING is sent or stored and the form says so honestly. */
-  var ENDPOINT = '';
+  /* Supabase RPC rtt_join -> public.rtt_waitlist (insert-only, rate-limited; see README.md). */
+  var ENDPOINT = 'https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/rtt_join';
+  var KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
 
   var btn=document.querySelector('.menu-btn'), nav=document.getElementById('nav');
   btn.addEventListener('click',function(){
@@ -325,7 +325,7 @@ footer{background:var(--navy);color:var(--mute-d);padding:56px 0;font-size:.92re
     }
     var a=f.querySelector('input[name=audience]:checked');
     var b=f.querySelector('button'); b.disabled=true;
-    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,audience:a?a.value:null,consent:true})})
+    fetch(ENDPOINT,{method:'POST',headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify({p_email:v,p_audience:a?a.value:null})})
       .then(function(r){ if(!r.ok) throw 0; st.textContent='Thank you — you’re on the list.'; f.reset(); })
       .catch(function(){ st.textContent='Sorry, something went wrong. Please try again in a moment.'; })
       .then(function(){ st.className='status show'; b.disabled=false; });
