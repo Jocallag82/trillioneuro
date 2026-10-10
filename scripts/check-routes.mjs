@@ -101,6 +101,13 @@ const cases = [
   [T,  '/ripestream/',   'redirect', 'https://ripestream.com/'],
   [T,  '/ripestream/terms.html', 'redirect', 'https://ripestream.com/terms.html'],
   [T,  '/privacy',       'serve',    '/privacy.html'],
+
+  ['redteddytutor.com',     '/',              'serve',    '/redteddytutor/index.html'],
+  ['www.redteddytutor.com', '/',              'serve',    '/redteddytutor/index.html'],
+  ['redteddytutor.com',     '/hero.webp',     'serve',    '/redteddytutor/hero.webp'],
+  ['redteddytutor.com',     '/og-image.jpg',  'serve',    '/redteddytutor/og-image.jpg'],
+  ['redteddytutor.com',     '/index.html',    'redirect', '/'],
+  ['redteddytutor.com',     '/sitemap.xml',   'serve',    '/redteddytutor/sitemap.xml'],
 ];
 
 let bad = 0;
