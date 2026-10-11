@@ -2,6 +2,7 @@
 import { ACTIVITIES, BANDS, LEVEL_NAMES } from './content.js';
 import { readState, writeState, summarise, recommend, updateSettings } from './progress.js';
 import { el } from './dom.js';
+const GAME_TITLES = { 'bakery-counting': 'Teddy’s Bakery: Counting Cakes', 'bakery-numbers': 'Teddy’s Bakery: The Number Shop', 'bakery-shapes': 'Teddy’s Bakery: Shape Delivery', 'bakery-patterns': 'Teddy’s Bakery: Pattern Oven', 'bakery-grand-opening': 'Teddy’s Bakery: Grand Opening' };
 import { openRemote, syncSettings, syncReset } from './sync.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
@@ -30,7 +31,7 @@ function flash(text) {
 }
 
 const pct = (x) => `${Math.round(x * 100)}%`;
-const titleOf = (id) => ACTIVITIES.find((a) => a.id === id)?.title ?? 'Activity';
+const titleOf = (id) => ACTIVITIES.find((a) => a.id === id)?.title ?? GAME_TITLES[id] ?? 'Activity';
 
 function render() {
   const sum = summarise(state);

@@ -424,6 +424,21 @@
       "dest": "/redteddytutor/learn/index.html"
     },
     {
+      "src": "/learn/game/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/learn/game/index.html"
+    },
+    {
       "src": "/learn/parent/?",
       "has": [
         {

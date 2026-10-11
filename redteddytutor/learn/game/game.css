@@ -1,0 +1,38 @@
+/* Teddy's Bakery. Scene scales to the screen; controls stay large and touchable. */
+.game-body{background:var(--ivory)}
+.game-main{padding:18px 0 40px;flex:1;width:min(1040px,100% - 24px)}
+.g-stage-wrap{position:relative;width:100%}
+.g-stage{width:100%;aspect-ratio:16/10;max-height:68vh;border-radius:24px;overflow:hidden;background:var(--paper);box-shadow:var(--shadow-lift);position:relative;touch-action:manipulation}
+.g-stage canvas{display:block;width:100%!important;height:100%!important;outline:none}
+.g-panel{margin-top:18px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+.g-step{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+#g-prompt{font-size:clamp(1.25rem,2.8vw,1.6rem);margin:6px 0 14px;font-family:var(--serif)}
+.g-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:6px}
+.g-choices[hidden]{display:none}
+.g-choice{min-height:72px;padding:12px 16px;border-radius:18px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:700 1.15rem var(--sans);cursor:pointer;transition:transform .15s var(--ease),background .2s,border-color .2s}
+.g-choice:hover:not(:disabled){transform:translateY(-2px);border-color:var(--red);background:var(--red-soft)}
+.g-choice:active:not(:disabled){transform:scale(.98)}
+.g-choice:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.g-choice.is-number{font-size:1.8rem;font-family:var(--serif)}
+.g-choice.is-tried{opacity:.6;text-decoration:line-through}
+.g-choice:disabled{opacity:.45;cursor:default}
+.g-tools{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:14px}
+.g-tools .btn{min-height:46px;padding:0 18px;font-size:.95rem}
+.g-tools .btn:disabled{opacity:.5}
+.g-tools .check{min-height:46px}
+.g-hint{margin-top:12px;min-height:1.4em;font-size:1.05rem;color:var(--ink);background:var(--ivory2);border-left:4px solid var(--gold);padding:10px 14px;border-radius:10px}
+.g-hint:empty{display:none}
+.g-feedback{margin-top:12px;min-height:1.6em;font-weight:700;font-size:1.1rem}
+.g-feedback[data-tone="good"]{color:var(--ink)}
+.g-feedback[data-tone="retry"]{color:var(--red-d)}
+.g-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.g-actions:empty{display:none}
+.credits{margin-top:16px;font-size:.84rem;color:var(--mute)}
+[data-view="error"] .g-panel{border-color:rgba(163,23,31,.4)}
+
+@media (max-width:600px){
+  .g-stage{aspect-ratio:4/3;max-height:none}
+  .g-choices{grid-template-columns:1fr 1fr}
+  .g-choice{min-height:80px}
+  .g-panel{padding:16px}
+}
