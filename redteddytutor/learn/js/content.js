@@ -479,4 +479,105 @@ export const ACTIVITIES = [
       hints: ['Ends in 0, 2, 4, 6 or 8? That is even.', 'Odd numbers end in 1, 3, 5, 7 or 9.'],
     }],
   },
+
+  // ---- Memory: find the pairs ----
+  {
+    id: 'memory-shapes', title: 'Shape pairs', domain: 'Shapes', band: '2-3', level: 1, skill: 'shapes',
+    instruction: 'Turn over two cards. If the shapes match, they stay face up.',
+    steps: [{
+      kind: 'memory',
+      prompt: 'Find all the matching shapes.',
+      cards: [
+        { id: 'a1', pairId: 'circle', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 'a2', pairId: 'circle', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 'b1', pairId: 'square', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+        { id: 'b2', pairId: 'square', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+      ],
+      hints: ['Look closely at the shape on each card.', 'Round shapes match round shapes. Square shapes match squares.'],
+    }],
+  },
+  {
+    id: 'memory-colours', title: 'Colour pairs', domain: 'Colours', band: '3-5', level: 2, skill: 'colours',
+    instruction: 'Remember where each colour is. Find the matching pairs.',
+    steps: [{
+      kind: 'memory',
+      prompt: 'Find the matching colours.',
+      cards: [
+        { id: 'r1', pairId: 'red', label: 'Red', visual: { kind: 'swatch', label: 'Red', hex: RED } },
+        { id: 'r2', pairId: 'red', label: 'Red', visual: { kind: 'swatch', label: 'Red', hex: RED } },
+        { id: 'b1', pairId: 'blue', label: 'Blue', visual: { kind: 'swatch', label: 'Blue', hex: BLUE } },
+        { id: 'b2', pairId: 'blue', label: 'Blue', visual: { kind: 'swatch', label: 'Blue', hex: BLUE } },
+        { id: 'y1', pairId: 'yellow', label: 'Yellow', visual: { kind: 'swatch', label: 'Yellow', hex: YELLOW } },
+        { id: 'y2', pairId: 'yellow', label: 'Yellow', visual: { kind: 'swatch', label: 'Yellow', hex: YELLOW } },
+      ],
+      hints: ['Think about the colour, not the place on the table.', 'Each colour has exactly one partner.'],
+    }],
+  },
+  {
+    id: 'memory-numbers', title: 'Dots and numbers', domain: 'Numbers', band: '5-7', level: 3, skill: 'number-names',
+    instruction: 'Match each group of dots to its number.',
+    steps: [{
+      kind: 'memory',
+      prompt: 'Match the dots to the number.',
+      cards: [
+        { id: 'd2', pairId: 'two', label: '2 dots', visual: { kind: 'dots', count: 2 } },
+        { id: 'n2', pairId: 'two', label: 'Number 2', visual: { kind: 'text', text: '2' } },
+        { id: 'd3', pairId: 'three', label: '3 dots', visual: { kind: 'dots', count: 3 } },
+        { id: 'n3', pairId: 'three', label: 'Number 3', visual: { kind: 'text', text: '3' } },
+        { id: 'd4', pairId: 'four', label: '4 dots', visual: { kind: 'dots', count: 4 } },
+        { id: 'n4', pairId: 'four', label: 'Number 4', visual: { kind: 'text', text: '4' } },
+      ],
+      hints: ['Count the dots on each card, then look for the same number.', 'Four dots make the number four.'],
+    }],
+  },
+
+  // ---- Pattern building: put the pieces in order ----
+  {
+    id: 'pattern-build-shapes', title: 'Build the pattern', domain: 'Patterns', band: '3-5', level: 2, skill: 'patterns',
+    instruction: 'The shapes repeat: circle, square, circle, square. Put them in order.',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Drag each shape into the next empty slot.',
+      items: [
+        { id: 'c1', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 's1', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+        { id: 'c2', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 's2', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+      ],
+      targets: [
+        { id: 'slot1', label: 'Slot 1' },
+        { id: 'slot2', label: 'Slot 2' },
+        { id: 'slot3', label: 'Slot 3' },
+        { id: 'slot4', label: 'Slot 4' },
+      ],
+      pairs: { c1: 'slot1', s1: 'slot2', c2: 'slot3', s2: 'slot4' },
+      hints: ['Start at Slot 1. What shape comes first in the pattern?', 'After a circle, the pattern always gives a square.'],
+    }],
+  },
+
+  // ---- Listening: hear the question, then choose ----
+  {
+    id: 'listen-first-sound', title: 'Listen: first sound', domain: 'Letters & sounds', band: '5-7', level: 3, skill: 'letter-sounds',
+    instruction: 'Press play and listen. Then choose the answer.',
+    steps: [{
+      kind: 'choice',
+      listen: true,
+      prompt: 'Which letter does the word mouse start with?',
+      options: [word('M'), word('S'), word('T')],
+      answer: 'm',
+      hints: ['Say mouse slowly: mmm-ouse. Which letter makes the mmm sound?', 'The first sound in mouse is mmm.'],
+    }],
+  },
+  {
+    id: 'listen-rhyme', title: 'Listen: which rhymes?', domain: 'Letters & sounds', band: '3-5', level: 2, skill: 'letter-sounds',
+    instruction: 'Press play and listen. Find the word that sounds like the first one.',
+    steps: [{
+      kind: 'choice',
+      listen: true,
+      prompt: 'Which word rhymes with cat?',
+      options: [word('Dog'), word('Hat'), word('Sun')],
+      answer: 'hat',
+      hints: ['Rhyming words end with the same sound: cat, hat.', 'Say cat, then say each word. Which one ends the same way?'],
+    }],
+  },
 ];

@@ -1,6 +1,7 @@
 // Pure activity logic: validation, answer checking, hints and retries.
 // No DOM or storage access, so it runs in the browser and under node:test alike.
-// Step kinds: 'choice' (default; tap one option) and 'drop' (place each item on its target).
+// Step kinds: 'choice' (default; tap one option), 'drop' (place each item on its target)
+// and 'memory' (turn cards over to find pairs).
 import { BANDS, DOMAINS, SKILLS } from './content.js';
 
 const VISUAL_KINDS = ['dots', 'shape', 'swatch', 'text', 'sequence'];
@@ -53,6 +54,23 @@ function validateDrop(s, at, bad) {
   if (!hintsOk(s.hints)) bad(`${at} needs one or two non-empty hints`);
 }
 
+function validateMemory(s, at, bad) {
+  if (!Array.isArray(s.cards) || s.cards.length < 4 || s.cards.length > 8 || s.cards.length % 2 !== 0) {
+    bad(`${at} needs an even number of cards, 4 to 8`);
+    return;
+  }
+  const ids = s.cards.map((c) => c.id);
+  if (new Set(ids).size !== ids.length) bad(`${at} has duplicate card ids`);
+  const counts = {};
+  s.cards.forEach((c) => {
+    counts[c.pairId] = (counts[c.pairId] || 0) + 1;
+    if (!isLabelled(c)) bad(`${at} card "${c.id}" has no label`);
+    if (c.visual !== undefined && !validVisual(c.visual, false)) bad(`${at} card "${c.id}" has an invalid visual`);
+  });
+  if (!Object.values(counts).every((n) => n === 2)) bad(`${at} every pair needs exactly two cards`);
+  if (!hintsOk(s.hints)) bad(`${at} needs one or two non-empty hints`);
+}
+
 // Returns a list of problems. An empty list means the activity can be published.
 export function validateActivity(a) {
   const errors = [];
@@ -76,6 +94,10 @@ export function validateActivity(a) {
     if (s.visual !== undefined && !validVisual(s.visual)) bad(`${at} has an invalid visual`);
     if (s.kind === 'drop') {
       validateDrop(s, at, bad);
+      return;
+    }
+    if (s.kind === 'memory') {
+      validateMemory(s, at, bad);
       return;
     }
     if (s.kind !== undefined && s.kind !== 'choice') {
@@ -109,8 +131,21 @@ export function validateLibrary(list) {
   return errors;
 }
 
-export function startSession(activity) {
-  return { activityId: activity.id, index: 0, misses: 0, hintsUsed: 0, drop: null, results: [], done: false };
+// Fisher-Yates shuffle. `rand` is injectable so tests can make it deterministic.
+export function shuffle(list, rand = Math.random) {
+  const a = [...list];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// `order` holds each memory step's card layout, shuffled once per attempt so that
+// re-rendering after a flip never moves the cards.
+export function startSession(activity, rand = Math.random) {
+  const order = activity.steps.map((s) => (s.kind === 'memory' ? shuffle(s.cards.map((c) => c.id), rand) : null));
+  return { activityId: activity.id, index: 0, misses: 0, hintsUsed: 0, drop: null, memory: null, order, results: [], done: false };
 }
 
 // Choice steps: tap one option. Returns { session, outcome } without mutating the input.
@@ -121,7 +156,7 @@ export function startSession(activity) {
 export function submit(session, activity, optionId) {
   if (session.done) throw new Error('session already complete');
   const step = stepsOf(activity)[session.index];
-  if (step.kind === 'drop') throw new Error('use placeItem for drop steps');
+  if (step.kind === 'drop' || step.kind === 'memory') throw new Error('use placeItem or placeCard for this step');
   if (!step.options.some((o) => o.id === optionId)) throw new Error(`unknown option ${optionId}`);
 
   if (optionId === step.answer) {
@@ -178,6 +213,53 @@ export function placeItem(session, activity, itemId, targetId) {
   });
 }
 
+// Memory steps: turn over one card, then a second. Matching pairs stay face up.
+// A mismatch shows both cards and a hint; the next tap turns them back over.
+//   outcome.kind: 'flip' | 'match' | 'retry' (mismatch, hint) | 'correct' (step done)
+export function placeCard(session, activity, cardId) {
+  if (session.done) throw new Error('session already complete');
+  const step = stepsOf(activity)[session.index];
+  if (step.kind !== 'memory') throw new Error('placeCard is for memory steps');
+  const card = step.cards.find((c) => c.id === cardId);
+  if (!card) throw new Error(`unknown card ${cardId}`);
+  const mem = session.memory || { flipped: [], matched: [], wrong: 0 };
+  if (mem.matched.includes(cardId)) throw new Error(`${cardId} is already matched`);
+
+  const open = mem.flipped.length === 2 ? [] : mem.flipped;
+  if (open.includes(cardId)) throw new Error(`${cardId} is already face up`);
+  const base = { correct: true, stepDone: false, activityDone: false, hint: null, answer: null, cardId };
+
+  if (open.length === 0) {
+    return {
+      session: { ...session, memory: { ...mem, flipped: [cardId] } },
+      outcome: { ...base, kind: 'flip' },
+    };
+  }
+
+  const first = step.cards.find((c) => c.id === open[0]);
+  if (first.pairId === card.pairId) {
+    const matched = [...mem.matched, first.id, card.id];
+    const memory = { flipped: [], matched, wrong: mem.wrong };
+    if (matched.length < step.cards.length) {
+      return { session: { ...session, memory }, outcome: { ...base, kind: 'match' } };
+    }
+    return advance({ ...session, misses: mem.wrong, memory: null }, activity, {
+      kind: 'correct', correct: true, firstTry: mem.wrong === 0,
+    });
+  }
+
+  const wrong = mem.wrong + 1;
+  const hint = step.hints[Math.min(wrong - 1, step.hints.length - 1)];
+  return {
+    session: {
+      ...session,
+      memory: { flipped: [first.id, card.id], matched: mem.matched, wrong },
+      hintsUsed: session.hintsUsed + 1,
+    },
+    outcome: { ...base, kind: 'retry', correct: false, hint },
+  };
+}
+
 function advance(session, activity, outcome) {
   const step = stepsOf(activity)[session.index];
   const result = {
@@ -197,6 +279,8 @@ function advance(session, activity, outcome) {
     misses: 0,
     hintsUsed: session.hintsUsed,
     drop: null,
+    memory: null,
+    order: session.order,
     results,
     done,
   };

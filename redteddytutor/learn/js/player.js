@@ -1,6 +1,6 @@
 // Activity player: age choice, activity list, steps, feedback and completion.
 import { ACTIVITIES, BANDS, DOMAINS, LEVEL_NAMES } from './content.js';
-import { startSession, submit, placeItem, summarySession } from './engine.js';
+import { startSession, submit, placeItem, placeCard, summarySession } from './engine.js';
 import { readState, writeState, recordStep, recordCompletion, updateSettings, recommend } from './progress.js';
 import { canSpeak, speak, stopSpeaking } from './speech.js';
 import { el, visualNode } from './dom.js';
@@ -75,10 +75,8 @@ function renderHome(focusSelector = '#home-title') {
       el('h3', { id: 'rec-h', text: 'Suggested next' }),
       el('p', { class: 'muted', text: 'Based on what you have tried on this device. These are suggestions, not a diagnosis.' }),
       el('ul', { class: 'cards' }, rec.map(({ activity: a, reason }) => el('li', {}, [
-        el('button', { type: 'button', class: 'card', onclick: () => startActivity(a.id) }, [
-          el('span', { class: 'card-title', text: a.title }),
-          el('span', { class: 'card-meta', text: `${reason} · ${LEVEL_NAMES[a.level]}` }),
-        ]),
+        el('button', { type: 'button', class: 'card', onclick: () => startActivity(a.id) },
+          cardBody(a, `${reason} · ${LEVEL_NAMES[a.level]}`)),
       ]))),
     ])
     : el('section', { class: 'panel' }, [
@@ -91,16 +89,21 @@ function renderHome(focusSelector = '#home-title') {
     return el('section', { class: 'domain', 'aria-labelledby': `d-${domainSlug(domain)}` }, [
       el('h3', { id: `d-${domainSlug(domain)}`, text: domain }),
       el('ul', { class: 'cards' }, items.map((a) => el('li', {}, [
-        el('button', { type: 'button', class: 'card', onclick: () => startActivity(a.id) }, [
-          el('span', { class: 'card-title', text: a.title }),
-          el('span', { class: 'card-meta', text: `${LEVEL_NAMES[a.level]} · ${done.has(a.id) ? 'Done' : 'New'}` }),
-        ]),
+        el('button', { type: 'button', class: 'card', onclick: () => startActivity(a.id) },
+          cardBody(a, `${LEVEL_NAMES[a.level]} · ${done.has(a.id) ? 'Done' : 'New'}`)),
       ]))),
     ]);
   });
 
   setScreen([
-    el('h2', { id: 'home-title', tabindex: '-1', text: 'Choose an activity' }),
+    el('section', { class: 'hero-banner' }, [
+      teddy('teddy-hero'),
+      el('div', {}, [
+        el('p', { class: 'eyebrow', text: 'Free early learning' }),
+        el('h2', { id: 'home-title', tabindex: '-1', text: 'Learn by playing' }),
+        el('p', { class: 'hero-copy', text: 'Short activities for counting, shapes, colours, letters and patterns. Pick an age to start.' }),
+      ]),
+    ]),
     el('div', { class: 'age-panel' }, [
       el('fieldset', { class: 'chips' }, [el('legend', { text: 'Age (a starting point, not a measure of ability)' }), ...bandRadios]),
       showAllBox,
@@ -110,6 +113,19 @@ function renderHome(focusSelector = '#home-title') {
     el('p', { class: 'privacy', text: 'No name or account is needed. Progress is saved only on this device. Clear it any time in the Parent summary.' }),
   ], focusSelector);
   say('Choose an age, then pick an activity.');
+}
+
+// A card shows a small preview of the activity's first picture, so it reads at a glance.
+function cardBody(a, meta) {
+  const first = a.steps[0];
+  const preview = first.visual
+    || first.options?.[0]?.visual || first.items?.[0]?.visual || first.cards?.[0]?.visual
+    || null;
+  return [
+    el('span', { class: 'card-preview', 'aria-hidden': 'true' }, visualNode(preview)),
+    el('span', { class: 'card-title', text: a.title }),
+    el('span', { class: 'card-meta', text: meta }),
+  ];
 }
 
 function domainSlug(d) {
@@ -136,19 +152,21 @@ function startActivity(id) {
 let selectedItem = null;
 let dragItem = null;
 
-// viewState lets a finished drop step be drawn from its last in-progress state.
+// viewState lets a finished step be drawn from its last in-progress state.
 function renderStep(intro = false, viewState = session) {
   view = 'activity';
   const step = current.steps[viewState.index];
   const total = current.steps.length;
-  const body = step.kind === 'drop' ? dropBody(step, viewState.drop) : choiceBody(step);
+  const body = bodyFor(step, viewState);
 
   setScreen([
     el('nav', { class: 'activity-nav' }, [
       el('button', { type: 'button', class: 'link', onclick: () => renderHome('#home-title'), text: '← All activities' }),
     ]),
-    el('p', { class: 'step-count', text: `Question ${viewState.index + 1} of ${total}` }),
-    el('progress', { max: total, value: viewState.index, 'aria-label': 'Activity progress' }),
+    el('div', { class: 'progress-row' }, [
+      el('p', { class: 'step-count', text: `Question ${viewState.index + 1} of ${total}` }),
+      el('progress', { max: total, value: viewState.index, 'aria-label': 'Activity progress' }),
+    ]),
     el('h2', { id: 'prompt', tabindex: '-1', text: current.title }),
     el('p', { class: 'prompt', text: step.prompt }),
     body,
@@ -159,6 +177,12 @@ function renderStep(intro = false, viewState = session) {
   say(spoken);
 }
 
+function bodyFor(step, viewState) {
+  if (step.kind === 'drop') return dropBody(step, viewState.drop);
+  if (step.kind === 'memory') return memoryBody(step, viewState.memory, viewState.order?.[viewState.index]);
+  return choiceBody(step);
+}
+
 function choiceBody(step) {
   const options = step.options.map((opt) => el('button', {
     type: 'button', class: 'option', dataset: { option: opt.id },
@@ -167,10 +191,68 @@ function choiceBody(step) {
     opt.visual ? el('span', { class: 'option-visual' }, visualNode(opt.visual)) : null,
     el('span', { class: 'option-label', text: opt.label }),
   ]));
-  return [
+  return el('div', { class: 'choice-body' }, [
+    step.listen
+      ? el('button', { type: 'button', class: 'btn btn-line play', onclick: () => say(step.prompt) }, 'Play question again')
+      : null,
     step.visual ? el('div', { class: 'stage' }, visualNode(step.visual)) : null,
     el('div', { class: 'options', role: 'group', 'aria-label': 'Answers' }, options),
-  ];
+  ]);
+}
+
+// Memory board. Cards are face down unless flipped or matched.
+function memoryBody(step, mem, order) {
+  const m = mem || { flipped: [], matched: [] };
+  const up = (id) => m.flipped.includes(id) || m.matched.includes(id);
+  const byId = Object.fromEntries(step.cards.map((c) => [c.id, c]));
+  const layout = order || step.cards.map((c) => c.id);
+  const cards = layout.map((id, n) => {
+    const card = byId[id];
+    const matched = m.matched.includes(card.id);
+    const shown = up(card.id);
+    return el('button', {
+      type: 'button',
+      class: `memory-card${shown ? ' is-up' : ''}${matched ? ' is-matched' : ''}`,
+      dataset: { card: card.id },
+      disabled: matched || undefined,
+      'aria-label': shown ? `${card.label}${matched ? ', matched' : ''}` : `Hidden card ${n + 1}`,
+      onclick: () => flipCard(card.id),
+    }, shown ? [visualNode(card.visual) || el('span', { class: 'visual-text small', text: card.label })] : [el('span', { class: 'card-back', 'aria-hidden': 'true' })]);
+  });
+  return el('div', { class: 'memory-board', role: 'group', 'aria-label': 'Memory cards' }, cards);
+}
+
+function flipCard(cardId) {
+  const step = current.steps[session.index];
+  const before = session;
+  const { session: next, outcome } = placeCard(session, current, cardId);
+  session = next;
+  const feedback = () => document.getElementById('feedback');
+
+  if (outcome.kind === 'retry') {
+    renderStep(false);
+    feedback().replaceChildren(
+      el('p', { class: 'fb fb-retry', text: 'Not a pair. Those cards turn back over next.' }),
+      el('p', { class: 'hint', text: `Hint: ${outcome.hint}` }),
+    );
+    say(`Not a pair. Hint: ${outcome.hint}`);
+    return;
+  }
+
+  if (outcome.kind === 'correct') {
+    persistSteps(outcome.firstTry);
+    const message = outcome.firstTry ? 'Every pair found, first time. Brilliant!' : 'Every pair found. Well done!';
+    const finished = { ...before, memory: { flipped: [], matched: step.cards.map((c) => c.id) } };
+    renderStep(false, finished);
+    feedback().replaceChildren(teddy('teddy-happy'), el('p', { class: 'fb fb-correct', text: message }), continueButton(outcome.activityDone));
+    say(message);
+    return;
+  }
+
+  renderStep(false);
+  const message = outcome.kind === 'match' ? 'A match! Keep going.' : 'Now find its partner.';
+  feedback().replaceChildren(el('p', { class: 'fb fb-correct', text: message }));
+  say(message);
 }
 
 // Drag a piece onto a hole, or tap a piece then tap its hole (touch and keyboard).

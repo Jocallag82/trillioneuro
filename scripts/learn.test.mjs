@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { ACTIVITIES, BANDS, DOMAINS, SKILLS } from '../redteddytutor/learn/js/content.js';
-import { validateActivity, validateLibrary, startSession, submit, placeItem, MAX_MISSES } from '../redteddytutor/learn/js/engine.js';
+import { validateActivity, validateLibrary, startSession, submit, placeItem, placeCard, shuffle, MAX_MISSES } from '../redteddytutor/learn/js/engine.js';
 import {
   emptyState, normalize, readState, writeState, clearState, recordStep, recordCompletion,
   trendOf, summarise, recommend, updateSettings, STORAGE_KEY,
@@ -51,7 +51,7 @@ test('every skill used by an activity is defined and every skill is taught', () 
 test('answers are pre-authored options, never empty', () => {
   for (const a of ACTIVITIES) {
     for (const s of a.steps) {
-      if (s.kind === 'drop') continue;
+      if (s.kind === 'drop' || s.kind === 'memory') continue;
       assert.ok(s.options.some((o) => o.id === s.answer), `${a.id}: answer not an option`);
     }
   }
@@ -93,7 +93,7 @@ test('drop steps: cannot place the same item twice or use choice submit', () => 
   const a = byId('group-warm-cool');
   const r = placeItem(startSession(a), a, 'red', 'warm');
   assert.throws(() => placeItem(r.session, a, 'red', 'warm'), /already placed/);
-  assert.throws(() => submit(startSession(a), a, 'warm'), /drop steps/);
+  assert.throws(() => submit(startSession(a), a, 'warm'), /use placeItem/);
 });
 
 test('validator catches bad drop pairs', () => {
@@ -269,4 +269,58 @@ test('voice: falls back to a network en-US voice, then any English voice, then n
   assert.equal(pickVoice([{ name: 'C', lang: 'en-GB', localService: true }]).name, 'C');
   assert.equal(pickVoice([{ name: 'D', lang: 'fr-FR', localService: true }]), null);
   assert.equal(pickVoice([]), null);
+});
+
+test('memory: matching pairs stay open; a mismatch gives a hint and both cards show until the next turn', () => {
+  const a = byId('memory-shapes');
+  let out = placeCard(startSession(a), a, 'a1');
+  assert.equal(out.outcome.kind, 'flip');
+  out = placeCard(out.session, a, 'b1');
+  assert.equal(out.outcome.kind, 'retry');
+  assert.equal(out.outcome.hint, a.steps[0].hints[0]);
+  assert.deepEqual(out.session.memory.flipped, ['a1', 'b1']);
+  out = placeCard(out.session, a, 'a2');
+  assert.equal(out.outcome.kind, 'flip', 'next tap turns the mismatch back over');
+});
+
+test('memory: finding every pair completes the step; first try only with no mismatches', () => {
+  const a = byId('memory-shapes');
+  let session = startSession(a);
+  let out;
+  for (const id of ['a1', 'a2', 'b1', 'b2']) {
+    out = placeCard(session, a, id);
+    session = out.session;
+  }
+  assert.equal(out.outcome.kind, 'correct');
+  assert.equal(out.outcome.activityDone, true);
+  assert.equal(out.session.results.length, 1);
+});
+
+test('memory: a perfect run is first try and completes the activity', () => {
+  const a = byId('memory-shapes');
+  let session = startSession(a);
+  let out;
+  for (const id of ['a1', 'a2', 'b1', 'b2']) {
+    out = placeCard(session, a, id);
+    session = out.session;
+  }
+  assert.equal(session.done, true);
+  assert.equal(session.results[0].firstTry, true);
+});
+
+test('memory: cannot flip a matched card', () => {
+  const a = byId('memory-shapes');
+  let out = placeCard(startSession(a), a, 'a1');
+  out = placeCard(out.session, a, 'a2');
+  assert.throws(() => placeCard(out.session, a, 'a1'), /already matched/);
+});
+
+test('memory: the board is shuffled once per attempt and keeps its order through a flip', () => {
+  const a = byId('memory-colours');
+  const session = startSession(a, () => 0.5);
+  assert.equal(session.order[0].length, 6);
+  assert.deepEqual([...session.order[0]].sort(), a.steps[0].cards.map((c) => c.id).sort());
+  const out = placeCard(session, a, session.order[0][0]);
+  assert.deepEqual(out.session.order, session.order);
+  assert.deepEqual(shuffle([1, 2, 3, 4], () => 0.99).length, 4);
 });
