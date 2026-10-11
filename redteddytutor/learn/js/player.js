@@ -1,6 +1,6 @@
 // Activity player: age choice, activity list, steps, feedback and completion.
 import { ACTIVITIES, BANDS, DOMAINS, LEVEL_NAMES } from './content.js';
-import { startSession, submit, summarySession } from './engine.js';
+import { startSession, submit, placeItem, summarySession } from './engine.js';
 import { readState, writeState, recordStep, recordCompletion, updateSettings, recommend } from './progress.js';
 import { canSpeak, speak, stopSpeaking } from './speech.js';
 import { el, visualNode } from './dom.js';
@@ -133,10 +133,33 @@ function startActivity(id) {
   renderStep(true);
 }
 
-function renderStep(intro = false) {
+let selectedItem = null;
+let dragItem = null;
+
+// viewState lets a finished drop step be drawn from its last in-progress state.
+function renderStep(intro = false, viewState = session) {
   view = 'activity';
-  const step = current.steps[session.index];
+  const step = current.steps[viewState.index];
   const total = current.steps.length;
+  const body = step.kind === 'drop' ? dropBody(step, viewState.drop) : choiceBody(step);
+
+  setScreen([
+    el('nav', { class: 'activity-nav' }, [
+      el('button', { type: 'button', class: 'link', onclick: () => renderHome('#home-title'), text: '← All activities' }),
+    ]),
+    el('p', { class: 'step-count', text: `Question ${viewState.index + 1} of ${total}` }),
+    el('progress', { max: total, value: viewState.index, 'aria-label': 'Activity progress' }),
+    el('h2', { id: 'prompt', tabindex: '-1', text: current.title }),
+    el('p', { class: 'prompt', text: step.prompt }),
+    body,
+    el('div', { id: 'feedback', class: 'feedback', role: 'status', 'aria-live': 'polite' }),
+  ], '#prompt');
+
+  const spoken = intro ? `${current.instruction} ${step.prompt}` : step.prompt;
+  say(spoken);
+}
+
+function choiceBody(step) {
   const options = step.options.map((opt) => el('button', {
     type: 'button', class: 'option', dataset: { option: opt.id },
     onclick: () => choose(opt.id),
@@ -144,22 +167,106 @@ function renderStep(intro = false) {
     opt.visual ? el('span', { class: 'option-visual' }, visualNode(opt.visual)) : null,
     el('span', { class: 'option-label', text: opt.label }),
   ]));
-
-  setScreen([
-    el('nav', { class: 'activity-nav' }, [
-      el('button', { type: 'button', class: 'link', onclick: () => renderHome('#home-title'), text: '← All activities' }),
-    ]),
-    el('p', { class: 'step-count', text: `Question ${session.index + 1} of ${total}` }),
-    el('progress', { max: total, value: session.index, 'aria-label': 'Activity progress' }),
-    el('h2', { id: 'prompt', tabindex: '-1', text: current.title }),
-    el('p', { class: 'prompt', text: step.prompt }),
+  return [
     step.visual ? el('div', { class: 'stage' }, visualNode(step.visual)) : null,
     el('div', { class: 'options', role: 'group', 'aria-label': 'Answers' }, options),
-    el('div', { id: 'feedback', class: 'feedback', role: 'status', 'aria-live': 'polite' }),
-  ], '#prompt');
+  ];
+}
 
-  const spoken = intro ? `${current.instruction} ${step.prompt}` : step.prompt;
-  say(spoken);
+// Drag a piece onto a hole, or tap a piece then tap its hole (touch and keyboard).
+function dropBody(step, drop) {
+  const d = drop || { placed: {}, wrong: 0 };
+  const unplaced = step.items.filter((i) => !d.placed[i.id]);
+  const tray = el('div', { class: 'tray', role: 'group', 'aria-label': 'Pieces to place' },
+    unplaced.map((item) => el('button', {
+      type: 'button',
+      class: 'drag-item',
+      dataset: { item: item.id },
+      'aria-pressed': String(selectedItem === item.id),
+      'aria-label': `${item.label}${selectedItem === item.id ? ', selected. Now choose where it goes' : ''}`,
+      onpointerdown: () => { dragItem = item.id; selectedItem = item.id; markSelected(); },
+      onclick: () => { selectedItem = item.id; markSelected(); },
+    }, [
+      visualNode(item.visual),
+      el('span', { class: 'option-label', text: item.label }),
+    ])));
+  if (!unplaced.length) tray.hidden = true;
+
+  const zones = step.targets.map((t) => {
+    const placed = step.items.filter((i) => d.placed[i.id] === t.id);
+    return el('button', {
+      type: 'button',
+      class: 'drop-zone',
+      dataset: { target: t.id },
+      'aria-label': `${t.label}. ${placed.length} placed.`,
+      onpointerup: () => { if (dragItem) { const id = dragItem; dragItem = null; dropOn(t.id, id); } },
+      onclick: () => dropOn(t.id, selectedItem),
+    }, [
+      t.visual ? el('span', { class: 'drop-visual' }, visualNode(t.visual)) : null,
+      el('span', { class: 'option-label', text: t.label }),
+      el('span', { class: 'placed-row' }, placed.map((i) => el('span', { class: 'placed' }, visualNode(i.visual) || el('span', { class: 'placed-text', text: i.label })))),
+    ]);
+  });
+
+  return el('div', { class: 'drop-area' }, [
+    tray,
+    el('div', { class: 'zones' }, zones),
+  ]);
+}
+
+function markSelected() {
+  app.querySelectorAll('.drag-item').forEach((b) => {
+    const on = b.dataset.item === selectedItem;
+    b.setAttribute('aria-pressed', String(on));
+  });
+}
+
+function dropOn(targetId, itemId) {
+  const step = current.steps[session.index];
+  const feedback = document.getElementById('feedback');
+  if (!itemId) {
+    const msg = 'Tap a piece first, then tap its hole.';
+    feedback.replaceChildren(el('p', { class: 'fb fb-retry', text: msg }));
+    say(msg);
+    return;
+  }
+  const before = session;
+  const { session: next, outcome } = placeItem(session, current, itemId, targetId);
+  session = next;
+  selectedItem = null;
+  dragItem = null;
+
+  if (outcome.kind === 'retry') {
+    renderStep(false);
+    const message = `Not that one. Have another look. Hint: ${outcome.hint}`;
+    document.getElementById('feedback').replaceChildren(
+      el('p', { class: 'fb fb-retry', text: 'Not that one. Have another look.' }),
+      el('p', { class: 'hint', text: `Hint: ${outcome.hint}` }),
+    );
+    say(message);
+    return;
+  }
+
+  if (outcome.stepDone) {
+    persistSteps(outcome.firstTry);
+    const isLast = outcome.activityDone;
+    const message = outcome.firstTry ? 'Brilliant! Every piece is in the right place.' : 'Well done. Every piece is in the right place now.';
+    const finishedView = { ...before, drop: { placed: { ...(before.drop?.placed || {}), [itemId]: targetId } } };
+    renderStep(false, finishedView);
+    document.getElementById('feedback').replaceChildren(
+      teddy('teddy-happy'),
+      el('p', { class: 'fb fb-correct', text: message }),
+      continueButton(isLast),
+    );
+    say(message);
+    return;
+  }
+
+  const remaining = step.items.length - Object.keys(session.drop.placed).length;
+  renderStep(false);
+  const message = `Yes, that one goes there. ${remaining} to go.`;
+  document.getElementById('feedback').replaceChildren(el('p', { class: 'fb fb-correct', text: message }));
+  say(message);
 }
 
 function choose(optionId) {
@@ -280,6 +387,7 @@ function setupAudio() {
 }
 
 window.addEventListener('pagehide', stopSpeaking);
+window.addEventListener('pointerup', () => { dragItem = null; });
 
 setupAudio();
 const requested = new URLSearchParams(window.location.search).get('activity');

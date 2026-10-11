@@ -49,7 +49,10 @@ export function visualNode(v) {
   if (v.kind === 'shape') {
     const label = SHAPE_NAMES[v.shape];
     const s = svg('svg', { viewBox: '0 0 120 120', class: 'visual-shape', role: 'img', 'aria-label': label });
-    const fill = { fill: 'var(--red)' };
+    // Outline shapes are the "holes" in shape-fitting activities.
+    const fill = v.outline
+      ? { fill: 'none', stroke: 'var(--red)', 'stroke-width': 6, 'stroke-dasharray': '10 6' }
+      : { fill: 'var(--red)' };
     if (v.shape === 'circle') s.append(svg('circle', { cx: 60, cy: 60, r: 50, ...fill }));
     if (v.shape === 'square') s.append(svg('rect', { x: 14, y: 14, width: 92, height: 92, ...fill }));
     if (v.shape === 'rectangle') s.append(svg('rect', { x: 8, y: 33, width: 104, height: 54, ...fill }));

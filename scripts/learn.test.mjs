@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { ACTIVITIES, BANDS, DOMAINS, SKILLS } from '../redteddytutor/learn/js/content.js';
-import { validateActivity, validateLibrary, startSession, submit, MAX_MISSES } from '../redteddytutor/learn/js/engine.js';
+import { validateActivity, validateLibrary, startSession, submit, placeItem, MAX_MISSES } from '../redteddytutor/learn/js/engine.js';
 import {
   emptyState, normalize, readState, writeState, clearState, recordStep, recordCompletion,
   trendOf, summarise, recommend, updateSettings, STORAGE_KEY,
@@ -51,9 +51,57 @@ test('every skill used by an activity is defined and every skill is taught', () 
 test('answers are pre-authored options, never empty', () => {
   for (const a of ACTIVITIES) {
     for (const s of a.steps) {
+      if (s.kind === 'drop') continue;
       assert.ok(s.options.some((o) => o.id === s.answer), `${a.id}: answer not an option`);
     }
   }
+});
+
+test('drop steps: wrong placement gives a hint and keeps the item; correct ones complete the step', () => {
+  const a = byId('drop-shape-holes-2');
+  let s = startSession(a);
+  let r = placeItem(s, a, 'circle', 'hole-square');
+  assert.equal(r.outcome.kind, 'retry');
+  assert.equal(r.outcome.hint, a.steps[0].hints[0]);
+  assert.equal(r.session.drop.placed.circle, undefined);
+  s = r.session;
+  r = placeItem(s, a, 'circle', 'hole-circle');
+  assert.equal(r.outcome.kind, 'placed');
+  assert.equal(r.outcome.stepDone, false);
+  r = placeItem(r.session, a, 'square', 'hole-square');
+  r = placeItem(r.session, a, 'triangle', 'hole-triangle');
+  assert.equal(r.outcome.stepDone, true);
+  assert.equal(r.outcome.activityDone, true);
+  assert.equal(r.outcome.firstTry, false, 'one wrong placement means not first try');
+  assert.equal(r.session.results[0].firstTry, false);
+  assert.equal(r.session.done, true);
+});
+
+test('drop steps: all placed first time counts as first try', () => {
+  const a = byId('group-even-odd');
+  let session = startSession(a);
+  let out;
+  for (const [item, target] of [['n2', 'even'], ['n7', 'odd'], ['n4', 'even'], ['n9', 'odd']]) {
+    out = placeItem(session, a, item, target);
+    session = out.session;
+  }
+  assert.equal(out.outcome.activityDone, true);
+  assert.equal(session.results[0].firstTry, true);
+});
+
+test('drop steps: cannot place the same item twice or use choice submit', () => {
+  const a = byId('group-warm-cool');
+  const r = placeItem(startSession(a), a, 'red', 'warm');
+  assert.throws(() => placeItem(r.session, a, 'red', 'warm'), /already placed/);
+  assert.throws(() => submit(startSession(a), a, 'warm'), /drop steps/);
+});
+
+test('validator catches bad drop pairs', () => {
+  const base = structuredClone(byId('group-warm-cool'));
+  base.steps[0].pairs = { red: 'warm', blue: 'cool', yellow: 'warm' };
+  assert.ok(validateActivity(base).length > 0);
+  base.steps[0].pairs = { red: 'warm', blue: 'nope', yellow: 'warm', green: 'cool' };
+  assert.ok(validateActivity(base).length > 0);
 });
 
 test('validator rejects a wrong answer, bad band, duplicate options and missing hints', () => {

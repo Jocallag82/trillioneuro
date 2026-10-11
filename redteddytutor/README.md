@@ -11,7 +11,7 @@ Only email + optional audience are collected.
 
 ## Free learning activities (`/learn/`)
 Static, no build step. Served from `redteddytutor.com/learn/` (routes in root `vercel.json`).
-- `learn/js/content.js` — the starter library (20 activities, ages 2–3 / 3–5 / 5–7). Answers are pre-authored.
+- `learn/js/content.js` — the starter library (25 activities, ages 2–3 / 3–5 / 5–7). Answers are pre-authored. Two step kinds: `choice` (tap one option) and `drop` (drag or tap each item onto its target, e.g. shapes into holes, grouping).
 - `learn/js/engine.js` — validation, answer checking, hints (two per question) and retries. A third miss reveals the answer without penalty.
 - `learn/js/progress.js` — device-only progress in `localStorage` (`rtt.learn.v1`). Recommendations and trends use first-try answers only.
 - `learn/js/player.js`, `learn/js/parent.js` — UI. Spoken instructions use the browser's speech synthesis, start only after a tap, and always appear as captions.

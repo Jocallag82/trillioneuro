@@ -355,5 +355,128 @@ export const ACTIVITIES = [
       hints: ['Say the months in order: January, February, March, ...', 'The month after March is April.'],
     }],
   },
-];
 
+  // ---- Drag and drop: shapes into holes, grouping ----
+  {
+    id: 'drop-shape-holes-2', title: 'Shapes into holes', domain: 'Shapes', band: '2-3', level: 1, skill: 'shapes',
+    instruction: 'Drag each shape into the hole that matches it. If dragging is hard, tap a shape, then tap its hole.',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Put each shape in its matching hole.',
+      items: [
+        { id: 'circle', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 'square', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+        { id: 'triangle', label: 'Triangle', visual: { kind: 'shape', shape: 'triangle' } },
+      ],
+      targets: [
+        { id: 'hole-circle', label: 'Circle hole', visual: { kind: 'shape', shape: 'circle', outline: true } },
+        { id: 'hole-square', label: 'Square hole', visual: { kind: 'shape', shape: 'square', outline: true } },
+        { id: 'hole-triangle', label: 'Triangle hole', visual: { kind: 'shape', shape: 'triangle', outline: true } },
+      ],
+      pairs: { circle: 'hole-circle', square: 'hole-square', triangle: 'hole-triangle' },
+      hints: ['Look at the edges. Does this hole have corners?', 'A round piece fits the round hole. Count the corners to match the others.'],
+    }],
+  },
+  {
+    id: 'drop-shape-holes-4', title: 'Fit the shapes', domain: 'Shapes', band: '3-5', level: 2, skill: 'shapes',
+    instruction: 'Look at each shape carefully. Which hole is its exact match?',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Match all four shapes to their holes.',
+      items: [
+        { id: 'circle', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 'square', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+        { id: 'triangle', label: 'Triangle', visual: { kind: 'shape', shape: 'triangle' } },
+        { id: 'rectangle', label: 'Rectangle', visual: { kind: 'shape', shape: 'rectangle' } },
+      ],
+      targets: [
+        { id: 'hole-circle', label: 'Circle hole', visual: { kind: 'shape', shape: 'circle', outline: true } },
+        { id: 'hole-square', label: 'Square hole', visual: { kind: 'shape', shape: 'square', outline: true } },
+        { id: 'hole-triangle', label: 'Triangle hole', visual: { kind: 'shape', shape: 'triangle', outline: true } },
+        { id: 'hole-rectangle', label: 'Rectangle hole', visual: { kind: 'shape', shape: 'rectangle', outline: true } },
+      ],
+      pairs: { circle: 'hole-circle', square: 'hole-square', triangle: 'hole-triangle', rectangle: 'hole-rectangle' },
+      hints: ['A rectangle is longer than it is tall. A square is the same all round.', 'Count the corners and check which hole has the same shape.'],
+    }],
+  },
+  {
+    id: 'group-round-corners', title: 'Round or has corners?', domain: 'Sorting', band: '3-5', level: 2, skill: 'sorting',
+    instruction: 'Drag each shape into the group it belongs to.',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Put every shape in the right group.',
+      items: [
+        { id: 'c1', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+        { id: 's1', label: 'Square', visual: { kind: 'shape', shape: 'square' } },
+        { id: 't1', label: 'Triangle', visual: { kind: 'shape', shape: 'triangle' } },
+        { id: 'c2', label: 'Circle', visual: { kind: 'shape', shape: 'circle' } },
+      ],
+      targets: [
+        { id: 'round', label: 'Round' },
+        { id: 'corners', label: 'Has corners' },
+      ],
+      pairs: { c1: 'round', s1: 'corners', t1: 'corners', c2: 'round' },
+      hints: ['Run your finger around the edge. Does it have corners?', 'Circles have no corners at all.'],
+    }],
+  },
+  {
+    id: 'group-few-many', title: 'Few or many?', domain: 'Counting', band: '3-5', level: 2, skill: 'count-to-10',
+    instruction: 'Count each group of dots. Put it in the right box.',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Drag each group to up to 3 or more than 3.',
+      items: [
+        { id: 'two', label: '2 dots', visual: { kind: 'dots', count: 2 } },
+        { id: 'five', label: '5 dots', visual: { kind: 'dots', count: 5 } },
+        { id: 'three', label: '3 dots', visual: { kind: 'dots', count: 3 } },
+        { id: 'six', label: '6 dots', visual: { kind: 'dots', count: 6 } },
+      ],
+      targets: [
+        { id: 'few', label: 'Up to 3' },
+        { id: 'many', label: 'More than 3' },
+      ],
+      pairs: { two: 'few', five: 'many', three: 'few', six: 'many' },
+      hints: ['Count the dots in each group first.', 'Up to 3 means 1, 2 or 3 dots.'],
+    }],
+  },
+  {
+    id: 'group-warm-cool', title: 'Warm or cool colours', domain: 'Colours', band: '5-7', level: 3, skill: 'colours',
+    instruction: 'Warm colours remind us of sunshine. Cool colours remind us of water and sky.',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Sort the colours into warm and cool.',
+      items: [
+        { id: 'red', label: 'Red', visual: { kind: 'swatch', label: 'Red', hex: RED } },
+        { id: 'blue', label: 'Blue', visual: { kind: 'swatch', label: 'Blue', hex: BLUE } },
+        { id: 'yellow', label: 'Yellow', visual: { kind: 'swatch', label: 'Yellow', hex: YELLOW } },
+        { id: 'green', label: 'Green', visual: { kind: 'swatch', label: 'Green', hex: GREEN } },
+      ],
+      targets: [
+        { id: 'warm', label: 'Warm' },
+        { id: 'cool', label: 'Cool' },
+      ],
+      pairs: { red: 'warm', blue: 'cool', yellow: 'warm', green: 'cool' },
+      hints: ['Think of fire and sunshine for warm colours.', 'Think of grass, water and sky for cool colours.'],
+    }],
+  },
+  {
+    id: 'group-even-odd', title: 'Even or odd?', domain: 'Numbers', band: '5-7', level: 3, skill: 'number-names',
+    instruction: 'Even numbers can be split into two equal groups with none left over.',
+    steps: [{
+      kind: 'drop',
+      prompt: 'Sort each number into even or odd.',
+      items: [
+        { id: 'n2', label: '2', visual: { kind: 'text', text: '2' } },
+        { id: 'n7', label: '7', visual: { kind: 'text', text: '7' } },
+        { id: 'n4', label: '4', visual: { kind: 'text', text: '4' } },
+        { id: 'n9', label: '9', visual: { kind: 'text', text: '9' } },
+      ],
+      targets: [
+        { id: 'even', label: 'Even' },
+        { id: 'odd', label: 'Odd' },
+      ],
+      pairs: { n2: 'even', n7: 'odd', n4: 'even', n9: 'odd' },
+      hints: ['Ends in 0, 2, 4, 6 or 8? That is even.', 'Odd numbers end in 1, 3, 5, 7 or 9.'],
+    }],
+  },
+];
