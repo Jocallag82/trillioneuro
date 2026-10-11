@@ -2,7 +2,7 @@
 import { ACTIVITIES, BANDS, DOMAINS, LEVEL_NAMES } from './content.js';
 import { startSession, submit, placeItem, placeCard, summarySession } from './engine.js';
 import { readState, writeState, recordStep, recordCompletion, updateSettings, recommend } from './progress.js';
-import { canSpeak, speak, stopSpeaking } from './speech.js';
+import { canSpeak, speak, narrate, stopSpeaking } from './speech.js';
 import { el, visualNode } from './dom.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
@@ -19,6 +19,7 @@ let view = 'home';
 let current = null;
 let session = null;
 let spokenLast = '';
+let spokenKey = null;
 
 const byId = (id) => ACTIVITIES.find((a) => a.id === id);
 const completedIds = () => new Set(state.sessions.map((s) => s.activityId));
@@ -34,11 +35,13 @@ function showNotice(text) {
 }
 
 // Every spoken line is also shown as a caption. Speech runs only after a tap.
-function say(text) {
+function say(text, clipKey = null) {
   spokenLast = text;
+  spokenKey = clipKey;
   caption.textContent = text;
   if (!state.settings.audio) return;
-  speak(text, { volume: state.settings.volume });
+  if (clipKey) narrate(clipKey, text, { volume: state.settings.volume });
+  else speak(text, { volume: state.settings.volume });
 }
 
 function setScreen(nodes, focusSelector) {
@@ -173,8 +176,8 @@ function renderStep(intro = false, viewState = session) {
     el('div', { id: 'feedback', class: 'feedback', role: 'status', 'aria-live': 'polite' }),
   ], '#prompt');
 
-  const spoken = intro ? `${current.instruction} ${step.prompt}` : step.prompt;
-  say(spoken);
+  if (intro) say(`${current.instruction} ${step.prompt}`);
+  else say(step.prompt, `${current.id}-${viewState.index}`);
 }
 
 function bodyFor(step, viewState) {
@@ -193,7 +196,7 @@ function choiceBody(step) {
   ]));
   return el('div', { class: 'choice-body' }, [
     step.listen
-      ? el('button', { type: 'button', class: 'btn btn-line play', onclick: () => say(step.prompt) }, 'Play question again')
+      ? el('button', { type: 'button', class: 'btn btn-line play', onclick: () => say(step.prompt, `${current.id}-${session.index}`) }, 'Play question again')
       : null,
     step.visual ? el('div', { class: 'stage' }, visualNode(step.visual)) : null,
     el('div', { class: 'options', role: 'group', 'aria-label': 'Answers' }, options),
@@ -464,7 +467,8 @@ function setupAudio() {
   });
   replayBtn.addEventListener('click', () => {
     if (!state.settings.audio) return;
-    speak(spokenLast || 'Choose an activity.', { volume: state.settings.volume });
+    if (spokenKey) narrate(spokenKey, spokenLast, { volume: state.settings.volume });
+    else speak(spokenLast || 'Choose an activity.', { volume: state.settings.volume });
   });
 }
 

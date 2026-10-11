@@ -67,3 +67,33 @@ export function stopSpeaking() {
   if (!canSpeak()) return;
   try { window.speechSynthesis.cancel(); } catch { /* ignore */ }
 }
+
+// Recorded narration. A clip at /learn/audio/<key>.mp3 is played when present,
+// otherwise the built-in voice speaks the same text. A missing clip is remembered
+// per key so the page does not re-request it on every tap.
+const clipState = new Map(); // key -> true (exists) | false (missing)
+let currentClip = null;
+
+export function narrate(key, text, { volume = 1, muted = false } = {}) {
+  if (muted) return false;
+  if (!key || clipState.get(key) === false || typeof Audio !== 'function') {
+    return speak(text, { volume, muted });
+  }
+  try {
+    if (currentClip) currentClip.pause();
+    stopSpeaking();
+    const clip = new Audio(`/learn/audio/${key}.mp3`);
+    clip.volume = Math.min(1, Math.max(0, volume));
+    currentClip = clip;
+    clip.onerror = () => { clipState.set(key, false); speak(text, { volume }); };
+    clip.play().then(() => clipState.set(key, true)).catch(() => {
+      if (clip === currentClip && clipState.get(key) !== true) {
+        clipState.set(key, false);
+        speak(text, { volume });
+      }
+    });
+    return true;
+  } catch {
+    return speak(text, { volume, muted });
+  }
+}
