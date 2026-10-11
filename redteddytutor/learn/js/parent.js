@@ -2,6 +2,7 @@
 import { ACTIVITIES, BANDS, LEVEL_NAMES } from './content.js';
 import { readState, writeState, summarise, recommend, updateSettings } from './progress.js';
 import { el } from './dom.js';
+import { openRemote, syncSettings, syncReset } from './sync.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
 const root = document.getElementById('parent-app');
@@ -13,12 +14,14 @@ const TREND_LABEL = {
 };
 
 let state = readState(storage);
+let remote = null;
 
 function save(next) {
   state = next;
   if (!writeState(storage, state)) {
     flash('Settings could not be saved on this device.');
   }
+  syncSettings(remote, state.settings).catch(() => flash('Settings saved on this device. They will sync when you are online.'));
 }
 
 function flash(text) {
@@ -98,7 +101,12 @@ function render() {
     ])))
     : el('p', { class: 'muted', text: 'Nothing to suggest for this age band yet. Try "Show activities from all age bands".' });
 
+  const who = remote?.profile
+    ? el('p', { class: 'muted', text: `Showing progress for ${remote.profile.nickname}, synced to your account.` })
+    : el('p', { class: 'muted', text: 'Showing progress saved on this device. Sign in on the account page to sync across devices.' });
+
   root.replaceChildren(
+    who,
     overview,
     el('section', { class: 'panel', 'aria-labelledby': 'skills-h' }, [
       el('h3', { id: 'skills-h', text: 'Skills' }), skillTable,
@@ -112,7 +120,7 @@ function render() {
     settingsForm,
     el('section', { class: 'panel danger', 'aria-labelledby': 'data-h' }, [
       el('h3', { id: 'data-h', text: 'Delete progress on this device' }),
-      el('p', { class: 'muted', text: 'Removes every recorded answer and session from this browser. Settings are kept until you clear them too.' }),
+      el('p', { class: 'muted', text: 'Removes every recorded answer and session for this learner, on this device and in your account if signed in. Settings are kept.' }),
       el('button', { type: 'button', class: 'btn btn-line', onclick: resetProgress, text: 'Delete progress' }),
     ]),
     el('p', { id: 'flash', class: 'flash', role: 'status', 'aria-live': 'polite' }),
@@ -129,8 +137,11 @@ function stat(label, value) {
 function resetProgress() {
   if (!window.confirm('Delete all progress recorded on this device? This cannot be undone.')) return;
   save({ ...state, steps: [], sessions: [] });
+  syncReset(remote).catch(() => flash('Could not delete the synced progress. Try again when online.'));
   render();
-  flash('Progress on this device has been deleted.');
+  flash('Progress has been deleted.');
 }
 
-render();
+openRemote(storage).then((r) => {
+  if (r?.profile) { remote = r; state = r.state; writeState(storage, state); }
+}).finally(render);

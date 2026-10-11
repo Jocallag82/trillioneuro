@@ -231,3 +231,16 @@ thead th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:va
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .card:hover,.option:hover:not(:disabled),.drag-item:hover,.memory-card:hover{transform:none!important}
 }
+
+/* accounts */
+.field{width:100%;min-height:52px;padding:0 16px;border:1.5px solid var(--line);border-radius:14px;font:1rem var(--sans);background:var(--paper);color:var(--ink);margin-bottom:16px}
+.field:focus{border-color:var(--red);outline:3px solid var(--gold);outline-offset:0}
+.field-label{display:block;font-weight:700;font-size:.9rem;margin-bottom:8px}
+.small{font-size:.85rem;margin-top:14px}
+.learning-as{font-size:.95rem;margin:-4px 0 18px}
+.learning-as a{color:var(--red);font-weight:700}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.profiles{list-style:none;display:grid;gap:12px;margin-bottom:6px}
+.profile{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--ivory2)}
+.profile-actions{display:flex;flex-wrap:wrap;gap:10px}
+.profile-actions .btn{min-height:46px;padding:0 20px;font-size:.95rem}

@@ -4,6 +4,7 @@ import { startSession, submit, placeItem, placeCard, summarySession } from './en
 import { readState, writeState, recordStep, recordCompletion, updateSettings, recommend } from './progress.js';
 import { canSpeak, speak, narrate, stopSpeaking } from './speech.js';
 import { el, visualNode } from './dom.js';
+import { openRemote, syncStep, syncSession, syncSettings } from './sync.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
 const app = document.getElementById('app');
@@ -15,6 +16,7 @@ const audioBar = document.getElementById('audio-bar');
 const audioNote = document.getElementById('audio-note');
 
 let state = readState(storage);
+let remote = null; // { session, profile } when a child profile is active and signed in
 let view = 'home';
 let current = null;
 let session = null;
@@ -107,6 +109,14 @@ function renderHome(focusSelector = '#home-title') {
         el('p', { class: 'hero-copy', text: 'Short activities for counting, shapes, colours, letters and patterns. Pick an age to start.' }),
       ]),
     ]),
+    remote?.profile
+      ? el('p', { class: 'learning-as' }, [
+        'Learning as ', el('strong', { text: remote.profile.nickname }), ' · ',
+        el('a', { href: '/learn/account.html', text: 'Change profile' }),
+      ])
+      : el('p', { class: 'learning-as muted' }, [
+        'Saved on this device. ', el('a', { href: '/learn/account.html', text: 'Sign in to sync across devices' }),
+      ]),
     el('div', { class: 'age-panel' }, [
       el('fieldset', { class: 'chips' }, [el('legend', { text: 'Age (a starting point, not a measure of ability)' }), ...bandRadios]),
       showAllBox,
@@ -142,6 +152,7 @@ function setBand(band) {
 function setSettings(patch, focusSelector) {
   state = updateSettings(state, patch);
   persist();
+  syncSettings(remote, state.settings);
   renderHome(focusSelector);
 }
 
@@ -397,8 +408,10 @@ function choose(optionId) {
 
 function persistSteps(firstTry) {
   state = recordStep(state, current.id, current.skill, firstTry, Date.now());
+  syncStep(storage, remote, state.steps[state.steps.length - 1]);
   if (session.done) {
     state = recordCompletion(state, current.id, summarySession(session), Date.now());
+    syncSession(storage, remote, state.sessions[state.sessions.length - 1]);
   }
   persist();
 }
@@ -457,6 +470,7 @@ function setupAudio() {
   soundBtn.addEventListener('click', () => {
     state = updateSettings(state, { audio: !state.settings.audio });
     persist();
+    syncSettings(remote, state.settings);
     soundBtn.setAttribute('aria-pressed', String(state.settings.audio));
     soundBtn.textContent = state.settings.audio ? 'Voice on' : 'Voice off';
     if (!state.settings.audio) stopSpeaking();
@@ -464,6 +478,7 @@ function setupAudio() {
   volumeInput.addEventListener('change', () => {
     state = updateSettings(state, { volume: Number(volumeInput.value) });
     persist();
+    syncSettings(remote, state.settings);
   });
   replayBtn.addEventListener('click', () => {
     if (!state.settings.audio) return;
@@ -476,6 +491,16 @@ window.addEventListener('pagehide', stopSpeaking);
 window.addEventListener('pointerup', () => { dragItem = null; });
 
 setupAudio();
-const requested = new URLSearchParams(window.location.search).get('activity');
-if (requested && byId(requested)) startActivity(requested);
-else renderHome('#home-title');
+// Signed in with an active child profile: load that child's synced progress.
+// Otherwise everything stays on this device.
+openRemote(storage).then((r) => {
+  remote = r?.profile ? r : null;
+  if (r?.state) {
+    state = r.state;
+    writeState(storage, state);
+  }
+}).finally(() => {
+  const requested = new URLSearchParams(window.location.search).get('activity');
+  if (requested && byId(requested)) startActivity(requested);
+  else renderHome('#home-title');
+});

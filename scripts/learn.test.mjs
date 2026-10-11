@@ -324,3 +324,27 @@ test('memory: the board is shuffled once per attempt and keeps its order through
   assert.deepEqual(out.session.order, session.order);
   assert.deepEqual(shuffle([1, 2, 3, 4], () => 0.99).length, 4);
 });
+
+// ---- Synced profiles: row mapping ----
+import { rowsToState } from '../redteddytutor/learn/js/api.js';
+
+test('synced rows map to the local progress model with the profile settings', () => {
+  const profile = { age_band: '5-7', settings: { audio: false, volume: 0.5, showAll: true } };
+  const state = rowsToState(profile, {
+    attempts: [{ activity_id: 'count-dots-3', skill: 'count-to-5', first_try: true, created_at: '2026-10-01T10:00:00Z' }],
+    sessions: [{ activity_id: 'count-dots-3', total: 1, correct_first: 1, hints_used: 0, created_at: '2026-10-01T10:01:00Z' }],
+  });
+  assert.equal(state.settings.band, '5-7');
+  assert.equal(state.settings.audio, false);
+  assert.equal(state.settings.showAll, true);
+  assert.equal(state.steps[0].firstTry, true);
+  assert.equal(state.steps[0].at, Date.parse('2026-10-01T10:00:00Z'));
+  assert.equal(state.sessions[0].correctFirst, 1);
+  assert.equal(summarise(state).completed, 1);
+});
+
+test('synced rows with missing settings fall back to defaults', () => {
+  const state = rowsToState({ age_band: '2-3', settings: null }, { attempts: [], sessions: [] });
+  assert.equal(state.settings.audio, true);
+  assert.equal(state.settings.volume, 1);
+});
