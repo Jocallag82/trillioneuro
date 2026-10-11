@@ -2,10 +2,46 @@
 // every spoken line is also shown as a caption, and the app works without audio.
 // Speech starts only from a tap (see player.js), never on page load.
 
+// Most natural-sounding voices first. Matching is by name, so it depends on
+// what the device ships with; the fallbacks below cover everything else.
+const PREFERRED = [
+  /Microsoft .*(Natural|Online).*(en-US|United States)/i,
+  /Google US English/i,
+  /(Samantha|Ava|Allison|Susan|Zoe|Nicky)\b/i,
+];
+
+// Pure: chooses a voice from a list. Prefers en-US, then network (usually
+// higher quality) voices, then any English voice. Returns null if none.
+export function pickVoice(voices) {
+  const english = voices.filter((v) => /^en([-_]|$)/i.test(v.lang || ''));
+  if (!english.length) return null;
+  const us = english.filter((v) => /-US$|_US$/i.test(v.lang || ''));
+  const pool = us.length ? us : english;
+  for (const pattern of PREFERRED) {
+    const hit = pool.find((v) => pattern.test(v.name));
+    if (hit) return hit;
+  }
+  return pool.find((v) => v.localService === false) || pool[0];
+}
+
 export function canSpeak() {
   return typeof window !== 'undefined'
     && 'speechSynthesis' in window
     && typeof window.SpeechSynthesisUtterance === 'function';
+}
+
+let cachedVoice = null;
+function currentVoice() {
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices();
+  if (!voices.length) return null;
+  if (!cachedVoice || !voices.includes(cachedVoice)) cachedVoice = pickVoice(voices);
+  return cachedVoice;
+}
+
+if (typeof window !== 'undefined' && canSpeak()) {
+  // Voices load asynchronously in most browsers.
+  window.speechSynthesis.addEventListener?.('voiceschanged', () => { cachedVoice = null; });
 }
 
 export function speak(text, { volume = 1, muted = false } = {}) {
@@ -14,8 +50,11 @@ export function speak(text, { volume = 1, muted = false } = {}) {
     const synth = window.speechSynthesis;
     synth.cancel();
     const utterance = new window.SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
+    const voice = currentVoice();
+    if (voice) utterance.voice = voice;
+    utterance.lang = voice ? voice.lang : 'en-US';
+    utterance.rate = 0.92;   // slightly slower reads clearer for young listeners
+    utterance.pitch = 1;
     utterance.volume = Math.min(1, Math.max(0, volume));
     synth.speak(utterance);
     return true;

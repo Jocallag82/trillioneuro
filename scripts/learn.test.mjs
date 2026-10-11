@@ -203,3 +203,22 @@ test('normalize keeps only recognised fields', () => {
   assert.equal(s.sessions.length, 1);
   assert.deepEqual(normalize(null), emptyState());
 });
+
+// ---- Voice selection ----
+import { pickVoice } from '../redteddytutor/learn/js/speech.js';
+
+test('voice: prefers a natural en-US voice over generic ones', () => {
+  const voices = [
+    { name: 'Albert', lang: 'en-US', localService: true },
+    { name: 'Microsoft Aria Online (Natural) - English (United States)', lang: 'en-US', localService: false },
+    { name: 'Google UK English Female', lang: 'en-GB', localService: false },
+  ];
+  assert.equal(pickVoice(voices).name.includes('Natural'), true);
+});
+
+test('voice: falls back to a network en-US voice, then any English voice, then none', () => {
+  assert.equal(pickVoice([{ name: 'A', lang: 'en-US', localService: true }, { name: 'B', lang: 'en-US', localService: false }]).name, 'B');
+  assert.equal(pickVoice([{ name: 'C', lang: 'en-GB', localService: true }]).name, 'C');
+  assert.equal(pickVoice([{ name: 'D', lang: 'fr-FR', localService: true }]), null);
+  assert.equal(pickVoice([]), null);
+});
