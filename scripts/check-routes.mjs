@@ -108,6 +108,11 @@ const cases = [
   ['redteddytutor.com',     '/og-image.jpg',  'serve',    '/redteddytutor/og-image.jpg'],
   ['redteddytutor.com',     '/index.html',    'redirect', '/'],
   ['redteddytutor.com',     '/sitemap.xml',   'serve',    '/redteddytutor/sitemap.xml'],
+  ['redteddytutor.com',     '/learn/',       'serve',    '/redteddytutor/learn/index.html'],
+  ['redteddytutor.com',     '/learn',        'serve',    '/redteddytutor/learn/index.html'],
+  ['redteddytutor.com',     '/learn/parent', 'serve',    '/redteddytutor/learn/parent.html'],
+  ['redteddytutor.com',     '/learn/js/player.js', 'serve', '/redteddytutor/learn/js/player.js'],
+  ['redteddytutor.com',     '/learn/learn.css',    'serve', '/redteddytutor/learn/learn.css'],
 ];
 
 let bad = 0;

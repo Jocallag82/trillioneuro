@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free learning activities — Red Teddy Tutor</title>
+<meta name="description" content="Free early-learning activities from Red Teddy Tutor: counting, shapes, colours, letters and patterns.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0e1830">
+<link rel="icon" href="/teddy-mark.webp" type="image/webp">
+<link rel="stylesheet" href="/learn/learn.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to activities</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Red Teddy Tutor home">
+      <img src="/teddy-mark.webp" width="40" height="40" alt="">
+      <span>Red Teddy Tutor</span>
+    </a>
+    <nav aria-label="Learning">
+      <a href="/learn/parent.html">Parent summary</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap main">
+  <div class="toolbar" role="group" aria-label="Spoken instructions" id="audio-bar">
+    <button type="button" class="btn btn-line" id="replay">Replay instruction</button>
+    <button type="button" class="btn btn-line" id="sound" aria-pressed="true">Voice on</button>
+    <label class="range-label">Volume
+      <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+    </label>
+  </div>
+  <p class="notice" id="audio-note" hidden></p>
+  <p class="caption" id="caption" role="status" aria-live="polite" aria-label="Captions"></p>
+  <p class="notice" id="notice" role="status"></p>
+  <noscript><p class="notice">Activities need JavaScript to run. Please enable it in your browser.</p></noscript>
+  <div id="app" tabindex="-1"></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>No name or account is needed. Activities are free to try. Progress stays on this device.</p>
+    <p><a href="/">Back to Red Teddy Tutor</a></p>
+  </div>
+</footer>
+
+<script type="module" src="/learn/js/player.js"></script>
+</body>
+</html>

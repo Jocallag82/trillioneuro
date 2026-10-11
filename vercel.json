@@ -409,6 +409,36 @@
       "status": 308
     },
     {
+      "src": "/learn/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/learn/index.html"
+    },
+    {
+      "src": "/learn/parent/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/learn/parent.html"
+    },
+    {
       "src": "/((?!_vercel/).*)",
       "has": [
         {
