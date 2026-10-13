@@ -443,3 +443,15 @@ tr.strand-start th,tr.strand-start td{border-top:2px solid var(--line)}
   .toolbar .btn{min-height:42px;padding:0 14px;font-size:.85rem}
 }
 @media (max-width:420px){.brand span{display:none}}
+
+/* visuals for ages 7-11 */
+.visual-clock{width:min(100%,220px);height:auto}
+.visual-bars{width:min(100%,460px);height:auto}
+.visual-grid{width:auto;max-width:100%;max-height:300px}
+.visual-passage{max-width:62ch;text-align:left;font-size:1.05rem;line-height:1.7}
+.visual-passage h3{font-size:1.25rem;margin-bottom:8px}
+.visual-passage p+p{margin-top:10px}
+.stage-text{justify-content:flex-start;align-items:flex-start;min-height:0}
+.options.long{grid-template-columns:1fr;gap:10px}
+.options.long .option{min-height:64px;align-items:flex-start;text-align:left;padding:14px 18px}
+.options.long .option-label{font-size:1.02rem;font-weight:600}

@@ -3,7 +3,7 @@
 //
 // Inbound (game.events):  'show-map' | 'show-round' | 'show-feedback' | 'show-result' | 'show-ending'
 // Outbound (game.events): 'map-pick' {levelId} | 'answer' {choice} | 'next' {action}
-import { createTeddy } from './teddy.js';
+import { createTeddy, TEDDY_POSES } from './teddy.js';
 
 const W = 960;
 const H = 600;
@@ -14,9 +14,29 @@ const C = {
 };
 const COLOR_HEX = { red: C.red, blue: C.blue, yellow: C.yellow, green: C.green };
 const SHAPE_LABEL = { circle: 'Circle', square: 'Square', triangle: 'Triangle', rectangle: 'Rectangle' };
+const SERIF = 'Fraunces, Georgia, serif';
+const SANS = '"Atkinson Hyperlegible", system-ui, sans-serif';
+const ART = '/learn/game/art/';
+const BUNS = ['bun', 'bun-pink', 'bun-choc'];
+// Original illustrations (scripts/build-bakery-art.mjs). Rasterised at 1.5x for sharp edges.
+const ART_FILES = {
+  ...Object.fromEntries(TEDDY_POSES.map((p) => [`teddy-${p}`, [600, 690]])),
+  bun: [240, 225], 'bun-pink': [240, 225], 'bun-choc': [240, 225],
+  ...Object.fromEntries(['circle', 'square', 'triangle', 'rectangle'].flatMap((s) => [[`tin-${s}`, [270, 270]], [`cookie-${s}`, [270, 270]]])),
+  'macaron-red': [180, 180], 'macaron-blue': [180, 180], 'macaron-yellow': [180, 180], 'macaron-green': [180, 180],
+  tray: [780, 360], plate: [480, 345], shop: [1440, 900],
+};
 
 export class BakeryScene extends Phaser.Scene {
   constructor() { super('bakery'); }
+
+  // Missing art is not fatal: every drawing has a code-drawn fallback.
+  preload() {
+    this.load.on('loaderror', (file) => console.warn(`[bakery] art missing: ${file.key}`));
+    for (const [key, [width, height]] of Object.entries(ART_FILES)) this.load.svg(key, `${ART}${key}.svg`, { width, height });
+  }
+
+  has(key) { return this.textures.exists(key); }
 
   create() {
     this.calm = !!this.registry.get('calm');
@@ -55,6 +75,11 @@ export class BakeryScene extends Phaser.Scene {
 
   // ---------- Shop front ----------
   drawEnvironment() {
+    if (this.has('shop')) {
+      this.env.add(this.add.image(W / 2, H / 2, 'shop').setDisplaySize(W, H));
+      this.addMotes();
+      return;
+    }
     const g = this.add.graphics();
     g.fillStyle(C.paper); g.fillRect(0, 0, W, H);
     // Warm window light on the back wall.
@@ -99,6 +124,15 @@ export class BakeryScene extends Phaser.Scene {
     }
   }
 
+  addMotes() {
+    if (this.calm) return;
+    for (let i = 0; i < 12; i++) {
+      const m = this.add.circle(Phaser.Math.Between(60, W - 60), Phaser.Math.Between(140, 420), 2.5, C.gold, 0.55);
+      this.env.add(m);
+      this.tweens.add({ targets: m, y: m.y - 40, alpha: 0.1, duration: Phaser.Math.Between(3000, 6000), yoyo: true, repeat: -1, delay: i * 200, ease: 'Sine.easeInOut' });
+    }
+  }
+
   clearStage() {
     this.layer.removeAll(true);
     this.stageObjs.forEach((o) => o.destroy?.());
@@ -117,7 +151,7 @@ export class BakeryScene extends Phaser.Scene {
     const fill = style === 'red' ? C.red : style === 'navy' ? C.navy : C.ivory;
     const textColour = style === 'line' ? '#1d1a1a' : '#ffffff';
     const bg = this.add.rectangle(x, y, w, h, fill).setStrokeStyle(style === 'line' ? 3 : 0, C.ink);
-    const t = this.add.text(x, y, label, { fontFamily: 'system-ui, sans-serif', fontSize: '24px', fontStyle: '700', color: textColour }).setOrigin(0.5);
+    const t = this.add.text(x, y, label, { fontFamily: SANS, fontSize: '24px', fontStyle: '700', color: textColour }).setOrigin(0.5);
     const hit = this.add.zone(x, y, w, h).setInteractive({ useHandCursor: true });
     hit.on('pointerdown', () => { bg.setScale(0.97); this.later(90, () => bg.setScale(1)); onClick(); });
     this.layer.add([bg, t, hit]);
@@ -145,7 +179,7 @@ export class BakeryScene extends Phaser.Scene {
     this.layer.add(this.teddy.root);
     this.stage(this.add.rectangle(W / 2, 130, 540, 50, C.ivory).setStrokeStyle(3, C.red));
     this.stage(this.add.text(W / 2, 130, headline || 'Teddy\u2019s Bakery', {
-      fontFamily: 'Georgia, serif', fontSize: '30px', fontStyle: '700', color: '#1d1a1a',
+      fontFamily: SERIF, fontSize: '30px', fontStyle: '700', color: '#1d1a1a',
     }).setOrigin(0.5));
     // Two rows of signs, then the Grand Opening sign on the counter.
     levels.forEach((lv, i) => {
@@ -159,13 +193,17 @@ export class BakeryScene extends Phaser.Scene {
 
   signpost(x, y, lv) {
     const locked = !!lv.locked;
-    const card = this.add.rectangle(x, y, 250, 92, locked ? C.grey : C.ivory, 1).setStrokeStyle(3, locked ? 0x8f887d : C.red);
-    this.layer.add(card);
+    const ropes = this.add.graphics();
+    ropes.lineStyle(3, 0x8a6a44, 1); ropes.lineBetween(x - 90, y - 46, x - 70, y - 70); ropes.lineBetween(x + 90, y - 46, x + 70, y - 70);
+    this.layer.add(ropes);
+    const shadow = this.add.rectangle(x + 4, y + 5, 250, 92, 0x000000, 0.12);
+    const card = this.add.rectangle(x, y, 250, 92, locked ? 0xd8d0c2 : 0xfffaf0, 1).setStrokeStyle(4, locked ? 0x9c9384 : 0x7a4f2a);
+    this.layer.add([shadow, card]);
     this.layer.add(this.add.text(x, y - 14, lv.title, {
-      fontFamily: 'Georgia, serif', fontSize: '23px', fontStyle: '700', color: locked ? '#5d5650' : '#1d1a1a',
+      fontFamily: SERIF, fontSize: '23px', fontStyle: '700', color: locked ? '#5d5650' : '#1d1a1a',
     }).setOrigin(0.5));
     if (locked) {
-      this.layer.add(this.add.text(x, y + 22, 'Solve the sign before this', { fontFamily: 'system-ui, sans-serif', fontSize: '15px', color: '#5d5650' }).setOrigin(0.5));
+      this.layer.add(this.add.text(x, y + 22, 'Solve the sign before this', { fontFamily: SANS, fontSize: '15px', color: '#5d5650' }).setOrigin(0.5));
     } else {
       for (let s = 0; s < 3; s++) this.drawStar(x - 40 + s * 40, y + 26, 13, s < (lv.stars ?? 0));
     }
@@ -180,8 +218,13 @@ export class BakeryScene extends Phaser.Scene {
   // ---------- Rounds ----------
   showRound({ round, index, total, levelTitle, boss }) {
     this.clearStage();
-    this.stage(this.add.text(24, 16, `${levelTitle}  ·  ${index + 1} of ${total}`, {
-      fontFamily: 'system-ui, sans-serif', fontSize: '18px', fontStyle: '700', color: '#5d5650',
+    // A calm work surface in front of the busy shop, so the puzzle is what stands out.
+    const veil = this.add.graphics();
+    veil.fillStyle(0xfffaf0, 0.9); veil.fillRoundedRect(222, 116, 718, 312, 22);
+    veil.lineStyle(2, 0xe3d6c2, 1); veil.strokeRoundedRect(222, 116, 718, 312, 22);
+    this.layer.add(veil);
+    this.stage(this.add.text(244, 132, `${levelTitle}  ·  ${index + 1} of ${total}`, {
+      fontFamily: SANS, fontSize: '17px', fontStyle: '700', color: '#7a4f2a',
     }));
     this.teddy = createTeddy(this, 120, 330, 0.55, this.calm);
     this.layer.add(this.teddy.root);
@@ -198,7 +241,12 @@ export class BakeryScene extends Phaser.Scene {
     }
   }
 
-  cakeAt(x, y, scale, colour = C.cake) {
+  cakeAt(x, y, scale, colour = C.cake, kind = 0) {
+    if (this.has('bun')) {
+      const img = this.add.image(x, y, BUNS[kind % BUNS.length]).setScale(scale * 0.32);
+      this.layer.add(img);
+      return img;
+    }
     const g = this.add.graphics();
     g.fillStyle(colour); g.fillRoundedRect(-26, -4, 52, 30, 8);
     g.fillStyle(C.icing); g.fillRoundedRect(-30, -14, 60, 16, 8);
@@ -212,25 +260,34 @@ export class BakeryScene extends Phaser.Scene {
     const n = round.data.count;
     const cols = Math.min(n, 5);
     const rows = Math.ceil(n / cols);
-    const cx = 580; const cy = 300;
-    const tray = this.add.graphics();
-    tray.fillStyle(C.woodD); tray.fillRoundedRect(cx - 230, cy - 120 + 0, 460, 210, 22);
-    this.layer.add(tray);
-    const counter = this.add.text(cx, 110, 'Counted: 0', { fontFamily: 'system-ui, sans-serif', fontSize: '26px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(0.5);
+    const cx = 580; const cy = 292;
+    if (this.has('tray')) this.layer.add(this.add.image(cx, cy - 15, 'tray').setDisplaySize(500, 230));
+    else {
+      const tray = this.add.graphics();
+      tray.fillStyle(C.woodD); tray.fillRoundedRect(cx - 230, cy - 120 + 0, 460, 210, 22);
+      this.layer.add(tray);
+    }
+    const counter = this.add.text(900, 132, 'Counted: 0', { fontFamily: SANS, fontSize: '24px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(1, 0);
     this.layer.add(counter);
     for (let i = 0; i < n; i++) {
       const col = i % cols; const row = Math.floor(i / cols);
-      const x = cx - ((cols - 1) * 80) / 2 + col * 80;
-      const y = cy - 40 + row * 90 - ((rows - 1) * 90) / 2 + 20;
-      const cake = this.cakeAt(x, y, 1.2);
-      cake.setInteractive(new Phaser.Geom.Rectangle(-32, -30, 64, 60), Phaser.Geom.Rectangle.Contains);
+      const x = cx - ((cols - 1) * 96) / 2 + col * 96;
+      const y = cy - 15 + row * 100 - ((rows - 1) * 100) / 2;
+      const cake = this.cakeAt(x, y, cols <= 3 && rows === 1 ? 1.75 : cols === 4 ? 1.25 : 1.22, C.cake, n % 3);
+      if (cake.type === 'Image') cake.setInteractive({ useHandCursor: true });
+      else cake.setInteractive(new Phaser.Geom.Rectangle(-32, -30, 64, 60), Phaser.Geom.Rectangle.Contains);
       cake.on('pointerdown', () => {
         if (cake.counted) return;
         cake.counted = true;
         this.roundCounted += 1;
         counter.setText(`Counted: ${this.roundCounted}`);
         this.game.events.emit('sfx', 'pop');
-        this.tweens.add({ targets: cake, scale: 1.45, duration: this.calm ? 0 : 140, yoyo: true });
+        const base = cake.scale;
+        this.tweens.add({ targets: cake, scale: base * 1.2, duration: this.calm ? 0 : 140, yoyo: true });
+        // A counted bun gets a numbered gold tag, so a child can see which ones are done.
+        const tag = this.add.circle(cake.x + 26, cake.y - 26, 13, C.gold).setStrokeStyle(3, 0xffffff);
+        this.layer.add(tag);
+        this.layer.add(this.add.text(tag.x, tag.y, String(this.roundCounted), { fontFamily: SANS, fontSize: '15px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(0.5));
       });
       this.roundObjs.push(cake);
     }
@@ -239,47 +296,52 @@ export class BakeryScene extends Phaser.Scene {
 
   drawCompare(round) {
     const draw = (cx, count, id) => {
-      const frame = this.add.graphics();
-      frame.fillStyle(C.woodD); frame.fillRoundedRect(cx - 150, 190, 300, 220, 22);
-      frame.fillStyle(C.ivory, 0.85); frame.fillRoundedRect(cx - 136, 204, 272, 192, 16);
-      this.layer.add(frame);
+      if (this.has('plate')) this.layer.add(this.add.image(cx, 268, 'plate').setDisplaySize(300, 210));
+      else {
+        const frame = this.add.graphics();
+        frame.fillStyle(C.woodD); frame.fillRoundedRect(cx - 150, 190, 300, 220, 22);
+        frame.fillStyle(C.ivory, 0.85); frame.fillRoundedRect(cx - 136, 204, 272, 192, 16);
+        this.layer.add(frame);
+      }
       const cols = Math.min(count, 4);
       for (let i = 0; i < count; i++) {
         const col = i % cols; const row = Math.floor(i / cols);
-        const x = cx - ((cols - 1) * 66) / 2 + col * 66;
-        const y = 270 + row * 70;
-        this.cakeAt(x, y, 0.9);
+        const x = cx - ((cols - 1) * 60) / 2 + col * 60;
+        const y = 262 + row * 58 - (Math.ceil(count / cols) - 1) * 26;
+        this.cakeAt(x, y, 1.0, C.cake, id === 'left' ? 0 : 1);
       }
-      const zone = this.add.zone(cx, 300, 300, 220).setInteractive({ useHandCursor: true });
+      const zone = this.add.zone(cx, 268, 300, 220).setInteractive({ useHandCursor: true });
       zone.on('pointerdown', () => this.game.events.emit('answer', { choice: id }));
       this.layer.add(zone);
       this.roundObjs.push(zone);
     };
-    draw(330, round.data.left, 'left');
-    draw(630, round.data.right, 'right');
-    this.stage(this.add.text(W / 2, 470, 'Tap the tray you choose', { fontFamily: 'system-ui, sans-serif', fontSize: '20px', color: '#5d5650' }).setOrigin(0.5));
+    draw(420, round.data.left, 'left');
+    draw(750, round.data.right, 'right');
+    this.stage(this.add.text(585, 404, 'Tap the plate you choose', { fontFamily: SANS, fontSize: '20px', color: '#5d5650' }).setOrigin(0.5));
     this.teddy.setMood('think');
   }
 
   drawShape(round) {
     const holes = round.data.holes;
-    const spacing = 780 / holes.length;
-    const startX = 260 + spacing / 2 - 20;
-    const holeY = 260;
+    const spacing = 680 / holes.length;
+    const startX = 250 + spacing / 2;
+    const holeY = 230;
     holes.forEach((id, i) => {
       const x = startX + i * spacing;
       const outline = this.shapeGfx(id, x, holeY, 62, false);
       outline.setData('hole', id);
       this.layer.add(outline);
-      this.stage(this.add.text(x, holeY + 84, SHAPE_LABEL[id], { fontFamily: 'system-ui, sans-serif', fontSize: '18px', color: '#5d5650' }).setOrigin(0.5));
+      this.stage(this.add.text(x, holeY + 84, SHAPE_LABEL[id], { fontFamily: SANS, fontSize: '18px', color: '#5d5650' }).setOrigin(0.5));
       this.roundObjs.push({ id, x, y: holeY, hole: true });
     });
-    const sx = 480; const sy = 430;
+    const sx = 585; const sy = 468;
     const piece = this.shapeGfx(round.answer, sx, sy, 56, true);
-    piece.setInteractive(new Phaser.Geom.Rectangle(-60, -60, 120, 120), Phaser.Geom.Rectangle.Contains);
+    // An image's hit area is its whole frame; the drawn fallback needs one centred on it.
+    if (piece.type === 'Image') piece.setInteractive({ useHandCursor: true });
+    else piece.setInteractive(new Phaser.Geom.Rectangle(-60, -60, 120, 120), Phaser.Geom.Rectangle.Contains);
     this.input.setDraggable(piece);
     this.layer.add(piece);
-    this.stage(this.add.text(W / 2, 512, 'Drag the cake to its hole', { fontFamily: 'system-ui, sans-serif', fontSize: '20px', color: '#5d5650' }).setOrigin(0.5));
+    this.stage(this.add.text(585, 400, 'Drag the biscuit up into the tin it fits', { fontFamily: SANS, fontSize: '20px', color: '#5d5650' }).setOrigin(0.5));
     piece.on('drag', (p, dx, dy) => { piece.x = dx; piece.y = dy; });
     piece.on('dragend', () => {
       const hit = this.roundObjs.find((h) => h.hole && Phaser.Math.Distance.Between(piece.x, piece.y, h.x, h.y) < 80);
@@ -293,6 +355,8 @@ export class BakeryScene extends Phaser.Scene {
   }
 
   shapeGfx(id, x, y, r, filled) {
+    const key = `${filled ? 'cookie' : 'tin'}-${id}`;
+    if (this.has(key)) return this.add.image(x, y, key).setDisplaySize(r * 2.5, r * 2.5);
     const g = this.add.graphics();
     const colour = filled ? C.red : C.ivory;
     const stroke = filled ? 0 : C.red;
@@ -312,34 +376,35 @@ export class BakeryScene extends Phaser.Scene {
 
   drawPattern(round) {
     const seq = round.data.seq;
-    const startX = W / 2 - ((seq.length - 1) * 96) / 2;
+    const startX = 585 - ((seq.length - 1) * 96) / 2;
     seq.forEach((item, i) => {
       const x = startX + i * 96;
-      const y = 250;
+      const y = 214;
       if (i === round.data.gap) {
         const slot = this.add.rectangle(x, y, 80, 80, C.ivory).setStrokeStyle(4, C.ink);
         this.layer.add(slot);
-        this.layer.add(this.add.text(x, y, '?', { fontFamily: 'Georgia, serif', fontSize: '44px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(0.5));
+        this.layer.add(this.add.text(x, y, '?', { fontFamily: SERIF, fontSize: '44px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(0.5));
       } else {
         this.patternTile(x, y, item);
       }
     });
-    this.stage(this.add.text(W / 2, 360, 'Tap the piece that fills the gap', { fontFamily: 'system-ui, sans-serif', fontSize: '20px', color: '#5d5650' }).setOrigin(0.5));
+    this.stage(this.add.text(585, 286, 'Tap the piece that fills the gap', { fontFamily: SANS, fontSize: '20px', color: '#5d5650' }).setOrigin(0.5));
     round.options.forEach((opt, i) => {
-      const x = W / 2 - ((round.options.length - 1) * 130) / 2 + i * 130;
-      const tile = this.patternTile(x, 450, opt, true);
+      const x = 585 - ((round.options.length - 1) * 130) / 2 + i * 130;
+      const tile = this.patternTile(x, 352, opt, true);
       tile.on('pointerdown', () => this.game.events.emit('answer', { choice: opt }));
     });
     this.teddy.setMood('think');
   }
 
   patternTile(x, y, item, interactive = false) {
-    const bg = this.add.rectangle(x, y, 80, 80, C.ivory).setStrokeStyle(3, C.ink);
-    const dot = this.add.circle(x, y, 26, COLOR_HEX[item] ?? C.red);
+    const bg = this.add.rectangle(x, y, 80, 80, 0xfffaf0).setStrokeStyle(3, interactive ? 0x7a4f2a : 0xe3d6c2);
+    const key = `macaron-${item}`;
+    const dot = this.has(key) ? this.add.image(x, y, key).setDisplaySize(72, 72) : this.add.circle(x, y, 26, COLOR_HEX[item] ?? C.red);
     this.layer.add([bg, dot]);
     if (interactive) {
       bg.setInteractive({ useHandCursor: true });
-      this.layer.add(this.add.text(x, y + 56, item.charAt(0).toUpperCase() + item.slice(1), { fontFamily: 'system-ui, sans-serif', fontSize: '16px', color: '#5d5650' }).setOrigin(0.5));
+      this.layer.add(this.add.text(x, y + 56, item.charAt(0).toUpperCase() + item.slice(1), { fontFamily: SANS, fontSize: '16px', color: '#5d5650' }).setOrigin(0.5));
       return bg;
     }
     return bg;
@@ -376,7 +441,7 @@ export class BakeryScene extends Phaser.Scene {
     b.fillRoundedRect(300 - 40, 40, width, 62, 16);
     b.strokeRoundedRect(300 - 40, 40, width, 62, 16);
     this.layer.add(b);
-    const t = this.add.text(300 - 40 + 22, 71, text, { fontFamily: 'system-ui, sans-serif', fontSize: '20px', color: '#1d1a1a', wordWrap: { width: width - 40 } }).setOrigin(0, 0.5);
+    const t = this.add.text(300 - 40 + 22, 71, text, { fontFamily: SANS, fontSize: '20px', color: '#1d1a1a', wordWrap: { width: width - 40 } }).setOrigin(0, 0.5);
     this.layer.add(t);
     this.stageObjs.push({ destroy: () => { b.destroy(); t.destroy(); } });
     this.later(3200, () => { b.destroy(); t.destroy(); });
@@ -397,29 +462,39 @@ export class BakeryScene extends Phaser.Scene {
   }
 
   // ---------- Results and ending ----------
+  card(x, y, w, h) {
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.1); g.fillRoundedRect(x + 5, y + 7, w, h, 24);
+    g.fillStyle(0xfffaf0, 0.96); g.fillRoundedRect(x, y, w, h, 24);
+    g.lineStyle(3, 0x7a4f2a, 1); g.strokeRoundedRect(x, y, w, h, 24);
+    this.layer.add(g);
+    return g;
+  }
+
   showResult({ passed, correctFirst, total, levelTitle, nextTitle, boss }) {
     this.clearStage();
-    this.teddy = createTeddy(this, 240, 330, 0.9, this.calm);
+    this.card(300, 118, 620, 360);
+    this.teddy = createTeddy(this, 165, 318, 0.78, this.calm);
     this.layer.add(this.teddy.root);
-    this.teddy.react(passed ? 'celebrate' : 'oops');
+    // Not passing is never a telling-off: Teddy stays warm and encouraging.
+    this.teddy.react(passed ? 'celebrate' : 'smile');
     const headline = passed
       ? (boss ? 'The bakery is open!' : 'Sign finished!')
       : 'The oven needs a little more warmth.';
     const body = passed
       ? `You got ${correctFirst} of ${total} right first time. ${nextTitle ? `Next up: ${nextTitle}.` : ''}`
       : `You got ${correctFirst} of ${total} right first time. Practice makes the oven hot. Let’s try again. Hints are there whenever you need them.`;
-    this.stage(this.add.text(W / 2 + 60, 200, headline, { fontFamily: 'Georgia, serif', fontSize: '36px', fontStyle: '700', color: '#1d1a1a', wordWrap: { width: 560 }, align: 'center' }).setOrigin(0.5));
-    this.stage(this.add.text(W / 2 + 60, 290, body, { fontFamily: 'system-ui, sans-serif', fontSize: '21px', color: '#3d3833', wordWrap: { width: 560 }, align: 'center' }).setOrigin(0.5));
+    const cx = 610;
+    this.stage(this.add.text(cx, 178, headline, { fontFamily: SERIF, fontSize: '34px', fontStyle: '700', color: '#1d1a1a', wordWrap: { width: 540 }, align: 'center' }).setOrigin(0.5));
+    this.stage(this.add.text(cx, 262, body, { fontFamily: SANS, fontSize: '20px', color: '#3d3833', wordWrap: { width: 540 }, align: 'center', lineSpacing: 4 }).setOrigin(0.5));
     if (passed) {
       this.game.events.emit('sfx', 'sticker');
-      this.burst(W / 2, 170, C.gold);
-      this.sticker(W / 2 + 60, 420);
-    }
-    if (passed) {
-      this.button(W / 2 + 60, 500, 300, 60, nextTitle ? 'Next sign' : 'Back to the map', () => this.game.events.emit('next', { action: 'map' }));
+      this.burst(cx, 178, C.gold);
+      this.sticker(cx, 350);
+      this.button(cx, 430, 300, 56, nextTitle ? 'Next sign' : 'Back to the map', () => this.game.events.emit('next', { action: 'map' }));
     } else {
-      this.button(W / 2 - 110, 500, 240, 60, 'Try again', () => this.game.events.emit('next', { action: 'retry' }));
-      this.button(W / 2 + 170, 500, 240, 60, 'Back to the map', () => this.game.events.emit('next', { action: 'map' }), 'line');
+      this.button(cx - 140, 420, 250, 56, 'Try again', () => this.game.events.emit('next', { action: 'retry' }));
+      this.button(cx + 140, 420, 250, 56, 'Back to the map', () => this.game.events.emit('next', { action: 'map' }), 'line');
     }
   }
 
@@ -433,16 +508,17 @@ export class BakeryScene extends Phaser.Scene {
 
   showEnding({ summary }) {
     this.clearStage();
-    this.teddy = createTeddy(this, W / 2, 330, 1.05, this.calm);
+    this.card(300, 110, 620, 380);
+    this.teddy = createTeddy(this, 165, 318, 0.86, this.calm);
     this.layer.add(this.teddy.root);
     this.teddy.react('celebrate');
     this.game.events.emit('sfx', 'win');
-    this.burst(W / 2, 200, C.gold);
-    this.stage(this.add.text(W / 2, 50, 'The bakery is open!', { fontFamily: 'Georgia, serif', fontSize: '42px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(0.5));
+    this.burst(610, 170, C.gold);
+    this.stage(this.add.text(610, 166, 'The bakery is open!', { fontFamily: SERIF, fontSize: '40px', fontStyle: '700', color: '#1d1a1a' }).setOrigin(0.5));
     const lines = summary.lines;
-    this.stage(this.add.text(W / 2, 470, lines.join('\n'), {
-      fontFamily: 'system-ui, sans-serif', fontSize: '19px', color: '#3d3833', align: 'center', lineSpacing: 6,
+    this.stage(this.add.text(610, 218, lines.join('\n'), {
+      fontFamily: SANS, fontSize: '19px', color: '#3d3833', align: 'center', lineSpacing: 6, wordWrap: { width: 540 },
     }).setOrigin(0.5, 0));
-    this.button(W / 2, 555, 300, 50, 'Back to the map', () => this.game.events.emit('next', { action: 'map' }));
+    this.button(610, 440, 300, 54, 'Back to the map', () => this.game.events.emit('next', { action: 'map' }));
   }
 }

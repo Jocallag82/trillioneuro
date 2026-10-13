@@ -57,8 +57,8 @@ function renderSubjects() {
 const DEMO = {
   '3-5': ['number-names', 'subitise', 'patterns', 'rhyme', 'compare-numbers'],
   '5-7': ['add-within-20', 'shape-words', 'subtract-within-20', 'measure-length', 'place-value-100'],
-  '7-9': ['subtract-2digit', 'unit-fractions', 'times-2-5-10', 'vocabulary', 'add-2digit'],
-  '9-11': ['times-tables', 'fractions-compare', 'word-parts', 'division-facts', 'place-value-1000'],
+  '7-9': ['tell-time', 'bar-charts', 'word-problems', 'comprehension', 'logic-puzzles', 'subtract-2digit', 'unit-fractions'],
+  '9-11': ['decimals', 'area-perimeter', 'comprehension', 'logic-puzzles', 'times-tables', 'fractions-compare', 'spelling'],
 };
 const LEVEL = { '3-5': [1, 2], '5-7': [1, 2, 3], '7-9': [2, 3], '9-11': [2, 3] };
 
@@ -140,7 +140,7 @@ function render() {
   const pictorial = step.options?.every((o) => o.visual);
   const parts = [
     el('p', { class: 'demo-prompt', id: 'demo-prompt', text: L(step.prompt) }),
-    step.visual ? el('div', { class: 'demo-stage' }, visualNode(step.visual)) : null,
+    step.visual ? el('div', { class: 'demo-stage' }, visualNode(step.visual.kind === 'passage' ? { ...step.visual, title: L(step.visual.title), text: L(step.visual.text) } : step.visual)) : null,
   ];
   if (step.kind === 'input') {
     const input = el('input', { type: 'text', inputmode: 'numeric', autocomplete: 'off', 'aria-labelledby': 'demo-prompt', maxlength: 8 });
@@ -155,7 +155,8 @@ function render() {
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
     parts.push(el('div', { class: 'demo-input' }, [input, el('button', { type: 'button', class: 'btn btn-red', onclick: submit, text: 'Check' })]));
   } else {
-    parts.push(el('div', { class: 'demo-options', role: 'group', 'aria-labelledby': 'demo-prompt' }, step.options.map((o) => {
+    const long = step.options.some((o) => String(o.label).length > 18);
+    parts.push(el('div', { class: `demo-options${long ? ' long' : ''}`, role: 'group', 'aria-labelledby': 'demo-prompt' }, step.options.map((o) => {
       const b = el('button', {
         type: 'button', class: 'demo-opt', dataset: { option: o.id },
         'aria-label': pictorial ? L(o.label) : undefined,

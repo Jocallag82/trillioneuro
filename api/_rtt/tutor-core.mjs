@@ -48,6 +48,8 @@ export function parseRequest(body) {
       learnerAnswer: redact(clean(item.learnerAnswer, 60)),
       attempts,
       revealed: item.revealed === true,
+      // The reading text on screen, for comprehension. Authored by us, but capped and cleaned like everything else.
+      context: redact(clean(item.context, 900)),
     },
     message: redact(clean(message)),
     history: (Array.isArray(history) ? history : []).slice(-6)
@@ -105,6 +107,7 @@ export function buildSystemPrompt({ objective, band, mode }) {
 export function buildMessages(req) {
   const { item, mode, message, history } = req;
   const lines = [
+    item.context ? `Text the child is reading (authored by the app): ${item.context}` : null,
     `Question on screen: ${item.prompt}`,
     item.options.length ? `Choices: ${item.options.join(' | ')}` : null,
     `Correct answer (for your reference only): ${item.answer}`,

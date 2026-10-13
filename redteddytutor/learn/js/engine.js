@@ -11,7 +11,7 @@
 import { BANDS, DOMAINS, SKILLS } from './content.js';
 import { isMisconception } from './curriculum/misconceptions.js';
 
-const VISUAL_KINDS = ['dots', 'shape', 'swatch', 'text', 'sequence', 'tenframe', 'blocks', 'groups', 'fraction', 'ruler'];
+const VISUAL_KINDS = ['dots', 'shape', 'swatch', 'text', 'sequence', 'tenframe', 'blocks', 'groups', 'fraction', 'ruler', 'clock', 'bars', 'grid', 'passage'];
 const RESPOND_KINDS = ['input', 'numberline', 'order', 'build'];
 const isInt = (n, lo, hi) => Number.isInteger(n) && n >= lo && n <= hi;
 const SHAPES = ['circle', 'square', 'triangle', 'rectangle'];
@@ -36,6 +36,14 @@ function validVisual(v, allowSequence = true) {
   if (v.kind === 'ruler') return isInt(v.start, 0, 10) && isInt(v.length, 1, 15) && v.start + v.length <= 20;
   if (v.kind === 'swatch') return typeof v.label === 'string' && /^#[0-9a-f]{6}$/i.test(v.hex);
   if (v.kind === 'text') return typeof v.text === 'string' && v.text.length > 0 && v.text.length <= 6;
+  if (v.kind === 'clock') return isInt(v.h, 1, 12) && isInt(v.m, 0, 59);
+  if (v.kind === 'grid') return isInt(v.w, 1, 12) && isInt(v.h, 1, 12) && typeof v.labels === 'boolean';
+  if (v.kind === 'passage') return typeof v.title === 'string' && v.title.length <= 60 && typeof v.text === 'string' && v.text.length >= 40 && v.text.length <= 900;
+  if (v.kind === 'bars') {
+    return typeof v.title === 'string' && [1, 2, 5, 10].includes(v.step) && isInt(v.max, v.step, 100) && v.max % v.step === 0
+      && Array.isArray(v.items) && v.items.length >= 2 && v.items.length <= 6
+      && v.items.every((b) => typeof b.label === 'string' && b.label.length <= 14 && isInt(b.value, 0, v.max));
+  }
   if (v.kind === 'sequence') {
     return allowSequence && Array.isArray(v.items) && v.items.length >= 2 && v.items.length <= 6
       && v.items.every((item) => item === null || validVisual(item, false))

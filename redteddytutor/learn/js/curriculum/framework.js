@@ -26,9 +26,9 @@ export const STAGES = {
 };
 
 export const SUBJECTS = {
-  maths: { label: 'Maths', strands: ['number', 'calculation', 'fractions', 'shape', 'measure'] },
-  literacy: { label: 'Reading & words', strands: ['letters', 'words', 'sentences'] },
-  thinking: { label: 'Thinking skills', strands: ['patterns', 'sorting', 'memory'] },
+  maths: { label: 'Maths', strands: ['number', 'calculation', 'fractions', 'shape', 'measure', 'data'] },
+  literacy: { label: 'Reading & words', strands: ['letters', 'words', 'sentences', 'reading'] },
+  thinking: { label: 'Thinking skills', strands: ['patterns', 'sorting', 'memory', 'reasoning'] },
 };
 
 export const STRANDS = {
@@ -37,12 +37,15 @@ export const STRANDS = {
   fractions: 'Fractions',
   shape: 'Shape & space',
   measure: 'Measurement',
+  data: 'Data & graphs',
   letters: 'Letters & sounds',
   words: 'Words & vocabulary',
   sentences: 'Sentences',
+  reading: 'Reading for meaning',
   patterns: 'Patterns & sequences',
   sorting: 'Sorting & observation',
   memory: 'Memory & attention',
+  reasoning: 'Reasoning',
 };
 
 // Each objective:
@@ -134,6 +137,24 @@ export const OBJECTIVES = {
     'Remembers where things are and finds matching pairs.', 15),
   'number-patterns': O('Number patterns', 'Patterns', 'thinking', 'patterns', ['7-9', '9-11'], ['add-within-20'],
     'Finds the rule in a number sequence and continues it.', 60),
+  'logic-puzzles': O('Logic puzzles', 'Logic', 'thinking', 'reasoning', ['7-9', '9-11'], ['sequencing'],
+    'Combines two or more clues to work out an order, and checks the answer against every clue.', 65),
+
+  // ---- Older learners (7 to 11) ----
+  'tell-time': O('Telling the time', 'Time', 'maths', 'measure', ['7-9'], ['times-2-5-10'],
+    'Reads an analogue clock to the nearest five minutes.', 72),
+  'bar-charts': O('Reading bar charts', 'Data', 'maths', 'data', ['7-9', '9-11'], ['compare-numbers', 'times-2-5-10'],
+    'Reads values from a bar chart, including scales that count in 2s, 5s or 10s, and compares bars.', 74),
+  'word-problems': O('Word problems', 'Problem solving', 'maths', 'calculation', ['7-9', '9-11'], ['add-2digit', 'subtract-2digit'],
+    'Works out what a story problem is asking, chooses the operations and solves problems with two steps.', 88),
+  'area-perimeter': O('Area and perimeter', 'Area & perimeter', 'maths', 'shape', ['9-11'], ['times-tables'],
+    'Finds the area of a rectangle by counting or multiplying, and its perimeter by adding all four sides.', 92),
+  'decimals': O('Decimals', 'Decimals', 'maths', 'fractions', ['9-11'], ['fractions-compare', 'place-value-1000'],
+    'Knows tenths and hundredths, writes them as decimals, and compares and orders decimals.', 98),
+  'spelling': O('Spelling tricky words', 'Spelling', 'literacy', 'words', ['7-9', '9-11'], ['build-words'],
+    'Spots the correct spelling of common tricky words in a sentence.', 55),
+  'comprehension': O('Reading comprehension', 'Reading', 'literacy', 'reading', ['7-9', '9-11'], ['build-sentences'],
+    'Finds information in a short text, works out what is meant but not said, and explains word choices.', 60),
 };
 
 export const DOMAINS = [...new Set(Object.values(OBJECTIVES).map((o) => o.domain))];

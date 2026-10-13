@@ -20,13 +20,13 @@ export const LEVELS = [
   },
   {
     id: 'bakery-numbers', order: 2, title: 'The Number Shop', skill: 'number-names', kind: 'compare',
-    objective: 'Find which tray has more.',
-    intro: 'Two trays of cakes. Which tray has more?',
+    objective: 'Find which plate has more.',
+    intro: 'Two plates of cakes. Which plate has more?',
   },
   {
     id: 'bakery-shapes', order: 3, title: 'Shape Delivery', skill: 'shapes', kind: 'shape',
-    objective: 'Match each shape cake to its matching hole.',
-    intro: 'The van needs cakes delivered to the right shaped holes.',
+    objective: 'Fit each shaped biscuit into the matching tin.',
+    intro: 'The biscuits need to go into the tins they fit.',
   },
   {
     id: 'bakery-patterns', order: 4, title: 'Pattern Oven', skill: 'patterns', kind: 'pattern',
@@ -49,8 +49,8 @@ const COUNT_HINTS = [
   'Count from one. The last number you say is how many cakes there are.',
 ];
 const COMPARE_HINTS = [
-  'Count each tray. Which one has the bigger number?',
-  'Look for the tray with more cakes on it.',
+  'Count each plate. Which one has the bigger number?',
+  'Look for the plate with more cakes on it.',
 ];
 const PATTERN_HINTS = [
   'Look for the two pieces that take turns.',
@@ -99,7 +99,7 @@ function makeCompare(tier, rng) {
   while (right === left) right = range(rng, 1, max);
   const answer = left > right ? 'left' : 'right';
   return {
-    skill: 'number-names', tier, kind: 'compare', prompt: 'Which tray has MORE cakes?',
+    skill: 'number-names', tier, kind: 'compare', prompt: 'Which plate has MORE cakes?',
     data: { left, right }, answer, options: ['left', 'right'], hints: COMPARE_HINTS,
   };
 }
@@ -108,7 +108,7 @@ function makeShape(tier, rng) {
   const pool = tier === 1 ? ['circle', 'square', 'triangle'] : SHAPE_IDS;
   const shape = pick(rng, pool);
   return {
-    skill: 'shapes', tier, kind: 'shape', prompt: `Deliver the ${shape} cake to the ${shape} hole.`,
+    skill: 'shapes', tier, kind: 'shape', prompt: `Put the ${shape} biscuit in the ${shape} tin.`,
     data: { shape, holes: pool }, answer: shape, options: pool, hints: SHAPE_HINTS,
   };
 }

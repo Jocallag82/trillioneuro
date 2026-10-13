@@ -29,6 +29,7 @@ export function itemFor(step, attempts, revealed, learnerAnswer) {
     learnerAnswer: learnerAnswer || '',
     attempts,
     revealed,
+    ...(step.visual?.kind === 'passage' ? { context: `${step.visual.title}. ${step.visual.text}` } : {}),
   };
 }
 

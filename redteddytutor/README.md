@@ -28,7 +28,7 @@ Static, no build step. Served from `redteddytutor.com/learn/` (routes in root `v
 Pages are `noindex`.
 
 ## Learning engine (ages 2–11)
-- `learn/js/curriculum/framework.js` — subjects, strands and 35 objectives with prerequisites and usual ages. Objective ids are the `skill` ids stored with every answer.
+- `learn/js/curriculum/framework.js` — subjects, strands and 43 objectives with prerequisites and usual ages. Objective ids are the `skill` ids stored with every answer.
 - `learn/js/curriculum/generators.js` — rule-based practice for every objective (number lines, ten frames, typed answers, tile ordering, fractions, rulers, phonics, sentences). Wrong options built from a known mistake carry its code.
 - `learn/js/curriculum/misconceptions.js` — the closed list of mistake codes. `locales.js` — en-GB/IE/US/AU words and stage names (labels only; no national curriculum has been mapped or reviewed).
 - `learn/js/learner.js` — mastery (difficulty, independence and recency weighted, with confidence; adapted from GradeA/ExplainIt), spaced review, active mistakes, today's plan, and the adaptive placement check. Pure.
@@ -38,3 +38,11 @@ Pages are `noindex`.
 No billing provider is connected: `rtt_entitlements` exists for a future webhook and everyone is on the free plan.
 
 Tests: `node --test scripts/*.test.mjs`. Browser: `PLAYWRIGHT_MODULE=… node scripts/learn-e2e.mjs [screenshot-dir]` and `scripts/game-e2e.mjs`.
+
+## Ages 7 to 11 (added October 2026)
+Eight skills, each with a rule-based generator and independent answer checks in
+`scripts/curriculum.test.mjs`: telling the time (analogue clock), reading bar charts with scales,
+two-step word problems, area and perimeter, decimals, spelling in context, reading comprehension
+(six original passages; retrieval, inference, word choice) and logic puzzles (every puzzle is
+solved by brute force in the tests to prove it has exactly one answer). New visuals in `dom.js`:
+`clock`, `bars`, `grid`, `passage`. The comprehension passage is sent to the AI helper as context.

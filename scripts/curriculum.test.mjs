@@ -86,8 +86,66 @@ function checkAnswer(step) {
     assert.equal(step.target, 10);
   } else if ((m = p.match(/^Build the word “(\w+)”\.$/))) {
     assert.equal(step.accept[0].replace(/ /g, ''), m[1]);
+  } else if (step.visual?.kind === 'clock') {
+    const { h, m: mins } = step.visual;
+    assert.equal(ans, `${h}:${String(mins).padStart(2, '0')}`, p);
+  } else if (step.visual?.kind === 'grid') {
+    const { w, h } = step.visual;
+    assert.equal(Number(ans), /perimeter/.test(p) ? 2 * (w + h) : w * h, p);
+  } else if (step.visual?.kind === 'bars') {
+    const val = Object.fromEntries(step.visual.items.map((b) => [b.label, b.value]));
+    if ((m = p.match(/^How many more (\w+) than (\w+)\?$/))) assert.equal(Number(ans), val[m[1]] - val[m[2]], p);
+    else if ((m = p.match(/how many for (\w+)\?$/))) assert.equal(Number(ans), val[m[1]], p);
+    else if (/which has the most\?$/.test(p)) assert.equal(val[ans], Math.max(...Object.values(val)), p);
+    else assert.fail(`unchecked bar question: ${p}`);
+  } else if ((m = p.match(/^Which is bigger: (\d+\.\d+) or (\d+\.\d+)\?$/))) {
+    assert.equal(ans, Number(m[1]) > Number(m[2]) ? m[1] : m[2], p);
+  } else if ((m = p.match(/^Which decimal is the same as (\d+)\/(\d+)\?$/))) {
+    assert.equal(Number(ans), Number(m[1]) / Number(m[2]), p);
+  } else if (p === 'Put the decimals in order, smallest first.') {
+    const vals = step.accept[0].split(' ').map(Number);
+    assert.ok(vals.every((v, i) => i === 0 || v > vals[i - 1]), p);
+  } else if (step.visual?.kind === 'passage' && step.visual.title === 'The clues') {
+    assert.equal(ans, solveLogic(`${step.visual.text.replace(/\n/g, ' ')} ${p}`), p);
   }
 }
+
+// Solves an ordering puzzle from its clues alone, by trying every order.
+function solveLogic(p) {
+  const MORE = { taller: 1, older: 1, faster: 1, shorter: -1, younger: -1, slower: -1 };
+  const clues = [...p.matchAll(/(\w+) is (\w+) than (\w+)\./g)].map(([, a, rel, b]) => (MORE[rel] > 0 ? [a, b] : [b, a]));
+  const names = [...new Set(clues.flat())];
+  const perms = (xs) => (xs.length <= 1 ? [xs] : xs.flatMap((x, i) => perms([...xs.slice(0, i), ...xs.slice(i + 1)]).map((r) => [x, ...r])));
+  const fits = perms(names).filter((o) => clues.every(([hi, lo]) => o.indexOf(hi) < o.indexOf(lo)));
+  assert.equal(fits.length, 1, `puzzle has ${fits.length} solutions: ${p}`);
+  const [order] = fits;
+  if (/Who is the second \w+\?$/.test(p)) return order[1];
+  if (/Who is in the middle\?$/.test(p)) return order[1];
+  if (/Who is the (shortest|youngest|slowest)\?$/.test(p)) return order[order.length - 1];
+  return order[0];
+}
+
+test('new 7-11 skills: mistakes tagged on the right wrong answers', () => {
+  const rand = mulberry32(99);
+  for (let i = 0; i < 300; i++) {
+    const t = generateStep('tell-time', 3, rand);
+    const swap = t.options.find((o) => o.misconception === 'clock-hands-swap');
+    if (swap) {
+      const { h, m } = t.visual;
+      assert.equal(swap.id, `${m === 0 ? 12 : m / 5}:${String((h * 5) % 60).padStart(2, '0')}`);
+    }
+    const a = generateStep('area-perimeter', 3, rand);
+    const { w, h } = a.visual;
+    if (w * h !== 2 * (w + h)) assert.equal(a.wrong[String(w * h)], 'area-perimeter-mix');
+    assert.equal(a.wrong[String(w + h)], 'perimeter-two-sides');
+    const d = generateStep('decimals', 1, rand);
+    const tagged = d.options.find((o) => o.misconception === 'decimal-longer-bigger');
+    if (tagged) assert.ok(tagged.id.length > d.answer.length && Number(tagged.id) < Number(d.answer));
+    const w2 = generateStep('word-problems', 2, rand);
+    const [x, y] = w2.prompt.match(/\d+/g).map(Number);
+    assert.equal(w2.wrong[String(x + y)], 'one-step-only');
+  }
+});
 
 test('generated practice is valid and every answer re-computes, across thousands of seeds', () => {
   let items = 0;

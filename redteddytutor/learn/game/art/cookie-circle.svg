@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+<defs><radialGradient id="b" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#f0c27f"/><stop offset="1" stop-color="#c98b3e"/></radialGradient></defs>
+<g fill="url(#b)" stroke="#9c6526" stroke-width="5"><circle cx="90" cy="90" r="60"/></g>
+<g fill="#a3171f" transform="translate(90 90) scale(.62) translate(-90 -90)"><circle cx="90" cy="90" r="60"/></g>
+<g fill="#3a2320"><circle cx="72" cy="84" r="5"/><circle cx="104" cy="96" r="5"/><circle cx="88" cy="110" r="4"/></g>
+</svg>

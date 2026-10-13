@@ -579,6 +579,291 @@ function numberPatterns(d, rand) {
     wrong);
 }
 
+// ---------- Older learners (7 to 11) ----------
+
+// Telling the time. The clock is drawn from { h, m }; options are digital times.
+const fmtTime = (h, m) => `${h}:${String(m).padStart(2, '0')}`;
+const nextHour = (h) => (h % 12) + 1;
+function tellTime(d, rand) {
+  const h = int(rand, 1, 12);
+  const m = d === 1 ? pick(rand, [0, 30]) : d === 2 ? pick(rand, [0, 15, 30, 45]) : 5 * int(rand, 1, 11);
+  const answer = fmtTime(h, m);
+  const wrong = [];
+  const swapH = m === 0 ? 12 : m / 5;
+  const swapM = (h * 5) % 60;
+  wrong.push({ value: fmtTime(swapH, swapM), misconception: 'clock-hands-swap' });
+  if (m >= 30) wrong.push({ value: fmtTime(nextHour(h), m), misconception: 'clock-hour-next' });
+  wrong.push({ value: fmtTime(h, (m + 30) % 60) });
+  wrong.push({ value: fmtTime(nextHour(h), (m + 15) % 60) });
+  wrong.push({ value: fmtTime(h === 1 ? 12 : h - 1, m) });
+  return choice(rand, {
+    prompt: 'What time does the clock show?', visual: { kind: 'clock', h, m }, answer, wrong, size: 4,
+    hints: ['Find the short hand first. It shows the hour it has just passed.', m ? 'Now the long hand: count in 5s from the 12 to where it points.' : 'The long hand is on 12, so it is exactly on the hour.'],
+  });
+}
+
+// Bar charts with a scale. Values sit on or halfway between grid lines.
+const CHARTS = [
+  ['Favourite fruit', ['Apples', 'Bananas', 'Grapes', 'Pears']],
+  ['Pets in our class', ['Dogs', 'Cats', 'Fish', 'Rabbits']],
+  ['How we get to school', ['Walk', 'Car', 'Bus', 'Bike']],
+  ['Books read this week', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']],
+  ['Birds in the garden', ['Robins', 'Sparrows', 'Blackbirds', 'Finches']],
+];
+function barCharts(d, rand) {
+  const [title, labels] = pick(rand, CHARTS);
+  const step = d === 1 ? 1 : d === 2 ? pick(rand, [2, 5]) : pick(rand, [2, 5, 10]);
+  const top = step * 10;
+  const values = [];
+  while (values.length < labels.length) {
+    const v = step === 1 ? int(rand, 1, 10) : step * int(rand, 1, 9) + (rand() < 0.4 ? step / 2 : 0);
+    if (!values.includes(v) && Number.isInteger(v)) values.push(v);
+  }
+  const chart = { kind: 'bars', title, step, max: top, items: labels.map((label, i) => ({ label, value: values[i] })) };
+  const i = int(rand, 0, labels.length - 1);
+  let j = int(rand, 0, labels.length - 1);
+  while (j === i) j = int(rand, 0, labels.length - 1);
+  if (d === 1 && rand() < 0.5) {
+    const most = values.indexOf(Math.max(...values));
+    return {
+      prompt: `${title}: which has the most?`, visual: chart, answer: labels[most],
+      options: shuffled([labels[most], ...shuffled(labels.filter((l) => l !== labels[most]), rand).slice(0, 3)], rand).map((l) => ({ id: l, label: l })),
+      hints: ['Find the tallest bar.', 'Follow the top of each bar across to the numbers.'],
+    };
+  }
+  if (d === 3) {
+    const [a, b] = values[i] >= values[j] ? [i, j] : [j, i];
+    if (values[a] === values[b]) return barCharts(2, rand);
+    return input(`How many more ${labels[a]} than ${labels[b]}?`, values[a] - values[b],
+      [`Read the ${labels[a]} bar, then the ${labels[b]} bar.`, 'How many more means find the difference: take the smaller from the bigger.'],
+      { [values[a] + values[b]]: 'wrong-operation' }, chart);
+  }
+  const v = values[i];
+  return input(`${title}: how many for ${labels[i]}?`, v,
+    [`Each line on the side goes up in ${step}${step === 1 ? '' : 's'}.`, step > 1 ? `If the bar stops between two lines, it is halfway: add ${step / 2}.` : 'Follow the top of the bar across to the numbers.'],
+    {}, chart);
+}
+
+// Story problems. Names are varied; nothing refers to gender.
+const NAMES = ['Ava', 'Sam', 'Noah', 'Mia', 'Leo', 'Zara', 'Ravi', 'Aoife', 'Kofi', 'Lena', 'Tom', 'Priya'];
+function wordProblems(d, rand) {
+  const n = pick(rand, NAMES);
+  if (d === 1) {
+    if (rand() < 0.5) {
+      const a = int(rand, 18, 64); const b = int(rand, 11, 35);
+      return input(`${n} had ${a} stickers and was given ${b} more. How many stickers does ${n} have now?`, a + b,
+        ['Is the number of stickers getting bigger or smaller?', 'Given more means add.'], { [a - b]: 'wrong-operation' });
+    }
+    const a = int(rand, 40, 95); const b = int(rand, 12, a - 10);
+    return input(`A box held ${a} apples. ${b} apples were eaten. How many apples are left?`, a - b,
+      ['Are there more apples or fewer at the end?', 'Eaten means take away.'], { [a + b]: 'wrong-operation' });
+  }
+  if (d === 2) {
+    const a = int(rand, 20, 60); const b = int(rand, 10, 30); const c = int(rand, 5, a + b - 5);
+    return input(`${n} had ${a} marbles, won ${b} more, then gave ${c} to a friend. How many marbles does ${n} have now?`, a + b - c,
+      ['There are two things that happen. Do the first one, then the second.', `First add the ${b} won. Then take away the ${c} given.`],
+      { [a + b]: 'one-step-only', [a + b + c]: 'wrong-operation' });
+  }
+  if (rand() < 0.5) {
+    const p = int(rand, 4, 12); const k = int(rand, 3, 9); const g = int(rand, 5, p * k - 2);
+    return input(`Pencils come in packs of ${p}. A teacher buys ${k} packs and gives out ${g} pencils. How many pencils are left?`, p * k - g,
+      ['Step 1: how many pencils are there in all the packs?', `Step 2: take away the ${g} given out.`],
+      { [p * k]: 'one-step-only', [p + k - g]: 'times-as-add' });
+  }
+  const r = int(rand, 3, 9); const rows = int(rand, 3, 9); const x = int(rand, 2, 6);
+  const t = r * rows;
+  return input(`${t} chairs are put in rows of ${r}. Then ${x} more rows are added. How many rows are there now?`, rows + x,
+    [`Step 1: how many rows of ${r} make ${t}?`, `Step 2: add the ${x} new rows.`],
+    { [rows]: 'one-step-only', [t - r + x]: 'wrong-operation' });
+}
+
+// Area and perimeter of a rectangle on squared paper.
+function areaPerimeter(d, rand) {
+  const w = int(rand, 2, d === 1 ? 5 : 9);
+  let h = int(rand, 2, d === 1 ? 4 : 8);
+  if (h === w) h = w === 2 ? 3 : w - 1;
+  const area = w * h;
+  const per = 2 * (w + h);
+  if (d === 1) {
+    return input('Each square is 1 square centimetre. What is the area of the shaded rectangle, in square centimetres?', area,
+      ['Area is how many squares are inside.', `Count one row, then count the rows. ${w} in each row.`],
+      { [per]: 'area-perimeter-mix' }, { kind: 'grid', w, h, labels: false });
+  }
+  if (d === 2) {
+    return input(`The rectangle is ${w} cm long and ${h} cm wide. What is its area, in square centimetres?`, area,
+      ['Area of a rectangle: length times width.', `Think: ${h} rows of ${w}.`],
+      { [per]: 'area-perimeter-mix', [w + h]: 'times-as-add' }, { kind: 'grid', w, h, labels: true });
+  }
+  return input(`The rectangle is ${w} cm long and ${h} cm wide. What is its perimeter, in centimetres?`, per,
+    ['Perimeter is the distance all the way round.', `There are two sides of ${w} cm and two sides of ${h} cm.`],
+    { [area]: 'area-perimeter-mix', [w + h]: 'perimeter-two-sides' }, { kind: 'grid', w, h, labels: true });
+}
+
+// Decimals. Strings are compared by value, never by length.
+const dec = (n, places) => (n / 10 ** places).toFixed(places);
+function decimals(d, rand) {
+  if (d === 1) {
+    const t = int(rand, 2, 9);
+    const trap = rand() < 0.65; // the longer number is the smaller one
+    const a = dec(t, 1);
+    const b = trap ? dec((t - 1) * 10 + int(rand, 1, 9), 2) : dec(t * 10 + int(rand, 1, 9), 2);
+    const bigger = Number(a) > Number(b) ? a : b;
+    const smaller = bigger === a ? b : a;
+    return choice(rand, {
+      prompt: `Which is bigger: ${a} or ${b}?`, answer: bigger, size: 2,
+      wrong: [{ value: smaller, misconception: trap ? 'decimal-longer-bigger' : undefined }],
+      hints: ['Compare the tenths first: the first digit after the point.', 'If the tenths are the same, then compare the hundredths.'],
+    });
+  }
+  if (d === 2) {
+    const hund = rand() < 0.5;
+    const n = hund ? int(rand, 11, 99) : int(rand, 1, 9);
+    const den = hund ? 100 : 10;
+    const answer = hund ? dec(n, 2) : dec(n, 1);
+    const wrong = [{ value: `${n}.${den}`, misconception: 'decimal-fraction-digits' }];
+    wrong.push({ value: hund ? dec(n, 1) : dec(n, 2) });
+    wrong.push({ value: hund ? dec(n, 3) : `${n}.0` });
+    return choice(rand, {
+      prompt: `Which decimal is the same as ${n}/${den}?`, answer, size: 3, wrong,
+      hints: [hund ? 'Hundredths fill two places after the point.' : 'Tenths go in the first place after the point.', `${n}/${den} means ${n} ${hund ? 'hundredths' : 'tenths'}.`],
+    });
+  }
+  const vals = new Set();
+  const out = [];
+  while (out.length < 4) {
+    const places = pick(rand, [1, 2, 2]);
+    const v = places === 1 ? dec(int(rand, 1, 9), 1) : dec(int(rand, 1, 99), 2);
+    if (v.endsWith('0') && places === 2) continue;
+    if (vals.has(Number(v))) continue;
+    vals.add(Number(v)); out.push(v);
+  }
+  const ordered = [...out].sort((x, y) => Number(x) - Number(y));
+  return order('Put the decimals in order, smallest first.', out, [ordered.join(' ')], rand,
+    ['Line them up by the point and compare the tenths first.', 'A number with more digits is not always bigger: 0.4 is more than 0.35.'], null);
+}
+
+// Spelling in context: one correct spelling among common misspellings.
+const SPELLINGS = [
+  [['The puppy hid ___ it was scared.', 'because', ['becuase', 'becos', 'beacause']],
+    ['My best ___ lives next door.', 'friend', ['freind', 'frend', 'friennd']],
+    ['Lots of ___ came to the fair.', 'people', ['peeple', 'poeple', 'pepole']],
+    ['Can we play that game ___?', 'again', ['agian', 'agen', 'agane']],
+    ['I ___ like a glass of water.', 'would', ['wood', 'wuold', 'whould']],
+    ['She ___ hello to the new teacher.', 'said', ['sed', 'siad', 'sayed']]],
+  [['We ___ the bus by one minute.', 'caught', ['cort', 'cawt', 'caugt']],
+    ['I ___ you can do it.', 'believe', ['beleive', 'belive', 'beleave']],
+    ['Our class went on a trip to the ___.', 'library', ['libary', 'liberry', 'librery']],
+    ['We had a ___ party for Grandad.', 'surprise', ['suprise', 'surprize', 'serprise']],
+    ['Please write your answer in the ___ box.', 'separate', ['seperate', 'separete', 'seprate']],
+    ['My birthday is in ___.', 'February', ['Febuary', 'Februray', 'Febrary']]],
+  [['I will ___ remember to bring my coat.', 'definitely', ['definately', 'definitly', 'defanitely']],
+    ['Plants need a healthy ___ to grow.', 'environment', ['enviroment', 'envirnment', 'environmant']],
+    ['It is ___ to wear a helmet on a bike.', 'necessary', ['neccessary', 'necesary', 'nessecary']],
+    ['The music had a strong ___.', 'rhythm', ['rythm', 'rhythem', 'rhytm']],
+    ['Our school has a new ___ room.', 'committee', ['commitee', 'comittee', 'comitee']],
+    ['Watch the rabbit ___ into the hat.', 'disappear', ['dissapear', 'disapear', 'disappeer']]],
+];
+function spelling(d, rand) {
+  const [sentence, answer, others] = pick(rand, SPELLINGS[d - 1]);
+  return choice(rand, {
+    prompt: `Which spelling is correct? “${sentence}”`, answer, size: d === 1 ? 3 : 4, wrong: others.map((value) => ({ value })),
+    hints: ['Say each one slowly in your head. Which looks right?', 'Look at the tricky part of the word: the part you cannot hear clearly.'],
+  });
+}
+
+// Reading comprehension: original short texts. Retrieval (1), inference (2), word choice (3).
+const PASSAGES = [
+  {
+    title: 'The Night Garden',
+    text: 'Every evening, Mo crept out to the bottom of the garden with a torch and a notebook. For two weeks nothing came. Then, on a still night in June, a hedgehog shuffled out from under the shed, sniffed the air and began to eat the slugs by the lettuces. Mo wrote down the time, 9:42, and did not move a muscle until it had gone.',
+    q: [
+      ['What did Mo take into the garden?', 'A torch and a notebook', ['A torch and a camera', 'A blanket and a book', 'Some food for the hedgehog'], 'Look at the first sentence.'],
+      ['Why did Mo not move a muscle?', 'So the hedgehog would not be scared away', ['Because Mo was asleep', 'Because Mo was cold', 'Because the torch had gone out'], 'Think about what might happen if Mo moved.'],
+      ['The hedgehog “shuffled” out. What does this tell you about how it moved?', 'Slowly, with small steps', ['Very quickly', 'By jumping', 'By flying'], 'Try acting out the word shuffled.'],
+    ],
+  },
+  {
+    title: 'Bridge Builders',
+    text: 'The class had one job: build a bridge from paper and tape that could hold a tin of beans. Priya’s team rolled the paper into tight tubes. Leo’s team folded it flat, like a fan. When the tin went on, the flat bridge sagged and slid to the floor. The tube bridge creaked, but it held. Leo grinned anyway and said, “Next time, tubes.”',
+    q: [
+      ['What did Priya’s team do with the paper?', 'Rolled it into tight tubes', ['Folded it like a fan', 'Cut it into strips', 'Screwed it into a ball'], 'Find Priya’s name in the text.'],
+      ['How do you think Leo felt at the end?', 'Cheerful, and ready to learn from it', ['Angry with Priya', 'Upset and wanting to give up', 'Bored of the task'], 'Look at what Leo did and said at the end.'],
+      ['The bridge “sagged”. Which word is closest in meaning?', 'Drooped', ['Snapped', 'Grew', 'Shone'], 'Picture a bridge that sags in the middle.'],
+    ],
+  },
+  {
+    title: 'Why Leaves Change in Autumn',
+    text: 'In summer, leaves are full of a green substance called chlorophyll, which helps the tree make food from sunlight. As autumn days get shorter, the tree stops making chlorophyll. The green fades, and yellow and orange colours that were hidden underneath can be seen at last. Some trees also make new red colours in autumn. Soon the leaves fall, and the tree rests until spring.',
+    q: [
+      ['What does chlorophyll help the tree do?', 'Make food from sunlight', ['Drop its leaves', 'Turn red', 'Grow taller in winter'], 'Find the sentence with the word chlorophyll.'],
+      ['Why can we see yellow and orange in autumn?', 'The green fades and the colours underneath show', ['The tree paints the leaves', 'The rain washes the green off', 'Sunlight turns them orange'], 'Look at what happens to the green.'],
+      ['What is the main purpose of this text?', 'To explain why leaves change colour', ['To tell a story about a tree', 'To persuade you to plant trees', 'To give instructions for collecting leaves'], 'Look at the title and what each sentence does.'],
+    ],
+  },
+  {
+    title: 'The Lost Library Book',
+    text: 'Kofi searched his bag, under his bed and behind the sofa, but the library book had vanished. It was due back on Friday. On Thursday night his little sister wandered in holding something behind her back. “I was reading it to my bear,” she whispered. Kofi laughed so much he forgot to be cross.',
+    q: [
+      ['When was the book due back?', 'Friday', ['Thursday', 'Monday', 'Saturday'], 'Look for a day of the week.'],
+      ['Why was his sister holding something behind her back?', 'She had the book and felt a bit guilty', ['She had a present for Kofi', 'She was hiding her bear', 'She was playing a game of tag'], 'What was missing in the story?'],
+      ['The book had “vanished”. What does vanished mean here?', 'Disappeared', ['Been torn', 'Been read', 'Been returned'], 'What had Kofi been doing to find it?'],
+    ],
+  },
+  {
+    title: 'How to Grow Cress',
+    text: 'You will need: an empty eggshell, cotton wool, water and cress seeds. First, wet the cotton wool and push it gently into the eggshell. Next, sprinkle a pinch of seeds over the top. Put the shell on a sunny windowsill and keep the cotton wool damp. In about a week, you will have tiny green shoots to snip and eat.',
+    q: [
+      ['Where should you put the eggshell?', 'On a sunny windowsill', ['In a dark cupboard', 'In the fridge', 'Outside in the rain'], 'Find the sentence that starts with “Put”.'],
+      ['Why must the cotton wool be kept damp?', 'The seeds need water to grow', ['So the shell does not break', 'To keep the cress cold', 'So birds do not eat it'], 'Think about what plants need.'],
+      ['What type of text is this?', 'Instructions', ['A poem', 'A letter', 'A story'], 'Look at the words First and Next, and the list at the start.'],
+    ],
+  },
+  {
+    title: 'The Lighthouse Keeper',
+    text: 'For forty years, Nan climbed the hundred and twelve steps of the lighthouse every evening to light the great lamp. Ships far out at sea saw its beam and steered away from the rocks. Now the lamp switches on by itself. Nan still lives in the cottage below, and some nights, out of habit, she glances up at the tower to check it is shining.',
+    q: [
+      ['How many steps did Nan climb?', 'One hundred and twelve', ['Forty', 'One hundred', 'Twelve'], 'Look for a number that goes with steps.'],
+      ['Why did ships need the lighthouse?', 'To help them stay away from the rocks', ['To find the cottage', 'To see Nan', 'To know what time it was'], 'What did ships do when they saw the beam?'],
+      ['Nan glances up “out of habit”. What does this tell us?', 'She did it for so long that she still does it without thinking', ['She is worried the lamp is broken', 'She wants to climb it again', 'She has never seen it before'], 'Think about how long Nan did the job.'],
+    ],
+  },
+];
+function comprehension(d, rand) {
+  const p = pick(rand, PASSAGES);
+  const [q, answer, wrong, hint] = p.q[d - 1];
+  return choice(rand, {
+    prompt: q, visual: { kind: 'passage', title: p.title, text: p.text }, answer, size: 4,
+    wrong: wrong.map((value) => ({ value })),
+    hints: [hint, d === 1 ? 'The answer is written in the text. Find the exact words.' : 'The text does not say it straight out. Use clues in the words.'],
+  });
+}
+
+// Logic: put people in order from clues, then answer one question about the order.
+const TRAITS = [
+  ['taller', 'tallest', 'shortest'], ['older', 'oldest', 'youngest'], ['faster', 'fastest', 'slowest'],
+];
+const OPPOSITE = { taller: 'shorter', older: 'younger', faster: 'slower' };
+function logicPuzzles(d, rand) {
+  const count = d === 3 ? 4 : 3;
+  const people = shuffled(NAMES, rand).slice(0, count); // people[0] is the most
+  const [more, most, least] = pick(rand, TRAITS);
+  const clues = [];
+  for (let i = 0; i < count - 1; i++) {
+    const flip = d >= 2 && rand() < 0.5;
+    clues.push(flip ? `${people[i + 1]} is ${OPPOSITE[more]} than ${people[i]}.` : `${people[i]} is ${more} than ${people[i + 1]}.`);
+  }
+  const shown = shuffled(clues, rand);
+  let question; let answer;
+  if (d === 1) { question = `Who is the ${most}?`; answer = people[0]; }
+  else if (d === 2) { const low = rand() < 0.5; question = low ? `Who is the ${least}?` : `Who is in the middle?`; answer = low ? people[count - 1] : people[1]; }
+  else { question = `Who is the second ${most}?`; answer = people[1]; }
+  return {
+    prompt: question, visual: { kind: 'passage', title: 'The clues', text: shown.join('\n') }, answer,
+    options: shuffled(people, rand).map((p) => ({ id: p, label: p })),
+    hints: ['Write the names in a line, using one clue at a time.', `Check your line against every clue. Is anyone ${more} than your answer?`],
+  };
+}
+
 // ---------- Registry ----------
 export const GENERATORS = {
   'count-to-5': (d, r) => counting('count-to-5', d, r),
@@ -616,6 +901,14 @@ export const GENERATORS = {
   'sequencing': sequencing,
   'memory': memory,
   'number-patterns': numberPatterns,
+  'logic-puzzles': logicPuzzles,
+  'tell-time': tellTime,
+  'bar-charts': barCharts,
+  'word-problems': wordProblems,
+  'area-perimeter': areaPerimeter,
+  'decimals': decimals,
+  'spelling': spelling,
+  'comprehension': comprehension,
 };
 
 export function generateStep(objective, difficulty, rand) {

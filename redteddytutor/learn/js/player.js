@@ -415,6 +415,14 @@ function bodyFor(step, viewState) {
   return choiceBody(step);
 }
 
+// The picture or text above the answers. Reading passages follow the chosen
+// country's spelling, like every other word on screen.
+function stageFor(v) {
+  if (!v) return null;
+  const shown = v.kind === 'passage' ? { ...v, title: L(v.title), text: L(v.text) } : v;
+  return el('div', { class: `stage${v.kind === 'passage' ? ' stage-text' : ''}` }, visualNode(shown));
+}
+
 // When every option is a picture, the picture is the answer: a caption such as
 // "3 dots" or "triangle" would let a reader skip the skill. The caption then
 // becomes the button's accessible name only.
@@ -427,10 +435,11 @@ function choiceBody(step) {
     opt.visual ? el('span', { class: 'option-visual', 'aria-hidden': pictorial ? 'true' : undefined }, visualNode(opt.visual)) : null,
     pictorial ? null : el('span', { class: 'option-label', text: L(opt.label) }),
   ]));
+  const long = step.options.some((o) => String(o.label).length > 18);
   return el('div', { class: 'choice-body' }, [
     step.listen ? el('button', { type: 'button', class: 'btn btn-line play', onclick: () => say(step.prompt), text: 'Hear the question' }) : null,
-    step.visual ? el('div', { class: 'stage' }, visualNode(step.visual)) : null,
-    el('div', { class: `options${step.options.length === 2 ? ' two' : ''}`, role: 'group', 'aria-label': 'Answers' }, options),
+    stageFor(step.visual),
+    el('div', { class: `options${long ? ' long' : step.options.length === 2 ? ' two' : ''}`, role: 'group', 'aria-label': 'Answers' }, options),
   ]);
 }
 
@@ -443,7 +452,7 @@ function inputBody(step) {
     oninput: (e) => { ui.text = e.target.value; },
   });
   return el('div', { class: 'choice-body' }, [
-    step.visual ? el('div', { class: 'stage' }, visualNode(step.visual)) : null,
+    stageFor(step.visual),
     el('form', { class: 'answer-controls', onsubmit: (e) => { e.preventDefault(); answer(field.value, field.value); } }, [
       field,
       el('button', { type: 'submit', class: 'btn btn-red', disabled: ui.locked || undefined, text: 'Check' }),

@@ -89,6 +89,41 @@ export const MISCONCEPTIONS = {
     parent: 'Applied a different step from the one in the pattern (for example +2 instead of +3).',
     tip: 'Check the jump between every pair of numbers, not just the first.',
   },
+  'clock-hands-swap': {
+    label: 'Mixing up the hour and minute hands',
+    parent: 'Read the long hand as the hour and the short hand as the minutes. Naming the hands before reading helps.',
+    tip: 'The short hand shows the hour. The long hand shows the minutes.',
+  },
+  'clock-hour-next': {
+    label: 'Reading the hour the hand is moving towards',
+    parent: 'After half past, read the hour the short hand is heading to rather than the one it has passed.',
+    tip: 'The hour is the number the short hand has just passed, not the next one.',
+  },
+  'area-perimeter-mix': {
+    label: 'Mixing up area and perimeter',
+    parent: 'Gave the distance around a shape when asked for the space inside, or the other way round.',
+    tip: 'Area is the squares inside. Perimeter is the distance all the way round the edge.',
+  },
+  'perimeter-two-sides': {
+    label: 'Adding only two sides for perimeter',
+    parent: 'Added the length and width once, so went only half way round the shape.',
+    tip: 'Perimeter goes all the way round: there are four sides to add.',
+  },
+  'decimal-longer-bigger': {
+    label: 'Thinking more decimal digits means a bigger number',
+    parent: 'Thought 0.35 is bigger than 0.4 because it has more digits. Comparing tenths first helps.',
+    tip: 'Compare the tenths first. 0.4 has 4 tenths; 0.35 has only 3.',
+  },
+  'decimal-fraction-digits': {
+    label: 'Writing a fraction’s digits as a decimal',
+    parent: 'Wrote 3/10 as 3.10 by copying the digits, rather than as 3 tenths (0.3).',
+    tip: 'Tenths go in the first place after the point. 3 tenths is 0.3.',
+  },
+  'one-step-only': {
+    label: 'Stopping after the first step of a problem',
+    parent: 'Did the first part of a two-step problem correctly but stopped before the second part. Asking “what does the question want?” at the end helps.',
+    tip: 'Read the question again. Is there another step after that one?',
+  },
 };
 
 export const isMisconception = (code) => typeof code === 'string' && Object.hasOwn(MISCONCEPTIONS, code);

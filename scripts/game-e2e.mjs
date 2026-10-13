@@ -117,13 +117,14 @@ async function dragShape(page, round) {
   const sx = (gx) => box.x + (gx * box.width) / 960;
   const sy = (gy) => box.y + (gy * box.height) / 600;
   const holes = round.data.holes;
-  const spacing = 780 / holes.length;
-  const startX = 260 + spacing / 2 - 20;
+  // Same layout as BakeryScene.drawShape.
+  const spacing = 680 / holes.length;
+  const startX = 250 + spacing / 2;
   const idx = holes.indexOf(round.answer);
   const hx = startX + idx * spacing;
-  await page.mouse.move(sx(480), sy(430));
+  await page.mouse.move(sx(585), sy(468));
   await page.mouse.down();
-  await page.mouse.move(sx(hx), sy(262), { steps: 12 });
+  await page.mouse.move(sx(hx), sy(230), { steps: 12 });
   await page.mouse.up();
 }
 
@@ -176,12 +177,12 @@ await check('level 3 (shape delivery): drag to a wrong hole, then to the right o
   if (wrongHole) {
     const box = await page.locator('#g-stage canvas').boundingBox();
     const holes = round.data.holes;
-    const spacing = 780 / holes.length;
-    const startX = 260 + spacing / 2 - 20;
+    const spacing = 680 / holes.length;
+    const startX = 250 + spacing / 2;
     const hx = startX + holes.indexOf(wrongHole) * spacing;
-    await page.mouse.move(box.x + (480 * box.width) / 960, box.y + (430 * box.height) / 600);
+    await page.mouse.move(box.x + (585 * box.width) / 960, box.y + (468 * box.height) / 600);
     await page.mouse.down();
-    await page.mouse.move(box.x + (hx * box.width) / 960, box.y + (262 * box.height) / 600, { steps: 10 });
+    await page.mouse.move(box.x + (hx * box.width) / 960, box.y + (230 * box.height) / 600, { steps: 10 });
     await page.mouse.up();
     await page.waitForSelector('.g-hint:not(:empty)', { timeout: 5000 });
   }

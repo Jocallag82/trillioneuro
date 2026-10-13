@@ -15,7 +15,9 @@ if (!storage) {
 
 if (!root.dataset.mounted) {
   root.dataset.mounted = 'true';
-  mountBakery({ root, storage: storage ?? { getItem: () => null, setItem() {}, removeItem() {} }, seed })
+  // Text in the game canvas uses the page fonts, so give them a moment to arrive first.
+  const fontsReady = Promise.race([document.fonts?.ready ?? Promise.resolve(), new Promise((r) => setTimeout(r, 1500))]);
+  fontsReady.then(() => mountBakery({ root, storage: storage ?? { getItem: () => null, setItem() {}, removeItem() {} }, seed }))
     .then((game) => {
       if (leaving) game.destroy();
       else instance = game;

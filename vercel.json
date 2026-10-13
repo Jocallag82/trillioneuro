@@ -14,7 +14,7 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "X-Frame-Options": "SAMEORIGIN",
         "Permissions-Policy": "geolocation=(), microphone=(), camera=(), payment=()",
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://kxzywyflylkcqoidiqmo.supabase.co https://ipapi.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self' https://kxzywyflylkcqoidiqmo.supabase.co https://ipapi.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
       },
       "continue": true
     },
