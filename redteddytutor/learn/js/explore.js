@@ -163,6 +163,7 @@ export function renderAsk(ctx, objective = askSession.objective) {
           el('p', { class: 'eyebrow', text: 'Ask Red Teddy' }),
           el('h2', { id: 'ask-title', tabindex: '-1', text: 'What would you like help with?' }),
           el('p', { class: 'muted', text: 'Red Teddy explains, gives examples and asks you questions. He helps you work it out rather than doing the work for you, and he can make mistakes: check with your teacher if something seems off.' }),
+          ctx.meetLink ? ctx.meetLink() : null,
         ]),
       ]),
       el('label', { class: 'field-row' }, [el('span', { class: 'field-label', text: 'Topic' }), topic]),

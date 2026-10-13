@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', 'redteddytutor');
 const PORT = Number(process.argv[2] || process.env.PORT || 4321);
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg', '.json': 'application/json', '.txt': 'text/plain', '.xml': 'application/xml' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.vtt': 'text/vtt', '.json': 'application/json', '.txt': 'text/plain', '.xml': 'application/xml' };
 const vercel = JSON.parse(await readFile(join(HERE, '..', 'vercel.json'), 'utf8'));
 const CSP = vercel.routes.find((r) => r.headers?.['Content-Security-Policy'])?.headers['Content-Security-Policy'];
 const ALIASES = { '/learn/parent': '/learn/parent.html', '/learn/account': '/learn/account.html', '/privacy': '/privacy.html', '/curriculum': '/curriculum.html' };

@@ -396,3 +396,45 @@ form .btn{width:100%}
   .cur-skills li{grid-template-columns:1fr}
   .cur-meta{text-align:left}
 }
+
+/* Meet Red Teddy: welcome video entry point and dialog */
+.meet{display:flex;align-items:center;gap:14px;margin-top:26px;padding:8px 18px 8px 8px;max-width:26rem;border:1.5px solid rgba(255,255,255,.22);border-radius:14px;background:rgba(255,255,255,.06);color:#fff;font:inherit;text-align:left;cursor:pointer;transition:border-color .2s,background-color .2s}
+.meet:hover{border-color:var(--gold);background:rgba(255,255,255,.1)}
+.meet-thumb{position:relative;flex:none;width:112px;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:#3a2a20}
+.meet-thumb img{width:100%;height:100%;object-fit:cover}
+.meet-play{position:absolute;inset:0;margin:auto;width:36px;height:36px;border-radius:50%;background:rgba(14,24,48,.78);box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+.meet-play::after{content:"";position:absolute;left:14px;top:10px;border-left:12px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent}
+.meet-text{display:flex;flex-direction:column;gap:2px}
+.meet-text strong{font-size:1.02rem}
+.meet-note{font-size:.86rem;color:var(--mute-d)}
+.meet-again{display:none}
+/* After watching: same control, quieter. Still there whenever wanted. */
+.meet.is-seen{margin-top:20px;padding:4px 12px 4px 4px;border-color:rgba(255,255,255,.14);background:transparent}
+.meet.is-seen .meet-thumb{width:64px;border-radius:7px}
+.meet.is-seen .meet-play{width:24px;height:24px}
+.meet.is-seen .meet-play::after{left:9px;top:6px;border-left-width:9px;border-top-width:6px;border-bottom-width:6px}
+.meet.is-seen .meet-first{display:none}
+.meet.is-seen .meet-again{display:inline;font-weight:400;font-size:.95rem;color:var(--mute-d)}
+.meet.is-seen .meet-note{display:none}
+.foot-link-btn{background:none;border:0;color:inherit;font:inherit;cursor:pointer;min-height:32px;padding:0;text-align:left}
+.foot-link-btn:hover{color:#fff;text-decoration:underline}
+
+.welcome-dialog{border:0;padding:0;background:transparent;width:100%;max-width:min(920px,calc(100vw - 24px),calc((100dvh - 150px) * 16 / 9));max-height:100dvh;margin:auto;color:#fff;overflow:auto}
+.welcome-dialog::backdrop{background:rgba(8,12,24,.82)}
+.welcome-frame{background:var(--navy);border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.welcome-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px 12px 20px}
+.welcome-bar h2{font-size:1.2rem}
+.welcome-close{min-height:44px;padding:0 16px;border:1.5px solid rgba(255,255,255,.4);border-radius:10px;background:none;color:#fff;font:700 .95rem var(--sans);cursor:pointer}
+.welcome-close:hover{border-color:#fff}
+.welcome-media{aspect-ratio:16/9;background:#000}
+.welcome-media video{display:block;width:100%;height:100%}
+.welcome-desc{padding:12px 20px 16px;font-size:.92rem;color:var(--mute-d)}
+.welcome-error{padding:0 20px 16px;color:#ffd0d2;font-weight:700}
+.welcome-error a{color:#fff}
+@media (max-width:900px){
+  .meet{max-width:none}
+}
+@media (max-width:640px){
+  .welcome-dialog{max-width:min(100vw,calc((100dvh - 150px) * 16 / 9))}
+  .welcome-frame{border-radius:0}
+}

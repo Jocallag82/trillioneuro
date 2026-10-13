@@ -22,6 +22,7 @@ import {
 import { askTutor, itemFor, reasonText } from './tutor.js';
 import { mulberry32 } from '../game/js/rng.js';
 import { renderCurriculum, renderLesson, renderAsk } from './explore.js';
+import { openWelcome, welcomeSeen } from '/welcome-video.js';
 import { LESSONS } from './curriculum/lessons.js';
 import { US_GRADES, GRADE_BAND, gradeLabel } from './curriculum/grades.js';
 
@@ -91,6 +92,14 @@ function teddy(cls = '') {
   return el('img', { src: '/teddy-mark.webp', width: 64, height: 64, alt: '', class: `teddy ${cls}`.trim() });
 }
 
+// A quiet way to watch Red Teddy's 10-second hello. Never plays by itself.
+function meetLink() {
+  return el('button', { type: 'button', class: 'meet-link', onclick: (e) => openWelcome(e.currentTarget) }, [
+    el('span', { class: 'meet-link-play', 'aria-hidden': 'true' }),
+    welcomeSeen() ? 'Watch Red Teddy’s hello again' : 'New here? Meet Red Teddy (10-second video)',
+  ]);
+}
+
 // What the curriculum, lesson and Ask Red Teddy screens need from the app.
 const ctx = {
   state: () => state, remote: () => remote, storage, L, say,
@@ -98,6 +107,7 @@ const ctx = {
   renderHome: () => renderHome(),
   startPractice: (id, why, opts) => startPractice(id, why, opts),
   focus: (sel) => app.querySelector(sel)?.focus(),
+  meetLink: () => meetLink(),
 };
 
 function saveSettings(patch) {
@@ -127,6 +137,7 @@ function renderSetup(step = 'age') {
       el('div', { class: 'setup' }, [
         el('p', { class: 'eyebrow', text: 'Getting started' }),
         el('h2', { id: 'setup-title', tabindex: '-1', text: usGrades() ? 'What grade is the learner in?' : 'Who is learning today?' }),
+        meetLink(),
         el('p', { class: 'lead', text: usGrades()
           ? 'Pick the school grade. It sets the starting point, the curriculum shown and how the screens look. It is not a measure of ability, and you can change it any time.'
           : 'Choose an age. It sets the starting point and how the screens look. It is not a measure of ability, and you can change it any time.' }),

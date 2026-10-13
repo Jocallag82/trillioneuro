@@ -9,6 +9,7 @@ import { grade, MAX_MISSES } from '/learn/js/engine.js';
 import { el, visualNode } from '/learn/js/dom.js';
 import { mulberry32 } from '/learn/game/js/rng.js';
 import { US_CATALOGUE } from '/learn/js/curriculum/catalogues/us.js';
+import { wireWelcome } from '/welcome-video.js';
 
 const locale = pickLocale(navigator.languages || []);
 const L = (t) => localise(t, locale);
@@ -260,6 +261,7 @@ function initForm() {
 
 initMenu();
 initForm();
+try { wireWelcome(); } catch (e) { console.warn('[home] welcome video', e); }
 try { renderSubjects(); } catch (e) { console.warn('[home] skill list', e); }
 try { initDemo(); } catch (e) {
   console.warn('[home] demo', e);
