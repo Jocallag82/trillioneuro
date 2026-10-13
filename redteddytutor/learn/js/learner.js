@@ -190,9 +190,11 @@ export function plan(state, now = Date.now(), limit = 4) {
   const { band, focus } = state.settings;
   const reports = learnerReport(state, now);
   const inFocus = (id) => (focus === 'all' || OBJECTIVES[id].subject === focus) && GENERATORS[id];
-  const near = objectivesFor(band, 1).filter(inFocus);
-  const here = new Set(objectivesFor(band, 0));
   const placement = state.settings.placement || {};
+  // The quick check's starting points are always plannable, even when the check found
+  // the child needs to start below their age band (otherwise the plan would be empty).
+  const near = [...new Set([...objectivesFor(band, 1), ...Object.values(placement)])].filter(inFocus);
+  const here = new Set(objectivesFor(band, 0));
   // For planning only: a prerequisite usually met in an earlier age band, with no
   // answers either way, is taken as known. A learner in grade 9 is not asked to prove
   // counting first. As soon as answers show a gap, it is no longer taken as known,
@@ -237,6 +239,18 @@ export function plan(state, now = Date.now(), limit = 4) {
       const placed = (id) => (Object.values(placement).includes(id) ? 0 : 1);
       return placed(a) - placed(b) || (here.has(b) - here.has(a)) || OBJECTIVES[a].order - OBJECTIVES[b].order;
     });
+  // A starting point whose own foundation is not yet shown (a short check can stop
+  // before reaching it): start from the deepest missing foundation instead.
+  const foundation = (id, seen = new Set()) => {
+    if (seen.has(id)) return id;
+    seen.add(id);
+    const gap = OBJECTIVES[id].prereqs.find((p) => !metForPlan(p) && GENERATORS[p]);
+    return gap ? foundation(gap, seen) : id;
+  };
+  Object.values(placement).filter((id) => inFocus(id) && reports[id].state === 'not-started' && !isReady(reports, id)).forEach((id) => {
+    const f = foundation(id);
+    if (f !== id && reports[f].state === 'not-started') add(f, 'new', `Builds the foundation for ${mid(OBJECTIVES[id].label)}, your starting point from the quick check.`);
+  });
   fresh.forEach((id) => {
     const after = OBJECTIVES[id].prereqs.map((p) => mid(OBJECTIVES[p].label));
     add(id, 'new', Object.values(placement).includes(id)

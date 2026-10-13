@@ -12,6 +12,7 @@ import { mulberry32 } from '../../game/js/rng.js';
 import { int, pick, shuffled, choice, input, dots, text, order } from './kit.js';
 import { SECONDARY_MATH } from './gen-secondary-math.js';
 import { SUBJECT_GENERATORS } from './gen-subjects.js';
+import { EXPANSION_GENERATORS } from './gen-expansion.js';
 
 // ---------- Maths ----------
 const RANGES = {
@@ -865,6 +866,7 @@ export const GENERATORS = {
   'comprehension': comprehension,
   ...SECONDARY_MATH,
   ...SUBJECT_GENERATORS,
+  ...EXPANSION_GENERATORS,
 };
 
 export function generateStep(objective, difficulty, rand) {

@@ -15,6 +15,80 @@ const unsup = (s) => Number([...s].map((c) => SUP[c]).join(''));
 
 // Each solver returns an array of lines, or null when it does not recognise the question.
 const SOLVERS = {
+  // ---- Expansion, October 2026 ----
+  'multiply-multidigit': (s) => {
+    const [a, b] = nums(s.prompt);
+    if (b < 10) {
+      const parts = String(a).split('').reverse().map((dg, i) => Number(dg) * 10 ** i).filter(Boolean).reverse();
+      return [...parts.map((p) => `${p} × ${b} = ${p * b}.`), `Add the parts: ${parts.map((p) => p * b).join(' + ')} = ${a * b}.`];
+    }
+    const t = Math.floor(b / 10) * 10; const o = b % 10;
+    return [`Split ${b} into ${t} + ${o}.`, `${a} × ${o} = ${a * o}.`, `${a} × ${t} = ${a * t}.`, `Add the partial products: ${a * o} + ${a * t} = ${a * b}.`];
+  },
+  'long-division': (s) => {
+    const [a, b] = nums(s.prompt);
+    const lines = []; let r = 0;
+    for (const dg of String(a)) {
+      const cur = r * 10 + Number(dg); const q = Math.floor(cur / b); r = cur - q * b;
+      if (cur >= b || lines.length) lines.push(`${cur} ÷ ${b} = ${q}${r ? ` remainder ${r}` : ''}.`);
+    }
+    return /remainder/.test(s.prompt)
+      ? [...lines, `${b} × ${Math.floor(a / b)} = ${b * Math.floor(a / b)}, and ${a} − ${b * Math.floor(a / b)} = ${a % b}. The remainder is ${a % b}.`]
+      : [...lines, `So ${a} ÷ ${b} = ${a / b}. Check: ${a / b} × ${b} = ${a}.`];
+  },
+  'order-of-operations': (s) => {
+    const e = s.prompt.replace(/ = \?$/, '');
+    let m;
+    if ((m = e.match(/^(\d+) ([+−]) (\d+) × (\d+)$/))) { const p = m[3] * m[4]; return [`Multiply first: ${m[3]} × ${m[4]} = ${p}.`, `Then ${m[1]} ${m[2]} ${p} = ${m[2] === '+' ? Number(m[1]) + p : m[1] - p}.`]; }
+    if ((m = e.match(/^\((\d+) \+ (\d+)\) × (\d+) − (\d+)$/))) { const p = Number(m[1]) + Number(m[2]); return [`Parentheses: ${m[1]} + ${m[2]} = ${p}.`, `Multiply: ${p} × ${m[3]} = ${p * m[3]}.`, `Subtract: ${p * m[3]} − ${m[4]} = ${p * m[3] - m[4]}.`]; }
+    if ((m = e.match(/^(\d+) \+ (\d+)² × (\d+) ÷ (\d+)$/))) { const sq = m[2] ** 2; const t = sq * m[3]; return [`Exponent: ${m[2]}² = ${sq}.`, `Left to right: ${sq} × ${m[3]} = ${t}, then ${t} ÷ ${m[4]} = ${t / m[4]}.`, `Add: ${m[1]} + ${t / m[4]} = ${Number(m[1]) + t / m[4]}.`]; }
+    return null;
+  },
+  'volume': (s) => {
+    const v = nums(s.prompt);
+    if (/How tall/.test(s.prompt)) { const [V, l, w] = v; return [`Base: ${l} × ${w} = ${l * w}.`, `Height = ${V} ÷ ${l * w} = ${V / (l * w)}.`]; }
+    const [l, w, h] = v; return [`One layer: ${l} × ${w} = ${l * w}.`, `${h} layers: ${l * w} × ${h} = ${l * w * h}.`];
+  },
+  'circles': (s) => {
+    const [n] = nums(s.prompt);
+    if (/circumference/.test(s.prompt)) return [`C = 2πr = 2 × π × ${n}.`, `So C = ${2 * n}π, and k = ${2 * n}.`];
+    const r = /diameter/.test(s.prompt) ? n / 2 : n;
+    return [...(/diameter/.test(s.prompt) ? [`Radius = ${n} ÷ 2 = ${r}.`] : []), `A = πr² = π × ${r}².`, `${r}² = ${r * r}, so k = ${r * r}.`];
+  },
+  'volume-solids': (s) => {
+    const [r, h] = nums(s.prompt);
+    if (/cylinder/.test(s.prompt)) return [`V = πr²h = π × ${r}² × ${h}.`, `${r * r} × ${h} = ${r * r * h}, so k = ${r * r * h}.`];
+    if (/cone/.test(s.prompt)) return [`V = ⅓πr²h = ⅓ × π × ${r}² × ${h}.`, `${r * r} × ${h} = ${r * r * h}; ${r * r * h} ÷ 3 = ${(r * r * h) / 3}. So k = ${(r * r * h) / 3}.`];
+    return [`V = ⁴⁄₃πr³ = ⁴⁄₃ × π × ${r}³.`, `${r}³ = ${r ** 3}; × 4 = ${4 * r ** 3}; ÷ 3 = ${(4 * r ** 3) / 3}. So k = ${(4 * r ** 3) / 3}.`];
+  },
+  'sequences': (s) => {
+    const v = nums(s.prompt.replace(/term \d+.*$/, '')); const n = Number(s.prompt.match(/term (\d+)\?$/)?.[1]);
+    if (/goes up by the same amount/.test(s.prompt)) { const dd = v[1] - v[0]; return [`Common difference: ${neg(v[1])} − ${par(v[0])} = ${dd}.`, `Term ${n} = ${neg(v[0])} + (${n} − 1) × ${dd} = ${neg(v[0] + (n - 1) * dd)}.`]; }
+    if (/multiplied by the same number/.test(s.prompt)) { const r = v[1] / v[0]; return [`Common ratio: ${v[1]} ÷ ${v[0]} = ${r}.`, `Term ${n} = ${v[0]} × ${r}^${n - 1} = ${v[0] * r ** (n - 1)}.`]; }
+    const m = s.prompt.match(/term (\d+) is (\S+) and term (\d+) is (\S+)\./); if (!m) return null;
+    const [i, a, j, b] = [Number(m[1]), num(m[2]), Number(m[3]), num(m[4])]; const dd = (b - a) / (j - i);
+    return [`From term ${i} to term ${j}: ${j - i} steps, a change of ${neg(b - a)}. Difference = ${neg(b - a)} ÷ ${j - i} = ${neg(dd)}.`, `Term 1 = ${neg(a)} − ${i - 1} × ${par(dd)} = ${neg(a - (i - 1) * dd)}.`];
+  },
+  'data-spread': (s) => {
+    const m = s.prompt.match(/of: (.+)$/); if (!m) return null;
+    const v = nums(m[1]).sort((x, y) => x - y);
+    const lower = v.slice(0, 3); const upper = v.slice(4);
+    const lines = [`In order: ${v.join(', ')}. Median: ${v[3]}.`, `Lower half ${lower.join(', ')} → Q1 = ${lower[1]}.`];
+    if (/lower quartile/.test(s.prompt)) return lines;
+    return [...lines, `Upper half ${upper.join(', ')} → Q3 = ${upper[1]}.`, `IQR = ${upper[1]} − ${lower[1]} = ${upper[1] - lower[1]}.`];
+  },
+  'energy': (s) => {
+    const v = nums(s.prompt);
+    if (/kinetic energy in joules/.test(s.prompt)) { const [m, sp] = v; return [`KE = ½mv² = ½ × ${m} × ${sp}².`, `${sp}² = ${sp * sp}; ½ × ${m} × ${sp * sp} = ${(m * sp * sp) / 2}.`]; }
+    const [m, h] = v.filter((x) => x !== 10); if (m === undefined || h === undefined) return null;
+    return [`PE = mgh = ${m} × 10 × ${h} = ${m * 10 * h}.`, ...(/dropped/.test(s.prompt) ? [`All of it becomes kinetic energy: ${m * 10 * h}.`] : [])];
+  },
+  'binary': (s) => {
+    let m;
+    if ((m = s.prompt.match(/binary number (\d+) in decimal/))) { const bits = m[1]; const parts = [...bits].map((b, i) => (b === '1' ? 2 ** (bits.length - 1 - i) : 0)).filter(Boolean); return [`Place values with a 1: ${parts.join(' + ')}.`, `Total: ${parts.reduce((x, y) => x + y, 0)}.`]; }
+    if ((m = s.prompt.match(/using (\d+) bits/))) { const b = Number(m[1]); return [`Each bit doubles the patterns: 2 multiplied ${b} times.`, `2^${b} = ${2 ** b}.`]; }
+    return null;
+  },
   'count-to-5': countDots,
   'count-to-10': (s) => (s.kind === 'build'
     ? [`Put the counters in one at a time and count: ${countList(1, s.target)}.`, `Stop at ${s.target}.`]

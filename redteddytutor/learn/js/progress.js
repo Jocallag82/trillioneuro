@@ -72,9 +72,31 @@ function cleanStep(x) {
   return step;
 }
 
+// A signed-in child profile keeps its own copy on the device, apart from progress made
+// without an account. So signing in never overwrites a family's device progress, and
+// signing out or deleting a profile can remove that child's copy completely.
+export const PROFILE_PREFIX = 'rtt.learn.p.';
+const ACTIVE_PROFILE_KEY = 'rtt.activeProfile.v1'; // written by api.js
+export function storeKey(storage) {
+  try {
+    const id = JSON.parse(storage.getItem(ACTIVE_PROFILE_KEY) || 'null');
+    return typeof id === 'string' && id ? PROFILE_PREFIX + id : STORAGE_KEY;
+  } catch { return STORAGE_KEY; }
+}
+
+// Removes one profile's device copy, or every profile's copy when no id is given.
+export function clearProfileCaches(storage, id = null) {
+  try {
+    const keys = [];
+    for (let i = 0; i < storage.length; i++) keys.push(storage.key(i));
+    keys.filter((k) => k && (id ? k === PROFILE_PREFIX + id : k.startsWith(PROFILE_PREFIX))).forEach((k) => storage.removeItem(k));
+    return true;
+  } catch { return false; }
+}
+
 export function readState(storage) {
   try {
-    const raw = storage.getItem(STORAGE_KEY);
+    const raw = storage.getItem(storeKey(storage));
     return raw ? normalize(JSON.parse(raw)) : emptyState();
   } catch {
     return emptyState();
@@ -83,7 +105,7 @@ export function readState(storage) {
 
 export function writeState(storage, state) {
   try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(state));
+    storage.setItem(storeKey(storage), JSON.stringify(state));
     return true;
   } catch {
     return false;
@@ -92,7 +114,7 @@ export function writeState(storage, state) {
 
 export function clearState(storage) {
   try {
-    storage.removeItem(STORAGE_KEY);
+    storage.removeItem(storeKey(storage));
     return true;
   } catch {
     return false;

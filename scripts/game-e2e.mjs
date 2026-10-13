@@ -52,6 +52,8 @@ function plannedSession(plan, seed, startSteps, behaviours) {
 
 async function openGame(browser, { viewport, reducedMotion = 'no-preference', seed = 12345, storage = null } = {}) {
   const ctx = await browser.newContext({ viewport: viewport ?? { width: 1280, height: 860 }, reducedMotion });
+  // Web fonts are cosmetic and outside the app; serve them empty so tests run offline.
+  await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -298,6 +300,8 @@ await check('sound can be switched off and the choice is remembered', async () =
 // ---- 4. Error handling ----
 await check('if the game engine fails to load, the page says so instead of breaking', async () => {
   const ctx = await browser.newContext({ viewport: { width: 1000, height: 800 } });
+  // Web fonts are cosmetic and outside the app; serve them empty so tests run offline.
+  await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
   const page = await ctx.newPage();
   await page.route('**/vendor/phaser-3.90.0.min.js', (r) => r.abort());
   await page.goto(`${BASE}/learn/game/`);

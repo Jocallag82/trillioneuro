@@ -151,6 +151,7 @@ function choose(id, btn) {
 function render() {
   q = makeQuestion();
   hintBtn.disabled = false;
+  howBtn.setAttribute('aria-expanded', 'false');
   feedback.replaceChildren();
   if (!q) { body.replaceChildren(el('p', { class: 'demo-prompt', text: 'Could not make a question just now.' })); return; }
   const { step, id } = q;
@@ -217,6 +218,7 @@ function initDemo() {
     if (!q) return;
     const h = helpFor(q.step, q.id, BAND_STAGE[band], rand);
     const ex = h.example;
+    howBtn.setAttribute('aria-expanded', 'true');
     show(el('div', { class: 'demo-how' }, [
       h.method.length ? el('div', {}, [el('p', { class: 'demo-how-title', text: h.style.framing }), el('ul', {}, h.method.map((m) => el('li', { text: L(m) })))]) : null,
       ex ? el('div', { class: 'demo-how-ex' }, [

@@ -576,3 +576,24 @@ body[data-stage="high"] .teddy-large{width:72px;height:72px}
 /* Older learners: compact, textbook-like */
 .work-middle .work-btn,.work-high .work-btn{min-height:40px;font-size:.9rem;border-radius:8px}
 .work-high .work-example{font-size:.98rem}
+
+/* Parent dashboard: observed vs estimated, evidence, child switcher */
+.who{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;justify-content:space-between;margin-bottom:14px}
+.who p{margin:0;flex:1 1 260px}
+.switcher{display:grid;gap:4px;min-width:200px}
+.switcher .field{margin:0}
+.tag{display:inline-block;vertical-align:middle;font:700 .7rem/1 var(--sans,inherit);letter-spacing:.04em;text-transform:uppercase;padding:4px 7px;border-radius:999px;border:1px solid currentColor}
+.tag-observed{color:var(--ink)}
+.tag-estimate{color:var(--mute)}
+.trend{margin-top:12px;font-size:.95rem}
+.insight-list{list-style:none;display:grid;gap:12px}
+.insight-list li{padding:14px 16px;background:var(--ivory);border-radius:12px}
+.insight-list li.kind-struggling{border-left:4px solid var(--amber);border-radius:0 12px 12px 0}
+.insight-list p{margin:4px 0 6px}
+.insight-actions{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.insight-actions a{font-weight:700;color:var(--red)}
+.evidence{display:inline-block;font-size:.82rem;color:var(--mute)}
+.evidence::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px;background:currentColor;opacity:.35}
+.ev-some::before{opacity:.65}
+.ev-strong::before{opacity:1}
+[aria-busy="true"]{opacity:.6}

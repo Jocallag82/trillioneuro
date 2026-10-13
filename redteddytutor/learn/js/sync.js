@@ -5,18 +5,22 @@ import {
   listProfiles, fetchProgress, pushAttempt, pushSession, updateProfile, resetProgress,
   rowsToState, queueWrite, flushQueue, attemptRow,
 } from './api.js';
-import { normalize } from './progress.js';
+import { normalize, clearProfileCaches } from './progress.js';
 
 // Returns { session, profile, state } when a profile is active and reachable, else null.
 export async function openRemote(storage) {
   const session = await ensureSession(storage, loadSession(storage));
-  if (!session) return null;
+  if (!session) {
+    // The sign-in has ended: stop using (and remove) any synced child's device copy.
+    if (loadActiveProfile(storage)) { saveActiveProfile(storage, null); clearProfileCaches(storage); }
+    return null;
+  }
   const activeId = loadActiveProfile(storage);
   if (!activeId) return { session, profile: null, state: null };
   try {
     const profiles = await listProfiles(session);
     const profile = profiles.find((p) => p.id === activeId);
-    if (!profile) { saveActiveProfile(storage, null); return { session, profile: null, state: null }; }
+    if (!profile) { saveActiveProfile(storage, null); clearProfileCaches(storage, activeId); return { session, profile: null, state: null }; }
     const data = await fetchProgress(session, profile.id);
     flushQueue(storage, session).catch(() => {});
     return { session, profile, state: normalize(rowsToState(profile, data)) };

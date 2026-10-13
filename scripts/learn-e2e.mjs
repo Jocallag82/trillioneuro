@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', 'redteddytutor');
 const SHOTS = process.argv[2] || null;
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.mp3': 'audio/mpeg', '.json': 'application/json' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.mp3': 'audio/mpeg', '.json': 'application/json', '.mp4': 'video/mp4', '.svg': 'image/svg+xml' };
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : 'playwright');
 const vercel = JSON.parse(await readFile(join(HERE, '..', 'vercel.json'), 'utf8'));
 const CSP = vercel.routes.find((r) => r.headers?.['Content-Security-Policy'])?.headers['Content-Security-Policy'];
@@ -51,6 +51,8 @@ async function check(name, fn) {
 
 async function open(path, { viewport = { width: 1280, height: 900 }, storage = null, signedIn = false, colorScheme = 'light' } = {}) {
   const ctx = await browser.newContext({ viewport, colorScheme, locale: 'en-GB' });
+  // Web fonts are cosmetic and outside the app; serve them empty so tests run offline.
+  await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -80,6 +82,12 @@ async function open(path, { viewport = { width: 1280, height: 900 }, storage = n
 }
 
 const readState = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('rtt.learn.v1') || 'null'));
+// From grade 2 up, a skill's first practice opens its lesson. Go through it to the questions.
+async function pastLesson(page) {
+  await page.waitForSelector('.prompt, .lesson, button:has-text("Start practice")');
+  const start = page.getByRole('button', { name: 'Start practice' });
+  if (await start.count()) await start.click();
+}
 const noHScroll = async (page) => {
   const [sw, cw] = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   assert.ok(sw <= cw + 1, `horizontal scroll: ${sw} > ${cw}`);
@@ -200,6 +208,7 @@ await check('practice: number line, ten frame, sums and tiles are solved; eviden
 
 await check('mistakes: a tagged wrong answer gives a targeted hint, records the mistake, and the third miss reveals', async () => {
   const { page, errors, ctx } = await open('/learn/?practise=add-2digit', { storage: { ...PRIMARY, settings: { ...PRIMARY.settings, band: '7-9' } } });
+  await pastLesson(page);
   await page.waitForSelector('#answer');
   const prompt = (await page.locator('.prompt').textContent()).trim();
   const [a, b] = prompt.match(/\d+/g).map(Number);
@@ -228,12 +237,17 @@ await check('mistakes: a tagged wrong answer gives a targeted hint, records the 
   await ctx.close();
 });
 
-await check('Teddy signed out: asking for help explains why and gives the authored hint instead', async () => {
+await check('signed out: no AI helper is offered; authored clues and a worked example still help', async () => {
   const { page, errors, ctx } = await open('/learn/?practise=add-within-20', { storage: PRIMARY });
-  await page.waitForSelector('.help');
+  let tutorCalls = 0;
+  page.on('request', (r) => { if (r.url().includes('/api/rtt-tutor')) tutorCalls++; });
+  await page.waitForSelector('#work');
+  assert.equal(await page.locator('.help').count(), 0, 'the AI panel needs a signed-in parent');
   await page.getByRole('button', { name: 'Give me a clue' }).click();
-  await page.waitForSelector('.help-msg.note');
-  assert.match(await page.locator('.help-msg.note').textContent(), /sign in.*Hint:/is);
+  await page.waitForSelector('.work-hints li');
+  await page.getByRole('button', { name: 'Show me how' }).click();
+  await page.waitForSelector('.work-example .work-answer');
+  assert.equal(tutorCalls, 0);
   await shot(page, 'help-signed-out', false);
   assert.deepEqual(errors, []);
   await ctx.close();
@@ -281,7 +295,11 @@ await check('parent view: support, secure, assumed and review states come from t
   const { page, errors, ctx } = await open('/learn/parent.html', { storage: seededHistory(Date.now()) });
   await page.waitForSelector('.glance');
   const text = await page.locator('#parent-app').textContent();
-  assert.match(text, /Where support would help.*Adding within 20.*one more or one less/s);
+  assert.match(text, /What to practise next, and why/);
+  assert.match(text, /Can do independently.*Counting to 10.*Strong evidence: 12 answers on 4 days/s);
+  assert.match(text, /Still uncertain, and why.*Adding within 20.*2 of 4 answers right first time/s);
+  assert.match(text, /Mistakes that keep coming up.*one more or one less.*Seen 2 times/s);
+  assert.match(text, /Too early to tell/, 'no trend claimed from too few answers');
   assert.match(text, /Counting to 10.*Secure/s);
   assert.match(text, /Counting to 5.*Probably known/s);
   assert.match(text, /Number bonds to 10.*Getting started.*Too few answers/s);
@@ -289,6 +307,68 @@ await check('parent view: support, secure, assumed and review states come from t
   assert.match(text, /nothing your child types to Teddy, and nothing Teddy says, is stored/i);
   await shot(page, 'parent-desktop');
   assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+await check('parent view, signed in with two children: switching shows each child only; device progress is kept apart', async () => {
+  const KIDS = [
+    { id: '3f1c2a4e-1111-4222-8333-444455556666', nickname: 'Sam', age_band: '7-9', locale: 'en-US', settings: { onboarded: true, grade: '3' } },
+    { id: '9a8b7c6d-2222-4333-8444-555566667777', nickname: 'Ava', age_band: '11-14', locale: 'en-US', settings: { onboarded: true, grade: '7' } },
+  ];
+  const now = Date.now();
+  const row = (pid, skill, first, daysAgo) => ({ profile_id: pid, activity_id: `pr-${skill}`, skill, first_try: first, correct: true, hints: 0, difficulty: 2, misconception: null, source: 'practice', created_at: new Date(now - daysAgo * 864e5).toISOString() });
+  const attempts = [...[5, 4, 3].flatMap((d) => [1, 2, 3, 4].map(() => row(KIDS[0].id, 'times-tables', true, d))), ...[2, 1].flatMap((d) => [1, 2, 3].map(() => row(KIDS[1].id, 'integers', false, d)))];
+  const device = { ...PRIMARY, steps: [{ activityId: 'pr-count-to-10', skill: 'count-to-10', firstTry: true, correct: true, at: now - 864e5, difficulty: 1, source: 'practice' }] };
+  const { page, errors, ctx } = await open('/learn/parent.html', { storage: device });
+  const deleted = [];
+  await ctx.addInitScript(() => localStorage.setItem('rtt.auth.v1', JSON.stringify({ access_token: 'tok', refresh_token: 'r', expires_at: Date.now() + 3600e3, user: { id: 'u1', email: 'p@example.com' } })));
+  await page.route('https://kxzywyflylkcqoidiqmo.supabase.co/**', async (route) => {
+    const url = new URL(route.request().url());
+    const method = route.request().method();
+    const json = (d) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(d) });
+    const pid = (url.searchParams.get('profile_id') || url.searchParams.get('id') || '').replace('eq.', '');
+    if (url.pathname.endsWith('/rtt_profiles') && method === 'GET') return json(KIDS.filter((k) => !deleted.includes(k.id)));
+    if (url.pathname.endsWith('/rtt_attempts') && method === 'GET') return json(attempts.filter((a) => a.profile_id === pid));
+    if (url.pathname.endsWith('/rtt_sessions') && method === 'GET') return json([]);
+    if (method === 'DELETE') { deleted.push(pid); return route.fulfill({ status: 204 }); }
+    if (method === 'PATCH') return route.fulfill({ status: 204 });
+    return route.fulfill({ status: 404, body: '{}' });
+  });
+  await page.reload();
+  await page.waitForSelector('#p-child');
+  // No child chosen yet: the device's own progress is shown, and the switcher lists both children.
+  assert.match(await page.locator('#parent-app').textContent(), /without an account/);
+  assert.deepEqual(await page.locator('#p-child option').allTextContents(), ['Sam', 'Ava', 'This device (no account)']);
+  await page.selectOption('#p-child', KIDS[0].id);
+  await page.waitForFunction(() => /Showing Sam/.test(document.querySelector('#parent-app').textContent));
+  let text = await page.locator('#parent-app').textContent();
+  assert.match(text, /Can do independently.*Times tables/s);
+  assert.doesNotMatch(text, /Positive and negative numbers|Counting to 10/, 'only Sam’s answers');
+  await page.selectOption('#p-child', KIDS[1].id);
+  await page.waitForFunction(() => /Showing Ava/.test(document.querySelector('#parent-app').textContent));
+  text = await page.locator('#parent-app').textContent();
+  assert.match(text, /Still uncertain, and why.*Positive and negative numbers/s);
+  assert.doesNotMatch(text, /Times tables/);
+  await shot(page, 'parent-two-children');
+  // The device's anonymous progress was never overwritten by a synced child.
+  const store = await page.evaluate(() => ({ anon: JSON.parse(localStorage.getItem('rtt.learn.v1')), keys: Object.keys(localStorage) }));
+  assert.equal(store.anon.steps.length, 1);
+  assert.equal(store.anon.steps[0].skill, 'count-to-10');
+  assert.ok(store.keys.includes(`rtt.learn.p.${KIDS[1].id}`));
+  // Deleting a profile on the Account page removes that child's device copy too.
+  page.once('dialog', (d) => d.accept());
+  await page.goto(`${BASE}/learn/account.html`);
+  await page.locator('.profile', { hasText: 'Ava' }).getByRole('button', { name: 'Delete' }).click();
+  await page.waitForFunction(() => /Ava's profile and progress were deleted/.test(document.body.textContent));
+  assert.ok(!(await page.evaluate(() => Object.keys(localStorage))).includes(`rtt.learn.p.${KIDS[1].id}`));
+  assert.deepEqual(deleted, [KIDS[1].id]);
+  // Signing out removes every synced child's copy and returns to the device's own progress.
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await page.waitForFunction(() => /signed out/.test(document.body.textContent));
+  const keys = await page.evaluate(() => Object.keys(localStorage));
+  assert.ok(!keys.some((k) => k.startsWith('rtt.learn.p.')), keys.join());
+  assert.ok(keys.includes('rtt.learn.v1'));
+  assert.deepEqual(errors.filter((e) => !/404/.test(e)), []);
   await ctx.close();
 });
 
@@ -356,6 +436,66 @@ await check('keyboard only: a number line question can be answered without a poi
   assert.equal(await page.locator('.line-slider').getAttribute('aria-valuenow'), String(target));
   await page.keyboard.press('Enter');
   await page.waitForSelector('.fb-correct');
+  await ctx.close();
+});
+
+await check('home: no video bytes until asked; the welcome video plays with sound, closes, replays and is remembered', async () => {
+  const { page, errors, ctx } = await open('/');
+  const videoRequests = [];
+  page.on('request', (r) => { if (r.url().endsWith('.mp4')) videoRequests.push(r.url()); });
+  await page.waitForSelector('.meet');
+  await page.waitForTimeout(400);
+  assert.equal(videoRequests.length, 0, 'never autoplays or preloads the video');
+  assert.equal(await page.locator('video').count(), 0);
+  await page.locator('.meet').click();
+  await page.waitForSelector('dialog.welcome-dialog[open] video');
+  const v = await page.locator('dialog video').evaluate((el) => ({ muted: el.muted, controls: el.controls, loop: el.loop }));
+  assert.deepEqual(v, { muted: false, controls: true, loop: false }, 'sound on, controls shown, does not repeat on its own');
+  assert.ok(videoRequests.length >= 1);
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !document.querySelector('dialog.welcome-dialog[open]'));
+  assert.equal(await page.locator('dialog video').count(), 0, 'closing stops and removes the video');
+  assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('meet')), true, 'focus returns to the button');
+  assert.equal(await page.evaluate(() => localStorage.getItem('rtt.welcome.v1')), 'seen');
+  assert.ok(await page.locator('.meet.is-seen').count(), 'entry point switches to “watch again”');
+  await page.locator('.meet').click();
+  await page.waitForSelector('dialog.welcome-dialog[open] video');
+  await page.getByRole('button', { name: 'Close video' }).click();
+  await page.waitForFunction(() => !document.querySelector('dialog.welcome-dialog[open]'));
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+await check('home: the demo question marks answers, gives a hint, a worked example and a new question', async () => {
+  const { page, errors, ctx } = await open('/', { viewport: { width: 390, height: 844 } });
+  await page.waitForSelector('#demo-body .demo-prompt, #demo-body [class*=prompt]');
+  await page.locator('#demo-hint').click();
+  await page.waitForFunction(() => document.querySelector('#demo-feedback').textContent.trim().length > 0 || document.querySelector('.demo-hint, .hint'));
+  await page.locator('#demo-how').click();
+  assert.equal(await page.locator('#demo-how').getAttribute('aria-expanded'), 'true');
+  const before = await page.locator('#demo-body').textContent();
+  for (let i = 0; i < 5 && (await page.locator('#demo-body').textContent()) === before; i++) await page.locator('#demo-next').click();
+  assert.notEqual(await page.locator('#demo-body').textContent(), before);
+  for (const band of ['5-7', '7-9', '9-11', '14-18']) {
+    await page.locator(`#tab-${band}`).click();
+    assert.equal(await page.locator(`#tab-${band}`).getAttribute('aria-selected'), 'true');
+  }
+  await noHScroll(page);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+await check('curriculum and privacy pages render the computed coverage and honest limits', async () => {
+  const { page, errors, ctx } = await open('/curriculum.html', { viewport: { width: 375, height: 800 } });
+  await page.waitForFunction(() => /skills today/.test(document.getElementById('cur-totals')?.textContent || ''));
+  const totals = await page.locator('#cur-totals').textContent();
+  assert.match(totals, /^111 skills today/);
+  await noHScroll(page);
+  await page.goto(`${BASE}/privacy.html`);
+  const text = await page.locator('main').textContent();
+  assert.match(text, /COPPA/);
+  assert.doesNotMatch(text, /fully compliant|guarantee/i);
+  assert.deepEqual(errors, []);
   await ctx.close();
 });
 

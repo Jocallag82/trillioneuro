@@ -5,6 +5,7 @@ import {
   sendMagicLink, signOut, listProfiles, createProfile, deleteProfile,
   loadActiveProfile, saveActiveProfile,
 } from './api.js';
+import { clearProfileCaches } from './progress.js';
 import { BANDS } from './content.js';
 import { LOCALES, pickLocale, stageName } from './curriculum/locales.js';
 
@@ -134,6 +135,7 @@ async function removeProfile(session, p) {
   if (!window.confirm(`Delete ${p.nickname}'s profile and all of their saved progress? This cannot be undone.`)) return;
   try {
     await deleteProfile(session, p.id);
+    clearProfileCaches(storage, p.id);
     if (loadActiveProfile(storage) === p.id) saveActiveProfile(storage, null);
     say(`${p.nickname}'s profile and progress were deleted.`);
     renderAccount(session);

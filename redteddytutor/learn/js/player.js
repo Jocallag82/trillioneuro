@@ -1081,7 +1081,7 @@ openRemote(storage).then((r) => {
   if (r?.state) {
     state = r.state;
     writeState(storage, state);
-  }
+  } else if (!r?.offline) state = readState(storage); // the device's own progress if a sign-in ended
 }).finally(() => {
   document.body.dataset.stage = stage().id;
   const params = new URLSearchParams(window.location.search);

@@ -49,9 +49,9 @@ export const COURSES = [
   { id: 'algebra-1', title: 'Algebra I', subject: 'maths', grades: ['9'] },
   { id: 'geometry', title: 'Geometry', subject: 'maths', grades: ['10'] },
   { id: 'algebra-2', title: 'Algebra II', subject: 'maths', grades: ['11'] },
-  { id: 'precalculus', title: 'Precalculus', subject: 'maths', grades: ['11', '12'], status: 'planned' },
+  { id: 'precalculus', title: 'Precalculus', subject: 'maths', grades: ['11', '12'] },
   { id: 'calculus', title: 'Calculus', subject: 'maths', grades: ['12'] },
-  { id: 'statistics-hs', title: 'Statistics', subject: 'maths', grades: ['11', '12'], status: 'planned' },
+  { id: 'statistics-hs', title: 'Statistics', subject: 'maths', grades: ['11', '12'] },
   { id: 'english-9-10', title: 'English 9–10', subject: 'literacy', grades: ['9', '10'] },
   { id: 'english-11-12', title: 'English 11–12', subject: 'literacy', grades: ['11', '12'] },
   { id: 'biology', title: 'Biology', subject: 'science', grades: ['9', '10'] },
@@ -59,7 +59,7 @@ export const COURSES = [
   { id: 'physics', title: 'Physics', subject: 'science', grades: ['11', '12'] },
   { id: 'us-government', title: 'US Government', subject: 'social', grades: ['12'] },
   { id: 'us-history-hs', title: 'US History', subject: 'social', grades: ['11'], status: 'planned' },
-  { id: 'world-history', title: 'World History', subject: 'social', grades: ['9', '10'], status: 'planned' },
+  { id: 'world-history', title: 'World History', subject: 'social', grades: ['6', '9', '10'] },
   { id: 'economics', title: 'Economics & Personal Finance', subject: 'social', grades: ['11', '12'] },
   { id: 'cs-hs', title: 'Computer Science', subject: 'computing', grades: ['9', '10', '11', '12'] },
   // Catalogued electives with no content yet
@@ -164,6 +164,42 @@ export const PLACEMENT = {
   'sequencing': { grades: ['K'], course: 'thinking-early', standards: [] },
   'memory': { grades: ['PK'], course: 'thinking-early', standards: [] },
   'logic-puzzles': { grades: ['3', '4', '5'], course: 'thinking-early', standards: [] },
+  // Expansion, October 2026. Codes checked against the published CCSS, NGSS text.
+  'multiply-multidigit': { grades: ['4'], course: 'math-4', standards: [S('CCSS-M', '4.NBT.B.5', 'partial')] },
+  'long-division': { grades: ['4'], course: 'math-4', standards: [S('CCSS-M', '4.NBT.B.6', 'partial')] },
+  'fraction-add-subtract': { grades: ['4', '5'], course: 'math-5', also: ['math-4'], standards: [S('CCSS-M', '4.NF.B.3.A', 'partial'), S('CCSS-M', '5.NF.A.1')] },
+  'multiply-fractions': { grades: ['5'], course: 'math-5', standards: [S('CCSS-M', '5.NF.B.4.A', 'partial')] },
+  'volume': { grades: ['5'], course: 'math-5', standards: [S('CCSS-M', '5.MD.C.5.A', 'partial'), S('CCSS-M', '5.MD.C.5.B')] },
+  'order-of-operations': { grades: ['5', '6'], course: 'math-5', also: ['math-6'], standards: [S('CCSS-M', '5.OA.A.1', 'partial'), S('CCSS-M', '6.EE.A.2.C', 'partial')] },
+  'divide-fractions': { grades: ['6'], course: 'math-6', standards: [S('CCSS-M', '6.NS.A.1', 'partial'), S('CCSS-M', '5.NF.B.7', 'partial')] },
+  'one-step-equations': { grades: ['6'], course: 'math-6', standards: [S('CCSS-M', '6.EE.B.7')] },
+  'area-triangles': { grades: ['6'], course: 'math-6', standards: [S('CCSS-M', '6.G.A.1', 'partial')] },
+  'circles': { grades: ['7'], course: 'math-7', standards: [S('CCSS-M', '7.G.B.4', 'partial')] },
+  'scientific-notation': { grades: ['8'], course: 'math-8', standards: [S('CCSS-M', '8.EE.A.3', 'partial'), S('CCSS-M', '8.EE.A.4', 'partial')] },
+  'linear-functions': { grades: ['8'], course: 'math-8', standards: [S('CCSS-M', '8.F.B.4', 'partial')] },
+  'volume-solids': { grades: ['8'], course: 'math-8', standards: [S('CCSS-M', '8.G.C.9')] },
+  'exponential-functions': { grades: ['9', '11'], course: 'algebra-1', also: ['algebra-2'], standards: [S('CCSS-M', 'HSF-LE.A.2', 'partial'), S('CCSS-M', 'HSF-LE.A.1', 'partial')] },
+  'polynomials': { grades: ['9'], course: 'algebra-1', standards: [S('CCSS-M', 'HSA-APR.A.1', 'partial')] },
+  'sequences': { grades: ['9', '11'], course: 'algebra-2', also: ['algebra-1'], standards: [S('CCSS-M', 'HSF-BF.A.2', 'partial'), S('CCSS-M', 'HSF-IF.A.3', 'partial')] },
+  'data-spread': { grades: ['11', '12'], course: 'statistics-hs', standards: [S('CCSS-M', 'HSS-ID.A.2', 'partial'), S('CCSS-M', 'HSS-ID.A.3', 'partial')] },
+  'unit-circle': { grades: ['11', '12'], course: 'precalculus', standards: [S('CCSS-M', 'HSF-TF.A.2', 'partial'), S('CCSS-M', 'HSF-TF.A.3', 'partial')] },
+
+  'main-idea': { grades: ['3', '4', '6'], course: 'ela-3-5', also: ['ela-6-8'], standards: [S('CCSS-ELA', 'RI.3.2', 'partial'), S('CCSS-ELA', 'RI.4.2', 'partial'), S('CCSS-ELA', 'RI.6.2', 'partial')] },
+  'text-structure': { grades: ['4', '5'], course: 'ela-3-5', standards: [S('CCSS-ELA', 'RI.4.5', 'partial')] },
+  'punctuation': { grades: ['3', '4', '5', '6'], course: 'ela-3-5', also: ['ela-6-8'], standards: [S('CCSS-ELA', 'L.3.2.C', 'partial'), S('CCSS-ELA', 'L.3.2.D', 'partial'), S('CCSS-ELA', 'L.4.2.B', 'partial'), S('CCSS-ELA', 'L.5.2.A', 'partial'), S('CCSS-ELA', 'L.6.2.A', 'partial')] },
+  'rhetoric': { grades: ['11', '12'], course: 'english-11-12', standards: [S('CCSS-ELA', 'RI.11-12.6', 'partial'), S('CCSS-ELA', 'RI.11-12.8', 'partial')] },
+
+  'water-cycle-weather': { grades: ['5', '6'], course: 'science-elem', also: ['earth-science-ms'], standards: [S('NGSS', 'MS-ESS2-4', 'partial'), S('NGSS', 'MS-ESS2-5', 'partial')] },
+  'plate-tectonics': { grades: ['7'], course: 'earth-science-ms', standards: [S('NGSS', 'MS-ESS2-3', 'partial')] },
+  'energy': { grades: ['7', '11'], course: 'physical-science-ms', also: ['physics'], standards: [S('NGSS', 'MS-PS3-1', 'partial'), S('NGSS', 'MS-PS3-2', 'partial'), S('NGSS', 'HS-PS3-1', 'partial')] },
+  'atoms': { grades: ['8', '10'], course: 'chemistry', also: ['physical-science-ms'], standards: [S('NGSS', 'MS-PS1-1', 'partial')] },
+
+  'map-skills': { grades: ['3', '4'], course: 'social-elem', standards: [], note: 'Geography standards are set by each state; no code is mapped.' },
+  'world-history': { grades: ['6', '9', '10'], course: 'world-history', standards: [], note: 'World history standards are set by each state; no code is mapped.' },
+  'budgeting': { grades: ['11', '12'], course: 'economics', standards: [], note: 'Personal finance requirements vary by state; no code is mapped.' },
+
+  'binary': { grades: ['7', '9'], course: 'cs-ms', also: ['cs-hs'], standards: [], note: 'Computer science standards (such as CSTA) are not mapped yet.' },
+  'boolean-logic': { grades: ['8', '10'], course: 'cs-ms', also: ['cs-hs'], standards: [], note: 'Computer science standards (such as CSTA) are not mapped yet.' },
 };
 
 export const US_CATALOGUE = { country: 'US', label: 'United States', frameworks: FRAMEWORKS, courses: COURSES, placement: PLACEMENT, subjectNames: SUBJECT_NAMES };

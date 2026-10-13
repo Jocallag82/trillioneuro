@@ -259,7 +259,11 @@ export function grade(step, response) {
   if (step.kind === 'input') {
     // A typed minus may be a hyphen, a real minus sign or a dash.
     const value = String(response ?? '').trim().replace(/\s+/g, '').replace(/^\+/, '').replace(/[−–—]/g, '-');
-    const norm = (x) => (/^-?\d+$/.test(x) ? String(Number(x)) : x.toLowerCase());
+    // Numbers compare by value: 0.50 = 0.5, 007 = 7, 1,200 = 1200.
+    const norm = (x) => {
+      const plain = /^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(x) ? x.replace(/,/g, '') : x;
+      return /^-?(\d+\.?\d*|\.\d+)$/.test(plain) ? String(Number(plain)) : x.toLowerCase();
+    };
     const v = norm(value);
     if (!value) return { valid: false };
     return { valid: true, correct: v === norm(step.answer), misconception: step.wrong?.[v] || null, shown: value };

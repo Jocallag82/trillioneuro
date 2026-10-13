@@ -65,3 +65,17 @@ solved by brute force in the tests to prove it has exactly one answer). New visu
 - **Planning**: from middle school up, earlier-band prerequisites with no evidence are assumed
   for planning only; struggling sends the learner back to the missing foundation.
 - Compliance notes: `docs/compliance/us-child-privacy.md`.
+
+## Production-readiness pass (13 October 2026)
+- **Curriculum**: 31 new skills (`curriculum/gen-expansion.js`), 111 in total, each with a lesson.
+  Inventory: `node scripts/curriculum-inventory.mjs` → `docs/curriculum/inventory.json`; plan in
+  `docs/curriculum/expansion-plan.md`. Re-solved in `scripts/expansion.test.mjs`.
+- **Parent view**: child switcher for signed-in parents; "Can do independently", "Still uncertain,
+  and why", "Mistakes that keep coming up" and a like-for-like trend, from `learn/js/insights.js`.
+  Every conclusion is tagged Observed or Estimate and shows its evidence.
+- **Device storage**: a synced child's copy lives under `rtt.learn.p.<profileId>`, apart from
+  `rtt.learn.v1` (no account). Removed on sign-out, sign-in expiry and profile deletion.
+- **Billing**: no Stripe code, keys, routes or webhooks exist. Plus stays "not on sale".
+  `rtt_entitlements` is SELECT-only for clients.
+- Browser tests: `PLAYWRIGHT_MODULE=$(npm root -g)/playwright/index.mjs node scripts/learn-e2e.mjs`
+  (web fonts are stubbed so they run offline).

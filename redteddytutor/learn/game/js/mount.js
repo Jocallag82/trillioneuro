@@ -41,7 +41,7 @@ export async function mountBakery({ root, storage, Phaser = window.Phaser, seed 
   let remote = null;
   try {
     remote = await openRemote(storage);
-    if (remote?.state) { state = remote.state; writeState(storage, state); }
+    if (remote?.state) { state = remote.state; writeState(storage, state); } else if (!remote?.offline) state = readState(storage);
   } catch { /* offline or signed out: the device copy is used */ }
   if (destroyed) return { destroy() {} };
 

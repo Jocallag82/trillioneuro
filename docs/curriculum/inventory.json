@@ -1,0 +1,5882 @@
+{
+  "generatedAt": "2026-10-13",
+  "country": "US",
+  "frameworks": {
+    "CCSS-M": {
+      "name": "Common Core State Standards for Mathematics",
+      "owner": "NGA Center and CCSSO",
+      "version": "2010",
+      "url": "https://www.thecorestandards.org/Math/"
+    },
+    "CCSS-ELA": {
+      "name": "Common Core State Standards for English Language Arts & Literacy",
+      "owner": "NGA Center and CCSSO",
+      "version": "2010",
+      "url": "https://www.thecorestandards.org/ELA-Literacy/"
+    },
+    "NGSS": {
+      "name": "Next Generation Science Standards",
+      "owner": "Achieve and NGSS Lead States",
+      "version": "2013",
+      "url": "https://www.nextgenscience.org/"
+    }
+  },
+  "totals": {
+    "objectives": 111,
+    "withPractice": 111,
+    "withLessons": 85,
+    "standardsMapped": 91,
+    "activeCourses": 36,
+    "plannedCourses": 6,
+    "skills": 111,
+    "aligned": 31,
+    "partial": 60,
+    "unmapped": 20
+  },
+  "courses": [
+    {
+      "id": "math-k",
+      "title": "Kindergarten Math",
+      "subject": "maths",
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "status": "active",
+      "skills": [
+        "count-to-5",
+        "count-to-10",
+        "number-names",
+        "subitise",
+        "compare-numbers",
+        "bonds-to-10",
+        "shapes",
+        "shape-words"
+      ]
+    },
+    {
+      "id": "math-1",
+      "title": "Grade 1 Math",
+      "subject": "maths",
+      "grades": [
+        "1"
+      ],
+      "status": "active",
+      "skills": [
+        "place-value-100",
+        "add-within-20",
+        "subtract-within-20"
+      ]
+    },
+    {
+      "id": "math-2",
+      "title": "Grade 2 Math",
+      "subject": "maths",
+      "grades": [
+        "2"
+      ],
+      "status": "active",
+      "skills": [
+        "number-line-20",
+        "place-value-1000",
+        "add-2digit",
+        "subtract-2digit",
+        "measure-length",
+        "tell-time",
+        "word-problems"
+      ]
+    },
+    {
+      "id": "math-3",
+      "title": "Grade 3 Math",
+      "subject": "maths",
+      "grades": [
+        "3"
+      ],
+      "status": "active",
+      "skills": [
+        "times-2-5-10",
+        "times-tables",
+        "division-facts",
+        "unit-fractions",
+        "fractions-compare",
+        "bar-charts",
+        "word-problems",
+        "area-perimeter"
+      ]
+    },
+    {
+      "id": "math-4",
+      "title": "Grade 4 Math",
+      "subject": "maths",
+      "grades": [
+        "4"
+      ],
+      "status": "active",
+      "skills": [
+        "fractions-compare",
+        "number-patterns",
+        "area-perimeter",
+        "decimals",
+        "multiply-multidigit",
+        "long-division",
+        "fraction-add-subtract"
+      ]
+    },
+    {
+      "id": "math-5",
+      "title": "Grade 5 Math",
+      "subject": "maths",
+      "grades": [
+        "5"
+      ],
+      "status": "active",
+      "skills": [
+        "decimals",
+        "fraction-add-subtract",
+        "multiply-fractions",
+        "volume",
+        "order-of-operations"
+      ]
+    },
+    {
+      "id": "ela-k",
+      "title": "Kindergarten Reading",
+      "subject": "literacy",
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "status": "active",
+      "skills": [
+        "letters",
+        "letter-sounds",
+        "rhyme"
+      ]
+    },
+    {
+      "id": "ela-1-2",
+      "title": "Grades 1–2 English Language Arts",
+      "subject": "literacy",
+      "grades": [
+        "1",
+        "2"
+      ],
+      "status": "active",
+      "skills": [
+        "build-words",
+        "build-sentences",
+        "spelling"
+      ]
+    },
+    {
+      "id": "ela-3-5",
+      "title": "Grades 3–5 English Language Arts",
+      "subject": "literacy",
+      "grades": [
+        "3",
+        "4",
+        "5"
+      ],
+      "status": "active",
+      "skills": [
+        "vocabulary",
+        "word-parts",
+        "spelling",
+        "comprehension",
+        "grammar-usage",
+        "figurative-language",
+        "main-idea",
+        "text-structure",
+        "punctuation"
+      ]
+    },
+    {
+      "id": "science-elem",
+      "title": "Elementary Science",
+      "subject": "science",
+      "grades": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "status": "active",
+      "skills": [
+        "states-of-matter",
+        "food-chains",
+        "water-cycle-weather"
+      ]
+    },
+    {
+      "id": "social-elem",
+      "title": "Elementary Social Studies",
+      "subject": "social",
+      "grades": [
+        "3",
+        "4",
+        "5"
+      ],
+      "status": "active",
+      "skills": [
+        "states-capitals",
+        "branches-of-government",
+        "us-history-timeline",
+        "map-skills"
+      ]
+    },
+    {
+      "id": "thinking-early",
+      "title": "Thinking Skills",
+      "subject": "thinking",
+      "grades": [
+        "PK",
+        "K",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "status": "active",
+      "skills": [
+        "colours",
+        "sorting",
+        "observation",
+        "patterns",
+        "sequencing",
+        "memory",
+        "logic-puzzles"
+      ]
+    },
+    {
+      "id": "math-6",
+      "title": "Grade 6 Math",
+      "subject": "maths",
+      "grades": [
+        "6"
+      ],
+      "status": "active",
+      "skills": [
+        "ratios-rates",
+        "mean-median",
+        "percent",
+        "order-of-operations",
+        "divide-fractions",
+        "one-step-equations",
+        "area-triangles"
+      ]
+    },
+    {
+      "id": "math-7",
+      "title": "Grade 7 Math",
+      "subject": "maths",
+      "grades": [
+        "7"
+      ],
+      "status": "active",
+      "skills": [
+        "integers",
+        "percent",
+        "probability",
+        "equations-two-step",
+        "circles"
+      ]
+    },
+    {
+      "id": "math-8",
+      "title": "Grade 8 Math",
+      "subject": "maths",
+      "grades": [
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "exponents",
+        "pythagorean",
+        "slope",
+        "scientific-notation",
+        "linear-functions",
+        "volume-solids"
+      ]
+    },
+    {
+      "id": "ela-6-8",
+      "title": "Middle School English",
+      "subject": "literacy",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "figurative-language",
+        "context-clues",
+        "argument-evidence",
+        "main-idea",
+        "punctuation"
+      ]
+    },
+    {
+      "id": "life-science-ms",
+      "title": "Life Science",
+      "subject": "science",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "cells",
+        "photosynthesis"
+      ]
+    },
+    {
+      "id": "physical-science-ms",
+      "title": "Physical Science",
+      "subject": "science",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "density",
+        "energy",
+        "atoms"
+      ]
+    },
+    {
+      "id": "earth-science-ms",
+      "title": "Earth & Space Science",
+      "subject": "science",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "earth-moon-sun",
+        "water-cycle-weather",
+        "plate-tectonics"
+      ]
+    },
+    {
+      "id": "civics-ms",
+      "title": "Civics, US History & Economics",
+      "subject": "social",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "branches-of-government",
+        "us-history-timeline",
+        "bill-of-rights",
+        "supply-demand"
+      ]
+    },
+    {
+      "id": "cs-ms",
+      "title": "Introduction to Programming",
+      "subject": "computing",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "active",
+      "skills": [
+        "code-tracing",
+        "binary",
+        "boolean-logic"
+      ]
+    },
+    {
+      "id": "algebra-1",
+      "title": "Algebra I",
+      "subject": "maths",
+      "grades": [
+        "9"
+      ],
+      "status": "active",
+      "skills": [
+        "multi-step-equations",
+        "function-notation",
+        "systems",
+        "quadratics",
+        "exponential-functions",
+        "polynomials",
+        "sequences"
+      ]
+    },
+    {
+      "id": "geometry",
+      "title": "Geometry",
+      "subject": "maths",
+      "grades": [
+        "10"
+      ],
+      "status": "active",
+      "skills": [
+        "quadratics",
+        "trig-ratios"
+      ]
+    },
+    {
+      "id": "algebra-2",
+      "title": "Algebra II",
+      "subject": "maths",
+      "grades": [
+        "11"
+      ],
+      "status": "active",
+      "skills": [
+        "logarithms",
+        "exponential-functions",
+        "sequences"
+      ]
+    },
+    {
+      "id": "precalculus",
+      "title": "Precalculus",
+      "subject": "maths",
+      "grades": [
+        "11",
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "unit-circle"
+      ]
+    },
+    {
+      "id": "calculus",
+      "title": "Calculus",
+      "subject": "maths",
+      "grades": [
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "derivatives"
+      ]
+    },
+    {
+      "id": "statistics-hs",
+      "title": "Statistics",
+      "subject": "maths",
+      "grades": [
+        "11",
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "data-spread"
+      ]
+    },
+    {
+      "id": "english-9-10",
+      "title": "English 9–10",
+      "subject": "literacy",
+      "grades": [
+        "9",
+        "10"
+      ],
+      "status": "active",
+      "skills": [
+        "argument-evidence",
+        "literary-analysis"
+      ]
+    },
+    {
+      "id": "english-11-12",
+      "title": "English 11–12",
+      "subject": "literacy",
+      "grades": [
+        "11",
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "rhetoric"
+      ]
+    },
+    {
+      "id": "biology",
+      "title": "Biology",
+      "subject": "science",
+      "grades": [
+        "9",
+        "10"
+      ],
+      "status": "active",
+      "skills": [
+        "genetics"
+      ]
+    },
+    {
+      "id": "chemistry",
+      "title": "Chemistry",
+      "subject": "science",
+      "grades": [
+        "10",
+        "11"
+      ],
+      "status": "active",
+      "skills": [
+        "conservation-of-mass",
+        "atoms"
+      ]
+    },
+    {
+      "id": "physics",
+      "title": "Physics",
+      "subject": "science",
+      "grades": [
+        "11",
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "forces-motion",
+        "energy"
+      ]
+    },
+    {
+      "id": "us-government",
+      "title": "US Government",
+      "subject": "social",
+      "grades": [
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "bill-of-rights"
+      ]
+    },
+    {
+      "id": "us-history-hs",
+      "title": "US History",
+      "subject": "social",
+      "grades": [
+        "11"
+      ],
+      "status": "planned",
+      "skills": []
+    },
+    {
+      "id": "world-history",
+      "title": "World History",
+      "subject": "social",
+      "grades": [
+        "6",
+        "9",
+        "10"
+      ],
+      "status": "active",
+      "skills": [
+        "world-history"
+      ]
+    },
+    {
+      "id": "economics",
+      "title": "Economics & Personal Finance",
+      "subject": "social",
+      "grades": [
+        "11",
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "supply-demand",
+        "simple-interest",
+        "budgeting"
+      ]
+    },
+    {
+      "id": "cs-hs",
+      "title": "Computer Science",
+      "subject": "computing",
+      "grades": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "status": "active",
+      "skills": [
+        "code-tracing",
+        "binary",
+        "boolean-logic"
+      ]
+    },
+    {
+      "id": "world-languages",
+      "title": "World Languages (Spanish)",
+      "subject": "electives",
+      "grades": [
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "status": "planned",
+      "skills": []
+    },
+    {
+      "id": "art",
+      "title": "Art & Design",
+      "subject": "electives",
+      "grades": [
+        "K",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "planned",
+      "skills": []
+    },
+    {
+      "id": "music",
+      "title": "Music",
+      "subject": "electives",
+      "grades": [
+        "K",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "planned",
+      "skills": []
+    },
+    {
+      "id": "health",
+      "title": "Health & Wellbeing",
+      "subject": "electives",
+      "grades": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "status": "planned",
+      "skills": []
+    },
+    {
+      "id": "study-skills",
+      "title": "Study Skills",
+      "subject": "electives",
+      "grades": [
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "status": "planned",
+      "skills": []
+    }
+  ],
+  "byGradeAndSubject": [
+    {
+      "grade": "PK",
+      "subject": "maths",
+      "skills": 2,
+      "withLessons": 0,
+      "standardsMapped": 2,
+      "courses": [
+        "Kindergarten Math (active)"
+      ]
+    },
+    {
+      "grade": "PK",
+      "subject": "literacy",
+      "skills": 1,
+      "withLessons": 0,
+      "standardsMapped": 1,
+      "courses": [
+        "Kindergarten Reading (active)"
+      ]
+    },
+    {
+      "grade": "PK",
+      "subject": "thinking",
+      "skills": 5,
+      "withLessons": 0,
+      "standardsMapped": 1,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "K",
+      "subject": "maths",
+      "skills": 8,
+      "withLessons": 0,
+      "standardsMapped": 8,
+      "courses": [
+        "Kindergarten Math (active)"
+      ]
+    },
+    {
+      "grade": "K",
+      "subject": "literacy",
+      "skills": 3,
+      "withLessons": 0,
+      "standardsMapped": 3,
+      "courses": [
+        "Kindergarten Reading (active)"
+      ]
+    },
+    {
+      "grade": "K",
+      "subject": "thinking",
+      "skills": 4,
+      "withLessons": 0,
+      "standardsMapped": 1,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "K",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Art & Design (planned)",
+        "Music (planned)"
+      ]
+    },
+    {
+      "grade": "1",
+      "subject": "maths",
+      "skills": 3,
+      "withLessons": 0,
+      "standardsMapped": 3,
+      "courses": [
+        "Grade 1 Math (active)"
+      ]
+    },
+    {
+      "grade": "1",
+      "subject": "literacy",
+      "skills": 2,
+      "withLessons": 0,
+      "standardsMapped": 2,
+      "courses": [
+        "Grades 1–2 English Language Arts (active)"
+      ]
+    },
+    {
+      "grade": "1",
+      "subject": "thinking",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "1",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Art & Design (planned)",
+        "Music (planned)"
+      ]
+    },
+    {
+      "grade": "2",
+      "subject": "maths",
+      "skills": 7,
+      "withLessons": 4,
+      "standardsMapped": 7,
+      "courses": [
+        "Grade 2 Math (active)"
+      ]
+    },
+    {
+      "grade": "2",
+      "subject": "literacy",
+      "skills": 2,
+      "withLessons": 1,
+      "standardsMapped": 2,
+      "courses": [
+        "Grades 1–2 English Language Arts (active)"
+      ]
+    },
+    {
+      "grade": "2",
+      "subject": "science",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "Elementary Science (active)"
+      ]
+    },
+    {
+      "grade": "2",
+      "subject": "thinking",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "2",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Art & Design (planned)",
+        "Music (planned)"
+      ]
+    },
+    {
+      "grade": "3",
+      "subject": "maths",
+      "skills": 8,
+      "withLessons": 7,
+      "standardsMapped": 8,
+      "courses": [
+        "Grade 3 Math (active)"
+      ]
+    },
+    {
+      "grade": "3",
+      "subject": "literacy",
+      "skills": 6,
+      "withLessons": 6,
+      "standardsMapped": 6,
+      "courses": [
+        "Grades 3–5 English Language Arts (active)"
+      ]
+    },
+    {
+      "grade": "3",
+      "subject": "science",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Elementary Science (active)"
+      ]
+    },
+    {
+      "grade": "3",
+      "subject": "social",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "Elementary Social Studies (active)"
+      ]
+    },
+    {
+      "grade": "3",
+      "subject": "thinking",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "3",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Art & Design (planned)",
+        "Music (planned)",
+        "Health & Wellbeing (planned)"
+      ]
+    },
+    {
+      "grade": "4",
+      "subject": "maths",
+      "skills": 6,
+      "withLessons": 6,
+      "standardsMapped": 6,
+      "courses": [
+        "Grade 4 Math (active)"
+      ]
+    },
+    {
+      "grade": "4",
+      "subject": "literacy",
+      "skills": 6,
+      "withLessons": 6,
+      "standardsMapped": 6,
+      "courses": [
+        "Grades 3–5 English Language Arts (active)"
+      ]
+    },
+    {
+      "grade": "4",
+      "subject": "science",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Elementary Science (active)"
+      ]
+    },
+    {
+      "grade": "4",
+      "subject": "social",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 0,
+      "courses": [
+        "Elementary Social Studies (active)"
+      ]
+    },
+    {
+      "grade": "4",
+      "subject": "thinking",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 1,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "4",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Art & Design (planned)",
+        "Music (planned)",
+        "Health & Wellbeing (planned)"
+      ]
+    },
+    {
+      "grade": "5",
+      "subject": "maths",
+      "skills": 5,
+      "withLessons": 5,
+      "standardsMapped": 5,
+      "courses": [
+        "Grade 5 Math (active)"
+      ]
+    },
+    {
+      "grade": "5",
+      "subject": "literacy",
+      "skills": 3,
+      "withLessons": 3,
+      "standardsMapped": 3,
+      "courses": [
+        "Grades 3–5 English Language Arts (active)"
+      ]
+    },
+    {
+      "grade": "5",
+      "subject": "science",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 2,
+      "courses": [
+        "Elementary Science (active)"
+      ]
+    },
+    {
+      "grade": "5",
+      "subject": "social",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 0,
+      "courses": [
+        "Elementary Social Studies (active)"
+      ]
+    },
+    {
+      "grade": "5",
+      "subject": "thinking",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "Thinking Skills (active)"
+      ]
+    },
+    {
+      "grade": "5",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Art & Design (planned)",
+        "Music (planned)",
+        "Health & Wellbeing (planned)"
+      ]
+    },
+    {
+      "grade": "6",
+      "subject": "maths",
+      "skills": 7,
+      "withLessons": 7,
+      "standardsMapped": 7,
+      "courses": [
+        "Grade 6 Math (active)"
+      ]
+    },
+    {
+      "grade": "6",
+      "subject": "literacy",
+      "skills": 4,
+      "withLessons": 4,
+      "standardsMapped": 4,
+      "courses": [
+        "Middle School English (active)"
+      ]
+    },
+    {
+      "grade": "6",
+      "subject": "science",
+      "skills": 4,
+      "withLessons": 4,
+      "standardsMapped": 3,
+      "courses": [
+        "Life Science (active)",
+        "Physical Science (active)",
+        "Earth & Space Science (active)"
+      ]
+    },
+    {
+      "grade": "6",
+      "subject": "social",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "Civics, US History & Economics (active)",
+        "World History (active)"
+      ]
+    },
+    {
+      "grade": "6",
+      "subject": "computing",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Introduction to Programming (active)"
+      ]
+    },
+    {
+      "grade": "6",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Art & Design (planned)",
+        "Music (planned)",
+        "Health & Wellbeing (planned)",
+        "Study Skills (planned)"
+      ]
+    },
+    {
+      "grade": "7",
+      "subject": "maths",
+      "skills": 5,
+      "withLessons": 5,
+      "standardsMapped": 5,
+      "courses": [
+        "Grade 7 Math (active)"
+      ]
+    },
+    {
+      "grade": "7",
+      "subject": "literacy",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "Middle School English (active)"
+      ]
+    },
+    {
+      "grade": "7",
+      "subject": "science",
+      "skills": 4,
+      "withLessons": 4,
+      "standardsMapped": 4,
+      "courses": [
+        "Life Science (active)",
+        "Physical Science (active)",
+        "Earth & Space Science (active)"
+      ]
+    },
+    {
+      "grade": "7",
+      "subject": "social",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Civics, US History & Economics (active)"
+      ]
+    },
+    {
+      "grade": "7",
+      "subject": "computing",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 0,
+      "courses": [
+        "Introduction to Programming (active)"
+      ]
+    },
+    {
+      "grade": "7",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Art & Design (planned)",
+        "Music (planned)",
+        "Health & Wellbeing (planned)",
+        "Study Skills (planned)"
+      ]
+    },
+    {
+      "grade": "8",
+      "subject": "maths",
+      "skills": 6,
+      "withLessons": 6,
+      "standardsMapped": 6,
+      "courses": [
+        "Grade 8 Math (active)"
+      ]
+    },
+    {
+      "grade": "8",
+      "subject": "literacy",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "Middle School English (active)"
+      ]
+    },
+    {
+      "grade": "8",
+      "subject": "science",
+      "skills": 3,
+      "withLessons": 3,
+      "standardsMapped": 2,
+      "courses": [
+        "Life Science (active)",
+        "Physical Science (active)",
+        "Earth & Space Science (active)"
+      ]
+    },
+    {
+      "grade": "8",
+      "subject": "social",
+      "skills": 4,
+      "withLessons": 4,
+      "standardsMapped": 0,
+      "courses": [
+        "Civics, US History & Economics (active)"
+      ]
+    },
+    {
+      "grade": "8",
+      "subject": "computing",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "Introduction to Programming (active)"
+      ]
+    },
+    {
+      "grade": "8",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Art & Design (planned)",
+        "Music (planned)",
+        "Health & Wellbeing (planned)",
+        "Study Skills (planned)"
+      ]
+    },
+    {
+      "grade": "9",
+      "subject": "maths",
+      "skills": 7,
+      "withLessons": 7,
+      "standardsMapped": 7,
+      "courses": [
+        "Algebra I (active)"
+      ]
+    },
+    {
+      "grade": "9",
+      "subject": "literacy",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 2,
+      "courses": [
+        "English 9–10 (active)"
+      ]
+    },
+    {
+      "grade": "9",
+      "subject": "science",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "Biology (active)"
+      ]
+    },
+    {
+      "grade": "9",
+      "subject": "social",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "World History (active)"
+      ]
+    },
+    {
+      "grade": "9",
+      "subject": "computing",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "Computer Science (active)"
+      ]
+    },
+    {
+      "grade": "9",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Study Skills (planned)"
+      ]
+    },
+    {
+      "grade": "10",
+      "subject": "maths",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 2,
+      "courses": [
+        "Geometry (active)"
+      ]
+    },
+    {
+      "grade": "10",
+      "subject": "literacy",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "English 9–10 (active)"
+      ]
+    },
+    {
+      "grade": "10",
+      "subject": "science",
+      "skills": 3,
+      "withLessons": 3,
+      "standardsMapped": 3,
+      "courses": [
+        "Biology (active)",
+        "Chemistry (active)"
+      ]
+    },
+    {
+      "grade": "10",
+      "subject": "social",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 0,
+      "courses": [
+        "World History (active)"
+      ]
+    },
+    {
+      "grade": "10",
+      "subject": "computing",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 0,
+      "courses": [
+        "Computer Science (active)"
+      ]
+    },
+    {
+      "grade": "10",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Study Skills (planned)"
+      ]
+    },
+    {
+      "grade": "11",
+      "subject": "maths",
+      "skills": 5,
+      "withLessons": 5,
+      "standardsMapped": 5,
+      "courses": [
+        "Algebra II (active)",
+        "Precalculus (active)",
+        "Statistics (active)"
+      ]
+    },
+    {
+      "grade": "11",
+      "subject": "literacy",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "English 11–12 (active)"
+      ]
+    },
+    {
+      "grade": "11",
+      "subject": "science",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 2,
+      "courses": [
+        "Chemistry (active)",
+        "Physics (active)"
+      ]
+    },
+    {
+      "grade": "11",
+      "subject": "social",
+      "skills": 2,
+      "withLessons": 2,
+      "standardsMapped": 0,
+      "courses": [
+        "US History (planned)",
+        "Economics & Personal Finance (active)"
+      ]
+    },
+    {
+      "grade": "11",
+      "subject": "computing",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Computer Science (active)"
+      ]
+    },
+    {
+      "grade": "11",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Study Skills (planned)"
+      ]
+    },
+    {
+      "grade": "12",
+      "subject": "maths",
+      "skills": 3,
+      "withLessons": 3,
+      "standardsMapped": 2,
+      "courses": [
+        "Precalculus (active)",
+        "Calculus (active)",
+        "Statistics (active)"
+      ]
+    },
+    {
+      "grade": "12",
+      "subject": "literacy",
+      "skills": 1,
+      "withLessons": 1,
+      "standardsMapped": 1,
+      "courses": [
+        "English 11–12 (active)"
+      ]
+    },
+    {
+      "grade": "12",
+      "subject": "science",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Physics (active)"
+      ]
+    },
+    {
+      "grade": "12",
+      "subject": "social",
+      "skills": 4,
+      "withLessons": 4,
+      "standardsMapped": 0,
+      "courses": [
+        "US Government (active)",
+        "Economics & Personal Finance (active)"
+      ]
+    },
+    {
+      "grade": "12",
+      "subject": "computing",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "Computer Science (active)"
+      ]
+    },
+    {
+      "grade": "12",
+      "subject": "electives",
+      "skills": 0,
+      "withLessons": 0,
+      "standardsMapped": 0,
+      "courses": [
+        "World Languages (Spanish) (planned)",
+        "Study Skills (planned)"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "grade": "PK",
+      "subject": "maths",
+      "skills": 2,
+      "note": "thin"
+    },
+    {
+      "grade": "PK",
+      "subject": "literacy",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "K",
+      "subject": "science",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "1",
+      "subject": "maths",
+      "skills": 3,
+      "note": "thin"
+    },
+    {
+      "grade": "1",
+      "subject": "literacy",
+      "skills": 2,
+      "note": "thin"
+    },
+    {
+      "grade": "1",
+      "subject": "science",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "2",
+      "subject": "literacy",
+      "skills": 2,
+      "note": "thin"
+    },
+    {
+      "grade": "2",
+      "subject": "science",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "3",
+      "subject": "science",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "3",
+      "subject": "computing",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "4",
+      "subject": "science",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "4",
+      "subject": "computing",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "5",
+      "subject": "computing",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "6",
+      "subject": "computing",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "7",
+      "subject": "literacy",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "7",
+      "subject": "social",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "8",
+      "subject": "literacy",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "9",
+      "subject": "literacy",
+      "skills": 2,
+      "note": "thin"
+    },
+    {
+      "grade": "9",
+      "subject": "science",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "10",
+      "subject": "maths",
+      "skills": 2,
+      "note": "thin"
+    },
+    {
+      "grade": "10",
+      "subject": "literacy",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "11",
+      "subject": "literacy",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "11",
+      "subject": "computing",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "12",
+      "subject": "maths",
+      "skills": 3,
+      "note": "thin"
+    },
+    {
+      "grade": "12",
+      "subject": "literacy",
+      "skills": 1,
+      "note": "thin"
+    },
+    {
+      "grade": "12",
+      "subject": "science",
+      "skills": 0,
+      "note": "none"
+    },
+    {
+      "grade": "12",
+      "subject": "computing",
+      "skills": 0,
+      "note": "none"
+    }
+  ],
+  "caveats": [
+    "Standards codes are linked only where the practice addresses the standard; \"partial\" means part of what the standard asks (often explaining, modelling or wider contexts) is not assessed.",
+    "No state-level alignment has been verified. Common Core and NGSS are adopted and modified differently by each state.",
+    "Social studies, personal finance and computer science skills have no mapped codes.",
+    "Content is authored by the Red Teddy team and checked by automated tests; no outside educator review has taken place yet."
+  ],
+  "skills": [
+    {
+      "id": "count-to-5",
+      "label": "Counting to 5",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "2-3",
+        "3-5"
+      ],
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Counts up to five objects, saying one number for each.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+dots"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.CC.B.4",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "count-to-10",
+      "label": "Counting to 10",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Counts up to ten objects accurately, without skipping or counting twice.",
+      "prerequisites": [
+        "count-to-5"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "build",
+        "choice+dots"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.CC.B.5",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "number-names",
+      "label": "Recognising numbers",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Recognises the written numbers 0 to 10 and matches them to amounts.",
+      "prerequisites": [
+        "count-to-5"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+text"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.CC.A.3",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "subitise",
+      "label": "Seeing amounts at a glance",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Recognises small amounts on a ten frame without counting one by one.",
+      "prerequisites": [
+        "count-to-5"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+tenframe"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.CC.B.5",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "compare-numbers",
+      "label": "More and fewer",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Says which of two amounts or numbers is bigger, up to 20.",
+      "prerequisites": [
+        "count-to-10"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.CC.C.6",
+          "fit": "aligned"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "K.CC.C.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "number-line-20",
+      "label": "Number line to 20",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "5-7",
+        "7-9"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "math-2",
+      "alsoIn": [],
+      "goal": "Places numbers up to 20 on a number line, using the marks in between.",
+      "prerequisites": [
+        "number-names",
+        "compare-numbers"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "numberline"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.MD.B.6",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "place-value-100",
+      "label": "Tens and ones",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "5-7",
+        "7-9"
+      ],
+      "grades": [
+        "1"
+      ],
+      "course": "math-1",
+      "alsoIn": [],
+      "goal": "Explains a two-digit number as tens and ones (47 is 4 tens and 7 ones).",
+      "prerequisites": [
+        "number-line-20"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "choice+blocks",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "1.NBT.B.2",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "place-value-1000",
+      "label": "Hundreds, tens and ones",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "math-2",
+      "alsoIn": [],
+      "goal": "Reads and builds three-digit numbers from hundreds, tens and ones.",
+      "prerequisites": [
+        "place-value-100"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.NBT.A.1",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "bonds-to-10",
+      "label": "Number bonds to 10",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Knows the pairs that make 10 (6 and 4, 7 and 3) and uses them.",
+      "prerequisites": [
+        "count-to-10",
+        "subitise"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "build",
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.OA.A.4",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "add-within-20",
+      "label": "Adding within 20",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "5-7"
+      ],
+      "grades": [
+        "1"
+      ],
+      "course": "math-1",
+      "alsoIn": [],
+      "goal": "Adds two numbers with a total up to 20, counting on or using bonds.",
+      "prerequisites": [
+        "bonds-to-10"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "1.OA.C.6",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "subtract-within-20",
+      "label": "Subtracting within 20",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "5-7",
+        "7-9"
+      ],
+      "grades": [
+        "1"
+      ],
+      "course": "math-1",
+      "alsoIn": [],
+      "goal": "Takes away within 20 and understands subtraction as finding the difference.",
+      "prerequisites": [
+        "bonds-to-10"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "1.OA.C.6",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "add-2digit",
+      "label": "Adding two-digit numbers",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "7-9"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "math-2",
+      "alsoIn": [],
+      "goal": "Adds two-digit numbers, including when the ones make a new ten.",
+      "prerequisites": [
+        "place-value-100",
+        "add-within-20"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.NBT.B.5",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "subtract-2digit",
+      "label": "Subtracting two-digit numbers",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "7-9"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "math-2",
+      "alsoIn": [],
+      "goal": "Subtracts two-digit numbers, including exchanging a ten for ones.",
+      "prerequisites": [
+        "place-value-100",
+        "subtract-within-20"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.NBT.B.5",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "times-2-5-10",
+      "label": "Times tables: 2, 5 and 10",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "7-9"
+      ],
+      "grades": [
+        "3"
+      ],
+      "course": "math-3",
+      "alsoIn": [],
+      "goal": "Understands multiplication as equal groups and knows the 2, 5 and 10 times tables.",
+      "prerequisites": [
+        "add-within-20"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "choice+groups",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.OA.A.1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "times-tables",
+      "label": "Times tables to 12",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3"
+      ],
+      "course": "math-3",
+      "alsoIn": [],
+      "goal": "Recalls multiplication facts up to 12 × 12.",
+      "prerequisites": [
+        "times-2-5-10"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.OA.C.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "division-facts",
+      "label": "Division facts",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3"
+      ],
+      "course": "math-3",
+      "alsoIn": [],
+      "goal": "Uses times tables to divide, and knows division undoes multiplication.",
+      "prerequisites": [
+        "times-tables"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.OA.C.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "unit-fractions",
+      "label": "Halves, thirds and quarters",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Fractions",
+      "ageBands": [
+        "7-9"
+      ],
+      "grades": [
+        "3"
+      ],
+      "course": "math-3",
+      "alsoIn": [],
+      "goal": "Recognises a fraction as equal parts of a whole, and names unit fractions.",
+      "prerequisites": [
+        "times-2-5-10"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "choice+fraction"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.NF.A.1",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "fractions-compare",
+      "label": "Comparing fractions",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Fractions",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "3",
+        "4"
+      ],
+      "course": "math-4",
+      "alsoIn": [
+        "math-3"
+      ],
+      "goal": "Places fractions on a number line and compares them.",
+      "prerequisites": [
+        "unit-fractions",
+        "number-line-20"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "numberline"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.NF.A.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "3.NF.A.3.D",
+          "fit": "aligned"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "4.NF.A.2",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "shapes",
+      "label": "Shapes",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Shape & space",
+      "ageBands": [
+        "2-3",
+        "3-5"
+      ],
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Recognises circles, squares, triangles and rectangles in any size or turn.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.G.A.2",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "shape-words",
+      "label": "Matching words to shapes",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Shape & space",
+      "ageBands": [
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "math-k",
+      "alsoIn": [],
+      "goal": "Reads the names of common shapes and matches them.",
+      "prerequisites": [
+        "shapes",
+        "letters"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+shape"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.G.A.2",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "measure-length",
+      "label": "Measuring length",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Measurement",
+      "ageBands": [
+        "5-7",
+        "7-9"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "math-2",
+      "alsoIn": [],
+      "goal": "Reads a length in centimetres from a ruler that starts at zero.",
+      "prerequisites": [
+        "number-line-20"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+ruler"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.MD.A.1",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "letters",
+      "label": "Letter recognition",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Letters & sounds",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "course": "ela-k",
+      "alsoIn": [],
+      "goal": "Recognises letters by shape, including ones that are easy to mix up.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RF.K.1.D",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "letter-sounds",
+      "label": "Letter sounds",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Letters & sounds",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "ela-k",
+      "alsoIn": [],
+      "goal": "Matches common letters to the sound they usually make.",
+      "prerequisites": [
+        "letters"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RF.K.3.A",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "rhyme",
+      "label": "Rhyming words",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Words & vocabulary",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "ela-k",
+      "alsoIn": [],
+      "goal": "Hears and chooses words that rhyme.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RF.K.2.A",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "build-words",
+      "label": "Building words",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Words & vocabulary",
+      "ageBands": [
+        "5-7"
+      ],
+      "grades": [
+        "1"
+      ],
+      "course": "ela-1-2",
+      "alsoIn": [],
+      "goal": "Builds simple words (cat, ship) from their sounds, in order.",
+      "prerequisites": [
+        "letter-sounds"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "order"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RF.1.2.B",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "vocabulary",
+      "label": "Word meanings",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Words & vocabulary",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "4"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [],
+      "goal": "Chooses words with the same or opposite meaning, and uses context.",
+      "prerequisites": [
+        "build-words"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.4.5.C",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "build-sentences",
+      "label": "Building sentences",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Sentences",
+      "ageBands": [
+        "5-7",
+        "7-9"
+      ],
+      "grades": [
+        "1",
+        "2"
+      ],
+      "course": "ela-1-2",
+      "alsoIn": [],
+      "goal": "Puts words in order to make a sentence that makes sense.",
+      "prerequisites": [
+        "build-words"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "order"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.1.1.J",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "word-parts",
+      "label": "Prefixes and suffixes",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Words & vocabulary",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [],
+      "goal": "Knows how un-, re-, -ful and -less change a word’s meaning.",
+      "prerequisites": [
+        "vocabulary"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.3.4.B",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "colours",
+      "label": "Colours",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Sorting & observation",
+      "ageBands": [
+        "2-3",
+        "3-5"
+      ],
+      "grades": [
+        "PK"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Names and matches the main colours.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "sorting",
+      "label": "Sorting",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Sorting & observation",
+      "ageBands": [
+        "2-3",
+        "3-5"
+      ],
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Sorts objects into groups by one rule: colour, shape or size.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "drop"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "K.MD.B.3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "observation",
+      "label": "Spotting differences",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Sorting & observation",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Notices what is the same and what is different between pictures.",
+      "prerequisites": [
+        "sorting"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "patterns",
+      "label": "Patterns",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Patterns & sequences",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "PK",
+        "K"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Continues a repeating pattern by finding the part that repeats.",
+      "prerequisites": [
+        "colours"
+      ],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+sequence"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "sequencing",
+      "label": "Sequencing",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Patterns & sequences",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "K"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Puts events or numbers in order.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "order"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "memory",
+      "label": "Memory",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Memory & attention",
+      "ageBands": [
+        "3-5",
+        "5-7"
+      ],
+      "grades": [
+        "PK"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Remembers where things are and finds matching pairs.",
+      "prerequisites": [],
+      "lesson": false,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "memory"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "number-patterns",
+      "label": "Number patterns",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Patterns & sequences",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "4"
+      ],
+      "course": "math-4",
+      "alsoIn": [],
+      "goal": "Finds the rule in a number sequence and continues it.",
+      "prerequisites": [
+        "add-within-20"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "4.OA.C.5",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "logic-puzzles",
+      "label": "Logic puzzles",
+      "subject": "thinking",
+      "subjectName": "Thinking Skills",
+      "strand": "Reasoning",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3",
+        "4",
+        "5"
+      ],
+      "course": "thinking-early",
+      "alsoIn": [],
+      "goal": "Combines two or more clues to work out an order, and checks the answer against every clue.",
+      "prerequisites": [
+        "sequencing"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+passage"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "tell-time",
+      "label": "Telling the time",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Measurement",
+      "ageBands": [
+        "7-9"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "math-2",
+      "alsoIn": [],
+      "goal": "Reads an analogue clock to the nearest five minutes.",
+      "prerequisites": [
+        "times-2-5-10"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+clock"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.MD.C.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "bar-charts",
+      "label": "Reading bar charts",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Data & graphs",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3"
+      ],
+      "course": "math-3",
+      "alsoIn": [],
+      "goal": "Reads values from a bar chart, including scales that count in 2s, 5s or 10s, and compares bars.",
+      "prerequisites": [
+        "compare-numbers",
+        "times-2-5-10"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+bars",
+        "input+bars"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.MD.B.3",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "word-problems",
+      "label": "Word problems",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "2",
+        "3"
+      ],
+      "course": "math-3",
+      "alsoIn": [
+        "math-2"
+      ],
+      "goal": "Works out what a story problem is asking, chooses the operations and solves problems with two steps.",
+      "prerequisites": [
+        "add-2digit",
+        "subtract-2digit"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "2.OA.A.1",
+          "fit": "aligned"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "3.OA.D.8",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "area-perimeter",
+      "label": "Area and perimeter",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Shape & space",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "3",
+        "4"
+      ],
+      "course": "math-4",
+      "alsoIn": [
+        "math-3"
+      ],
+      "goal": "Finds the area of a rectangle by counting or multiplying, and its perimeter by adding all four sides.",
+      "prerequisites": [
+        "times-tables"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input+grid"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "3.MD.C.7",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "3.MD.D.8",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "4.MD.A.3",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "decimals",
+      "label": "Decimals",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Fractions",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "4",
+        "5"
+      ],
+      "course": "math-5",
+      "alsoIn": [
+        "math-4"
+      ],
+      "goal": "Knows tenths and hundredths, writes them as decimals, and compares and orders decimals.",
+      "prerequisites": [
+        "fractions-compare",
+        "place-value-1000"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "order"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "4.NF.C.6",
+          "fit": "aligned"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "4.NF.C.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "spelling",
+      "label": "Spelling tricky words",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Words & vocabulary",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "2",
+        "3"
+      ],
+      "course": "ela-1-2",
+      "alsoIn": [
+        "ela-3-5"
+      ],
+      "goal": "Spots the correct spelling of common tricky words in a sentence.",
+      "prerequisites": [
+        "build-words"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.3.2.E",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "comprehension",
+      "label": "Reading comprehension",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Reading for meaning",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3",
+        "4"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [],
+      "goal": "Finds information in a short text, works out what is meant but not said, and explains word choices.",
+      "prerequisites": [
+        "build-sentences"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+passage"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.3.1",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "RL.4.1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "integers",
+      "label": "Positive and negative numbers",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Number sense",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "7"
+      ],
+      "course": "math-7",
+      "alsoIn": [],
+      "goal": "Adds, subtracts and multiplies positive and negative numbers.",
+      "prerequisites": [
+        "subtract-2digit"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "7.NS.A.1",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "7.NS.A.2",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "ratios-rates",
+      "label": "Ratios and unit rates",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Ratios, rates & percent",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6"
+      ],
+      "course": "math-6",
+      "alsoIn": [],
+      "goal": "Finds unit rates and uses them to compare and scale quantities.",
+      "prerequisites": [
+        "division-facts"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "6.RP.A.3.B",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "mean-median",
+      "label": "Mean, median and range",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Data & graphs",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6"
+      ],
+      "course": "math-6",
+      "alsoIn": [],
+      "goal": "Finds the mean, median and range of a data set.",
+      "prerequisites": [
+        "division-facts"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "6.SP.B.5.C",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "percent",
+      "label": "Percent",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Ratios, rates & percent",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6",
+        "7"
+      ],
+      "course": "math-6",
+      "alsoIn": [
+        "math-7"
+      ],
+      "goal": "Finds a percent of a quantity and solves discount and increase problems.",
+      "prerequisites": [
+        "ratios-rates",
+        "decimals"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "6.RP.A.3.C",
+          "fit": "aligned"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "7.RP.A.3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "exponents",
+      "label": "Exponents and powers",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "8"
+      ],
+      "course": "math-8",
+      "alsoIn": [],
+      "goal": "Evaluates powers and uses the laws of exponents.",
+      "prerequisites": [
+        "times-tables"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "8.EE.A.1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "probability",
+      "label": "Probability",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Data & graphs",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "7"
+      ],
+      "course": "math-7",
+      "alsoIn": [],
+      "goal": "Writes the probability of a simple event as a fraction from 0 to 1.",
+      "prerequisites": [
+        "fractions-compare"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "7.SP.C.7.A",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "equations-two-step",
+      "label": "Two-step equations",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "7"
+      ],
+      "course": "math-7",
+      "alsoIn": [],
+      "goal": "Solves equations of the form px + q = r and checks the solution.",
+      "prerequisites": [
+        "integers"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "7.EE.B.4.A",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "pythagorean",
+      "label": "The Pythagorean theorem",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Geometry & trigonometry",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "8"
+      ],
+      "course": "math-8",
+      "alsoIn": [],
+      "goal": "Finds a missing side of a right triangle using a² + b² = c².",
+      "prerequisites": [
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input+rtri"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "8.G.B.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "slope",
+      "label": "Slope and rate of change",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Functions",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "8"
+      ],
+      "course": "math-8",
+      "alsoIn": [],
+      "goal": "Finds the slope of a line through two points and explains what it means.",
+      "prerequisites": [
+        "integers",
+        "ratios-rates"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "8.F.B.4",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "multi-step-equations",
+      "label": "Multi-step linear equations",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9"
+      ],
+      "course": "algebra-1",
+      "alsoIn": [],
+      "goal": "Solves linear equations with variables on both sides and parentheses.",
+      "prerequisites": [
+        "equations-two-step"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSA-REI.B.3",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "function-notation",
+      "label": "Function notation",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Functions",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9"
+      ],
+      "course": "algebra-1",
+      "alsoIn": [],
+      "goal": "Evaluates functions written as f(x), and finds the input for a given output.",
+      "prerequisites": [
+        "equations-two-step"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-IF.A.2",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "systems",
+      "label": "Systems of linear equations",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9"
+      ],
+      "course": "algebra-1",
+      "alsoIn": [],
+      "goal": "Solves a pair of linear equations by substitution or elimination.",
+      "prerequisites": [
+        "multi-step-equations"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSA-REI.C.6",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "quadratics",
+      "label": "Solving quadratics by factoring",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9",
+        "10"
+      ],
+      "course": "algebra-1",
+      "alsoIn": [
+        "geometry"
+      ],
+      "goal": "Factors x² + bx + c and finds both solutions.",
+      "prerequisites": [
+        "multi-step-equations"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSA-REI.B.4.B",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "trig-ratios",
+      "label": "Right-triangle trigonometry",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Geometry & trigonometry",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "10"
+      ],
+      "course": "geometry",
+      "alsoIn": [],
+      "goal": "Uses sine, cosine and tangent as ratios of sides in a right triangle.",
+      "prerequisites": [
+        "pythagorean"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+rtri"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSG-SRT.C.6",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "HSG-SRT.C.8",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "logarithms",
+      "label": "Logarithms",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Functions",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11"
+      ],
+      "course": "algebra-2",
+      "alsoIn": [],
+      "goal": "Evaluates logarithms as the inverse of exponents.",
+      "prerequisites": [
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-LE.A.4",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "derivatives",
+      "label": "Derivatives and the power rule",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculus",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "12"
+      ],
+      "course": "calculus",
+      "alsoIn": [],
+      "goal": "Differentiates polynomials with the power rule and finds the slope of a tangent.",
+      "prerequisites": [
+        "function-notation",
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Calculus is beyond the Common Core; covered as in typical AP-style courses."
+    },
+    {
+      "id": "grammar-usage",
+      "label": "Grammar and usage",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Grammar & language",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "3",
+        "4"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [],
+      "goal": "Uses commonly confused words, verb agreement and pronouns correctly.",
+      "prerequisites": [
+        "build-sentences"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.3.1.F",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.4.1.G",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "figurative-language",
+      "label": "Figurative language",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Reading for meaning",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "5",
+        "7"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [
+        "ela-6-8"
+      ],
+      "goal": "Identifies and interprets similes, metaphors, personification and hyperbole.",
+      "prerequisites": [
+        "comprehension"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.5.5.A",
+          "fit": "aligned"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.7.5.A",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "context-clues",
+      "label": "Word meaning from context",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Words & vocabulary",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6"
+      ],
+      "course": "ela-6-8",
+      "alsoIn": [],
+      "goal": "Works out an unfamiliar word’s meaning from clues in the sentence.",
+      "prerequisites": [
+        "vocabulary"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.6.4.A",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "argument-evidence",
+      "label": "Claims and evidence",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Argument & evidence",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "6",
+        "8",
+        "9"
+      ],
+      "course": "ela-6-8",
+      "alsoIn": [
+        "english-9-10"
+      ],
+      "goal": "Identifies an author’s claim and judges which evidence supports it.",
+      "prerequisites": [
+        "comprehension"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+passage"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.6.8",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "literary-analysis",
+      "label": "Theme, tone and point of view",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Reading for meaning",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9",
+        "10"
+      ],
+      "course": "english-9-10",
+      "alsoIn": [],
+      "goal": "Identifies theme, narrator’s point of view and tone in short literary passages.",
+      "prerequisites": [
+        "figurative-language"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+passage"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RL.9-10.2",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "states-of-matter",
+      "label": "States of matter",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Physical science",
+      "ageBands": [
+        "7-9"
+      ],
+      "grades": [
+        "2"
+      ],
+      "course": "science-elem",
+      "alsoIn": [],
+      "goal": "Describes solids, liquids and gases, and how heating and cooling change them.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "2-PS1-1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "food-chains",
+      "label": "Food chains and ecosystems",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Life science",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "5"
+      ],
+      "course": "science-elem",
+      "alsoIn": [],
+      "goal": "Traces how energy and matter move from plants to animals and decomposers.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "5-LS2-1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "cells",
+      "label": "Cells and their parts",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Life science",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6",
+        "7"
+      ],
+      "course": "life-science-ms",
+      "alsoIn": [],
+      "goal": "Names the main parts of plant and animal cells and what each one does.",
+      "prerequisites": [
+        "food-chains"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-LS1-2",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "earth-moon-sun",
+      "label": "Earth, moon and sun",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Earth & space science",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6",
+        "8"
+      ],
+      "course": "earth-science-ms",
+      "alsoIn": [],
+      "goal": "Explains moon phases, eclipses and seasons using the Earth–sun–moon system.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-ESS1-1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "photosynthesis",
+      "label": "Photosynthesis",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Life science",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "7"
+      ],
+      "course": "life-science-ms",
+      "alsoIn": [],
+      "goal": "Explains the inputs and outputs of photosynthesis and why it matters to living things.",
+      "prerequisites": [
+        "cells"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-LS1-6",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "density",
+      "label": "Density",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Physical science",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6",
+        "8"
+      ],
+      "course": "physical-science-ms",
+      "alsoIn": [],
+      "goal": "Calculates density from mass and volume and predicts whether an object floats.",
+      "prerequisites": [
+        "states-of-matter",
+        "division-facts"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "forces-motion",
+      "label": "Newton’s second law",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Physical science",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11"
+      ],
+      "course": "physics",
+      "alsoIn": [],
+      "goal": "Uses F = ma to relate force, mass and acceleration.",
+      "prerequisites": [
+        "equations-two-step"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "HS-PS2-1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "conservation-of-mass",
+      "label": "Conservation of mass",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Physical science",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "10"
+      ],
+      "course": "chemistry",
+      "alsoIn": [],
+      "goal": "Uses conservation of mass to find an unknown mass in a chemical reaction.",
+      "prerequisites": [
+        "states-of-matter"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "HS-PS1-7",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "genetics",
+      "label": "Genetics and Punnett squares",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Life science",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9",
+        "10"
+      ],
+      "course": "biology",
+      "alsoIn": [],
+      "goal": "Predicts offspring traits with a Punnett square and states them as probabilities.",
+      "prerequisites": [
+        "cells",
+        "probability"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "HS-LS3-3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "states-capitals",
+      "label": "US states and capitals",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Geography",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "4"
+      ],
+      "course": "social-elem",
+      "alsoIn": [],
+      "goal": "Names the capitals of US states and tells them apart from the largest cities.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Social studies standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "branches-of-government",
+      "label": "Branches of government",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Civics & government",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "5",
+        "8"
+      ],
+      "course": "civics-ms",
+      "alsoIn": [
+        "social-elem"
+      ],
+      "goal": "Describes the three branches of the US government and how they check each other.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Social studies standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "us-history-timeline",
+      "label": "US history timeline",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "History",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "5",
+        "8"
+      ],
+      "course": "civics-ms",
+      "alsoIn": [
+        "social-elem"
+      ],
+      "goal": "Puts major events in US history in chronological order.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "order"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Social studies standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "bill-of-rights",
+      "label": "The Bill of Rights",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Civics & government",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "8",
+        "12"
+      ],
+      "course": "us-government",
+      "alsoIn": [
+        "civics-ms"
+      ],
+      "goal": "Identifies key rights protected by the first ten amendments.",
+      "prerequisites": [
+        "branches-of-government"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Social studies standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "supply-demand",
+      "label": "Supply and demand",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Economics & personal finance",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "8",
+        "12"
+      ],
+      "course": "economics",
+      "alsoIn": [
+        "civics-ms"
+      ],
+      "goal": "Predicts how prices change when supply or demand changes.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Economics standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "simple-interest",
+      "label": "Interest and personal finance",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Economics & personal finance",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11",
+        "12"
+      ],
+      "course": "economics",
+      "alsoIn": [],
+      "goal": "Calculates simple and compound interest and compares savings and loans.",
+      "prerequisites": [
+        "percent"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Personal finance requirements vary by state; no code is mapped."
+    },
+    {
+      "id": "code-tracing",
+      "label": "Reading code",
+      "subject": "computing",
+      "subjectName": "Computer Science",
+      "strand": "Programming",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "7",
+        "10"
+      ],
+      "course": "cs-ms",
+      "alsoIn": [
+        "cs-hs"
+      ],
+      "goal": "Predicts what short programs with variables, loops and conditions will print.",
+      "prerequisites": [
+        "logic-puzzles"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input+code"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Computer science standards are not mapped yet."
+    },
+    {
+      "id": "multiply-multidigit",
+      "label": "Multi-digit multiplication",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "4"
+      ],
+      "course": "math-4",
+      "alsoIn": [],
+      "goal": "Multiplies up to three-digit numbers by one-digit numbers, and two-digit by two-digit numbers.",
+      "prerequisites": [
+        "times-tables",
+        "place-value-1000"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "4.NBT.B.5",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "long-division",
+      "label": "Long division",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Calculation",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "4"
+      ],
+      "course": "math-4",
+      "alsoIn": [],
+      "goal": "Divides up to three-digit numbers by one-digit numbers and finds remainders.",
+      "prerequisites": [
+        "division-facts",
+        "multiply-multidigit"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "4.NBT.B.6",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "fraction-add-subtract",
+      "label": "Adding and subtracting fractions",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Fractions",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "4",
+        "5"
+      ],
+      "course": "math-5",
+      "alsoIn": [
+        "math-4"
+      ],
+      "goal": "Adds and subtracts fractions with like and unlike denominators.",
+      "prerequisites": [
+        "fractions-compare"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "4.NF.B.3.A",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "5.NF.A.1",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "multiply-fractions",
+      "label": "Multiplying fractions",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Fractions",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "5"
+      ],
+      "course": "math-5",
+      "alsoIn": [],
+      "goal": "Finds a fraction of a number and multiplies two fractions.",
+      "prerequisites": [
+        "fraction-add-subtract",
+        "times-tables"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "5.NF.B.4.A",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "volume",
+      "label": "Volume of rectangular prisms",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Measurement",
+      "ageBands": [
+        "9-11"
+      ],
+      "grades": [
+        "5"
+      ],
+      "course": "math-5",
+      "alsoIn": [],
+      "goal": "Finds volume by counting unit cubes and with V = l × w × h, and works backwards to a missing side.",
+      "prerequisites": [
+        "area-perimeter"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "5.MD.C.5.A",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "5.MD.C.5.B",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "order-of-operations",
+      "label": "Order of operations",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "5",
+        "6"
+      ],
+      "course": "math-5",
+      "alsoIn": [
+        "math-6"
+      ],
+      "goal": "Evaluates expressions with parentheses, exponents and mixed operations in the right order.",
+      "prerequisites": [
+        "times-tables"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "5.OA.A.1",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "6.EE.A.2.C",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "divide-fractions",
+      "label": "Dividing fractions",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Fractions",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6"
+      ],
+      "course": "math-6",
+      "alsoIn": [],
+      "goal": "Divides whole numbers and fractions by fractions.",
+      "prerequisites": [
+        "multiply-fractions"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "6.NS.A.1",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "5.NF.B.7",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "one-step-equations",
+      "label": "One-step equations",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6"
+      ],
+      "course": "math-6",
+      "alsoIn": [],
+      "goal": "Solves equations like x + a = b and ax = b using inverse operations.",
+      "prerequisites": [
+        "order-of-operations"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "6.EE.B.7",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "area-triangles",
+      "label": "Area of triangles and polygons",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Shape & space",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "6"
+      ],
+      "course": "math-6",
+      "alsoIn": [],
+      "goal": "Finds the area of triangles, trapezoids and composite shapes.",
+      "prerequisites": [
+        "area-perimeter"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "6.G.A.1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "circles",
+      "label": "Circles: circumference and area",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Shape & space",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "7"
+      ],
+      "course": "math-7",
+      "alsoIn": [],
+      "goal": "Uses C = 2πr and A = πr², and tells radius from diameter.",
+      "prerequisites": [
+        "area-triangles"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "7.G.B.4",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "scientific-notation",
+      "label": "Scientific notation",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "8"
+      ],
+      "course": "math-8",
+      "alsoIn": [],
+      "goal": "Writes very large and very small numbers in scientific notation and multiplies them.",
+      "prerequisites": [
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "8.EE.A.3",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "8.EE.A.4",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "linear-functions",
+      "label": "Linear functions",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Functions",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "8"
+      ],
+      "course": "math-8",
+      "alsoIn": [],
+      "goal": "Uses y = mx + b to find values, intercepts and costs in real situations.",
+      "prerequisites": [
+        "slope",
+        "one-step-equations"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "8.F.B.4",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "volume-solids",
+      "label": "Volume of cylinders, cones and spheres",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Shape & space",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "8"
+      ],
+      "course": "math-8",
+      "alsoIn": [],
+      "goal": "Finds the volume of cylinders, cones and spheres in terms of π.",
+      "prerequisites": [
+        "circles",
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "8.G.C.9",
+          "fit": "aligned"
+        }
+      ],
+      "coverage": "aligned",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "exponential-functions",
+      "label": "Exponential growth and decay",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Functions",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9",
+        "11"
+      ],
+      "course": "algebra-1",
+      "alsoIn": [
+        "algebra-2"
+      ],
+      "goal": "Evaluates f(x) = a · bˣ and models doubling and halving.",
+      "prerequisites": [
+        "exponents",
+        "function-notation"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-LE.A.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-LE.A.1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "polynomials",
+      "label": "Multiplying polynomials",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Expressions & equations",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9"
+      ],
+      "course": "algebra-1",
+      "alsoIn": [],
+      "goal": "Expands products of two binomials and identifies the coefficients.",
+      "prerequisites": [
+        "multi-step-equations"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSA-APR.A.1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "sequences",
+      "label": "Arithmetic and geometric sequences",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Functions",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "9",
+        "11"
+      ],
+      "course": "algebra-2",
+      "alsoIn": [
+        "algebra-1"
+      ],
+      "goal": "Finds any term of an arithmetic or geometric sequence, and works back to the first term.",
+      "prerequisites": [
+        "linear-functions",
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-BF.A.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-IF.A.3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "data-spread",
+      "label": "Quartiles, IQR and outliers",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Data & graphs",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11",
+        "12"
+      ],
+      "course": "statistics-hs",
+      "alsoIn": [],
+      "goal": "Finds quartiles and the interquartile range, and uses the 1.5 × IQR rule to spot outliers.",
+      "prerequisites": [
+        "mean-median"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSS-ID.A.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "HSS-ID.A.3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "unit-circle",
+      "label": "The unit circle",
+      "subject": "maths",
+      "subjectName": "Math",
+      "strand": "Geometry & trigonometry",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11",
+        "12"
+      ],
+      "course": "precalculus",
+      "alsoIn": [],
+      "goal": "Gives exact sine, cosine and tangent values for special angles in all four quadrants, in degrees and radians.",
+      "prerequisites": [
+        "trig-ratios"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-TF.A.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-M",
+          "code": "HSF-TF.A.3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "main-idea",
+      "label": "Main idea",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Reading for meaning",
+      "ageBands": [
+        "7-9",
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "3",
+        "4",
+        "6"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [
+        "ela-6-8"
+      ],
+      "goal": "Identifies the main or central idea of a passage and tells it apart from supporting details.",
+      "prerequisites": [
+        "comprehension"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice+passage"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.3.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.4.2",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.6.2",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "text-structure",
+      "label": "Text structure",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Reading for meaning",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "4",
+        "5"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [],
+      "goal": "Recognises sequence, compare and contrast, cause and effect, problem and solution, and description.",
+      "prerequisites": [
+        "main-idea"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.4.5",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "punctuation",
+      "label": "Punctuation",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Grammar & language",
+      "ageBands": [
+        "7-9",
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "course": "ela-3-5",
+      "alsoIn": [
+        "ela-6-8"
+      ],
+      "goal": "Uses commas, apostrophes, quotation marks, colons and semicolons correctly.",
+      "prerequisites": [
+        "build-sentences"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.3.2.C",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.3.2.D",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.4.2.B",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.5.2.A",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "L.6.2.A",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "rhetoric",
+      "label": "Rhetoric and reasoning",
+      "subject": "literacy",
+      "subjectName": "English Language Arts",
+      "strand": "Argument & evidence",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11",
+        "12"
+      ],
+      "course": "english-11-12",
+      "alsoIn": [],
+      "goal": "Identifies appeals, rhetorical devices and common fallacies in arguments.",
+      "prerequisites": [
+        "argument-evidence"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.11-12.6",
+          "fit": "partial"
+        },
+        {
+          "framework": "CCSS-ELA",
+          "code": "RI.11-12.8",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "water-cycle-weather",
+      "label": "The water cycle and weather",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Earth & space science",
+      "ageBands": [
+        "9-11",
+        "11-14"
+      ],
+      "grades": [
+        "5",
+        "6"
+      ],
+      "course": "science-elem",
+      "alsoIn": [
+        "earth-science-ms"
+      ],
+      "goal": "Explains evaporation, condensation, precipitation and runoff, and how they shape weather and climate.",
+      "prerequisites": [
+        "states-of-matter"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-ESS2-4",
+          "fit": "partial"
+        },
+        {
+          "framework": "NGSS",
+          "code": "MS-ESS2-5",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "plate-tectonics",
+      "label": "Plate tectonics",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Earth & space science",
+      "ageBands": [
+        "11-14"
+      ],
+      "grades": [
+        "7"
+      ],
+      "course": "earth-science-ms",
+      "alsoIn": [],
+      "goal": "Describes plate boundaries and the evidence that continents move.",
+      "prerequisites": [
+        "water-cycle-weather"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-ESS2-3",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "energy",
+      "label": "Kinetic and potential energy",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Physical science",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "7",
+        "11"
+      ],
+      "course": "physical-science-ms",
+      "alsoIn": [
+        "physics"
+      ],
+      "goal": "Calculates kinetic and gravitational potential energy and uses conservation of energy.",
+      "prerequisites": [
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-PS3-1",
+          "fit": "partial"
+        },
+        {
+          "framework": "NGSS",
+          "code": "MS-PS3-2",
+          "fit": "partial"
+        },
+        {
+          "framework": "NGSS",
+          "code": "HS-PS3-1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "atoms",
+      "label": "Atoms and ions",
+      "subject": "science",
+      "subjectName": "Science",
+      "strand": "Physical science",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "8",
+        "10"
+      ],
+      "course": "chemistry",
+      "alsoIn": [
+        "physical-science-ms"
+      ],
+      "goal": "Finds protons, neutrons and electrons from the atomic number, mass number and charge.",
+      "prerequisites": [
+        "integers"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [
+        {
+          "framework": "NGSS",
+          "code": "MS-PS1-1",
+          "fit": "partial"
+        }
+      ],
+      "coverage": "partial",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": null
+    },
+    {
+      "id": "map-skills",
+      "label": "Map skills",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Geography",
+      "ageBands": [
+        "7-9",
+        "9-11"
+      ],
+      "grades": [
+        "3",
+        "4"
+      ],
+      "course": "social-elem",
+      "alsoIn": [],
+      "goal": "Uses directions, map keys, scales, latitude and longitude.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Geography standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "world-history",
+      "label": "World history",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "History",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "6",
+        "9",
+        "10"
+      ],
+      "course": "world-history",
+      "alsoIn": [],
+      "goal": "Places key civilizations, inventions and turning points in world history.",
+      "prerequisites": [],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "World history standards are set by each state; no code is mapped."
+    },
+    {
+      "id": "budgeting",
+      "label": "Budgeting and paychecks",
+      "subject": "social",
+      "subjectName": "Social Studies",
+      "strand": "Economics & personal finance",
+      "ageBands": [
+        "14-18"
+      ],
+      "grades": [
+        "11",
+        "12"
+      ],
+      "course": "economics",
+      "alsoIn": [],
+      "goal": "Builds a simple budget, works out take-home pay and applies the 50/30/20 rule.",
+      "prerequisites": [
+        "percent"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "input"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Personal finance requirements vary by state; no code is mapped."
+    },
+    {
+      "id": "binary",
+      "label": "Binary numbers",
+      "subject": "computing",
+      "subjectName": "Computer Science",
+      "strand": "Data & logic",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "7",
+        "9"
+      ],
+      "course": "cs-ms",
+      "alsoIn": [
+        "cs-hs"
+      ],
+      "goal": "Converts between binary and decimal and explains how many values a number of bits can store.",
+      "prerequisites": [
+        "place-value-1000",
+        "exponents"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "input"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Computer science standards (such as CSTA) are not mapped yet."
+    },
+    {
+      "id": "boolean-logic",
+      "label": "Boolean logic",
+      "subject": "computing",
+      "subjectName": "Computer Science",
+      "strand": "Data & logic",
+      "ageBands": [
+        "11-14",
+        "14-18"
+      ],
+      "grades": [
+        "8",
+        "10"
+      ],
+      "course": "cs-ms",
+      "alsoIn": [
+        "cs-hs"
+      ],
+      "goal": "Evaluates expressions with and, or, not and comparisons.",
+      "prerequisites": [
+        "logic-puzzles"
+      ],
+      "lesson": true,
+      "practice": true,
+      "assessment": "scored practice set with spaced review",
+      "activityTypes": [
+        "choice",
+        "choice+code"
+      ],
+      "standards": [],
+      "coverage": "unmapped",
+      "stateAlignmentVerified": false,
+      "review": "authored",
+      "note": "Computer science standards (such as CSTA) are not mapped yet."
+    }
+  ]
+}

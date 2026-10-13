@@ -1,6 +1,8 @@
 // Accounts and synced profiles on Supabase, called over REST with fetch.
 // Only the publishable key is used in the browser. Row-level security on the
 // database decides what each signed-in parent can read and write.
+import { clearProfileCaches } from './progress.js';
+
 export const SUPABASE_URL = 'https://kxzywyflylkcqoidiqmo.supabase.co';
 export const PUBLISHABLE_KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
 const SESSION_KEY = 'rtt.auth.v1';
@@ -78,6 +80,8 @@ export async function signOut(storage, session) {
   saveSession(storage, null);
   saveActiveProfile(storage, null);
   write(storage, PENDING_KEY, null);
+  // Synced children's progress leaves the device with the sign-in.
+  clearProfileCaches(storage);
 }
 
 // ---- REST (row-level security applies) ----
@@ -141,7 +145,7 @@ export function rowsToState(profile, { attempts, sessions }) {
     settings: {
       band: profile.age_band, audio: st.audio ?? true, volume: st.volume ?? 1, showAll: st.showAll ?? false,
       locale: profile.locale ?? st.locale ?? null, onboarded: st.onboarded ?? false, focus: st.focus ?? 'all',
-      placement: st.placement ?? {}, assumed: st.assumed ?? [],
+      placement: st.placement ?? {}, assumed: st.assumed ?? [], grade: st.grade ?? null,
     },
     steps: attempts.map((r) => ({
       activityId: r.activity_id, skill: r.skill, firstTry: r.first_try, at: Date.parse(r.created_at),

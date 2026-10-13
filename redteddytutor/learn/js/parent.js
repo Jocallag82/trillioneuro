@@ -9,6 +9,8 @@ import { OBJECTIVES, SUBJECTS, STRANDS, objectivesFor } from './curriculum/frame
 import { MISCONCEPTIONS } from './curriculum/misconceptions.js';
 import { LOCALES, pickLocale, localise, stageName } from './curriculum/locales.js';
 import { learnerReport, plan, STATE_LABEL, mid } from './learner.js';
+import { evidenceOf, independent, uncertain, recurringMistakes, trend } from './insights.js';
+import { listProfiles, saveActiveProfile, loadActiveProfile } from './api.js';
 
 const GAME_TITLES = { 'bakery-counting': 'Teddy’s Bakery: Counting Cakes', 'bakery-numbers': 'Teddy’s Bakery: The Number Shop', 'bakery-shapes': 'Teddy’s Bakery: Shape Delivery', 'bakery-patterns': 'Teddy’s Bakery: Pattern Oven', 'bakery-grand-opening': 'Teddy’s Bakery: Grand Opening' };
 const DAY = 86400000;
@@ -18,6 +20,7 @@ const root = document.getElementById('parent-app');
 
 let state = readState(storage);
 let remote = null;
+let account = null; // { session, profiles } when a parent is signed in
 
 const locale = () => state.settings.locale || pickLocale(navigator.languages || []);
 const L = (t) => localise(t, locale());
@@ -61,9 +64,12 @@ function render() {
   const shown = Object.values(reports).filter((r) => r.mastery.attempts > 0 || r.state === 'assumed');
   const notYet = Object.values(reports).filter((r) => inScope.has(r.id) && r.state === 'not-started');
 
-  const who = remote?.profile
-    ? el('p', { class: 'muted', text: `Showing ${remote.profile.nickname}, synced to your account. ${stageName(band, locale())}, age ${band.replace('-', '–')}.` })
-    : el('p', { class: 'muted', text: `Showing progress saved on this device (${stageName(band, locale())}). Sign in on the Account page to see it on any device.` });
+  const who = el('div', { class: 'who' }, [
+    remote?.profile
+      ? el('p', { class: 'muted', text: `Showing ${remote.profile.nickname}, synced to your account. ${stageName(band, locale())}, age ${band.replace('-', '–')}.` })
+      : el('p', { class: 'muted', text: `Showing progress saved on this device without an account (${stageName(band, locale())}).${account ? '' : ' Sign in on the Account page to see it on any device.'}` }),
+    switcher(),
+  ]);
 
   if (!state.steps.length) {
     root.replaceChildren(who, el('section', { class: 'panel' }, [
@@ -75,33 +81,56 @@ function render() {
   }
 
   const support = practised.filter((r) => r.state === 'needs-support' || r.misconceptions.some((m) => m.active));
-  const secure = practised.filter((r) => r.state === 'secure');
   const due = practised.filter((r) => r.retention.due);
-  const remembered = practised.filter((r) => r.retention.rememberedAfterDays >= 3);
   const next = plan(state, now, 3);
+  const can = independent(state, reports);
+  const unsure = uncertain(state, reports);
+  const mistakes = recurringMistakes(state, reports, now);
+  const change = trend(state, now);
+  const all = evidenceOf(state.steps);
+  const tag = (kind) => el('span', { class: `tag tag-${kind}`, text: kind === 'observed' ? 'Observed' : 'Estimate' });
+  const evid = (e) => el('span', { class: `evidence ev-${e.level}`, text: e.text });
 
   // ---- Headline: the few things a parent most needs ----
   const headline = el('section', { class: 'panel', 'aria-labelledby': 'now-h' }, [
     el('h2', { id: 'now-h', text: 'At a glance' }),
     el('ul', { class: 'glance' }, [
-      el('li', {}, [el('strong', { text: `${practised.length}` }), ` ${practised.length === 1 ? 'skill' : 'skills'} practised, from ${sum.stepCount} answers.`]),
-      el('li', {}, [el('strong', { text: `${secure.length}` }), ' secure: answered right first time often enough to be confident.']),
-      el('li', {}, [el('strong', { text: `${support.length}` }), ` ${support.length === 1 ? 'needs' : 'need'} support.`]),
-      el('li', {}, [el('strong', { text: `${remembered.length}` }), ` remembered after a break of three days or more${due.length ? `. ${due.length} ${due.length === 1 ? 'is' : 'are'} due for review` : ''}.`]),
+      el('li', {}, [el('strong', { text: `${sum.stepCount}` }), ` answers on ${all.days} ${all.days === 1 ? 'day' : 'days'}, across ${practised.length} ${practised.length === 1 ? 'skill' : 'skills'}.`]),
+      el('li', {}, [el('strong', { text: `${can.length}` }), ` ${can.length === 1 ? 'skill' : 'skills'} shown independently.`]),
+      el('li', {}, [el('strong', { text: `${unsure.filter((u) => u.kind !== 'assumed').length}` }), ' still uncertain', support.length ? `, ${support.length} needing support.` : '.']),
+      el('li', {}, [el('strong', { text: `${due.length}` }), ` due for a review${due.length ? ' to help it stick' : ''}.`]),
     ]),
+    el('p', { class: `trend trend-${change.direction}` }, [tag('estimate'), ' ', change.text]),
   ]);
 
-  // ---- Where support is needed ----
-  const supportPanel = el('section', { class: 'panel', 'aria-labelledby': 'support-h' }, [
-    el('h2', { id: 'support-h', text: 'Where support would help' }),
-    support.length ? el('ul', { class: 'support-list' }, support.map((r) => {
-      const mc = r.misconceptions.find((m) => m.active);
-      return el('li', {}, [
-        el('strong', { text: L(r.label) }),
-        el('p', { text: mc ? MISCONCEPTIONS[mc.code].parent : `${r.mastery.firstTry} of ${r.mastery.attempts} answers right first time so far.` }),
-        mc ? el('p', { class: 'muted', text: `Seen ${mc.count} times in recent answers. At home: ${MISCONCEPTIONS[mc.code].tip}` }) : null,
-      ]);
-    })) : el('p', { class: 'muted', text: 'Nothing stands out at the moment. This updates as more answers come in.' }),
+  const canPanel = el('section', { class: 'panel', 'aria-labelledby': 'can-h' }, [
+    el('h2', { id: 'can-h' }, ['Can do independently ', tag('estimate')]),
+    el('p', { class: 'muted small', text: 'Skills answered right first time, without help, often enough to be confident. Each line shows exactly what was observed.' }),
+    can.length ? el('ul', { class: 'insight-list' }, can.map((c) => el('li', {}, [
+      el('strong', { text: L(c.label) }),
+      el('p', { text: `${c.observed} ${c.remembered}` }),
+      evid(c.evidence),
+    ]))) : el('p', { class: 'muted', text: 'Nothing yet. A skill appears here after enough unaided right answers, usually over more than one day.' }),
+  ]);
+
+  const unsurePanel = el('section', { class: 'panel', 'aria-labelledby': 'unsure-h' }, [
+    el('h2', { id: 'unsure-h' }, ['Still uncertain, and why ', tag('estimate')]),
+    unsure.length ? el('ul', { class: 'insight-list' }, unsure.slice(0, 8).map((u) => el('li', { class: `kind-${u.kind}` }, [
+      el('strong', { text: L(u.label) }),
+      el('p', { text: u.why }),
+      el('span', { class: 'insight-actions' }, [evid(u.evidence), u.kind !== 'assumed' ? el('a', { href: `/learn/?practise=${u.id}`, text: 'Practise this' }) : null]),
+    ]))) : el('p', { class: 'muted', text: 'Nothing uncertain right now.' }),
+    unsure.length > 8 ? el('p', { class: 'muted small', text: `And ${unsure.length - 8} more in the full list below.` }) : null,
+  ]);
+
+  const mistakesPanel = el('section', { class: 'panel', 'aria-labelledby': 'mc-h' }, [
+    el('h2', { id: 'mc-h' }, ['Mistakes that keep coming up ', tag('observed')]),
+    el('p', { class: 'muted small', text: 'Only wrong answers that clearly show a known mix-up are counted, over the last 30 days. Other wrong answers are not guessed at.' }),
+    mistakes.length ? el('ul', { class: 'support-list' }, mistakes.map((m) => el('li', {}, [
+      el('strong', { text: `${m.label}${m.status === 'resolved' ? ' (now sorted)' : m.status === 'quiet' ? ' (not seen lately)' : ''}` }),
+      el('p', { text: m.parent }),
+      el('p', { class: 'muted', text: `Seen ${m.count} times in ${m.skills.map((x) => mid(L(x))).join(', ')}. At home: ${m.tip}` }),
+    ]))) : el('p', { class: 'muted', text: 'No mix-up has shown up more than once in the last 30 days.' }),
   ]);
 
   // ---- Skills, by subject and strand ----
@@ -124,7 +153,7 @@ function render() {
             ]),
             el('td', { 'data-label': 'Answers', text: r.mastery.attempts ? String(r.mastery.attempts) : '—' }),
             el('td', { 'data-label': 'First time', text: r.mastery.attempts ? `${r.mastery.firstTry}` : '—' }),
-            el('td', { 'data-label': 'Status' }, [el('span', { class: `status state-${r.state}`, text: STATE_LABEL[r.state] }), el('span', { class: 'cell-goal', text: sureness(r) })]),
+            el('td', { 'data-label': 'Status' }, [el('span', { class: `status state-${r.state}`, text: STATE_LABEL[r.state] }), el('span', { class: 'cell-goal', text: r.mastery.attempts ? `${sureness(r)} · ${daysText(r.id)}` : '' })]),
             el('td', { 'data-label': 'Last practiced', text: r.mastery.lastAt ? ago(r.mastery.lastAt, now) : '—' }),
             el('td', { 'data-label': 'Notes', text: notes(r, now) }),
           ])))),
@@ -133,7 +162,7 @@ function render() {
   ]);
 
   const nextPanel = el('section', { class: 'panel', 'aria-labelledby': 'next-h' }, [
-    el('h2', { id: 'next-h', text: 'Coming up next' }),
+    el('h2', { id: 'next-h', text: 'What to practise next, and why' }),
     next.length ? el('ol', { class: 'recs' }, next.map((p) => el('li', {}, [
       el('a', { href: `/learn/?practise=${p.objective}`, text: L(p.label) }),
       el('span', { class: 'muted', text: ` · ${p.reason}` }),
@@ -141,8 +170,13 @@ function render() {
     el('p', { class: 'muted small', text: 'Suggestions from recorded answers, not a diagnosis or a measure of ability.' }),
   ]);
 
-  root.replaceChildren(who, headline, supportPanel, nextPanel, skills, weeksPanel(now), recentPanel(sum), settingsPanel(), privacyPanel(),
+  root.replaceChildren(who, headline, nextPanel, canPanel, unsurePanel, mistakesPanel, skills, weeksPanel(now), recentPanel(sum), settingsPanel(), privacyPanel(),
     el('p', { id: 'flash', class: 'flash', role: 'status', 'aria-live': 'polite' }));
+}
+
+function daysText(id) {
+  const { days } = evidenceOf(state.steps.filter((x) => x.skill === id));
+  return `${days} ${days === 1 ? 'day' : 'days'}`;
 }
 
 function notes(r, now) {
@@ -236,6 +270,39 @@ function resetProgress() {
   flash('Progress has been deleted.');
 }
 
-openRemote(storage).then((r) => {
+// Child switcher: only for a signed-in parent. "This device" is progress made without an account.
+function switcher() {
+  if (!account) return null;
+  const active = remote?.profile?.id || '';
+  return el('label', { class: 'switcher' }, [
+    el('span', { class: 'field-label', text: 'Child' }),
+    el('select', { class: 'field', id: 'p-child', onchange: (e) => switchTo(e.target.value) }, [
+      ...account.profiles.map((p) => el('option', { value: p.id, text: p.nickname, selected: p.id === active })),
+      el('option', { value: '', text: 'This device (no account)', selected: !active }),
+    ]),
+  ]);
+}
+
+async function switchTo(id) {
+  saveActiveProfile(storage, id || null);
+  root.setAttribute('aria-busy', 'true');
+  await load();
+  root.removeAttribute('aria-busy');
+  flash(remote?.profile ? `Showing ${remote.profile.nickname}.` : 'Showing progress saved on this device.');
+}
+
+async function load() {
+  remote = null;
+  let r = null;
+  try { r = await openRemote(storage); } catch { r = null; }
   if (r?.profile) { remote = r; state = r.state; writeState(storage, state); }
-}).finally(render);
+  else state = readState(storage);
+  account = null;
+  if (r?.session) {
+    try { account = { session: r.session, profiles: await listProfiles(r.session) }; } catch { account = null; }
+  }
+  render();
+  if (r?.offline && loadActiveProfile(storage)) flash('Offline: showing the copy saved on this device. It will refresh when you are online.');
+}
+
+load();

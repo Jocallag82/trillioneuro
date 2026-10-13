@@ -199,6 +199,81 @@ export const MISCONCEPTIONS = {
     parent: 'Worked out volume ÷ mass instead of mass ÷ volume.',
     tip: 'Density = mass ÷ volume.',
   },
+  'partial-product-place': {
+    label: 'Forgetting the zero in a partial product',
+    parent: 'Multiplied by the tens digit as if it were ones, so one partial product was ten times too small.',
+    tip: 'When you multiply by the tens digit, you are multiplying by tens: write a zero first.',
+  },
+  'add-denominators': {
+    label: 'Adding (or subtracting) the denominators',
+    parent: 'Added the bottom numbers as well as the top numbers. 1/4 + 1/4 is 2/4, not 2/8: the size of the pieces does not change.',
+    tip: 'Only the numerators are added. The denominator says what size the pieces are.',
+  },
+  'flip-wrong-fraction': {
+    label: 'Flipping the wrong fraction when dividing',
+    parent: 'Turned the first fraction upside down instead of the second.',
+    tip: 'Keep the first fraction, change ÷ to ×, flip the second.',
+  },
+  'left-to-right': {
+    label: 'Working strictly left to right',
+    parent: 'Did the operations in the order they were written instead of multiplying and dividing before adding and subtracting.',
+    tip: 'Parentheses, then exponents, then × and ÷, then + and −.',
+  },
+  'triangle-no-half': {
+    label: 'Forgetting the half in a triangle area',
+    parent: 'Multiplied base by height without halving. A triangle is half of a rectangle.',
+    tip: 'Area of a triangle = ½ × base × height.',
+  },
+  'circle-area-circumference': {
+    label: 'Mixing up area and circumference',
+    parent: 'Used the circumference formula (2πr) for area, or the other way round.',
+    tip: 'Circumference goes around: 2πr. Area covers the inside: πr².',
+  },
+  'radius-diameter': {
+    label: 'Mixing up radius and diameter',
+    parent: 'Used the diameter where the formula needs the radius (or the reverse).',
+    tip: 'The radius is half the diameter.',
+  },
+  'count-zeros': {
+    label: 'Counting zeros instead of places',
+    parent: 'Counted the zeros in the number rather than how far the decimal point moves.',
+    tip: 'Count the places the decimal point moves to give a number from 1 to 10.',
+  },
+  'cone-no-third': {
+    label: 'Forgetting the third in a cone',
+    parent: 'Found the volume of the matching cylinder. A cone holds one third as much.',
+    tip: 'Volume of a cone = ⅓πr²h.',
+  },
+  'linear-vs-exponential': {
+    label: 'Treating repeated multiplying as adding',
+    parent: 'Added the same amount each time when the amount should be multiplied each time.',
+    tip: '“Doubles every hour” means × 2 each hour, not + the starting amount.',
+  },
+  'iqr-range-mix': {
+    label: 'Mixing up range and interquartile range',
+    parent: 'Gave the range (largest − smallest) instead of Q3 − Q1.',
+    tip: 'The IQR is the spread of the middle half of the data: Q3 − Q1.',
+  },
+  'ke-no-half': {
+    label: 'Forgetting the half in kinetic energy',
+    parent: 'Worked out mass × speed² without halving.',
+    tip: 'Kinetic energy = ½ × m × v².',
+  },
+  'protons-neutrons-mix': {
+    label: 'Mixing up protons, neutrons and mass number',
+    parent: 'Confused the atomic number (protons) with the mass number (protons + neutrons).',
+    tip: 'Atomic number = protons. Neutrons = mass number − atomic number.',
+  },
+  'ion-charge-sign': {
+    label: 'Getting the ion charge the wrong way round',
+    parent: 'Added electrons for a positive ion (or removed them for a negative one). A positive ion has lost electrons.',
+    tip: 'Positive: fewer electrons than protons. Negative: more.',
+  },
+  'volume-surface-mix': {
+    label: 'Mixing up volume and surface area',
+    parent: 'Added the areas of the faces (surface area) instead of finding the space inside (volume).',
+    tip: 'Volume fills the box: length × width × height. Surface area wraps it.',
+  },
 };
 
 export const isMisconception = (code) => typeof code === 'string' && Object.hasOwn(MISCONCEPTIONS, code);
