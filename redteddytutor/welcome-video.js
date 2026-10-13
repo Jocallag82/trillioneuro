@@ -13,8 +13,6 @@ export const WELCOME = {
   poster: '/media/red-teddy-welcome-poster-1280.webp',
   posterSmall: '/media/red-teddy-welcome-poster-640.webp',
   seconds: 10,
-  // No captions file exists yet; the description stands in for the picture.
-  description: 'Red Teddy, a red teddy bear, sits at a desk in a sunny classroom with an open book and greets you. 10 seconds, with sound.',
 };
 
 const KEY = 'rtt.welcome.v1';
@@ -34,7 +32,6 @@ function build() {
   dialog = document.createElement('dialog');
   dialog.className = 'welcome-dialog';
   dialog.setAttribute('aria-labelledby', 'welcome-title');
-  dialog.setAttribute('aria-describedby', 'welcome-desc');
   dialog.innerHTML = `
     <div class="welcome-frame">
       <div class="welcome-bar">
@@ -42,10 +39,8 @@ function build() {
         <button type="button" class="welcome-close" aria-label="Close video">Close</button>
       </div>
       <div class="welcome-media"></div>
-      <p id="welcome-desc" class="welcome-desc"></p>
       <p class="welcome-error" role="alert" hidden>The video could not play. You can still <a href="/learn/">start learning</a> right away.</p>
     </div>`;
-  dialog.querySelector('.welcome-desc').textContent = WELCOME.description;
   dialog.querySelector('.welcome-close').addEventListener('click', () => dialog.close());
   // A click on the backdrop (outside the frame) closes it.
   dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });

@@ -295,3 +295,63 @@ test('catalogue: every placed grade is reachable through a course that runs at t
     }
   }
 });
+
+import { startSession as start2, respond as respond2, submit as submit2, useHelp } from '../redteddytutor/learn/js/engine.js';
+import { helpFor, methodFor, HOWTO } from '../redteddytutor/learn/js/help.js';
+
+test('help before answering is free but recorded: the answer is no longer unaided', () => {
+  const a = practiceActivity('add-2digit', 2, 7, 2);
+  let s = start2(a);
+  s = useHelp(s);
+  let r = respond2(s, a, a.steps[0].answer);
+  assert.equal(r.outcome.kind, 'correct');
+  assert.equal(r.outcome.firstTry, false, 'helped answers are not first time');
+  assert.equal(r.session.results[0].help, 1);
+  assert.equal(r.session.results[0].misses, 0, 'help never costs a try');
+  r = respond2(r.session, a, a.steps[1].answer);
+  assert.equal(r.outcome.firstTry, true, 'help resets for the next question');
+  const c = practiceActivity('compare-numbers', 1, 3, 1);
+  const out = submit2(useHelp(start2(c)), c, c.steps[0].answer);
+  assert.equal(out.outcome.firstTry, false);
+});
+
+test('every objective has a method; worked examples never show the learner’s own question or answer', () => {
+  for (const id of Object.keys(OBJECTIVES)) {
+    assert.ok(methodFor(id, 'primary').length >= 1, `${id} has no method`);
+    const rand = mulberry32(21);
+    for (const d of [1, 2, 3]) {
+      const step = generateStep(id, d, rand);
+      for (const stage of ['early', 'primary', 'middle', 'high']) {
+        const h = helpFor(step, id, stage, mulberry32(d * 31));
+        if (!h.example) continue;
+        assert.notEqual(h.example.step.prompt + JSON.stringify(h.example.step.visual), step.prompt + JSON.stringify(step.visual), `${id}: example repeats the question`);
+        assert.ok(h.example.steps.length >= 1 && h.example.answer, `${id}: example has steps and an answer`);
+      }
+    }
+  }
+  assert.ok(methodFor('count-to-5', 'early').length <= 2, 'young learners get fewer lines at once');
+  for (const id of Object.keys(HOWTO)) assert.ok(OBJECTIVES[id], `HOWTO for unknown ${id}`);
+});
+
+import { workFor, SOLVED } from '../redteddytutor/learn/js/curriculum/worked.js';
+import { answerText } from '../redteddytutor/learn/js/help.js';
+
+test('worked solutions: real working with the question’s numbers, ending in the right answer', () => {
+  const norm = (t) => String(t).replace(/−/g, '-').replace(/\s+/g, ' ').toLowerCase();
+  let solved = 0;
+  for (const id of Object.keys(OBJECTIVES)) {
+    for (const d of [1, 2, 3]) {
+      const rand = mulberry32(d * 7919 + id.length);
+      for (let i = 0; i < 40; i++) {
+        const step = generateStep(id, d, rand);
+        if (['drop', 'memory'].includes(step.kind)) continue;
+        const ans = answerText(step);
+        const lines = workFor(id, step, ans);
+        assert.ok(Array.isArray(lines) && lines.length >= 1 && lines.every((l) => typeof l === 'string' && l.trim()), `${id}: empty working`);
+        assert.ok(norm(lines.join(' ')).includes(norm(ans)), `${id}: working does not reach the answer ${ans}\n${step.prompt}\n${lines.join('\n')}`);
+        if (SOLVED.includes(id) && !lines.at(-1).startsWith('So the answer is')) solved++;
+      }
+    }
+  }
+  assert.ok(solved > 3000, `only ${solved} items had real worked steps`);
+});

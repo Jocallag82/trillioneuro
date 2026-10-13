@@ -549,3 +549,30 @@ body[data-stage="high"] .teddy-large{width:72px;height:72px}
 .welcome-error{padding:0 20px 16px;color:#ffd0d2;font-weight:700}
 .welcome-error a{color:#fff}
 @media (max-width:640px){.welcome-dialog{max-width:min(100vw,calc((100dvh - 150px) * 16 / 9))}.welcome-frame{border-radius:0}}
+
+/* Work it out: help under every question, before any answer */
+.work{margin:-4px 0 18px}
+.work-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.work-label{font-weight:700;color:var(--mute);margin-right:2px}
+.work-btn{min-height:44px;padding:0 16px;font-size:.95rem;background:var(--paper)}
+.work-btn[disabled]{opacity:.5;cursor:not-allowed}
+.work-hints{margin:12px 0 0;padding:12px 16px 12px 36px;background:#fff6e2;border-left:4px solid var(--gold);border-radius:0 12px 12px 0;display:grid;gap:6px}
+.work-how{margin-top:12px;display:grid;gap:12px}
+.work-title{font-weight:700;margin-bottom:6px}
+.work-method{padding:14px 16px;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+.work-method ul,.work-method ol{margin-left:20px;display:grid;gap:4px}
+.work-example{padding:14px 16px;background:var(--paper);border:1.5px dashed var(--line-strong,rgba(29,26,26,.3));border-radius:12px}
+.work-q{font-family:var(--serif);font-weight:700;font-size:1.1rem;margin-bottom:8px}
+.work-visual{display:flex;justify-content:center;margin:6px 0 10px}
+.work-visual>*{max-width:min(100%,320px);max-height:200px}
+.work-visual .visual-passage{max-width:100%;max-height:none;font-size:.95rem}
+.work-steps{margin:0 0 8px 22px;display:grid;gap:4px}
+.work-answer{padding-top:8px;border-top:1px dashed var(--line)}
+.work-yours{margin-top:6px;color:var(--red);font-weight:700}
+/* Early years: bigger, fewer words, read aloud */
+.work-early .work-btn{min-height:52px;font-size:1.05rem;padding:0 20px}
+.work-early .work-hints,.work-early .work-method{font-size:1.15rem}
+.work-early .work-label{font-size:1.05rem}
+/* Older learners: compact, textbook-like */
+.work-middle .work-btn,.work-high .work-btn{min-height:40px;font-size:.9rem;border-radius:8px}
+.work-high .work-example{font-size:.98rem}

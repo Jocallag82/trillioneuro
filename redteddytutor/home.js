@@ -10,6 +10,7 @@ import { el, visualNode } from '/learn/js/dom.js';
 import { mulberry32 } from '/learn/game/js/rng.js';
 import { US_CATALOGUE } from '/learn/js/curriculum/catalogues/us.js';
 import { wireWelcome } from '/welcome-video.js';
+import { helpFor } from '/learn/js/help.js';
 
 const locale = pickLocale(navigator.languages || []);
 const L = (t) => localise(t, locale);
@@ -81,6 +82,9 @@ const body = document.getElementById('demo-body');
 const skillLine = document.getElementById('demo-skill');
 const feedback = document.getElementById('demo-feedback');
 const hintBtn = document.getElementById('demo-hint');
+const howBtn = document.getElementById('demo-how');
+// The age style for each demo band, the same as the app uses.
+const BAND_STAGE = { '3-5': 'early', '5-7': 'early', '7-9': 'primary', '9-11': 'primary', '11-14': 'middle', '14-18': 'high' };
 const nextBtn = document.getElementById('demo-next');
 const tabs = [...document.querySelectorAll('.book-tabs [role=tab]')];
 const rand = mulberry32((Date.now() ^ (Math.random() * 1e9)) >>> 0);
@@ -209,6 +213,21 @@ function initDemo() {
     });
   });
   hintBtn.addEventListener('click', () => { if (q && !q.done) show(hintNode('Hint: ', nextHint())); });
+  howBtn.addEventListener('click', () => {
+    if (!q) return;
+    const h = helpFor(q.step, q.id, BAND_STAGE[band], rand);
+    const ex = h.example;
+    show(el('div', { class: 'demo-how' }, [
+      h.method.length ? el('div', {}, [el('p', { class: 'demo-how-title', text: h.style.framing }), el('ul', {}, h.method.map((m) => el('li', { text: L(m) })))]) : null,
+      ex ? el('div', { class: 'demo-how-ex' }, [
+        el('p', { class: 'demo-how-title', text: h.style.exampleIntro }),
+        el('p', { class: 'demo-how-q', text: L(ex.step.prompt) }),
+        ex.step.visual ? el('div', { class: 'demo-how-visual' }, visualNode(ex.step.visual)) : null,
+        el('ol', {}, ex.steps.map((t) => el('li', { text: L(t) }))),
+        el('p', { class: 'demo-how-yours', text: 'Now try yours the same way.' }),
+      ]) : null,
+    ]));
+  });
   nextBtn.addEventListener('click', () => { render(); body.querySelector('input, .demo-opt')?.focus({ preventScroll: true }); });
   render();
 }

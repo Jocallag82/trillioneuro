@@ -438,3 +438,12 @@ form .btn{width:100%}
   .welcome-dialog{max-width:min(100vw,calc((100dvh - 150px) * 16 / 9))}
   .welcome-frame{border-radius:0}
 }
+.demo-how{display:grid;gap:10px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:10px;font-size:.95rem}
+.demo-how ul,.demo-how ol{margin-left:20px;display:grid;gap:3px}
+.demo-how-title{font-weight:700}
+.demo-how-ex{border-top:1px dashed var(--line);padding-top:10px}
+.demo-how-q{font-family:var(--serif);font-weight:700;margin-bottom:4px}
+.demo-how-yours{color:var(--red);font-weight:700;margin-top:6px}
+.demo-how-visual{display:flex;justify-content:center;margin:6px 0}
+.demo-how-visual>*{max-width:min(100%,300px);max-height:180px}
+.demo-how-visual .visual-passage{max-width:100%;max-height:none;font-size:.92rem}

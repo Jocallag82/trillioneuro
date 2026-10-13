@@ -6,7 +6,8 @@
 //   learner.js     what has been shown, what to do next, the placement check
 //   curriculum/*   what is taught and how practice is generated
 import { ACTIVITIES, DOMAINS, LEVEL_NAMES } from './content.js';
-import { startSession, submit, respond, grade, placeItem, placeCard, summarySession } from './engine.js';
+import { startSession, submit, respond, grade, placeItem, placeCard, summarySession, useHelp } from './engine.js';
+import { helpFor, styleFor } from './help.js';
 import { readState, writeState, recordStep, recordCompletion, updateSettings } from './progress.js';
 import { canSpeak, speak, narrate, stopSpeaking } from './speech.js';
 import { el, visualNode } from './dom.js';
@@ -451,9 +452,10 @@ function renderStep(intro = false, viewState = session) {
     ]),
     el('h2', { id: 'prompt', tabindex: '-1', text: current.generated ? `${current.purpose === 'review' ? 'Review' : 'Practice'}: ${L(current.title)}` : L(current.title) }),
     el('p', { class: 'prompt', text: L(step.prompt) }),
+    !diagnostic && viewState === session ? workItOut(step) : null,
     bodyFor(step, viewState),
     el('div', { id: 'feedback', class: 'feedback', role: 'status', 'aria-live': 'polite' }),
-    !diagnostic && tutorAllowed() ? helpPanel(step, viewState) : null,
+    !diagnostic && tutorAllowed() && remote?.profile ? helpPanel(step, viewState) : null,
   ], '#prompt');
 
   const words = step.listen && step.say ? `${step.prompt}` : step.prompt;
@@ -851,7 +853,8 @@ function finishStep(outcome, answerLabel) {
 function persistStep() {
   const r = session.results[session.results.length - 1];
   state = recordStep(state, current.id, current.skill, r.firstTry, Date.now(), {
-    correct: r.correct, hints: r.misses, difficulty: r.difficulty, misconception: r.misconception, source: SOURCE[purpose],
+    // Tries missed plus help asked for: both mean the answer was not unaided.
+    correct: r.correct, hints: Math.min(10, r.misses + (r.help || 0)), difficulty: r.difficulty, misconception: r.misconception, source: SOURCE[purpose],
   });
   syncStep(storage, remote, state.steps[state.steps.length - 1]);
   if (session.done) {
@@ -869,6 +872,68 @@ function continueButton(isLast) {
   });
   queueMicrotask(() => btn.focus());
   return btn;
+}
+
+// ---------- Work it out ----------
+// Help that is always on offer under the question, before any answer: hints one at
+// a time, then "Show me how": the method and a worked example of a different question
+// of the same kind. Words and amount shown follow the learner's school stage.
+function workItOut(step) {
+  const stageId = stage().id;
+  const style = styleFor(stageId);
+  const young = stageId === 'early';
+  if (!ui.work) ui.work = { hints: 0, shown: false, data: null };
+  const w = ui.work;
+  const data = () => (w.data ||= helpFor(step, current.skill, stageId, mulberry32((Date.now() >>> 0) ^ 0x2545f491)));
+  const hintsLeft = w.hints < step.hints.length;
+  const takeHint = () => {
+    if (!hintsLeft || ui.stepDone) return;
+    session = useHelp(session);
+    w.hints += 1;
+    const text = step.hints[w.hints - 1];
+    refreshWork(step);
+    say(young ? `Here’s a clue. ${text}` : text);
+  };
+  const showHow = () => {
+    if (w.shown || ui.stepDone) { w.shown = true; refreshWork(step); return; }
+    session = useHelp(session);
+    w.shown = true;
+    refreshWork(step);
+    const d = data();
+    say([style.framing, ...d.method, d.example ? `${style.exampleIntro}. ${d.example.step.prompt} ${d.example.steps.join(' ')} The answer is ${d.example.answer}.` : ''].join(' '));
+  };
+
+  const shownHints = step.hints.slice(0, w.hints);
+  const d = w.shown ? data() : null;
+  return el('section', { class: `work work-${stageId}`, id: 'work', 'aria-label': 'Help to work it out' }, [
+    el('div', { class: 'work-actions' }, [
+      el('span', { class: 'work-label', text: young ? 'Need help?' : 'Stuck?' }),
+      el('button', { type: 'button', class: 'btn btn-line work-btn', disabled: !hintsLeft || ui.stepDone || undefined, onclick: takeHint,
+        text: young ? 'Give me a clue' : hintsLeft ? `Hint ${w.hints + 1} of ${step.hints.length}` : 'No more hints' }),
+      el('button', { type: 'button', class: 'btn btn-line work-btn', 'aria-expanded': String(w.shown), onclick: showHow,
+        text: young ? 'Show me how' : 'Show me how (worked example)' }),
+    ]),
+    shownHints.length ? el('ol', { class: 'work-hints', 'aria-live': 'polite' }, shownHints.map((h) => el('li', { text: L(h) }))) : null,
+    d ? el('div', { class: 'work-how', 'aria-live': 'polite' }, [
+      d.method.length ? el('div', { class: 'work-method' }, [
+        el('p', { class: 'work-title', text: style.framing }),
+        el(young ? 'ol' : 'ul', {}, d.method.map((m) => el('li', { text: L(m) }))),
+      ]) : null,
+      d.example ? el('div', { class: 'work-example' }, [
+        el('p', { class: 'work-title', text: style.exampleIntro }),
+        el('p', { class: 'work-q', text: L(d.example.step.prompt) }),
+        d.example.step.visual ? el('div', { class: 'work-visual' }, visualNode(d.example.step.visual.kind === 'passage' ? { ...d.example.step.visual, title: L(d.example.step.visual.title), text: L(d.example.step.visual.text) } : d.example.step.visual)) : null,
+        el('ol', { class: 'work-steps' }, d.example.steps.map((t) => el('li', { text: L(t) }))),
+        el('p', { class: 'work-answer' }, [el('strong', { text: young ? 'So the answer is ' : 'Answer: ' }), L(d.example.answer)]),
+        el('p', { class: 'work-yours', text: young ? 'Now try yours the same way!' : 'Now use the same steps on your question.' }),
+      ]) : null,
+    ]) : null,
+  ]);
+}
+
+function refreshWork(step) {
+  const node = app.querySelector('#work');
+  if (node) node.replaceWith(workItOut(step));
 }
 
 // ---------- Teddy's help ----------

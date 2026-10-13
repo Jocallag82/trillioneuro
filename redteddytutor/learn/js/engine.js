@@ -211,7 +211,7 @@ export function shuffle(list, rand = Math.random) {
 // re-rendering after a flip never moves the cards.
 export function startSession(activity, rand = Math.random) {
   const order = activity.steps.map((s) => (s.kind === 'memory' ? shuffle(s.cards.map((c) => c.id), rand) : null));
-  return { activityId: activity.id, index: 0, misses: 0, hintsUsed: 0, drop: null, memory: null, mistakes: [], order, results: [], done: false };
+  return { activityId: activity.id, index: 0, misses: 0, help: 0, hintsUsed: 0, drop: null, memory: null, mistakes: [], order, results: [], done: false };
 }
 
 // Choice steps: tap one option. Returns { session, outcome } without mutating the input.
@@ -234,7 +234,8 @@ export function submit(session, activity, optionId) {
 function judge(session, activity, correct, misconception, answer) {
   const step = stepsOf(activity)[session.index];
   if (correct) {
-    return advance(session, activity, { kind: 'correct', correct: true, firstTry: session.misses === 0 });
+    // Right first time means unaided: an answer after asking for help is not first time.
+    return advance(session, activity, { kind: 'correct', correct: true, firstTry: session.misses === 0 && !session.help });
   }
   const misses = session.misses + 1;
   const mistakes = misconception ? [...(session.mistakes || []), misconception] : (session.mistakes || []);
@@ -323,7 +324,7 @@ export function placeItem(session, activity, itemId, targetId) {
     };
   }
   return advance({ ...session, misses: drop.wrong, drop: null }, activity, {
-    kind: 'correct', correct: true, firstTry: drop.wrong === 0, itemId, targetId,
+    kind: 'correct', correct: true, firstTry: drop.wrong === 0 && !session.help, itemId, targetId,
   });
 }
 
@@ -358,7 +359,7 @@ export function placeCard(session, activity, cardId) {
       return { session: { ...session, memory }, outcome: { ...base, kind: 'match' } };
     }
     return advance({ ...session, misses: mem.wrong, memory: null }, activity, {
-      kind: 'correct', correct: true, firstTry: mem.wrong === 0,
+      kind: 'correct', correct: true, firstTry: mem.wrong === 0 && !session.help,
     });
   }
 
@@ -383,6 +384,8 @@ function advance(session, activity, outcome) {
     correct: outcome.correct,
     firstTry: outcome.firstTry,
     misses: session.misses,
+    // Help asked for before or between tries (hints, worked examples).
+    help: session.help || 0,
     difficulty: step.difficulty || activity.level,
     // The first mistake seen on this step, if the answer showed one.
     misconception: mistakes[0] || null,
@@ -395,6 +398,7 @@ function advance(session, activity, outcome) {
     activityId: session.activityId,
     index: nextIndex,
     misses: 0,
+    help: 0,
     hintsUsed: session.hintsUsed,
     drop: null,
     memory: null,
@@ -404,6 +408,13 @@ function advance(session, activity, outcome) {
     done,
   };
   return { session: next, outcome: { ...outcome, hint: null, answer: outcome.answer ?? null, stepDone: true, activityDone: done } };
+}
+
+// The learner asked for help on the current step. Help is always allowed and never
+// costs a try, but it is recorded: the answer that follows is no longer unaided.
+export function useHelp(session) {
+  if (session.done) return session;
+  return { ...session, help: (session.help || 0) + 1, hintsUsed: session.hintsUsed + 1 };
 }
 
 export function summarySession(session) {
