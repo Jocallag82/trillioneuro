@@ -415,12 +415,17 @@ function bodyFor(step, viewState) {
   return choiceBody(step);
 }
 
+// When every option is a picture, the picture is the answer: a caption such as
+// "3 dots" or "triangle" would let a reader skip the skill. The caption then
+// becomes the button's accessible name only.
 function choiceBody(step) {
+  const pictorial = step.options.every((o) => o.visual);
   const options = step.options.map((opt) => el('button', {
     type: 'button', class: 'option', dataset: { option: opt.id }, onclick: () => choose(opt.id),
+    'aria-label': pictorial ? L(opt.label) : undefined,
   }, [
-    opt.visual ? el('span', { class: 'option-visual' }, visualNode(opt.visual)) : null,
-    el('span', { class: 'option-label', text: L(opt.label) }),
+    opt.visual ? el('span', { class: 'option-visual', 'aria-hidden': pictorial ? 'true' : undefined }, visualNode(opt.visual)) : null,
+    pictorial ? null : el('span', { class: 'option-label', text: L(opt.label) }),
   ]));
   return el('div', { class: 'choice-body' }, [
     step.listen ? el('button', { type: 'button', class: 'btn btn-line play', onclick: () => say(step.prompt), text: 'Hear the question' }) : null,

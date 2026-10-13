@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy — Red Teddy Tutor</title>
+<meta name="description" content="What Red Teddy Tutor stores, where, for how long, and how to delete it.">
+<link rel="canonical" href="https://redteddytutor.com/privacy">
+<meta name="theme-color" content="#0e1830">
+<link rel="icon" href="/teddy-mark.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&display=swap">
+<link rel="stylesheet" href="/home.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Red Teddy Tutor home"><img src="/teddy-mark.webp" width="40" height="40" alt=""><span>Red Teddy Tutor</span></a>
+    <a class="btn btn-red" href="/learn/">Start learning</a>
+  </div>
+</header>
+<main id="main" class="wrap doc">
+  <p class="eyebrow">Privacy</p>
+  <h1>What we keep, and what we don’t.</h1>
+  <p class="doc-updated">Last updated 13 October 2026. This is a plain-English description of how the product works today. It has not been reviewed by a lawyer.</p>
+
+  <h2>Without an account</h2>
+  <p>Answers, settings and progress are saved only in your browser’s local storage on that device. Nothing about the child is sent to us. You can delete it in the parent view, or by clearing site data in your browser.</p>
+
+  <h2>With a parent account</h2>
+  <ul>
+    <li><strong>The parent:</strong> an email address, used only to send sign-in links and, if you ask for them, news emails.</li>
+    <li><strong>Each child profile:</strong> a nickname you choose, an age range and a country setting. We never ask for a child’s surname, birthday, school, photo or contact details.</li>
+    <li><strong>Learning records:</strong> which questions were answered, whether they were right first time, which hints were used, and the type of any mistake. These drive the plan and the parent view.</li>
+  </ul>
+  <p>Records are stored with Supabase (database hosting, EU region, Ireland). Database rules mean a signed-in parent can read only their own family’s profiles and records. Children do not sign in.</p>
+
+  <h2>Ask Teddy (the AI helper)</h2>
+  <p>When a signed-in child aged 5 or over asks Teddy for help, the current question, the child’s answer and their message are sent through Vercel’s AI Gateway to an AI model from Anthropic to write a reply. Messages are not stored by us. We keep a count of helps used each day so the daily limit can be applied. Messages that look unsafe are answered with a fixed reply and are not sent to the model.</p>
+
+  <h2>News emails</h2>
+  <p>If you join the news list, we store your email address and, if you choose one, whether you are a parent, a teacher or other. We will email only about Red Teddy Tutor. Each email will explain how to unsubscribe.</p>
+
+  <h2>What we don’t do</h2>
+  <ul>
+    <li>No adverts and no advertising trackers.</li>
+    <li>No selling or sharing of data, beyond the service providers named here.</li>
+    <li>No messaging between users and no public profiles.</li>
+  </ul>
+
+  <h2>Service providers</h2>
+  <ul>
+    <li><strong>Vercel</strong>: hosts the website and runs the Teddy helper’s server code.</li>
+    <li><strong>Supabase</strong>: sign-in emails and the database (EU region).</li>
+    <li><strong>Anthropic</strong>, through Vercel AI Gateway: writes Teddy’s replies.</li>
+    <li><strong>Google Fonts</strong>: serves the typefaces, so your browser contacts Google’s font servers when the page loads.</li>
+  </ul>
+
+  <h2>Deleting data</h2>
+  <ul>
+    <li>A child’s recorded progress: <a href="/learn/parent.html">parent view</a> → Delete progress.</li>
+    <li>A child profile, with its records: <a href="/learn/account.html">account page</a> → remove the profile.</li>
+    <li>Your parent account or news-list email: reply to any email we have sent you and ask, and we will delete it.</li>
+  </ul>
+  <p>We keep account data while the account exists and delete it when it is removed.</p>
+</main>
+<footer class="site-foot">
+  <div class="wrap foot">
+    <a class="brand" href="/"><img src="/teddy-mark.webp" width="40" height="40" alt=""><span>Red Teddy Tutor</span></a>
+    <p class="legal">&copy; 2026 Red Teddy Tutor.</p>
+  </div>
+</footer>
+</body>
+</html>

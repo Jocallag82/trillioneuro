@@ -3,261 +3,335 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Red Teddy Tutor — Your personal learning companion</title>
-<meta name="description" content="Red Teddy Tutor is a planned AI-powered learning companion to help you understand more, practise with purpose and prepare with confidence. Join the early access list.">
+<title>Red Teddy Tutor — maths, reading and thinking practice for ages 2 to 11</title>
+<meta name="description" content="Free adaptive practice in maths, reading and thinking skills for children aged 2 to 11. Hints that make them think, spaced review, a counting game and a parent view built from real answers. No account needed to start.">
 <link rel="canonical" href="https://redteddytutor.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Red Teddy Tutor">
 <meta property="og:url" content="https://redteddytutor.com/">
-<meta property="og:title" content="Red Teddy Tutor — Your personal learning companion">
-<meta property="og:description" content="A smarter, more personal way to learn. Join the early access list.">
+<meta property="og:title" content="Red Teddy Tutor — practice that notices what your child nearly knows">
+<meta property="og:description" content="Adaptive maths, reading and thinking practice for ages 2 to 11. Free to start, no account needed.">
 <meta property="og:image" content="https://redteddytutor.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Red Teddy, a red teddy bear in a scarf, studying at a desk with an open book and laptop.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Red Teddy Tutor — Your personal learning companion">
-<meta name="twitter:description" content="A smarter, more personal way to learn. Join the early access list.">
+<meta name="twitter:title" content="Red Teddy Tutor — practice that notices what your child nearly knows">
+<meta name="twitter:description" content="Adaptive maths, reading and thinking practice for ages 2 to 11. Free to start, no account needed.">
 <meta name="twitter:image" content="https://redteddytutor.com/og-image.jpg">
 <meta name="theme-color" content="#0e1830">
 <link rel="icon" href="/teddy-mark.webp" type="image/webp">
 <link rel="preload" as="image" href="/hero.webp" fetchpriority="high">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --navy:#0e1830;--navy2:#16233f;--red:#a3171f;--red-d:#7d0f17;--red-l:#c8353d;
-  --ivory:#faf5ec;--ivory2:#f1e9da;--white:#fff;--ink:#1d1a1a;--mute:#5d5650;--mute-d:#b9c0d0;
-  --gold:#d9a441;--line:rgba(29,26,26,.12);
-  --serif:Georgia,'Iowan Old Style','Palatino Linotype',Palatino,serif;
-  --sans:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-}
-html{scroll-behavior:smooth;scroll-padding-top:84px}
-body{font-family:var(--sans);color:var(--ink);background:var(--ivory);line-height:1.6;-webkit-font-smoothing:antialiased}
-img{max-width:100%;display:block}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.skip{position:absolute;left:-999px;top:8px;background:var(--white);color:var(--ink);padding:10px 16px;z-index:100;border-radius:6px}
-.skip:focus{left:8px}
-.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
-h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.1;letter-spacing:-.015em}
-.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;border-radius:999px;font-weight:700;font-size:1rem;text-decoration:none;border:2px solid transparent;cursor:pointer;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
-.btn-red{background:var(--red);color:var(--white)}
-.btn-red:hover{background:var(--red-d)}
-.btn-ghost{border-color:rgba(255,255,255,.55);color:var(--white)}
-.btn-ghost:hover{background:rgba(255,255,255,.12)}
-
-/* header */
-header{position:sticky;top:0;z-index:50;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08)}
-.bar{display:flex;align-items:center;justify-content:space-between;min-height:68px;gap:16px}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--white)}
-.brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:50% 25%;border:2px solid var(--red-l)}
-.brand span{font-family:var(--serif);font-weight:700;font-size:1.2rem;letter-spacing:-.01em}
-nav ul{display:flex;align-items:center;gap:28px;list-style:none}
-nav a{color:var(--mute-d);text-decoration:none;font-weight:600;font-size:.95rem}
-nav a:hover{color:var(--white)}
-nav .btn{min-height:42px;padding:0 20px;color:var(--white);font-size:.92rem}
-.menu-btn{display:none;background:none;border:2px solid rgba(255,255,255,.35);color:var(--white);border-radius:8px;min-height:44px;padding:0 14px;font:600 .92rem var(--sans);cursor:pointer}
-
-/* hero */
-.hero{background:var(--navy);color:var(--white);position:relative;overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;min-height:min(78vh,720px)}
-.hero-copy{padding:72px 32px 72px 0;position:relative;z-index:2}
-.hero h1{font-size:clamp(2.5rem,5.2vw,4.4rem);margin:18px 0 22px}
-.hero h1 em{font-style:italic;color:#ff8a8f}
-.hero .eyebrow{color:var(--gold)}
-.hero p.lead{font-size:1.15rem;color:var(--mute-d);max-width:34em}
-.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
-.stage{font-size:.85rem;color:var(--mute-d);margin-top:26px;border-left:3px solid var(--red-l);padding-left:12px;max-width:30em}
-.hero-img{position:relative;align-self:stretch;margin-right:calc(50% - 50vw)}
-.hero-img img{width:100%;height:100%;object-fit:cover;object-position:92% 50%;min-height:420px;
-  -webkit-mask-image:linear-gradient(to right,transparent,#000 22%);mask-image:linear-gradient(to right,transparent,#000 22%)}
-
-/* sections */
-section{padding:104px 0}
-.sec-head{max-width:40rem;margin-bottom:56px}
-.sec-head h2{font-size:clamp(2rem,4vw,3rem);margin:12px 0 16px}
-.sec-head p{color:var(--mute);font-size:1.1rem}
-.note{display:inline-block;font-size:.82rem;font-weight:600;color:var(--red-d);background:var(--ivory2);border-radius:999px;padding:4px 14px;margin-top:16px}
-
-.trio{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink)}
-.trio article{padding:32px 32px 8px 0}
-.trio article+article{padding-left:32px;border-left:1px solid var(--line)}
-.trio .n{font-family:var(--serif);font-size:3.4rem;line-height:1;color:var(--red);font-style:italic}
-.trio h3{font-size:1.7rem;margin:12px 0 10px}
-.trio p{color:var(--mute)}
-
-.how{background:var(--white)}
-.steps{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:s;position:relative}
-.steps li{counter-increment:s;padding:0 28px 0 0;position:relative}
-.steps li::before{content:counter(s);display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--red);color:var(--white);font:700 1.3rem var(--serif);position:relative;z-index:1}
-.steps li:not(:last-child)::after{content:"";position:absolute;top:26px;left:60px;right:8px;border-top:2px dashed rgba(163,23,31,.35)}
-.steps h3{font-size:1.35rem;margin:22px 0 8px}
-.steps p{color:var(--mute)}
-
-.learner{display:grid;grid-template-columns:5fr 6fr;gap:64px;align-items:start}
-.learner h2{font-size:clamp(2rem,4vw,3rem);margin:12px 0 16px}
-.learner>div:first-child p{color:var(--mute);font-size:1.1rem}
-.pillars{list-style:none;border-top:2px solid var(--ink)}
-.pillars li{padding:20px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:150px 1fr;gap:16px}
-.pillars strong{font-family:var(--serif);font-size:1.15rem}
-.pillars span{color:var(--mute)}
-.honest{margin-top:28px;padding:18px 20px;background:var(--ivory2);border-radius:10px;font-size:.95rem;color:var(--mute)}
-
-.signup{background:var(--red);color:var(--white);position:relative;overflow:hidden}
-.signup-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-.signup h2{font-size:clamp(2.1rem,4.2vw,3.3rem);margin-bottom:16px}
-.signup .eyebrow{color:#ffd9a0}
-.signup p.sub{color:#ffe3e4;font-size:1.1rem;max-width:30em}
-form{background:var(--ivory);color:var(--ink);padding:32px;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
-.field{margin-bottom:20px}
-label,legend{display:block;font-weight:700;font-size:.92rem;margin-bottom:8px}
-.opt{font-weight:400;color:var(--mute)}
-input[type=email]{width:100%;min-height:50px;padding:0 16px;border:2px solid #b9b0a2;border-radius:8px;font:1rem var(--sans);background:var(--white);color:var(--ink)}
-input[type=email][aria-invalid=true]{border-color:var(--red)}
-fieldset{border:0}
-.aud{display:flex;flex-wrap:wrap;gap:8px}
-.aud label{margin:0;font-weight:600}
-.aud input{position:absolute;opacity:0;pointer-events:none}
-.aud span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:2px solid #b9b0a2;border-radius:999px;cursor:pointer;background:var(--white);font-size:.93rem}
-.aud input:checked+span{background:var(--navy);border-color:var(--navy);color:var(--white)}
-.aud input:focus-visible+span{outline:3px solid var(--gold);outline-offset:2px}
-.consent{display:flex;gap:12px;align-items:flex-start;font-weight:400;font-size:.88rem;color:var(--mute)}
-.consent input{width:22px;height:22px;margin-top:2px;flex:none;accent-color:var(--red)}
-.err{color:var(--red-d);font-size:.88rem;font-weight:600;margin-top:6px;min-height:0}
-form .btn{width:100%}
-.status{margin-top:16px;padding:14px 16px;border-radius:8px;font-size:.95rem;font-weight:600;display:none}
-.status.show{display:block;background:var(--ivory2);color:var(--ink);border-left:4px solid var(--navy)}
-.small{font-size:.8rem;color:var(--mute);margin-top:14px}
-
-footer{background:var(--navy);color:var(--mute-d);padding:56px 0;font-size:.92rem}
-.foot{display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;align-items:flex-start}
-.foot p{max-width:30em;margin-top:12px}
-.foot .brand{color:var(--white)}
-.legal{width:100%;border-top:1px solid rgba(255,255,255,.12);padding-top:20px;font-size:.82rem}
-
-@media (max-width:900px){
-  .menu-btn{display:block}
-  nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding:8px 20px 24px;border-bottom:1px solid rgba(255,255,255,.1)}
-  nav.open{display:block}
-  nav ul{flex-direction:column;align-items:stretch;gap:0}
-  nav li a:not(.btn){display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}
-  nav .btn{margin-top:16px;width:100%}
-  .hero-grid{grid-template-columns:1fr;min-height:0}
-  .hero-img{order:-1;margin:0 -20px;max-height:340px}
-  .hero-img img{min-height:0;height:340px;-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent);mask-image:linear-gradient(to bottom,#000 70%,transparent)}
-  .hero-copy{padding:8px 0 56px}
-  section{padding:72px 0}
-  .trio,.steps,.learner,.signup-grid{grid-template-columns:1fr}
-  .trio article,.trio article+article{padding:28px 0;border-left:0;border-bottom:1px solid var(--line)}
-  .steps{gap:36px}
-  .steps li:not(:last-child)::after{display:none}
-  .learner,.signup-grid{gap:40px}
-  .pillars li{grid-template-columns:1fr;gap:4px}
-  form{padding:24px}
-}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&display=swap">
+<link rel="stylesheet" href="/home.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Red Teddy Tutor","url":"https://redteddytutor.com/","inLanguage":"en"}
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header>
+<header class="site-head">
   <div class="wrap bar">
-    <a class="brand" href="#top" aria-label="Red Teddy Tutor home">
-      <img src="/teddy-mark.webp" width="42" height="42" alt="">
+    <a class="brand" href="/" aria-label="Red Teddy Tutor home">
+      <img src="/teddy-mark.webp" width="40" height="40" alt="">
       <span>Red Teddy Tutor</span>
     </a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav id="nav" aria-label="Main">
       <ul>
-        <li><a href="#how">How It Works</a></li>
-        <li><a href="#learn">What You'll Learn</a></li>
-        <li><a href="#early-access">Early Access</a></li>
-        <li><a class="btn btn-red" href="#early-access">Get Early Access</a></li>
+        <li><a href="#try">Try a question</a></li>
+        <li><a href="#inside">What’s inside</a></li>
+        <li><a href="#parents">For parents</a></li>
+        <li><a href="#plans">Plans</a></li>
+        <li><a href="/learn/account.html">Parent sign-in</a></li>
+        <li><a class="btn btn-red" href="/learn/">Start learning</a></li>
       </ul>
     </nav>
   </div>
 </header>
 
 <main id="main">
-<div class="hero" id="top">
+
+<section class="hero" aria-labelledby="hero-h">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow">Your personal learning companion</p>
-      <h1>Learning should feel a little <em>less difficult.</em></h1>
-      <p class="lead">Meet Red Teddy Tutor — your future personal learning companion, designed to help you understand more, practise with purpose and approach your next challenge with confidence.</p>
+      <p class="eyebrow">Maths · reading · thinking skills · ages 2–11</p>
+      <h1 id="hero-h">Practice that notices what your child <em>nearly</em> knows.</h1>
+      <p class="lead">Short sessions that start at the right level, give a hint instead of the answer, spot the mistake behind a wrong answer, and bring skills back just before they fade.</p>
       <div class="cta-row">
-        <a class="btn btn-red" href="#early-access">Join the Early Access List</a>
-        <a class="btn btn-ghost" href="#vision">Discover the Vision</a>
-        <a class="btn btn-ghost" href="/learn/">Try a free activity</a>
+        <a class="btn btn-red btn-lg" href="/learn/">Start learning — free</a>
+        <a class="btn btn-ghost btn-lg" href="#try">Try a real question</a>
       </div>
-      <p class="stage">Free early-learning activities are live. The AI tutor isn't yet — join the list to hear first.</p>
+      <ul class="hero-facts" aria-label="Before you start">
+        <li>No account needed</li>
+        <li>No adverts</li>
+        <li>Phone, tablet or computer</li>
+      </ul>
     </div>
-    <div class="hero-img">
-      <img src="/hero.webp" width="1376" height="768" alt="Red Teddy, a deep-red teddy bear in a navy scarf, sitting at a desk with an open book, a laptop and a calculator, surrounded by bookshelves." fetchpriority="high">
-    </div>
+    <figure class="hero-art">
+      <img src="/hero.webp" width="1376" height="768" alt="Red Teddy, a deep-red teddy bear in a navy scarf, at a desk with an open book among bookshelves." fetchpriority="high">
+    </figure>
   </div>
-</div>
+</section>
 
-<section id="vision">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow">The learning vision</p>
-      <h2>A smarter, more personal way to learn.</h2>
-      <p>This is what we're building towards: one companion that meets you where you are.</p>
-      <span class="note">Intended capabilities — not yet available</span>
+<section class="try" id="try" aria-labelledby="try-h">
+  <div class="wrap try-grid">
+    <div class="try-intro">
+      <p class="eyebrow">Try it here</p>
+      <h2 id="try-h">A real question, from the real engine.</h2>
+      <p>Pick an age. This is the same question generator your child uses in the app, so every question is new. Get one wrong on purpose and see what happens.</p>
+      <ol class="try-notes">
+        <li><strong>A wrong answer gets a hint, not the answer.</strong> Two hints, then a gentle reveal. Nothing is taken away.</li>
+        <li><strong>Many wrong answers carry a reason.</strong> Choosing 7 when there are 6 dots usually means one was counted twice, and the hint says how to avoid that.</li>
+        <li><strong>In the app, every first try is recorded</strong> on your device, and that decides what comes next.</li>
+      </ol>
     </div>
-    <div class="trio">
-      <article><div class="n">01</div><h3>Understand it</h3><p>Get help making difficult concepts easier to understand, explained in a way that makes sense to you.</p></article>
-      <article><div class="n">02</div><h3>Practise it</h3><p>Build confidence through questions and guided practice, at a pace that suits you.</p></article>
-      <article><div class="n">03</div><h3>Master it</h3><p>Work towards your learning goals with a more structured approach.</p></article>
+
+    <div class="book" id="demo">
+      <div class="book-tabs" role="tablist" aria-label="Age">
+        <button role="tab" type="button" id="tab-3-5" data-band="3-5" aria-selected="false" aria-controls="demo-panel" tabindex="-1">3–5</button>
+        <button role="tab" type="button" id="tab-5-7" data-band="5-7" aria-selected="true" aria-controls="demo-panel">5–7</button>
+        <button role="tab" type="button" id="tab-7-9" data-band="7-9" aria-selected="false" aria-controls="demo-panel" tabindex="-1">7–9</button>
+        <button role="tab" type="button" id="tab-9-11" data-band="9-11" aria-selected="false" aria-controls="demo-panel" tabindex="-1">9–11</button>
+      </div>
+      <div class="page" role="tabpanel" id="demo-panel" aria-labelledby="tab-5-7">
+        <p class="page-skill" id="demo-skill">Age <span>5–7</span></p>
+        <div id="demo-body" class="demo-body">
+          <noscript><p class="demo-prompt">The live question needs JavaScript. You can still <a href="/learn/">open the activities</a>.</p></noscript>
+        </div>
+        <div class="demo-feedback" id="demo-feedback" role="status" aria-live="polite"></div>
+        <div class="demo-actions">
+          <button type="button" class="btn btn-line" id="demo-hint">Show a hint</button>
+          <button type="button" class="btn btn-line" id="demo-next">Another question</button>
+        </div>
+      </div>
+      <p class="book-foot">This demo saves nothing. <a href="/learn/">Open the app</a> for plans, progress and every activity type.</p>
     </div>
   </div>
 </section>
 
-<section class="how" id="how">
+<section class="how" id="how" aria-labelledby="how-h">
   <div class="wrap">
     <div class="sec-head">
-      <p class="eyebrow">How it could work</p>
-      <h2>Three simple steps.</h2>
-      <p>The experience we intend to create.</p>
-      <span class="note">Planned experience — not yet live</span>
+      <p class="eyebrow">How a session works</p>
+      <h2 id="how-h">A short session, chosen for one child.</h2>
+      <p>No mystery box. Each step follows a rule you can read, and the app says why each activity was picked.</p>
     </div>
-    <ol class="steps">
-      <li><h3>Tell Red Teddy what you're learning</h3><p>Share the subject and what you're working towards.</p></li>
-      <li><h3>Get guidance, practise your way</h3><p>Receive personalised guidance and practise at your own pace.</p></li>
-      <li><h3>Build understanding, prepare</h3><p>Grow your understanding and get ready for your next goal.</p></li>
+    <ol class="journey">
+      <li>
+        <span class="j-n" aria-hidden="true">1</span>
+        <h3>A quick check finds the start</h3>
+        <p>Up to seven questions per subject, about two minutes. It steps up after a right answer and down after a wrong one, and no marks are shown. Or skip it and start at the usual level for the age.</p>
+      </li>
+      <li>
+        <span class="j-n" aria-hidden="true">2</span>
+        <h3>Today’s plan picks four things</h3>
+        <p>A review that is due comes first, then a mix-up worth fixing, then new skills whose foundations are already in place. A new skill never comes before the skills it builds on.</p>
+      </li>
+      <li>
+        <span class="j-n" aria-hidden="true">3</span>
+        <h3>Practice that builds as it goes</h3>
+        <p>Each set starts easier and builds up. Children count, type answers, place markers on number lines, fill ten frames, put tiles in order and build words. It is not just tapping A, B, C or D.</p>
+      </li>
+      <li>
+        <span class="j-n" aria-hidden="true">4</span>
+        <h3>Skills come back before they fade</h3>
+        <p>Once a skill is going well, it comes back for review after 1 day, then 3, 7, 14, 30 and 60 days. A shaky skill comes back as practice, with easier questions first.</p>
+      </li>
     </ol>
   </div>
 </section>
 
-<section id="learn">
-  <div class="wrap learner">
-    <div>
-      <p class="eyebrow">Designed around the learner</p>
-      <h2>What you'll learn is up to you.</h2>
-      <p>Red Teddy Tutor is being designed to support many subjects, learning goals and educational stages — with international curriculum support built up progressively over time.</p>
+<section class="inside" id="inside" aria-labelledby="inside-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">What’s inside</p>
+      <h2 id="inside-h"><span id="obj-count">35</span> skills across three subjects.</h2>
+      <p>Every skill has its own question generator, its usual ages and the skills it builds on. This list is read from the app itself, so it is always current.</p>
     </div>
+    <div class="subjects" id="subjects">
+      <article class="subject">
+        <h3>Maths</h3>
+        <p>Counting, number sense, place value to 1,000, adding and subtracting, times tables and division, fractions, shape and measuring.</p>
+      </article>
+      <article class="subject">
+        <h3>Reading &amp; words</h3>
+        <p>Letters, first sounds, rhyme, building words and sentences, vocabulary and word parts.</p>
+      </article>
+      <article class="subject">
+        <h3>Thinking skills</h3>
+        <p>Colours, sorting, spotting details, patterns, sequences, memory and number patterns.</p>
+      </article>
+    </div>
+    <p class="honest">Answers are checked by fixed rules, not by AI. Activities are written for these ages but are <strong>not yet matched to any country’s official curriculum</strong>. Words such as Maths/Math and the names of school stages follow the country you choose: the UK, Ireland, the US or Australia.</p>
+  </div>
+</section>
+
+<section class="bakery" aria-labelledby="bakery-h">
+  <div class="wrap bakery-grid">
+    <div class="bakery-copy">
+      <p class="eyebrow">For the youngest: Teddy’s Bakery</p>
+      <h2 id="bakery-h">Count the buns. Fill the order. Open the shop.</h2>
+      <p>A small game for early counting. Teddy needs help counting, comparing, fitting shapes and finishing patterns. Each sign opens the next when three of five orders are right first time. After a hard patch, the rounds get easier.</p>
+      <p class="muted-d">Plays with touch, a mouse or a keyboard. There is a calm mode, and the sound is optional.</p>
+      <a class="btn btn-red" href="/learn/game/">Play Teddy’s Bakery</a>
+    </div>
+    <ol class="bakery-signs" aria-label="The four bakery signs, in order">
+      <li><span class="sign-k">Counting</span><span class="sign-v">How many buns are on the tray?</span></li>
+      <li><span class="sign-k">More or fewer</span><span class="sign-v">Which plate has more?</span></li>
+      <li><span class="sign-k">Shapes</span><span class="sign-v">Which tin does the biscuit fit?</span></li>
+      <li><span class="sign-k">Patterns</span><span class="sign-v">What goes in the gap?</span></li>
+      <li class="sign-final"><span class="sign-k">Grand Opening</span><span class="sign-v">All four, mixed.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="helper" aria-labelledby="helper-h">
+  <div class="wrap helper-grid">
+    <figure class="helper-mark"><img src="/teddy-mark.webp" width="180" height="180" alt="" loading="lazy"></figure>
     <div>
-      <ul class="pillars">
-        <li><strong>Subjects</strong><span>From sciences and maths to languages and humanities — the ambition is breadth, grown step by step.</span></li>
-        <li><strong>Goals</strong><span>Understanding a topic, practising for a test or preparing for exams.</span></li>
-        <li><strong>Stages</strong><span>Learners of different ages and levels, from early learning onwards.</span></li>
-        <li><strong>Curricula</strong><span>An international platform, with curriculum support developed progressively.</span></li>
+      <p class="eyebrow">Ask Teddy</p>
+      <h2 id="helper-h">A helper that answers with a question.</h2>
+      <p class="helper-lead">For children aged 5 and up, when a parent has signed in, Teddy can explain a step in other words. It is built to <strong>nudge, not to answer</strong>.</p>
+      <ul class="ticks">
+        <li>Marking is always done by the app’s own rules. Teddy never decides whether an answer is right.</li>
+        <li>A reply that gives the answer away, contains a link or looks wrong is dropped. The written hint is shown instead.</li>
+        <li>Unsafe messages get a fixed, kind reply and never reach the AI model.</li>
+        <li>Messages are not stored. Use is limited per child per day.</li>
+        <li>If Teddy is unavailable, every activity still works with its written hints.</li>
       </ul>
-      <p class="honest">We won't support every subject, curriculum or age group at launch. Early access members will help shape where we start.</p>
     </div>
   </div>
 </section>
 
-<section class="signup" id="early-access">
-  <div class="wrap signup-grid">
+<section class="parents" id="parents" aria-labelledby="parents-h">
+  <div class="wrap parents-grid">
     <div>
-      <p class="eyebrow">Early access</p>
-      <h2>Be part of a smarter way to learn.</h2>
-      <p class="sub">Students, parents and educators: register your interest and we'll let you know as Red Teddy Tutor takes shape. Just an email — nothing more.</p>
+      <p class="eyebrow">For parents</p>
+      <h2 id="parents-h">See what was practised, and how sure we are.</h2>
+      <p>The parent view is built only from answers your child actually gave. It keeps apart four things that most apps blur together.</p>
+      <a class="btn btn-line" href="/learn/parent.html">Open the parent view</a>
+    </div>
+    <dl class="evidence">
+      <div>
+        <dt>Measured</dt>
+        <dd>Activities finished, answers given, right first time or after a hint, and activity week by week.</dd>
+      </div>
+      <div>
+        <dt>Inferred, with confidence</dt>
+        <dd>Which skills look secure, which need support, and which mistakes keep coming back. A skill is only called secure after enough recent answers given without help.</dd>
+      </div>
+      <div>
+        <dt>Assumed</dt>
+        <dd>Earlier skills that the quick check stepped past are marked as assumed, not as learned.</dd>
+      </div>
+      <div>
+        <dt>Next</dt>
+        <dd>What the plan will suggest, and why, in plain words. For example: “Last practised 8 days ago. A quick review helps it stick.”</dd>
+      </div>
+    </dl>
+    <p class="honest parents-note">It does not give your child a grade, compare them with other children or predict exam results. You can delete the recorded progress at any time.</p>
+  </div>
+</section>
+
+<section class="plans" id="plans" aria-labelledby="plans-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Plans</p>
+      <h2 id="plans-h">Everything on this page is free today.</h2>
+      <p>No card and no trial clock. A paid plan is planned for families who want more help from Teddy. It is not on sale yet and has no price.</p>
+    </div>
+    <div class="plan-grid">
+      <article class="plan plan-free">
+        <h3>Free</h3>
+        <p class="plan-sub">Available now</p>
+        <ul class="ticks">
+          <li>Every activity and all <span data-obj-count>35</span> skills, ages 2–11</li>
+          <li>Quick check, today’s plan and spaced review</li>
+          <li>Teddy’s Bakery</li>
+          <li>Parent view</li>
+          <li>Optional parent sign-in to keep each child’s progress across devices</li>
+          <li>Ask Teddy: up to 20 helps a day per child (signed in, ages 5+)</li>
+        </ul>
+        <a class="btn btn-red" href="/learn/">Start learning</a>
+      </article>
+      <article class="plan plan-plus">
+        <h3>Plus</h3>
+        <p class="plan-sub">Not on sale yet</p>
+        <ul class="ticks">
+          <li>Everything in Free</li>
+          <li>Ask Teddy: up to 200 helps a day per child</li>
+        </ul>
+        <p class="plan-small">We will list more here only once it exists. Nothing that is free now will be moved into Plus.</p>
+        <a class="btn btn-line" href="#news">Tell me when it launches</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="safety" aria-labelledby="safety-h">
+  <div class="wrap safety-grid">
+    <div class="sec-head">
+      <p class="eyebrow">Safety and privacy</p>
+      <h2 id="safety-h">Built for children, so kept small.</h2>
+      <p><a href="/privacy">Read the privacy notice</a></p>
+    </div>
+    <ul class="safety-list">
+      <li><strong>No account needed to start.</strong> Without one, progress stays in this browser only.</li>
+      <li><strong>Parents sign in, not children.</strong> Sign-in is by an email link. A child is a nickname and an age range, never a surname, birthday, school or photo.</li>
+      <li><strong>No chat between users.</strong> No public profiles, no feeds and nothing children can post.</li>
+      <li><strong>No adverts and no ad trackers.</strong></li>
+      <li><strong>No streak pressure.</strong> Missing a day costs nothing. A wrong answer changes what comes next, never a score.</li>
+      <li><strong>Sound only after a tap.</strong> Every spoken line is also written on screen. Animation follows the device’s reduced-motion setting.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="faq" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="sec-head">
+      <p class="eyebrow">Questions parents ask</p>
+      <h2 id="faq-h">Before you start.</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>Is it really free?</summary>
+        <p>Yes. Every activity, the game, the plan, review and the parent view are free. The only planned paid feature is more daily help from Teddy, and it is not on sale yet.</p>
+      </details>
+      <details>
+        <summary>Which age should I pick?</summary>
+        <p>Your child’s age. It only sets the starting point and how the screens look. The quick check then moves up or down, and you can change the age at any time.</p>
+      </details>
+      <details>
+        <summary>Does it follow the national curriculum?</summary>
+        <p>Not yet. The skills are common building blocks of early maths and reading for these ages, but they have not been mapped against, or reviewed for, any country’s official curriculum. We will say so clearly if that changes.</p>
+      </details>
+      <details>
+        <summary>Can a young child use it alone?</summary>
+        <p>Ages 2 to 5 are designed for use with a grown-up nearby. Instructions can be read aloud, and wherever possible the question is carried by pictures.</p>
+      </details>
+      <details>
+        <summary>What happens to my child’s answers?</summary>
+        <p>Without an account they stay in your browser. If you sign in, they are saved to your family account so you can use more than one device, and only your account can read them. You can delete them from the parent view.</p>
+      </details>
+      <details>
+        <summary>Does it work on a shared tablet?</summary>
+        <p>Yes. When a parent signs in, each child gets their own profile. Without signing in, everyone using that browser shares one set of progress.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="news" id="news" aria-labelledby="news-h">
+  <div class="wrap news-grid">
+    <div>
+      <p class="eyebrow">Occasional news</p>
+      <h2 id="news-h">Hear when Plus and new subjects arrive.</h2>
+      <p class="sub">One email when something new is ready. No weekly newsletter.</p>
     </div>
     <form id="ea-form" novalidate aria-describedby="ea-note">
       <div class="field">
@@ -268,70 +342,39 @@ footer{background:var(--navy);color:var(--mute-d);padding:56px 0;font-size:.92re
       <fieldset class="field">
         <legend>I am a… <span class="opt">(optional)</span></legend>
         <div class="aud">
-          <label><input type="radio" name="audience" value="student"><span>Student</span></label>
-          <label><input type="radio" name="audience" value="parent"><span>Parent/Guardian</span></label>
-          <label><input type="radio" name="audience" value="educator"><span>Educator</span></label>
+          <label><input type="radio" name="audience" value="parent"><span>Parent or guardian</span></label>
+          <label><input type="radio" name="audience" value="educator"><span>Teacher</span></label>
           <label><input type="radio" name="audience" value="other"><span>Other</span></label>
         </div>
       </fieldset>
       <div class="field">
-        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required aria-describedby="consent-err"><span>I agree to be emailed about Red Teddy Tutor's launch and early access. I can unsubscribe at any time.</span></label>
+        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required aria-describedby="consent-err"><span>Email me Red Teddy Tutor news. I can unsubscribe at any time.</span></label>
         <p class="err" id="consent-err" role="alert"></p>
       </div>
-      <button class="btn btn-red" type="submit">Join the Early Access List</button>
+      <button class="btn btn-red" type="submit">Keep me posted</button>
       <p class="status" id="status" role="status" aria-live="polite"></p>
-      <p class="small" id="ea-note">Under 18? Please ask a parent or guardian to sign up for you. We ask for an email address only — no names, ages or schools.</p>
+      <p class="small" id="ea-note">For adults only. We ask for an email address and nothing else.</p>
     </form>
   </div>
 </section>
 </main>
 
-<footer>
+<footer class="site-foot">
   <div class="wrap foot">
     <div>
-      <a class="brand" href="#top"><img src="/teddy-mark.webp" width="42" height="42" alt=""><span>Red Teddy Tutor</span></a>
-      <p>A planned AI-powered learning companion to help students understand more, practise with purpose and build confidence.</p>
+      <a class="brand" href="/"><img src="/teddy-mark.webp" width="40" height="40" alt=""><span>Red Teddy Tutor</span></a>
+      <p>Adaptive maths, reading and thinking practice for children aged 2 to 11.</p>
     </div>
-    <p class="legal">&copy; 2026 Red Teddy Tutor. An early-stage project; features described on this page are planned, not yet available.</p>
+    <ul class="foot-links">
+      <li><a href="/learn/">Start learning</a></li>
+      <li><a href="/learn/game/">Teddy’s Bakery</a></li>
+      <li><a href="/learn/parent.html">Parent view</a></li>
+      <li><a href="/learn/account.html">Parent sign-in</a></li>
+      <li><a href="/privacy">Privacy</a></li>
+    </ul>
+    <p class="legal">&copy; 2026 Red Teddy Tutor.</p>
   </div>
 </footer>
-
-<script>
-(function(){
-  /* Supabase RPC rtt_join -> public.rtt_waitlist (insert-only, rate-limited; see README.md). */
-  var ENDPOINT = 'https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/rtt_join';
-  var KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
-
-  var btn=document.querySelector('.menu-btn'), nav=document.getElementById('nav');
-  btn.addEventListener('click',function(){
-    var o=nav.classList.toggle('open'); btn.setAttribute('aria-expanded',o);
-  });
-  nav.addEventListener('click',function(e){ if(e.target.closest('a')){nav.classList.remove('open');btn.setAttribute('aria-expanded','false');}});
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&nav.classList.contains('open')){nav.classList.remove('open');btn.setAttribute('aria-expanded','false');btn.focus();}});
-
-  var f=document.getElementById('ea-form'), em=document.getElementById('email'), cs=document.getElementById('consent'),
-      ee=document.getElementById('email-err'), ce=document.getElementById('consent-err'), st=document.getElementById('status');
-  f.addEventListener('submit',function(e){
-    e.preventDefault();
-    ee.textContent=ce.textContent=''; st.className='status'; em.removeAttribute('aria-invalid');
-    var v=em.value.trim(), bad=null;
-    if(!v){ee.textContent='Please enter your email address.';bad=em;}
-    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ee.textContent='That doesn’t look like a valid email address.';bad=em;}
-    if(bad) em.setAttribute('aria-invalid','true');
-    if(!cs.checked){ce.textContent='Please tick the box to agree to be contacted.';bad=bad||cs;}
-    if(bad){bad.focus();return;}
-    if(!ENDPOINT){
-      st.textContent='Early-access sign-up isn’t open yet, so your email has not been saved or sent. Please check back soon.';
-      st.className='status show'; return;
-    }
-    var a=f.querySelector('input[name=audience]:checked');
-    var b=f.querySelector('button'); b.disabled=true;
-    fetch(ENDPOINT,{method:'POST',headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify({p_email:v,p_audience:a?a.value:null})})
-      .then(function(r){ if(!r.ok) throw 0; st.textContent='Thank you — you’re on the list.'; f.reset(); })
-      .catch(function(){ st.textContent='Sorry, something went wrong. Please try again in a moment.'; })
-      .then(function(){ st.className='status show'; b.disabled=false; });
-  });
-})();
-</script>
+<script type="module" src="/home.js"></script>
 </body>
 </html>

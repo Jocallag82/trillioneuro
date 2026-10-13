@@ -1,8 +1,16 @@
-# Red Teddy Tutor landing page
+# Red Teddy Tutor
 
-Static page served for `redteddytutor.com` (see root `vercel.json`).
+Static site served for `redteddytutor.com` (see root `vercel.json`). Local preview with the
+production CSP: `node scripts/dev-rtt.mjs` (port 4321; `/api/*` answers 503).
 
-## Early-access form
+## Home page
+`index.html` + `home.css` + `home.js`. The "Try a real question" panel imports the app's own
+generators, marking (`engine.grade`) and mistake tips, so it can never show a question the app
+could not. The skill list is rendered from `curriculum/framework.js`. Nothing is stored.
+Copy rules: only describe what exists; Plus is "not on sale yet" until billing is connected.
+`privacy.html` (`/privacy`) describes the data actually stored; keep it in step with the schema.
+
+## News form (was early access)
 Posts `{p_email, p_audience}` to the Supabase RPC `rtt_join` (project `trillioneuro`),
 which inserts into `public.rtt_waitlist`. The table is RLS-locked with no anon grants;
 the function validates, de-duplicates, rate-limits (5/hour/IP) and is the only anon entry point.
