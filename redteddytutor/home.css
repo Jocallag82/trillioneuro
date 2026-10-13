@@ -386,6 +386,13 @@ form .btn{width:100%}
 .cur-matrix thead th{background:var(--ivory2);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em}
 .cur-matrix td.none{color:#b5aca0}
 .cur-matrix td span{color:var(--mute);font-size:.85rem}
+.cur-std td,.cur-std th{white-space:normal}
+.cur-sub{font-size:1.15rem;margin:26px 0 10px}
+.cur-defs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 22px;margin:16px 0 0}
+.cur-defs dt{font-weight:700}
+.cur-defs dd{color:var(--mute);font-size:.95rem}
+.cur-limits{padding-left:1.2em;max-width:48rem}
+.cur-limits li{margin:6px 0}
 .cur-sources{margin:0 0 10px 20px}
 .cur-sources li{margin:6px 0}
 .cur-sources a{color:var(--red);font-weight:700}

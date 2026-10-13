@@ -15,6 +15,8 @@
 // - `review` marks who checked the wording: 'authored' means written by the Red Teddy
 //   team and covered by tests. Nothing is marked reviewed by an outside educator.
 
+import { CORE_SPEC, bandsFor } from './core-spec.js';
+
 export const BANDS = ['2-3', '3-5', '5-7', '7-9', '9-11', '11-14', '14-18'];
 
 // How the workspace should feel at each stage. Used by the UI, never by the engine.
@@ -31,10 +33,12 @@ export const STAGES = {
 export const SUBJECTS = {
   maths: { label: 'Maths', strands: ['number', 'calculation', 'fractions', 'shape', 'measure', 'data', 'ratio', 'algebra', 'functions', 'trigonometry', 'calculus'] },
   literacy: { label: 'Reading & words', strands: ['letters', 'words', 'sentences', 'reading', 'language', 'writing'] },
-  science: { label: 'Science', strands: ['physical', 'life', 'earth'] },
+  science: { label: 'Science', strands: ['physical', 'life', 'earth', 'practices'] },
   social: { label: 'Social studies', strands: ['civics', 'history', 'geography', 'economics'] },
-  computing: { label: 'Computer science', strands: ['programming', 'information'] },
+  computing: { label: 'Computer science', strands: ['programming', 'information', 'safety'] },
   thinking: { label: 'Thinking skills', strands: ['patterns', 'sorting', 'memory', 'reasoning'] },
+  // Enrichment sits outside the core academic denominator (see standards/registry.js).
+  enrichment: { label: 'Enrichment', strands: ['learning', 'health', 'languages', 'arts'] },
 };
 
 export const STRANDS = {
@@ -68,6 +72,12 @@ export const STRANDS = {
   economics: 'Economics & personal finance',
   programming: 'Programming',
   information: 'Data & logic',
+  safety: 'Safety, security & citizenship',
+  practices: 'Investigation & engineering',
+  learning: 'Study skills',
+  health: 'Health & wellbeing',
+  languages: 'World languages',
+  arts: 'Arts & music',
 };
 
 // Each objective:
@@ -330,6 +340,9 @@ export const OBJECTIVES = {
     'Converts between binary and decimal and explains how many values a number of bits can store.', 20),
   'boolean-logic': O('Boolean logic', 'Logic', 'computing', 'information', ['11-14', '14-18'], ['logic-puzzles'],
     'Evaluates expressions with and, or, not and comparisons.', 22),
+
+  // ---- National core build-out, October 2026 (core-spec.js) ----
+  ...Object.fromEntries(Object.entries(CORE_SPEC).map(([id, r]) => [id, O(r.label, r.domain, r.subject, r.strand, bandsFor(r.grades), r.prereqs, r.goal, r.order)])),
 };
 
 export const DOMAINS = [...new Set(Object.values(OBJECTIVES).map((o) => o.domain))];

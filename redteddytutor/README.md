@@ -79,3 +79,19 @@ solved by brute force in the tests to prove it has exactly one answer). New visu
   `rtt_entitlements` is SELECT-only for clients.
 - Browser tests: `PLAYWRIGHT_MODULE=$(npm root -g)/playwright/index.mjs node scripts/learn-e2e.mjs`
   (web fonts are stubbed so they run offline).
+
+## National core build-out (13 October 2026)
+94 new skills (205 total), each with a lesson (two worked examples), generated or reviewed-bank
+practice and a US placement. Definition of completeness, sources, figures and backlog:
+`docs/curriculum/README.md`.
+- `curriculum/core-spec.js` — one row per new skill: objective, grades, prerequisites, course, standards.
+- `curriculum/gen-core-math.js`, `gen-core-subjects.js`, `gen-core-hs.js`, `lessons-core.js` — content.
+- `curriculum/standards/registry.js` — the 810-standard denominator (CCSS-M K–8, CCSS-ELA K–8, NGSS).
+- `curriculum/standards/coverage.js` — mapped / taught / assessed / fully covered per standard.
+- `curriculum/standards/states.js` — state layer (50 states + DC); nothing verified yet.
+- `scripts/quality-gate.mjs` — automated gate; writes `curriculum/quality.js` (shown on `/curriculum`)
+  and `docs/curriculum/quality-report.json`. Re-run after any curriculum change.
+- `scripts/core.test.mjs` — re-solves every new computed item from its prompt; planner never empty.
+- New subject `enrichment` (study skills, health, Spanish, art, music) sits outside the denominator.
+- Planner fix: a quick check that finds gaps below every nearby skill now steps back to foundations
+  instead of leaving a one-item or empty plan.

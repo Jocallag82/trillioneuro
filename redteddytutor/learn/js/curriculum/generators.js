@@ -13,6 +13,9 @@ import { int, pick, shuffled, choice, input, dots, text, order } from './kit.js'
 import { SECONDARY_MATH } from './gen-secondary-math.js';
 import { SUBJECT_GENERATORS } from './gen-subjects.js';
 import { EXPANSION_GENERATORS } from './gen-expansion.js';
+import { CORE_MATH_GENERATORS } from './gen-core-math.js';
+import { CORE_SUBJECT_GENERATORS } from './gen-core-subjects.js';
+import { CORE_HS_GENERATORS } from './gen-core-hs.js';
 
 // ---------- Maths ----------
 const RANGES = {
@@ -867,6 +870,9 @@ export const GENERATORS = {
   ...SECONDARY_MATH,
   ...SUBJECT_GENERATORS,
   ...EXPANSION_GENERATORS,
+  ...CORE_MATH_GENERATORS,
+  ...CORE_SUBJECT_GENERATORS,
+  ...CORE_HS_GENERATORS,
 };
 
 export function generateStep(objective, difficulty, rand) {
@@ -883,6 +889,7 @@ const INSTRUCTIONS = {
   science: 'Think about what you know, then check each choice against it.',
   social: 'Read each choice carefully. Hints are there if you need them.',
   computing: 'Trace the program one line at a time and keep track of each variable.',
+  enrichment: 'Read each choice carefully. Hints are there if you need them.',
 };
 
 // A practice set for one objective. `difficulties` may vary per item, so a set can

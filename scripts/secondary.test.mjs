@@ -229,9 +229,9 @@ import { US_GRADES, GRADE_BAND } from '../redteddytutor/learn/js/curriculum/grad
 import { MISCONCEPTIONS } from '../redteddytutor/learn/js/curriculum/misconceptions.js';
 
 const CODE_SHAPE = {
-  'CCSS-M': /^((K|[1-8])\.[A-Z]{1,3}\.[A-D]\.\d+(\.[A-D])?|HS[ANFGS]-[A-Z]{2,4}\.[A-D]\.\d+(\.[A-B])?)$/,
+  'CCSS-M': /^((K|[1-8])\.[A-Z]{1,3}\.[A-D]\.\d+(\.[A-D])?|HS[ANFGS]-[A-Z]{1,4}\.[A-D]\.\d+(\.[A-B])?)$/,
   'CCSS-ELA': /^(RF|RL|RI|L|W|SL)\.(K|\d{1,2}|9-10|11-12)\.\d+(\.[A-J])?$/,
-  'NGSS': /^(K|[1-5]|MS|HS)-(PS|LS|ESS|ETS)\d-\d+$/,
+  'NGSS': /^(K|[1-5]|K-2|3-5|MS|HS)-(PS|LS|ESS|ETS)\d-\d+$/,
 };
 
 test('US catalogue: every objective is placed, in known grades and courses, with well-formed codes', () => {

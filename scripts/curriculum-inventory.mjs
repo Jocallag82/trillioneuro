@@ -18,6 +18,10 @@ const { LESSONS } = await load('lessons.js');
 const { US_CATALOGUE } = await load('catalogues/us.js');
 const { coverageByGrade, totals, courseStatus } = await load('coverage.js');
 const { US_GRADES } = await load('grades.js');
+const { standardsCoverage } = await load('standards/coverage.js');
+const { SOURCES, REFERENCE_FRAMEWORKS } = await load('standards/registry.js');
+const { allStateStatus } = await load('standards/states.js');
+const { QUALITY } = await load('quality.js');
 const { mulberry32 } = await import(pathToFileURL(join(SRC, '../../game/js/rng.js')).href);
 
 function activityTypes(id) {
@@ -37,7 +41,7 @@ const skills = Object.entries(OBJECTIVES).map(([id, o]) => {
     id, label: o.label, subject: o.subject, subjectName: cat.subjectNames[o.subject] || SUBJECTS[o.subject].label,
     strand: STRANDS[o.strand] || o.strand, ageBands: o.bands, grades: p.grades, course: p.course || null, alsoIn: p.also || [],
     goal: o.goal, prerequisites: o.prereqs,
-    lesson: Boolean(LESSONS[id]), practice: Boolean(GENERATORS[id]), assessment: Boolean(GENERATORS[id]) ? 'scored practice set with spaced review' : null,
+    lesson: Boolean(LESSONS[id]), workedExamples: LESSONS[id] ? 1 + (LESSONS[id].more || []).length : 0, qualityGate: QUALITY.pass[id] === true ? 'pass' : 'fail', practice: Boolean(GENERATORS[id]), assessment: Boolean(GENERATORS[id]) ? 'scored practice set with spaced review' : null,
     activityTypes: GENERATORS[id] ? activityTypes(id) : [],
     standards: (p.standards || []).map((s) => ({ framework: s.framework, code: s.code, fit: s.fit })),
     coverage: !(p.standards || []).length ? 'unmapped' : p.standards.every((s) => s.fit === 'aligned') ? 'aligned' : 'partial',
@@ -68,9 +72,13 @@ const out = {
   caveats: [
     'Standards codes are linked only where the practice addresses the standard; "partial" means part of what the standard asks (often explaining, modelling or wider contexts) is not assessed.',
     'No state-level alignment has been verified. Common Core and NGSS are adopted and modified differently by each state.',
-    'Social studies, personal finance and computer science skills have no mapped codes.',
+    'Social studies, personal finance, computer science and enrichment skills have no mapped codes (C3, CSTA, Jump$tart, NHES, NCAS and ACTFL are referenced, not mapped).',
+    'The standards denominator is CCSS-M K-8, CCSS-ELA K-8 and all NGSS performance expectations; high-school CCSS is outside it.',
     'Content is authored by the Red Teddy team and checked by automated tests; no outside educator review has taken place yet.',
   ],
+  standards: (() => { const c = standardsCoverage(cat, QUALITY.pass); return { sources: SOURCES, referenced: REFERENCE_FRAMEWORKS, overall: c.overall, byFramework: c.byFramework, byGrade: c.byGrade, outsideDenominator: c.outsideDenominator, perStandard: c.rows.map((r) => ({ framework: r.framework, code: r.code, grade: r.grade, status: r.status, mapped: r.mapped, taught: r.taught, assessed: r.assessed, reviewed: false, skills: r.skills })) }; })(),
+  quality: { generatedAt: QUALITY.generatedAt, skills: QUALITY.skills, passing: QUALITY.passing, withWarnings: QUALITY.warnings, educatorReviewed: 0 },
+  states: allStateStatus(),
   skills,
 };
 const file = resolve(process.argv[2] || join(HERE, '..', 'docs/curriculum/inventory.json'));

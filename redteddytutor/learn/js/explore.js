@@ -95,12 +95,12 @@ export function renderLesson(ctx, id, back = () => ctx.renderHome()) {
       el('p', { class: 'lesson-goal' }, [el('strong', { text: 'You will be able to: ' }), o.goal]),
       el('p', { class: 'lesson-intro', text: ctx.L(l.intro) }),
       el('ul', { class: 'lesson-ideas' }, l.ideas.map((t) => el('li', { text: ctx.L(t) }))),
-      el('section', { class: 'worked', 'aria-labelledby': 'worked-h' }, [
-        el('h3', { id: 'worked-h', text: 'Worked example' }),
-        el('p', { class: 'worked-problem', text: ctx.L(l.example.problem) }),
-        el('ol', { class: 'worked-steps' }, l.example.steps.map((t) => el('li', { text: ctx.L(t) }))),
-        el('p', { class: 'worked-answer' }, [el('strong', { text: 'Answer: ' }), ctx.L(l.example.answer)]),
-      ]),
+      ...[l.example, ...(l.more || [])].map((ex, i, all) => el('section', { class: 'worked', 'aria-labelledby': `worked-h${i}` }, [
+        el('h3', { id: `worked-h${i}`, text: all.length > 1 ? `Worked example ${i + 1}` : 'Worked example' }),
+        el('p', { class: 'worked-problem', text: ctx.L(ex.problem) }),
+        el('ol', { class: 'worked-steps' }, ex.steps.map((t) => el('li', { text: ctx.L(t) }))),
+        el('p', { class: 'worked-answer' }, [el('strong', { text: 'Answer: ' }), ctx.L(ex.answer)]),
+      ])),
       el('p', { class: 'lesson-watch' }, [el('strong', { text: 'Watch out for: ' }), ctx.L(l.watch)]),
       place?.standards?.length ? el('p', { class: 'muted small', text: `Related standards: ${place.standards.map((s) => `${s.code}${s.fit === 'partial' ? ' (part)' : ''}`).join(', ')}.` }) : null,
       el('div', { class: 'cta-row left' }, [

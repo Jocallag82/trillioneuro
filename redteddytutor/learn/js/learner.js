@@ -258,6 +258,21 @@ export function plan(state, now = Date.now(), limit = 4) {
       : after.length ? `Ready to start. It builds on ${after.join(' and ')}.` : 'A good place to start.');
   });
 
+  // A quick check that found gaps below every nearby skill can leave nothing ready
+  // here. Then step back: first the missing foundation of anything already tried,
+  // then the earliest ready skills in the subject, so the plan is never a dead end.
+  if (out.length < 2) {
+    near.filter((id) => reports[id].state !== 'not-started' && !isReady(reports, id))
+      .sort((a, b) => OBJECTIVES[a].order - OBJECTIVES[b].order)
+      .forEach((id) => { const f = foundation(id); if (f !== id) add(f, 'support', `Builds the foundation for ${mid(OBJECTIVES[id].label)}, which has been tricky so far.`); });
+  }
+  if (out.length < 2) {
+    Object.keys(OBJECTIVES).filter(inFocus).filter((id) => !isMet(reports[id]) && isReady(reports, id))
+      .sort((a, b) => OBJECTIVES[a].order - OBJECTIVES[b].order)
+      .slice(0, 2 - out.length + 1)
+      .forEach((id) => add(id, 'new', 'A foundation to build on first.'));
+  }
+
   if (out.length < limit) {
     const next = BANDS[bandIndex(band) + 2];
     if (next) {

@@ -13,6 +13,8 @@
 //   'partial' - practice covers part of what the standard asks (often the standard
 //               also expects explaining, modelling or wider contexts we do not test).
 // An objective with no `standards` has no official mapping. That is shown, not hidden.
+import { CORE_SPEC } from '../core-spec.js';
+
 export const FRAMEWORKS = {
   'CCSS-M': { name: 'Common Core State Standards for Mathematics', owner: 'NGA Center and CCSSO', version: '2010', url: 'https://www.thecorestandards.org/Math/' },
   'CCSS-ELA': { name: 'Common Core State Standards for English Language Arts & Literacy', owner: 'NGA Center and CCSSO', version: '2010', url: 'https://www.thecorestandards.org/ELA-Literacy/' },
@@ -32,7 +34,9 @@ export const COURSES = [
   { id: 'ela-k', title: 'Kindergarten Reading', subject: 'literacy', grades: ['PK', 'K'] },
   { id: 'ela-1-2', title: 'Grades 1–2 English Language Arts', subject: 'literacy', grades: ['1', '2'] },
   { id: 'ela-3-5', title: 'Grades 3–5 English Language Arts', subject: 'literacy', grades: ['3', '4', '5'] },
+  { id: 'science-k-1', title: 'Kindergarten–Grade 1 Science', subject: 'science', grades: ['K', '1'] },
   { id: 'science-elem', title: 'Elementary Science', subject: 'science', grades: ['2', '3', '4', '5'] },
+  { id: 'cs-elem', title: 'Computing & Digital Citizenship', subject: 'computing', grades: ['3', '4', '5'] },
   { id: 'social-elem', title: 'Elementary Social Studies', subject: 'social', grades: ['3', '4', '5'] },
   { id: 'thinking-early', title: 'Thinking Skills', subject: 'thinking', grades: ['PK', 'K', '1', '2', '3', '4', '5'] },
   // Middle school
@@ -43,6 +47,7 @@ export const COURSES = [
   { id: 'life-science-ms', title: 'Life Science', subject: 'science', grades: ['6', '7', '8'] },
   { id: 'physical-science-ms', title: 'Physical Science', subject: 'science', grades: ['6', '7', '8'] },
   { id: 'earth-science-ms', title: 'Earth & Space Science', subject: 'science', grades: ['6', '7', '8'] },
+  { id: 'world-geography', title: 'World Geography', subject: 'social', grades: ['6', '7'] },
   { id: 'civics-ms', title: 'Civics, US History & Economics', subject: 'social', grades: ['6', '7', '8'] },
   { id: 'cs-ms', title: 'Introduction to Programming', subject: 'computing', grades: ['6', '7', '8'] },
   // High school
@@ -58,21 +63,22 @@ export const COURSES = [
   { id: 'chemistry', title: 'Chemistry', subject: 'science', grades: ['10', '11'] },
   { id: 'physics', title: 'Physics', subject: 'science', grades: ['11', '12'] },
   { id: 'us-government', title: 'US Government', subject: 'social', grades: ['12'] },
-  { id: 'us-history-hs', title: 'US History', subject: 'social', grades: ['11'], status: 'planned' },
+  { id: 'us-history-hs', title: 'US History', subject: 'social', grades: ['8', '11'] },
   { id: 'world-history', title: 'World History', subject: 'social', grades: ['6', '9', '10'] },
   { id: 'economics', title: 'Economics & Personal Finance', subject: 'social', grades: ['11', '12'] },
   { id: 'cs-hs', title: 'Computer Science', subject: 'computing', grades: ['9', '10', '11', '12'] },
-  // Catalogued electives with no content yet
-  { id: 'world-languages', title: 'World Languages (Spanish)', subject: 'electives', grades: ['6', '7', '8', '9', '10', '11', '12'], status: 'planned' },
-  { id: 'art', title: 'Art & Design', subject: 'electives', grades: ['K', '1', '2', '3', '4', '5', '6', '7', '8'], status: 'planned' },
-  { id: 'music', title: 'Music', subject: 'electives', grades: ['K', '1', '2', '3', '4', '5', '6', '7', '8'], status: 'planned' },
-  { id: 'health', title: 'Health & Wellbeing', subject: 'electives', grades: ['3', '4', '5', '6', '7', '8'], status: 'planned' },
-  { id: 'study-skills', title: 'Study Skills', subject: 'electives', grades: ['6', '7', '8', '9', '10', '11', '12'], status: 'planned' },
+  { id: 'web-dev', title: 'Web Development', subject: 'computing', grades: ['9', '10', '11', '12'] },
+  // Enrichment: outside the core academic denominator. Each has one starter skill.
+  { id: 'world-languages', title: 'World Languages (Spanish)', subject: 'enrichment', grades: ['6', '7', '8', '9', '10', '11', '12'] },
+  { id: 'art', title: 'Art & Design', subject: 'enrichment', grades: ['K', '1', '2', '3', '4', '5', '6', '7', '8'] },
+  { id: 'music', title: 'Music', subject: 'enrichment', grades: ['K', '1', '2', '3', '4', '5', '6', '7', '8'] },
+  { id: 'health', title: 'Health & Wellbeing', subject: 'enrichment', grades: ['3', '4', '5', '6', '7', '8'] },
+  { id: 'study-skills', title: 'Study Skills', subject: 'enrichment', grades: ['6', '7', '8', '9', '10', '11', '12'] },
 ];
 
 export const SUBJECT_NAMES = {
   maths: 'Math', literacy: 'English Language Arts', science: 'Science', social: 'Social Studies',
-  computing: 'Computer Science', thinking: 'Thinking Skills', electives: 'Electives',
+  computing: 'Computer Science', thinking: 'Thinking Skills', enrichment: 'Enrichment',
 };
 
 const S = (framework, code, fit = 'aligned') => ({ framework, code, fit });
@@ -105,7 +111,7 @@ export const PLACEMENT = {
   'word-problems': { grades: ['2', '3'], course: 'math-3', also: ['math-2'], standards: [S('CCSS-M', '2.OA.A.1'), S('CCSS-M', '3.OA.D.8', 'partial')] },
   'area-perimeter': { grades: ['3', '4'], course: 'math-4', also: ['math-3'], standards: [S('CCSS-M', '3.MD.C.7', 'partial'), S('CCSS-M', '3.MD.D.8', 'partial'), S('CCSS-M', '4.MD.A.3')] },
   'fractions-compare': { grades: ['3', '4'], course: 'math-4', also: ['math-3'], standards: [S('CCSS-M', '3.NF.A.2', 'partial'), S('CCSS-M', '3.NF.A.3.D'), S('CCSS-M', '4.NF.A.2', 'partial')] },
-  'number-patterns': { grades: ['4'], course: 'math-4', standards: [S('CCSS-M', '4.OA.C.5', 'partial')] },
+  'number-patterns': { grades: ['4'], course: 'thinking-early', standards: [S('CCSS-M', '4.OA.C.5', 'partial')] },
   'decimals': { grades: ['4', '5'], course: 'math-5', also: ['math-4'], standards: [S('CCSS-M', '4.NF.C.6'), S('CCSS-M', '4.NF.C.7')] },
   'ratios-rates': { grades: ['6'], course: 'math-6', standards: [S('CCSS-M', '6.RP.A.3.B')] },
   'mean-median': { grades: ['6'], course: 'math-6', standards: [S('CCSS-M', '6.SP.B.5.C', 'partial')] },
@@ -201,5 +207,10 @@ export const PLACEMENT = {
   'binary': { grades: ['7', '9'], course: 'cs-ms', also: ['cs-hs'], standards: [], note: 'Computer science standards (such as CSTA) are not mapped yet.' },
   'boolean-logic': { grades: ['8', '10'], course: 'cs-ms', also: ['cs-hs'], standards: [], note: 'Computer science standards (such as CSTA) are not mapped yet.' },
 };
+
+// National core build-out (October 2026): placements come from core-spec.js.
+for (const [id, r] of Object.entries(CORE_SPEC)) {
+  PLACEMENT[id] = { grades: r.grades, course: r.course, ...(r.also ? { also: r.also } : {}), standards: r.standards, ...(r.note ? { note: r.note } : {}) };
+}
 
 export const US_CATALOGUE = { country: 'US', label: 'United States', frameworks: FRAMEWORKS, courses: COURSES, placement: PLACEMENT, subjectNames: SUBJECT_NAMES };

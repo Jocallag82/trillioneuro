@@ -489,12 +489,47 @@ await check('curriculum and privacy pages render the computed coverage and hones
   const { page, errors, ctx } = await open('/curriculum.html', { viewport: { width: 375, height: 800 } });
   await page.waitForFunction(() => /skills today/.test(document.getElementById('cur-totals')?.textContent || ''));
   const totals = await page.locator('#cur-totals').textContent();
-  assert.match(totals, /^111 skills today/);
+  const { OBJECTIVES } = await import(pathToFileURL(join(ROOT, 'learn/js/curriculum/framework.js')).href);
+  assert.match(totals, new RegExp(`^${Object.keys(OBJECTIVES).length} skills today`));
+  // The standards table shows exactly what the coverage module computes.
+  const { standardsCoverage } = await import(pathToFileURL(join(ROOT, 'learn/js/curriculum/standards/coverage.js')).href);
+  const { US_CATALOGUE } = await import(pathToFileURL(join(ROOT, 'learn/js/curriculum/catalogues/us.js')).href);
+  const { QUALITY } = await import(pathToFileURL(join(ROOT, 'learn/js/curriculum/quality.js')).href);
+  const c = standardsCoverage(US_CATALOGUE, QUALITY.pass).overall;
+  const all = (await page.locator('#cur-std tbody tr').last().innerText()).split(/\t/).map((x) => x.trim());
+  assert.deepEqual(all.slice(0, 7), ['All', String(c.total), `${c.mapped} (${c.pct.mapped}%)`, `${c.taught} (${c.pct.taught}%)`, `${c.assessed} (${c.pct.assessed}%)`, `${c.full} (${c.pct.full}%)`, '0 (0%)']);
+  assert.match(await page.locator('#cur-qa').textContent(), new RegExp(`^${QUALITY.passing} of ${QUALITY.skills} published skills`));
+  assert.equal(await page.locator('#states-verified').textContent(), '0');
+  assert.equal(await page.locator('#cur-states tbody tr').count(), 6);
+  assert.ok(await page.locator('#cur-limits li').count() >= 5);
+  await shot(page, 'curriculum-mobile');
   await noHScroll(page);
   await page.goto(`${BASE}/privacy.html`);
   const text = await page.locator('main').textContent();
   assert.match(text, /COPPA/);
   assert.doesNotMatch(text, /fully compliant|guarantee/i);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+await check('every new core skill: lesson opens with two worked examples, and practice starts with a real question', async () => {
+  const { CORE_SPEC } = await import(pathToFileURL(join(ROOT, 'learn/js/curriculum/core-spec.js')).href);
+  const { page, errors, ctx } = await open('/learn/', { storage: { v: 1, settings: { band: '9-11', audio: false, volume: 1, showAll: false, onboarded: true, focus: 'all', placement: {}, assumed: [] }, steps: [], sessions: [] } });
+  const ids = Object.keys(CORE_SPEC);
+  for (const [i, id] of ids.entries()) {
+    await page.goto(`${BASE}/learn/?lesson=${id}`);
+    await page.waitForSelector('#lesson-title');
+    assert.equal(await page.locator('.lesson .worked').count(), 2, `${id}: worked examples`);
+    if (i % 4 === 0) {
+      await page.getByRole('button', { name: 'Start practice' }).click();
+      await page.waitForSelector('.prompt');
+      assert.ok((await page.locator('.prompt').first().textContent()).trim().length > 3, `${id}: empty prompt`);
+      assert.ok(await page.locator('.option, #answer').count() > 0, `${id}: no way to answer`);
+    }
+  }
+  await page.goto(`${BASE}/learn/?lesson=distance-midpoint`);
+  await page.waitForSelector('#lesson-title');
+  await shot(page, 'lesson-two-examples');
   assert.deepEqual(errors, []);
   await ctx.close();
 });

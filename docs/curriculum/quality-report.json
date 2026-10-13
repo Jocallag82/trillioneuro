@@ -1,0 +1,1156 @@
+{
+  "generatedAt": "2026-10-13",
+  "skills": 205,
+  "passing": 205,
+  "failing": 0,
+  "withWarnings": 112,
+  "checks": [
+    "ids",
+    "prereqs",
+    "placement",
+    "lesson",
+    "practice",
+    "keys",
+    "variety",
+    "duplicates",
+    "reachable",
+    "standards"
+  ],
+  "educatorReviewed": 0,
+  "standards": {
+    "overall": {
+      "total": 810,
+      "mapped": 236,
+      "taught": 219,
+      "assessed": 236,
+      "full": 48,
+      "partial": 188,
+      "unsupported": 574,
+      "reviewed": 0,
+      "stateVerified": 0,
+      "pct": {
+        "mapped": 29.1,
+        "taught": 27,
+        "assessed": 29.1,
+        "full": 5.9,
+        "reviewed": 0
+      }
+    },
+    "byFramework": {
+      "CCSS-M": {
+        "total": 229,
+        "mapped": 119,
+        "taught": 106,
+        "assessed": 119,
+        "full": 39,
+        "partial": 80,
+        "unsupported": 110,
+        "reviewed": 0,
+        "stateVerified": 0,
+        "pct": {
+          "mapped": 52,
+          "taught": 46.3,
+          "assessed": 52,
+          "full": 17,
+          "reviewed": 0
+        }
+      },
+      "CCSS-ELA": {
+        "total": 373,
+        "mapped": 44,
+        "taught": 40,
+        "assessed": 44,
+        "full": 9,
+        "partial": 35,
+        "unsupported": 329,
+        "reviewed": 0,
+        "stateVerified": 0,
+        "pct": {
+          "mapped": 11.8,
+          "taught": 10.7,
+          "assessed": 11.8,
+          "full": 2.4,
+          "reviewed": 0
+        }
+      },
+      "NGSS": {
+        "total": 208,
+        "mapped": 73,
+        "taught": 73,
+        "assessed": 73,
+        "full": 0,
+        "partial": 73,
+        "unsupported": 135,
+        "reviewed": 0,
+        "stateVerified": 0,
+        "pct": {
+          "mapped": 35.1,
+          "taught": 35.1,
+          "assessed": 35.1,
+          "full": 0,
+          "reviewed": 0
+        }
+      }
+    }
+  },
+  "results": {
+    "count-to-5": {
+      "errors": [],
+      "warnings": [
+        "placement: grade K (ages 5-7) is outside the skill's bands 2-3, 3-5",
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "count-to-10": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "number-names": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "subitise": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "compare-numbers": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "number-line-20": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "place-value-100": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "place-value-1000": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "bonds-to-10": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "add-within-20": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "subtract-within-20": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "add-2digit": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "subtract-2digit": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "times-2-5-10": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "times-tables": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only",
+        "duplicates: 17 question(s) also asked under times-2-5-10, e.g. \"2 × 8 = ?\""
+      ]
+    },
+    "division-facts": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "unit-fractions": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "fractions-compare": {
+      "errors": [],
+      "warnings": [
+        "placement: grade 3 (ages 7-9) is outside the skill's bands 9-11",
+        "lesson: one worked example only"
+      ]
+    },
+    "shapes": {
+      "errors": [],
+      "warnings": [
+        "placement: grade K (ages 5-7) is outside the skill's bands 2-3, 3-5",
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "shape-words": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "measure-length": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "letters": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "letter-sounds": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "rhyme": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "build-words": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "vocabulary": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "build-sentences": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "word-parts": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "colours": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "sorting": {
+      "errors": [],
+      "warnings": [
+        "placement: grade K (ages 5-7) is outside the skill's bands 2-3, 3-5",
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "observation": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "patterns": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "sequencing": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "memory": {
+      "errors": [],
+      "warnings": [
+        "lesson: no lesson: the app shows the goal and hints only"
+      ]
+    },
+    "number-patterns": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "logic-puzzles": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "tell-time": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "bar-charts": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "word-problems": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "area-perimeter": {
+      "errors": [],
+      "warnings": [
+        "placement: grade 3 (ages 7-9) is outside the skill's bands 9-11",
+        "lesson: one worked example only"
+      ]
+    },
+    "decimals": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "spelling": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "comprehension": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "integers": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only",
+        "duplicates: 3 question(s) also asked under add-within-20, e.g. \"6 + 9 = ?\"",
+        "duplicates: 1 question(s) also asked under times-2-5-10, e.g. \"10 × 4 = ?\"",
+        "duplicates: 2 question(s) also asked under subtract-within-20, e.g. \"9 − 8 = ?\"",
+        "duplicates: 10 question(s) also asked under times-tables, e.g. \"2 × 12 = ?\""
+      ]
+    },
+    "ratios-rates": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "mean-median": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "percent": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "exponents": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "probability": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "equations-two-step": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "pythagorean": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "slope": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "multi-step-equations": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "function-notation": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "systems": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "quadratics": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "trig-ratios": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "logarithms": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "derivatives": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "grammar-usage": {
+      "errors": [],
+      "warnings": [
+        "placement: grade 3 (ages 7-9) is outside the skill's bands 9-11, 11-14",
+        "lesson: one worked example only"
+      ]
+    },
+    "figurative-language": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "context-clues": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "argument-evidence": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "literary-analysis": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "states-of-matter": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "food-chains": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "cells": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "earth-moon-sun": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "photosynthesis": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "density": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "forces-motion": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "conservation-of-mass": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "genetics": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "states-capitals": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "branches-of-government": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "us-history-timeline": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "bill-of-rights": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "supply-demand": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "simple-interest": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "code-tracing": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "multiply-multidigit": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only",
+        "duplicates: 1 question(s) also asked under times-tables, e.g. \"12 × 6 = ?\""
+      ]
+    },
+    "long-division": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only",
+        "duplicates: 6 question(s) also asked under division-facts, e.g. \"88 ÷ 8 = ?\""
+      ]
+    },
+    "fraction-add-subtract": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "multiply-fractions": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "volume": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "order-of-operations": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "divide-fractions": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "one-step-equations": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only",
+        "duplicates: 6 question(s) also asked under equations-two-step, e.g. \"Solve for x: 7x = 63\""
+      ]
+    },
+    "area-triangles": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "circles": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "scientific-notation": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "linear-functions": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "volume-solids": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "exponential-functions": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "polynomials": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "sequences": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "data-spread": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "unit-circle": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "main-idea": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "text-structure": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "punctuation": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "rhetoric": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "water-cycle-weather": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "plate-tectonics": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "energy": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "atoms": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "map-skills": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "world-history": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "budgeting": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "binary": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "boolean-logic": {
+      "errors": [],
+      "warnings": [
+        "lesson: one worked example only"
+      ]
+    },
+    "add-within-10": {
+      "errors": [],
+      "warnings": []
+    },
+    "count-to-120": {
+      "errors": [],
+      "warnings": []
+    },
+    "missing-addend": {
+      "errors": [],
+      "warnings": []
+    },
+    "compare-lengths": {
+      "errors": [],
+      "warnings": []
+    },
+    "skip-counting": {
+      "errors": [],
+      "warnings": []
+    },
+    "even-odd": {
+      "errors": [],
+      "warnings": []
+    },
+    "count-money": {
+      "errors": [],
+      "warnings": []
+    },
+    "rounding": {
+      "errors": [],
+      "warnings": []
+    },
+    "add-subtract-1000": {
+      "errors": [],
+      "warnings": []
+    },
+    "multiply-by-tens": {
+      "errors": [],
+      "warnings": []
+    },
+    "elapsed-time": {
+      "errors": [],
+      "warnings": []
+    },
+    "mass-and-volume": {
+      "errors": [],
+      "warnings": []
+    },
+    "factors-multiples": {
+      "errors": [],
+      "warnings": []
+    },
+    "place-value-millions": {
+      "errors": [],
+      "warnings": []
+    },
+    "equivalent-fractions": {
+      "errors": [],
+      "warnings": []
+    },
+    "unit-conversion": {
+      "errors": [],
+      "warnings": []
+    },
+    "angles": {
+      "errors": [],
+      "warnings": []
+    },
+    "decimal-operations": {
+      "errors": [],
+      "warnings": []
+    },
+    "powers-of-ten": {
+      "errors": [],
+      "warnings": [
+        "duplicates: 1 question(s) also asked under times-2-5-10, e.g. \"10 × 10 = ?\""
+      ]
+    },
+    "coordinate-plane": {
+      "errors": [],
+      "warnings": []
+    },
+    "absolute-value": {
+      "errors": [],
+      "warnings": []
+    },
+    "gcf-lcm": {
+      "errors": [],
+      "warnings": []
+    },
+    "multi-digit-division": {
+      "errors": [],
+      "warnings": []
+    },
+    "surface-area": {
+      "errors": [],
+      "warnings": []
+    },
+    "unit-rate-fractions": {
+      "errors": [],
+      "warnings": []
+    },
+    "proportional-relationships": {
+      "errors": [],
+      "warnings": []
+    },
+    "scale-drawings": {
+      "errors": [],
+      "warnings": []
+    },
+    "sampling": {
+      "errors": [],
+      "warnings": []
+    },
+    "expressions": {
+      "errors": [],
+      "warnings": []
+    },
+    "compound-probability": {
+      "errors": [],
+      "warnings": []
+    },
+    "inequalities": {
+      "errors": [],
+      "warnings": []
+    },
+    "angle-relationships": {
+      "errors": [],
+      "warnings": []
+    },
+    "square-roots": {
+      "errors": [],
+      "warnings": []
+    },
+    "transformations": {
+      "errors": [],
+      "warnings": []
+    },
+    "two-way-tables": {
+      "errors": [],
+      "warnings": []
+    },
+    "distance-midpoint": {
+      "errors": [],
+      "warnings": []
+    },
+    "digraphs": {
+      "errors": [],
+      "warnings": []
+    },
+    "vowel-patterns": {
+      "errors": [],
+      "warnings": []
+    },
+    "syllables": {
+      "errors": [],
+      "warnings": []
+    },
+    "parts-of-speech": {
+      "errors": [],
+      "warnings": []
+    },
+    "verb-tenses": {
+      "errors": [],
+      "warnings": []
+    },
+    "sentence-structure": {
+      "errors": [],
+      "warnings": []
+    },
+    "theme": {
+      "errors": [],
+      "warnings": []
+    },
+    "authors-purpose": {
+      "errors": [],
+      "warnings": []
+    },
+    "research-sources": {
+      "errors": [],
+      "warnings": []
+    },
+    "writing-revision": {
+      "errors": [],
+      "warnings": []
+    },
+    "push-pull": {
+      "errors": [],
+      "warnings": []
+    },
+    "living-needs": {
+      "errors": [],
+      "warnings": []
+    },
+    "weather-climate": {
+      "errors": [],
+      "warnings": []
+    },
+    "light-sound": {
+      "errors": [],
+      "warnings": []
+    },
+    "scientific-method": {
+      "errors": [],
+      "warnings": []
+    },
+    "engineering-design": {
+      "errors": [],
+      "warnings": []
+    },
+    "inherited-traits": {
+      "errors": [],
+      "warnings": []
+    },
+    "erosion-landforms": {
+      "errors": [],
+      "warnings": []
+    },
+    "electricity-magnetism": {
+      "errors": [],
+      "warnings": []
+    },
+    "solar-system": {
+      "errors": [],
+      "warnings": []
+    },
+    "body-systems": {
+      "errors": [],
+      "warnings": []
+    },
+    "ecology": {
+      "errors": [],
+      "warnings": []
+    },
+    "human-impact": {
+      "errors": [],
+      "warnings": []
+    },
+    "natural-selection": {
+      "errors": [],
+      "warnings": []
+    },
+    "waves": {
+      "errors": [],
+      "warnings": []
+    },
+    "chemical-reactions": {
+      "errors": [],
+      "warnings": []
+    },
+    "state-local-government": {
+      "errors": [],
+      "warnings": []
+    },
+    "economics-basics": {
+      "errors": [],
+      "warnings": []
+    },
+    "colonial-revolution": {
+      "errors": [],
+      "warnings": []
+    },
+    "world-geography": {
+      "errors": [],
+      "warnings": []
+    },
+    "primary-sources": {
+      "errors": [],
+      "warnings": []
+    },
+    "civil-war-reconstruction": {
+      "errors": [],
+      "warnings": []
+    },
+    "credit-interest": {
+      "errors": [],
+      "warnings": []
+    },
+    "algorithms": {
+      "errors": [],
+      "warnings": []
+    },
+    "digital-citizenship": {
+      "errors": [],
+      "warnings": []
+    },
+    "loops": {
+      "errors": [],
+      "warnings": []
+    },
+    "cybersecurity": {
+      "errors": [],
+      "warnings": []
+    },
+    "data-representation": {
+      "errors": [],
+      "warnings": []
+    },
+    "ai-literacy": {
+      "errors": [],
+      "warnings": []
+    },
+    "networks": {
+      "errors": [],
+      "warnings": []
+    },
+    "search-sort": {
+      "errors": [],
+      "warnings": []
+    },
+    "web-basics": {
+      "errors": [],
+      "warnings": []
+    },
+    "similarity": {
+      "errors": [],
+      "warnings": []
+    },
+    "circle-geometry": {
+      "errors": [],
+      "warnings": []
+    },
+    "normal-distribution": {
+      "errors": [],
+      "warnings": []
+    },
+    "integrals": {
+      "errors": [],
+      "warnings": []
+    },
+    "momentum": {
+      "errors": [],
+      "warnings": []
+    },
+    "nuclear-processes": {
+      "errors": [],
+      "warnings": []
+    },
+    "word-roots": {
+      "errors": [],
+      "warnings": []
+    },
+    "evidence-analysis": {
+      "errors": [],
+      "warnings": []
+    },
+    "citation-research": {
+      "errors": [],
+      "warnings": []
+    },
+    "algorithm-efficiency": {
+      "errors": [],
+      "warnings": []
+    },
+    "data-structures": {
+      "errors": [],
+      "warnings": []
+    },
+    "art-color": {
+      "errors": [],
+      "warnings": []
+    },
+    "music-rhythm": {
+      "errors": [],
+      "warnings": []
+    },
+    "health-wellness": {
+      "errors": [],
+      "warnings": []
+    },
+    "study-skills": {
+      "errors": [],
+      "warnings": []
+    },
+    "spanish-basics": {
+      "errors": [],
+      "warnings": []
+    }
+  }
+}

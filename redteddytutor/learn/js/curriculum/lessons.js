@@ -7,6 +7,8 @@
 // where one exists. Objectives without an entry show their goal and hints instead,
 // and the coverage report counts them as having no lesson.
 const L = (intro, ideas, problem, steps, answer, watch) => ({ intro, ideas, example: { problem, steps, answer }, watch });
+import { CORE_LESSONS } from './lessons-core.js';
+
 
 export const LESSONS = {
 
@@ -289,6 +291,8 @@ export const LESSONS = {
   'code-tracing': L('Tracing code means running it in your head, one line at a time.',
     ['Keep a table of each variable and update it after every line.', 'range(n) counts 0, 1, …, n − 1. range(a, b) stops before b.', 'A while loop repeats until its condition becomes false.'],
     'total = 0, then for i in range(3): total = total + 2, then print(total)', ['The loop runs 3 times (i = 0, 1, 2).', 'total: 0 → 2 → 4 → 6.'], '6', 'Running a loop one time too many or too few.'),
+  // National core build-out, October 2026.
+  ...CORE_LESSONS,
 };
 
 // Ready-made questions the learner can send to Ask Red Teddy from a lesson.
