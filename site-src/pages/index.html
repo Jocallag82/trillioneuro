@@ -1,0 +1,114 @@
+<!--meta {"out":"index.html","path":"/","title":"BEAT ELON. — TrillionEuro.com","ogTitle":"BEAT ELON. One impossible ambition. A place in the story.","description":"One founder is documenting an attempt to build a €1 trillion personal fortune — in public. Join the Founders’ Record: a numbered, permanent entry in the story.","nav":"home","scripts":["world","home"],"jsonld":{"@context":"https://schema.org","@type":"WebSite","name":"TrillionEuro.com","url":"https://www.trillioneuro.com/"}} -->
+<section class="hero first">
+  <div class="wrap">
+    <p class="kicker">The challenge · TrillionEuro.com</p>
+    <h1>BEAT<br>ELON<span class="dot">.</span></h1>
+    <p class="tag">One impossible ambition. A place in the story.</p>
+    <p class="lede">A founder is documenting, in public, an attempt to build a <strong>€1&nbsp;trillion personal fortune</strong> and overtake the world’s richest person. Every step, setback and verified number goes on the record — alongside a permanent archive of the people who joined the challenge.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold" href="/join">Join the Founders’ Record <span aria-hidden="true">→</span></a>
+      <a class="btn btn-line" href="/record">Explore the Record</a>
+    </div>
+    <p class="disclose">This is the founder’s personal, commercial ambition. An entry is a digital product — a numbered public entry and certificate — not an investment, share, donation or claim on any future wealth. Success is not guaranteed. Not affiliated with or endorsed by Elon Musk.</p>
+
+    <div class="distance" aria-labelledby="dist-h">
+      <p class="kicker" id="dist-h">The distance</p>
+      <div class="distance-bar" role="img" id="dist-bar" aria-label="Progress toward €1 trillion: no verified figure published yet"><i id="dist-fill"></i></div>
+      <div class="distance-ends"><span>€0</span><span id="dist-now" class="muted">Verified net worth: not yet published</span><span>€1,000,000,000,000</span></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="status-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">Live challenge status</p><h2 id="status-h">The numbers, as they stand.</h2></div>
+      <p class="muted small" style="max-width:40ch">Counted from verified, paid entries in the database. Nothing here is estimated or seeded.</p>
+    </div>
+    <div class="stats" id="stats" aria-live="polite">
+      <div class="stat"><div class="v num" data-k="entries"><span class="skeleton" style="display:inline-block;width:60px;height:40px"></span></div><div class="l">Verified entries</div></div>
+      <div class="stat"><div class="v num" data-k="countries"><span class="skeleton" style="display:inline-block;width:40px;height:40px"></span></div><div class="l">Countries represented</div></div>
+      <div class="stat"><div class="v" data-k="started"><span class="skeleton" style="display:inline-block;width:110px;height:40px"></span></div><div class="l">Challenge began</div></div>
+      <div class="stat"><div class="v" data-k="networth"><span class="skeleton" style="display:inline-block;width:110px;height:40px"></span></div><div class="l">Verified founder net worth</div><div class="s" data-k="networth-src"></div></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="rec-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">The Founders’ Record</p><h2 id="rec-h">Names that were here first.</h2></div>
+      <a class="btn btn-line btn-sm" href="/record">Open the full archive →</a>
+    </div>
+    <form class="toolbar" action="/record" method="get" role="search">
+      <div class="q"><label class="sr-only" for="hq">Search by number or nickname</label><input id="hq" name="q" type="search" placeholder="Search by number or nickname" autocomplete="off"></div>
+      <div><label class="sr-only" for="hc">Country</label><select id="hc" name="country"><option value="">All countries</option></select></div>
+      <div><label class="sr-only" for="hs">Sort</label><select id="hs" name="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div>
+    </form>
+    <div class="ledger" id="preview" aria-live="polite"></div>
+  </div>
+</section>
+
+<section aria-labelledby="world-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">Global participation</p><h2 id="world-h">Where the record is being written.</h2></div>
+      <a class="btn btn-line btn-sm" href="/countries">All country rankings →</a>
+    </div>
+    <div class="split">
+      <div>
+        <div class="world" id="world" role="group" aria-label="World map of verified entries by country. Each linked point opens that country."></div>
+        <p class="small muted" style="margin-top:12px">Each point is a country. Gold points have at least one verified entry; size follows the count. Country totals reflect individual participants only — never national endorsement.</p>
+      </div>
+      <div>
+        <h3 style="margin-bottom:16px">Leading countries</h3>
+        <ol class="list-x" id="top-countries" style="list-style:none"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="journey-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">The journey</p><h2 id="journey-h">Launches, setbacks, verified milestones.</h2></div>
+      <a class="btn btn-line btn-sm" href="/journal">Read the journal →</a>
+    </div>
+    <div class="split">
+      <ul class="timeline" id="timeline"></ul>
+      <div id="latest-posts"></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="join-h">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="kicker">Your entry</p>
+        <h2 id="join-h">Put your name in the story.</h2>
+        <p class="lede" style="margin-top:20px">Pick a nickname, choose your country, leave a message to the future. You get a permanent, numbered entry in the Founders’ Record and a certificate to keep and share.</p>
+        <div class="hero-ctas"><a class="btn btn-gold" href="/join">Create your entry →</a></div>
+        <div class="share-row" id="share-site"></div>
+      </div>
+      <div class="price-box">
+        <p class="kicker">Exactly what it is</p>
+        <p class="amount num" id="price">—</p>
+        <p class="small muted" id="price-terms">One-off payment in euro, including any applicable VAT. No subscription, no recurring charge.</p>
+        <ul class="list-x">
+          <li>A unique, sequential entry number — assigned only after payment is verified</li>
+          <li>Your nickname, country and message on a public page</li>
+          <li>A downloadable, printable certificate with a QR link</li>
+          <li>Your real name only if you separately choose to show it</li>
+        </ul>
+        <p class="small" style="margin:18px 0 8px;color:var(--ivory)">What you are not buying</p>
+        <ul class="list-x no">
+          <li>Equity, shares, ownership or any financial return</li>
+          <li>A share of the founder’s fortune, or a promise the challenge succeeds</li>
+          <li>A charitable donation (it is not tax-deductible)</li>
+        </ul>
+        <p class="small muted" style="margin-top:14px"><a href="/terms">Terms</a> · <a href="/refunds">Refunds</a> · <a href="/privacy">Privacy</a></p>
+      </div>
+    </div>
+  </div>
+</section>

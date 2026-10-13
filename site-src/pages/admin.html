@@ -1,0 +1,26 @@
+<!--meta {"out":"admin.html","path":"/admin","title":"Founder dashboard","description":"Administration.","nav":"","noindex":true,"scripts":["vendor/supabase/supabase","admin"]} -->
+<div class="wrap" style="padding:40px var(--gutter) 96px">
+  <p class="kicker">Founder dashboard</p>
+  <div id="login" hidden>
+    <h1 style="font-size:48px;margin:12px 0 20px">Sign in.</h1>
+    <form id="lf" class="card" style="max-width:460px" novalidate>
+      <div class="field"><label for="le">Email</label><input id="le" type="email" autocomplete="username" required></div>
+      <div class="field"><label for="lp">Password <span class="muted">(or leave blank for a magic link)</span></label><input id="lp" type="password" autocomplete="current-password"></div>
+      <div class="err" id="lerr" role="alert"></div>
+      <button class="btn btn-gold" type="submit">Sign in</button>
+    </form>
+    <p class="small muted" style="margin-top:16px">Access is checked on the server for every action. Signing in grants nothing unless your account is listed as an administrator.</p>
+  </div>
+  <div id="denied" hidden><h1 style="font-size:48px;margin:12px 0 20px">No access.</h1><p class="lede">This account is not an administrator.</p><button class="btn btn-line" id="so2" type="button">Sign out</button></div>
+  <div id="app" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="font-size:40px;margin:12px 0">Dashboard</h1><span class="small muted"><span id="who"></span> · <button class="btn btn-line btn-sm" id="so" type="button">Sign out</button></span></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-t="overview" aria-selected="true">Overview</button><button role="tab" data-t="entries">Entries</button>
+      <button role="tab" data-t="queue">Reports &amp; requests</button><button role="tab" data-t="journal">Journal</button>
+      <button role="tab" data-t="milestones">Milestones</button><button role="tab" data-t="metrics">Financial metrics</button>
+      <button role="tab" data-t="settings">Settings &amp; payments</button><button role="tab" data-t="countries">Countries</button>
+      <button role="tab" data-t="audit">Audit &amp; export</button>
+    </div>
+    <div id="panel" role="tabpanel" aria-live="polite"></div>
+  </div>
+</div>

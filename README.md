@@ -98,6 +98,23 @@ platform in development. Same stack and rules as the other two sites: plain HTML
 - **Hero**: `#flow` is a canvas flow field (no video file, ~2 KB of JS) — pauses off-screen,
   one still frame under reduced motion.
 
+
+## Beat Elon — the Founders' Record (trillioneuro.com)
+
+Paid, numbered public archive + challenge journal. Plain HTML/CSS/JS like the rest of the repo.
+
+- **Pages**: authored in `site-src/pages/*.html`, wrapped by `node site-src/build.mjs` into the root
+  `*.html` files (committed; still no build step on Vercel). Shared assets in `assets/te/`.
+- **Server**: `api/te-checkout.mjs` (Stripe Checkout), `api/te-stripe-webhook.mjs` (signature-verified,
+  idempotent finalisation), `api/te-render.mjs` (server-side meta for `/record/:n`, `/countries/:cc`,
+  `/journal/:slug`), `api/te-sitemap.mjs`.
+- **Database**: `supabase/migrations/20261014_te_beat_elon.sql` + `20261014_te_countries_seed.sql`
+  (idempotent, `te_*` only). Entries are created only by `te_finalize_payment` (service role).
+- **Payments are off** until DB flag + operator details + env gate — see
+  `docs/compliance/trillioneuro-launch.md`.
+- **Tests**: `sh scripts/te/run-db-tests.sh`, `sh scripts/te/concurrency.sh` (local Postgres),
+  `node --test scripts/te/api.test.mjs`, `node scripts/te/e2e.mjs` (Playwright, full lifecycle + axe).
+
 ## Routing (`vercel.json`)
 
 JSON has no comments and **Vercel rejects any unknown property in a route object**,

@@ -1,0 +1,19 @@
+<!--meta {"out":"contact.html","path":"/contact","title":"Contact","description":"Contact TrillionEuro.com about your entry, a payment, privacy or press.","nav":"","scripts":["forms"]} -->
+<div class="wrap narrow" style="padding:56px var(--gutter) 96px">
+  <p class="kicker">Contact &amp; support</p>
+  <h1 style="font-size:clamp(36px,6vw,64px);margin:16px 0 20px">Talk to a human.</h1>
+  <p class="lede">Questions about an entry, a payment or your data. General: <a href="mailto:hello@trillioneuro.com">hello@trillioneuro.com</a> · Privacy: <a href="mailto:privacy@trillioneuro.com">privacy@trillioneuro.com</a>.</p>
+  <p class="muted small" id="operator"></p>
+  <form id="contact" novalidate style="margin-top:32px">
+    <div class="grid2">
+      <div class="field"><label for="ct-name">Name <span class="muted">(optional)</span></label><input id="ct-name" type="text" maxlength="80" autocomplete="name"></div>
+      <div class="field"><label for="ct-email">Email</label><input id="ct-email" type="email" maxlength="254" required autocomplete="email"></div>
+    </div>
+    <div class="field"><label for="ct-topic">Topic</label><select id="ct-topic">
+      <option value="general">General</option><option value="support">My entry</option><option value="payment">A payment or refund</option>
+      <option value="privacy">Privacy</option><option value="press">Press</option></select></div>
+    <div class="field"><label for="ct-body">Message</label><textarea id="ct-body" maxlength="4000" required></textarea></div>
+    <div class="err" id="ct-err" role="alert"></div>
+    <button class="btn btn-gold" type="submit">Send message</button>
+  </form>
+</div>

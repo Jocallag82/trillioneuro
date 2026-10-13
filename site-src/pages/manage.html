@@ -1,0 +1,25 @@
+<!--meta {"out":"manage.html","path":"/manage","title":"Manage your entry","description":"Change what is public on your Founders’ Record entry, or request a correction or removal.","nav":"","noindex":true,"scripts":["manage"]} -->
+<div class="wrap narrow" style="padding:56px var(--gutter) 96px">
+  <p class="kicker">Your entry</p>
+  <h1 style="font-size:clamp(36px,6vw,64px);margin:16px 0 20px">Manage your entry.</h1>
+  <div id="manage" aria-live="polite">
+    <p class="lede">Open the private management link shown after your payment (it looks like <span class="num">trillioneuro.com/manage#k=…</span>). Lost it? Use the request form below with the email you paid with.</p>
+  </div>
+  <section style="padding:56px 0 0;margin-top:48px" aria-labelledby="req-h">
+    <h2 id="req-h" style="font-size:32px;margin-bottom:16px">Request a correction, removal or your data</h2>
+    <p class="muted">We verify requests against the email used to pay. We aim to respond within 30 days, as the GDPR requires.</p>
+    <form id="req" novalidate>
+      <div class="grid2">
+        <div class="field"><label for="r-email">Email used for the entry</label><input id="r-email" type="email" required maxlength="254" autocomplete="email"></div>
+        <div class="field"><label for="r-entry">Entry number <span class="muted">(if known)</span></label><input id="r-entry" type="number" min="1" inputmode="numeric"></div>
+      </div>
+      <div class="field"><label for="r-kind">Request</label><select id="r-kind" required>
+        <option value="correction">Correct something on my entry</option><option value="hide_name">Hide my real name</option>
+        <option value="hide_message">Hide my message</option><option value="removal">Remove my entry from the public record</option>
+        <option value="erasure">Erase my personal data</option><option value="access">Send me a copy of my data</option><option value="other">Something else</option></select></div>
+      <div class="field"><label for="r-details">Details</label><textarea id="r-details" maxlength="2000"></textarea></div>
+      <div class="err" id="r-err" role="alert"></div>
+      <button class="btn btn-gold" type="submit">Send request</button>
+    </form>
+  </section>
+</div>

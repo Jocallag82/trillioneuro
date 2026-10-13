@@ -1,0 +1,17 @@
+<!--meta {"out":"report.html","path":"/report","title":"Report content","description":"Report an entry in the Founders’ Record that is offensive, unlawful, impersonating someone or exposing personal data.","nav":"","scripts":["forms"]} -->
+<div class="wrap narrow" style="padding:56px var(--gutter) 96px">
+  <p class="kicker">Moderation</p>
+  <h1 style="font-size:clamp(36px,6vw,64px);margin:16px 0 20px">Report an entry.</h1>
+  <p class="lede">Every report is reviewed by a person. Content that breaks the <a href="/terms#content">content rules</a> is hidden or removed; clearly unlawful content is removed promptly once we know about it.</p>
+  <form id="report" novalidate style="margin-top:32px">
+    <div class="field"><label for="rp-entry">Entry number</label><input id="rp-entry" type="number" min="1" inputmode="numeric" required></div>
+    <div class="field"><label for="rp-reason">Reason</label><select id="rp-reason" required>
+      <option value="offensive">Offensive or abusive</option><option value="hate">Hate speech</option>
+      <option value="personal_data">Exposes someone’s personal data</option><option value="impersonation">Impersonates a real person</option>
+      <option value="spam">Spam or advertising</option><option value="illegal">Illegal content</option><option value="other">Other</option></select></div>
+    <div class="field"><label for="rp-details">What’s wrong? <span class="muted">(optional)</span></label><textarea id="rp-details" maxlength="1000"></textarea></div>
+    <div class="field"><label for="rp-email">Your email <span class="muted">(optional — only if you want a reply)</span></label><input id="rp-email" type="email" maxlength="254" autocomplete="email"></div>
+    <div class="err" id="rp-err" role="alert"></div>
+    <button class="btn btn-gold" type="submit">Send report</button>
+  </form>
+</div>

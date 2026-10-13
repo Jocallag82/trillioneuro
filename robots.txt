@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /manage
+Disallow: /join/success
+Disallow: /join/cancelled
+Disallow: /api/
 
-Sitemap: https://trillioneuro.com/sitemap.xml
+Sitemap: https://www.trillioneuro.com/sitemap.xml

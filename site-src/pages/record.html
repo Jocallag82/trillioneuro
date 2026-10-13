@@ -1,0 +1,19 @@
+<!--meta {"out":"record.html","path":"/record","title":"The Founders’ Record","description":"The permanent, numbered public archive of everyone who joined the Beat Elon challenge. Search by entry number or nickname, filter by country.","nav":"record","scripts":["record"]} -->
+<div class="page-head">
+  <div class="wrap">
+    <p class="kicker">The archive</p>
+    <h1>The Founders’ Record.</h1>
+    <p class="lede">Every verified entry, numbered in the order its payment was confirmed. Numbers are never reused or reassigned. Only nicknames, countries and messages are public — real names appear only where their owner chose to show them.</p>
+  </div>
+</div>
+<div class="wrap" style="padding-bottom:80px">
+  <form class="toolbar" id="filters" role="search" aria-label="Search the record">
+    <div class="q"><label class="sr-only" for="q">Search by number or nickname</label><input id="q" name="q" type="search" placeholder="Search Nº or nickname" autocomplete="off" maxlength="40"></div>
+    <div><label class="sr-only" for="country">Country</label><select id="country" name="country"><option value="">All countries</option></select></div>
+    <div><label class="sr-only" for="sort">Sort order</label><select id="sort" name="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div>
+  </form>
+  <p class="small muted" id="count" aria-live="polite"></p>
+  <div class="ledger" id="list" aria-busy="true"></div>
+  <nav class="pager" id="pager" aria-label="Pagination"></nav>
+  <p class="small muted" style="margin-top:48px">Something on the record that shouldn’t be? <a href="/report">Report it</a>. Is it yours? <a href="/manage">Manage your entry</a>.</p>
+</div>

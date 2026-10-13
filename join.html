@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join the Founders’ Record — TrillionEuro.com</title>
+<meta name="description" content="Create your numbered entry in the Founders’ Record: nickname, country, a message to the future, and a certificate to keep.">
+<link rel="canonical" href="https://www.trillioneuro.com/join">
+<meta name="theme-color" content="#0a0a0c">
+<meta property="og:site_name" content="TrillionEuro.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Join the Founders’ Record — TrillionEuro.com">
+<meta property="og:description" content="Create your numbered entry in the Founders’ Record: nickname, country, a message to the future, and a certificate to keep.">
+<meta property="og:url" content="https://www.trillioneuro.com/join">
+<meta property="og:image" content="https://www.trillioneuro.com/assets/te/og-beat-elon.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="BEAT ELON. One impossible ambition. A place in the story. — TrillionEuro.com">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/te/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/te/apple-touch-icon.png">
+<link rel="preload" href="/assets/te/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/te/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/te/te.css?v=20261014">
+
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</head>
+<body data-page="join">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="TrillionEuro.com — home"><span class="brand-mark">Trillion<b>€</b>uro</span><span class="brand-sub">Beat Elon</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="/record">The Record</a>
+      <a href="/countries">Countries</a>
+      <a href="/journal">Journal</a>
+      <a href="/challenge">The Challenge</a>
+      <a href="/faq">FAQ</a>
+      <a class="btn btn-gold btn-sm" href="/join">Join the Record</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<div class="wrap" style="padding:48px var(--gutter) 96px">
+  <div class="join-grid">
+    <div>
+      <ol class="steps" id="steps" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+      <p class="step-label" id="step-label" aria-live="polite">Step 1 of 7</p>
+      <form id="join" novalidate>
+        <!-- 1 -->
+        <fieldset class="step" data-step="1" style="border:0;padding:0;margin:0">
+          <legend class="sr-only">About the entry</legend>
+          <h2>Your place in the story.</h2>
+          <p class="lede">The founder is trying to build a €1 trillion personal fortune — in public. The Founders’ Record is the permanent archive of the people who joined the challenge.</p>
+          <ul class="list-x" style="margin:24px 0">
+            <li>A unique, sequential entry number, assigned only once your payment is verified</li>
+            <li>Your nickname, country and message on a public, shareable page</li>
+            <li>A certificate you can download, print and share</li>
+            <li>A personal referral link — recognition titles only, never cash</li>
+          </ul>
+          <div class="notice"><strong>Plainly:</strong> this is the founder’s personal and commercial ambition. Your entry fee is revenue for a digital product. It is not an investment, a donation, or a stake in anything, and the challenge may fail.</div>
+        </fieldset>
+        <!-- 2 -->
+        <fieldset class="step" data-step="2" hidden style="border:0;padding:0;margin:0">
+          <legend class="sr-only">Nickname</legend>
+          <h2>Choose your nickname.</h2>
+          <p class="muted">This is how you appear in the record. It doesn’t need to be your real name.</p>
+          <div class="field"><label for="nickname">Public nickname</label>
+            <input id="nickname" name="nickname" type="text" maxlength="32" autocomplete="nickname" required aria-describedby="nick-hint nick-err">
+            <div class="hint" id="nick-hint">2–32 characters. Letters from any language and emoji are fine. No impersonation of real people.</div>
+            <div class="counter" data-for="nickname"></div><div class="err" id="nick-err" role="alert"></div></div>
+        </fieldset>
+        <!-- 3 -->
+        <fieldset class="step" data-step="3" hidden style="border:0;padding:0;margin:0">
+          <legend class="sr-only">Real name (optional)</legend>
+          <h2>Your real name — only if you want it.</h2>
+          <p class="muted">Optional. Stored privately with your entry. It is <strong>never</strong> shown publicly unless you tick the box below — and you can change that later.</p>
+          <div class="field"><label for="real_name">Real name <span class="muted">(optional)</span></label>
+            <input id="real_name" name="real_name" type="text" maxlength="60" autocomplete="name" aria-describedby="real-err"><div class="err" id="real-err" role="alert"></div></div>
+          <label class="check"><input type="checkbox" id="show_real_name" name="show_real_name"> <span>Show my real name publicly on my entry and certificate. I understand this makes it visible to anyone and to search engines once approved.</span></label>
+        </fieldset>
+        <!-- 4 -->
+        <fieldset class="step" data-step="4" hidden style="border:0;padding:0;margin:0">
+          <legend class="sr-only">Country</legend>
+          <h2>Which country do you represent?</h2>
+          <p class="muted">Your choice — we never infer it from your location. It counts toward that country’s total on the leaderboard.</p>
+          <div class="field"><label for="country">Country</label>
+            <select id="country" name="country" required aria-describedby="country-err"><option value="">Choose a country…</option></select>
+            <div class="err" id="country-err" role="alert"></div></div>
+        </fieldset>
+        <!-- 5 -->
+        <fieldset class="step" data-step="5" hidden style="border:0;padding:0;margin:0">
+          <legend class="sr-only">Message</legend>
+          <h2>A message to the future.</h2>
+          <p class="muted">Optional, public, up to 280 characters. Messages are moderated: no hate, harassment, personal data about others, or ads.</p>
+          <div class="field"><label for="message">Your message <span class="muted">(optional)</span></label>
+            <textarea id="message" name="message" maxlength="280" aria-describedby="msg-err"></textarea>
+            <div class="counter" data-for="message"></div><div class="err" id="msg-err" role="alert"></div></div>
+        </fieldset>
+        <!-- 6 -->
+        <fieldset class="step" data-step="6" hidden style="border:0;padding:0;margin:0">
+          <legend class="sr-only">Preview</legend>
+          <h2>Preview your entry.</h2>
+          <p class="muted">This is how your entry and certificate will look. The number is assigned only after a verified payment.</p>
+          <div id="preview-card" class="ledger" style="grid-template-columns:1fr;margin:20px 0"></div>
+        </fieldset>
+        <!-- 7 -->
+        <fieldset class="step" data-step="7" hidden style="border:0;padding:0;margin:0">
+          <legend class="sr-only">Price and terms</legend>
+          <h2>Price, terms and privacy.</h2>
+          <div class="price-box" style="margin:20px 0">
+            <p class="kicker">Total, one-off</p>
+            <p class="amount num" id="price">—</p>
+            <p class="small muted">Includes any applicable VAT. Charged once by card through Stripe. No subscription.</p>
+          </div>
+          <div class="field"><label for="email">Email for your receipt and entry management</label>
+            <input id="email" name="email" type="email" maxlength="254" autocomplete="email" required aria-describedby="email-hint email-err">
+            <div class="hint" id="email-hint">Never public. Used for your receipt, entry management and privacy requests.</div><div class="err" id="email-err" role="alert"></div></div>
+          <div class="notice" style="margin-bottom:18px">
+            <strong>What becomes public:</strong> your entry number, nickname, country, message and entry date<span id="pub-real"></span>. <strong>Private:</strong> your email<span id="priv-real"></span> and payment details (held by Stripe; we never see card numbers).
+          </div>
+          <label class="check"><input type="checkbox" id="ack_invest" required> <span>I understand this is a digital product, <strong>not an investment</strong>, share, loan or donation. It gives me no right to any money, profit or part of the founder’s wealth, and the challenge may not succeed.</span></label>
+          <label class="check"><input type="checkbox" id="ack_terms" required> <span>I agree to the <a href="/terms" target="_blank">Terms</a> and have read the <a href="/privacy" target="_blank">Privacy notice</a> and <a href="/refunds" target="_blank">Refund policy</a>.</span></label>
+          <label class="check"><input type="checkbox" id="ack_supply" required> <span>I ask for my entry to be published immediately after payment and acknowledge that, once it is published, I lose the 14-day right of withdrawal for digital content. (The <a href="/refunds" target="_blank">refund policy</a> still applies.)</span></label>
+          <div class="err" id="ack-err" role="alert"></div>
+          <div id="pay-state"></div>
+        </fieldset>
+        <div class="step-nav">
+          <button type="button" class="btn btn-line" id="back" hidden>← Back</button>
+          <button type="submit" class="btn btn-gold" id="next" style="margin-left:auto">Begin →</button>
+        </div>
+      </form>
+      <div id="done" hidden></div>
+    </div>
+    <aside class="join-aside" aria-label="Live certificate preview">
+      <div id="live-cert"></div>
+      <p class="small muted" style="margin-top:14px">Live preview. Your details stay in this browser until you continue to step 7.</p>
+    </aside>
+  </div>
+</div>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="/"><span class="brand-mark">Trillion<b>€</b>uro</span></a>
+        <p style="margin-top:14px;max-width:38ch">One founder’s public attempt to build a €1 trillion personal fortune — and the permanent record of the people who joined the story.</p>
+      </div>
+      <div><h4>Explore</h4><ul>
+        <li><a href="/record">The Founders’ Record</a></li><li><a href="/countries">Countries</a></li>
+        <li><a href="/journal">Journal</a></li><li><a href="/challenge">The Challenge</a></li><li><a href="/join">Join</a></li></ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="/about">About &amp; disclosure</a></li><li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact</a></li><li><a href="/report">Report content</a></li><li><a href="/manage">Manage your entry</a></li></ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li>
+        <li><a href="/refunds">Refunds</a></li><li><a href="/cookies">Cookies</a></li></ul></div>
+    </div>
+    <p class="foot-legal">An entry in the Founders’ Record is a digital product: a numbered public entry and certificate. It is not an investment, a share, a loan, a donation or a charitable gift, and it carries no right to any part of the founder’s wealth or any financial return. The challenge may not succeed. “Beat Elon” names the founder’s own ambition; TrillionEuro.com has no affiliation with, and no endorsement from, Elon Musk or any of his companies.</p>
+  </div>
+</footer>
+<script defer src="/assets/te/core.js?v=20261014"></script>
+<script defer src="/assets/te/vendor/qrcode.js?v=20261014"></script>
+<script defer src="/assets/te/cert.js?v=20261014"></script>
+<script defer src="/assets/te/join.js?v=20261014"></script>
+</body>
+</html>

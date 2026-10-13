@@ -14,7 +14,7 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "X-Frame-Options": "SAMEORIGIN",
         "Permissions-Policy": "geolocation=(), microphone=(), camera=(), payment=()",
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self' https://kxzywyflylkcqoidiqmo.supabase.co https://ipapi.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self'; connect-src 'self' https://kxzywyflylkcqoidiqmo.supabase.co https://ipapi.co; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
       },
       "continue": true
     },
@@ -584,46 +584,58 @@
       "dest": "/redteddytutor/$1"
     },
     {
-      "src": "/record/?",
-      "dest": "/record.html"
-    },
-    {
-      "src": "/claim/?",
-      "dest": "/claim.html"
-    },
-    {
-      "src": "/privacy/?",
-      "dest": "/privacy.html"
-    },
-    {
-      "src": "/terms/?",
-      "dest": "/terms.html"
-    },
-    {
-      "src": "/record\\.html",
+      "src": "/(admin|manage|join/success|join/cancelled|api/.*)",
       "headers": {
-        "Location": "/record"
+        "X-Robots-Tag": "noindex, nofollow"
+      },
+      "continue": true
+    },
+    {
+      "src": "/assets/te/(.*)\\.(js|css)",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      },
+      "continue": true
+    },
+    {
+      "src": "/record/(\\d{1,12})/?",
+      "dest": "/api/te-render?kind=entry&id=$1"
+    },
+    {
+      "src": "/countries/([A-Za-z]{2})/?",
+      "dest": "/api/te-render?kind=country&id=$1"
+    },
+    {
+      "src": "/journal/([a-z0-9-]{1,80})/?",
+      "dest": "/api/te-render?kind=journal&id=$1"
+    },
+    {
+      "src": "/join/success/?",
+      "dest": "/join-success.html"
+    },
+    {
+      "src": "/join/cancelled/?",
+      "dest": "/join-cancelled.html"
+    },
+    {
+      "src": "/sitemap\\.xml",
+      "dest": "/api/te-sitemap"
+    },
+    {
+      "src": "/claim(\\.html)?/?",
+      "headers": {
+        "Location": "/join"
       },
       "status": 308
     },
     {
-      "src": "/claim\\.html",
-      "headers": {
-        "Location": "/claim"
-      },
-      "status": 308
+      "src": "/(challenge|about|faq|contact|privacy|terms|refunds|cookies|report|manage|admin|early-record|countries|journal|record|join)/?",
+      "dest": "/$1.html"
     },
     {
-      "src": "/privacy\\.html",
+      "src": "/(challenge|about|faq|contact|privacy|terms|refunds|cookies|report|manage|admin|early-record|countries|journal|record|join)\\.html",
       "headers": {
-        "Location": "/privacy"
-      },
-      "status": 308
-    },
-    {
-      "src": "/terms\\.html",
-      "headers": {
-        "Location": "/terms"
+        "Location": "/$1"
       },
       "status": 308
     },

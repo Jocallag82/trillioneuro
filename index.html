@@ -1,277 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TrillionEuro — How big could your idea actually get?</title>
-<meta name="description" content="Turn an ambitious idea into arithmetic: how many customers each revenue milestone takes, what the unit economics say, and how that compares with trillion-scale markets — every figure labelled fact, assumption or calculation.">
-<link rel="canonical" href="https://trillioneuro.com/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BEAT ELON. — TrillionEuro.com</title>
+<meta name="description" content="One founder is documenting an attempt to build a €1 trillion personal fortune — in public. Join the Founders’ Record: a numbered, permanent entry in the story.">
+<link rel="canonical" href="https://www.trillioneuro.com/">
+<meta name="theme-color" content="#0a0a0c">
+<meta property="og:site_name" content="TrillionEuro.com">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="TrillionEuro">
-<meta property="og:url" content="https://trillioneuro.com/">
-<meta property="og:title" content="How big could your idea actually get?">
-<meta property="og:description" content="The scale ladder, unit economics and trillion-scale market facts for ambitious founders. Free. No sign-up.">
-<meta property="og:image" content="https://trillioneuro.com/og-image.png">
+<meta property="og:title" content="BEAT ELON. One impossible ambition. A place in the story.">
+<meta property="og:description" content="One founder is documenting an attempt to build a €1 trillion personal fortune — in public. Join the Founders’ Record: a numbered, permanent entry in the story.">
+<meta property="og:url" content="https://www.trillioneuro.com/">
+<meta property="og:image" content="https://www.trillioneuro.com/assets/te/og-beat-elon.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="BEAT ELON. One impossible ambition. A place in the story. — TrillionEuro.com">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%20x='5'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
-<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="/assets/te/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/te/apple-touch-icon.png">
+<link rel="preload" href="/assets/te/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/te/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/te/te.css?v=20261014">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"TrillionEuro.com","url":"https://www.trillioneuro.com/"}</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"TrillionEuro","url":"https://trillioneuro.com/","applicationCategory":"BusinessApplication","operatingSystem":"Any","description":"Scale and unit-economics tools for ambitious ideas, with sourced market facts.","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
-</script>
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--white:#fff;--off:#f5f5f7;--text:#1d1d1f;--mid:#6e6e73;--faint:#a1a1a6;--line:#d2d2d7;--gold:#b8860b;--goldhi:#c9940d;--gold-bg:#fdf8ee;--good:#1a7f37;--bad:#b42318}
-html{scroll-behavior:smooth}
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:var(--white);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-.serif{font-family:'Cormorant Garamond',serif;font-weight:300;letter-spacing:-.02em}
-.serif i{font-style:italic;color:var(--gold)}
-nav{position:sticky;top:0;z-index:50;height:52px;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px}
-.logo{font-weight:600;letter-spacing:-.2px;text-decoration:none;color:var(--text);white-space:nowrap}.logo b{color:var(--gold);font-weight:600}
-.links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0}.grid2>*{min-width:0}
-.links a{font-size:13px;color:var(--mid);text-decoration:none;padding:10px;white-space:nowrap}.links a:hover{color:var(--gold)}
-.hero{background:#0a0a0a;color:#f0ede8;text-align:center;padding:88px 24px 72px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse at center,rgba(184,134,11,.2),transparent 70%);pointer-events:none}
-.hero>*{position:relative}
-.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600}
-.hero h1{font-size:clamp(48px,8.5vw,104px);line-height:.95;margin:18px auto 22px;max-width:960px;color:#f0ede8}
-.hero p{max-width:620px;margin:0 auto;font-size:clamp(16px,2vw,19px);line-height:1.6;color:rgba(240,237,232,.72);font-weight:300}
-.cta{display:inline-block;margin-top:32px;background:var(--gold);color:#fff;text-decoration:none;border-radius:12px;padding:15px 28px;font-weight:500}
-.cta:hover{background:var(--goldhi)}
-.legend{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px;font-size:12px;color:rgba(240,237,232,.6)}
-.tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:3px 7px;vertical-align:middle}
-.t-fact{background:#e6f4ea;color:#1a7f37}.t-ass{background:#fff4e5;color:#9a5b00}.t-calc{background:#eef2ff;color:#3446a3}
-section{padding:80px 20px;border-bottom:1px solid var(--line)}
-.wrap{max-width:1080px;margin:0 auto}
-h2{font-size:clamp(34px,5vw,58px);line-height:1.02;margin-bottom:14px}
-.lede{color:var(--mid);max-width:680px;line-height:1.6;font-size:17px}
-.grid2{display:grid;gap:28px;grid-template-columns:minmax(0,340px) minmax(0,1fr);margin-top:36px}
-@media(max-width:820px){.grid2{grid-template-columns:1fr}}
-.panel{background:var(--off);border:1px solid var(--line);border-radius:20px;padding:22px}
-label{display:block;font-size:13px;color:var(--mid);margin-bottom:14px}
-label span.v{float:right;color:var(--text);font-weight:600}
-input[type=number],select{width:100%;margin-top:6px;font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
-input[type=range]{width:100%;margin-top:8px;accent-color:var(--gold)}
-table{width:100%;border-collapse:collapse;font-size:15px}.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}@media(max-width:600px){table{font-size:13px}td,th{padding:9px 6px}}
-th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
-td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
-.impossible{color:var(--bad)}.ok{color:var(--good)}
-.bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--gold)}
-.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:18px}
-.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
-.kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
-.kpi .v{font-size:26px;font-weight:600;margin-top:6px;font-variant-numeric:tabular-nums}
-.kpi .s{font-size:12px;color:var(--mid);margin-top:4px}
-.facts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:36px}
-.fact{border:1px solid var(--line);border-radius:18px;padding:20px;background:#fff}
-.fact .n{font-family:'Cormorant Garamond',serif;font-size:44px;line-height:1;margin:10px 0 6px}
-.fact .l{font-weight:600}.fact .m{font-size:12px;color:var(--mid);margin-top:6px;line-height:1.5}
-.fact a{color:var(--gold)}
-.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--text)}
-.btn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
-.saved{margin-top:14px;font-size:14px}.saved a{color:var(--gold);cursor:pointer}
-.note{font-size:12px;color:var(--mid);line-height:1.6;margin-top:14px}
-.dark{background:#0a0a0a;color:#f0ede8}.dark .lede{color:rgba(240,237,232,.7)}
-.dark a.cta{margin-top:20px}
-footer{padding:40px 20px;font-size:13px;color:var(--mid)}
-footer a{color:var(--mid);margin-right:16px}
-details{border-bottom:1px solid var(--line);padding:16px 0}summary{cursor:pointer;font-weight:500}details p{color:var(--mid);margin-top:10px;line-height:1.6}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style>
 </head>
-<body>
-<nav>
-  <a class="logo" href="/">Trillion<b>Euro</b></a>
-  <div class="links">
-    <a href="#ladder">Scale ladder</a><a href="#idea">Analyse an idea</a><a href="#facts">Trillion-scale facts</a><a href="https://quadrillioneuro.com/">QuadrillionEuro →</a>
+<body data-page="home">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="TrillionEuro.com — home"><span class="brand-mark">Trillion<b>€</b>uro</span><span class="brand-sub">Beat Elon</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="/record">The Record</a>
+      <a href="/countries">Countries</a>
+      <a href="/journal">Journal</a>
+      <a href="/challenge">The Challenge</a>
+      <a href="/faq">FAQ</a>
+      <a class="btn btn-gold btn-sm" href="/join">Join the Record</a>
+    </nav>
   </div>
-</nav>
-
-<header class="hero">
-  <div class="kicker">Scale intelligence for ambitious ideas</div>
-  <h1 class="serif">How big could your idea <i>actually</i> get?</h1>
-  <p>TrillionEuro turns ambition into arithmetic: how many customers each revenue milestone needs, whether the unit economics hold, and how it compares with the largest markets on earth. No sign-up. Nothing stored on our side.</p>
-  <a class="cta" href="#ladder" data-track="hero_cta">Start with your price →</a>
-  <div class="legend"><span><span class="tag t-fact">Fact</span> sourced</span><span><span class="tag t-ass">Assumption</span> yours to change</span><span><span class="tag t-calc">Calculated</span> arithmetic, not a forecast</span></div>
 </header>
-
-<section id="ladder">
+<main id="main">
+<section class="hero first">
   <div class="wrap">
-    <div class="kicker">1 · The scale ladder</div>
-    <h2 class="serif">Every milestone is <i>a customer count.</i></h2>
-    <p class="lede">Enter what one customer pays you in a year. The ladder shows how many paying customers each revenue level takes — and when that is more people than exist.</p>
-    <div class="grid2">
-      <div class="panel">
-        <label for="price">Price per customer per year <span class="tag t-ass">Assumption</span>
-          <input id="price" type="number" min="1" step="1" value="120"></label>
-        <label for="pop">Compared with
-          <select id="pop">
-            <option value="world">Everyone on earth (≈8.2 billion)</option>
-            <option value="eu">Everyone in the EU (≈450.6 million)</option>
-            <option value="ie">Everyone in Ireland (≈5.46 million)</option>
-          </select></label>
-        <p class="note">Population: UN/UNFPA (world, 2025); Eurostat (EU, 1 January 2025); CSO (Ireland, April 2025).</p>
+    <p class="kicker">The challenge · TrillionEuro.com</p>
+    <h1>BEAT<br>ELON<span class="dot">.</span></h1>
+    <p class="tag">One impossible ambition. A place in the story.</p>
+    <p class="lede">A founder is documenting, in public, an attempt to build a <strong>€1&nbsp;trillion personal fortune</strong> and overtake the world’s richest person. Every step, setback and verified number goes on the record — alongside a permanent archive of the people who joined the challenge.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold" href="/join">Join the Founders’ Record <span aria-hidden="true">→</span></a>
+      <a class="btn btn-line" href="/record">Explore the Record</a>
+    </div>
+    <p class="disclose">This is the founder’s personal, commercial ambition. An entry is a digital product — a numbered public entry and certificate — not an investment, share, donation or claim on any future wealth. Success is not guaranteed. Not affiliated with or endorsed by Elon Musk.</p>
+
+    <div class="distance" aria-labelledby="dist-h">
+      <p class="kicker" id="dist-h">The distance</p>
+      <div class="distance-bar" role="img" id="dist-bar" aria-label="Progress toward €1 trillion: no verified figure published yet"><i id="dist-fill"></i></div>
+      <div class="distance-ends"><span>€0</span><span id="dist-now" class="muted">Verified net worth: not yet published</span><span>€1,000,000,000,000</span></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="status-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">Live challenge status</p><h2 id="status-h">The numbers, as they stand.</h2></div>
+      <p class="muted small" style="max-width:40ch">Counted from verified, paid entries in the database. Nothing here is estimated or seeded.</p>
+    </div>
+    <div class="stats" id="stats" aria-live="polite">
+      <div class="stat"><div class="v num" data-k="entries"><span class="skeleton" style="display:inline-block;width:60px;height:40px"></span></div><div class="l">Verified entries</div></div>
+      <div class="stat"><div class="v num" data-k="countries"><span class="skeleton" style="display:inline-block;width:40px;height:40px"></span></div><div class="l">Countries represented</div></div>
+      <div class="stat"><div class="v" data-k="started"><span class="skeleton" style="display:inline-block;width:110px;height:40px"></span></div><div class="l">Challenge began</div></div>
+      <div class="stat"><div class="v" data-k="networth"><span class="skeleton" style="display:inline-block;width:110px;height:40px"></span></div><div class="l">Verified founder net worth</div><div class="s" data-k="networth-src"></div></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="rec-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">The Founders’ Record</p><h2 id="rec-h">Names that were here first.</h2></div>
+      <a class="btn btn-line btn-sm" href="/record">Open the full archive →</a>
+    </div>
+    <form class="toolbar" action="/record" method="get" role="search">
+      <div class="q"><label class="sr-only" for="hq">Search by number or nickname</label><input id="hq" name="q" type="search" placeholder="Search by number or nickname" autocomplete="off"></div>
+      <div><label class="sr-only" for="hc">Country</label><select id="hc" name="country"><option value="">All countries</option></select></div>
+      <div><label class="sr-only" for="hs">Sort</label><select id="hs" name="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div>
+    </form>
+    <div class="ledger" id="preview" aria-live="polite"></div>
+  </div>
+</section>
+
+<section aria-labelledby="world-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="kicker">Global participation</p><h2 id="world-h">Where the record is being written.</h2></div>
+      <a class="btn btn-line btn-sm" href="/countries">All country rankings →</a>
+    </div>
+    <div class="split">
+      <div>
+        <div class="world" id="world" role="group" aria-label="World map of verified entries by country. Each linked point opens that country."></div>
+        <p class="small muted" style="margin-top:12px">Each point is a country. Gold points have at least one verified entry; size follows the count. Country totals reflect individual participants only — never national endorsement.</p>
       </div>
       <div>
-        <div class="tscroll"><table aria-describedby="ladder-note"><thead><tr><th>Revenue a year</th><th>Paying customers needed <span class="tag t-calc">Calculated</span></th><th>Share of population</th></tr></thead><tbody id="ladder-body"></tbody></table></div>
-        <p class="note" id="ladder-note">Customers = revenue ÷ price. It ignores churn, discounts and costs — which is the point: if the ladder is impossible before costs, it is impossible after them.</p>
+        <h3 style="margin-bottom:16px">Leading countries</h3>
+        <ol class="list-x" id="top-countries" style="list-style:none"></ol>
       </div>
     </div>
   </div>
 </section>
 
-<section id="idea" style="background:var(--off)">
+<section aria-labelledby="journey-h">
   <div class="wrap">
-    <div class="kicker">2 · Analyse an idea</div>
-    <h2 class="serif">Do the unit economics <i>survive growth?</i></h2>
-    <p class="lede">A subscription-style model: customers you win each month, how fast that grows, what each costs to acquire, and how many leave. It shows lifetime value, payback, and the year each milestone would be reached — if every assumption held.</p>
-    <div class="grid2">
-      <div class="panel" style="background:#fff">
-        <label for="i-price">Price per customer per year (€) <span class="tag t-ass">Assumption</span><input id="i-price" type="number" value="240"></label>
-        <label for="i-margin">Gross margin <span class="v" id="i-margin-v"></span><input id="i-margin" type="range" min="5" max="95" value="75"></label>
-        <label for="i-cac">Cost to win one customer (€)<input id="i-cac" type="number" value="80"></label>
-        <label for="i-churn">Customers lost per year <span class="v" id="i-churn-v"></span><input id="i-churn" type="range" min="0" max="90" value="30"></label>
-        <label for="i-new">New customers in month one<input id="i-new" type="number" value="50"></label>
-        <label for="i-growth">Monthly growth in new customers <span class="v" id="i-growth-v"></span><input id="i-growth" type="range" min="0" max="20" step="0.5" value="5"></label>
-        <label for="i-years">Years to model <span class="v" id="i-years-v"></span><input id="i-years" type="range" min="1" max="10" value="5"></label>
-        <label for="i-name">Name this analysis<input id="i-name" type="text" maxlength="60" placeholder="e.g. Pet-insurance app" style="width:100%;margin-top:6px;font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px"></label>
-        <div class="btnrow"><button class="btn gold" id="save">Save</button><button class="btn" id="share">Copy share link</button></div>
-        <div class="saved" id="saved"></div>
-      </div>
-      <div>
-        <div class="kpis" id="kpis"></div>
-        <div class="tscroll"><table><thead><tr><th>Year</th><th>Customers</th><th>Revenue</th><th>Gross profit</th><th>After acquisition cost</th></tr></thead><tbody id="years"></tbody></table></div>
-        <p class="note">All results <span class="tag t-calc">Calculated</span> from your assumptions. Real growth is rarely smooth; acquisition usually gets more expensive as you grow, and churn is usually worse early. Not a forecast, and not investment advice.</p>
-      </div>
+    <div class="sec-head">
+      <div><p class="kicker">The journey</p><h2 id="journey-h">Launches, setbacks, verified milestones.</h2></div>
+      <a class="btn btn-line btn-sm" href="/journal">Read the journal →</a>
+    </div>
+    <div class="split">
+      <ul class="timeline" id="timeline"></ul>
+      <div id="latest-posts"></div>
     </div>
   </div>
 </section>
 
-<section id="facts">
+<section aria-labelledby="join-h">
   <div class="wrap">
-    <div class="kicker">3 · Trillion-scale facts</div>
-    <h2 class="serif">What a trillion <i>looks like.</i></h2>
-    <p class="lede">The markets that actually operate in trillions. Each figure is sourced and dated — use them to sanity-check any “our market is worth…” slide, including your own.</p>
-    <div class="facts" id="factgrid"></div>
+    <div class="split">
+      <div>
+        <p class="kicker">Your entry</p>
+        <h2 id="join-h">Put your name in the story.</h2>
+        <p class="lede" style="margin-top:20px">Pick a nickname, choose your country, leave a message to the future. You get a permanent, numbered entry in the Founders’ Record and a certificate to keep and share.</p>
+        <div class="hero-ctas"><a class="btn btn-gold" href="/join">Create your entry →</a></div>
+        <div class="share-row" id="share-site"></div>
+      </div>
+      <div class="price-box">
+        <p class="kicker">Exactly what it is</p>
+        <p class="amount num" id="price">—</p>
+        <p class="small muted" id="price-terms">One-off payment in euro, including any applicable VAT. No subscription, no recurring charge.</p>
+        <ul class="list-x">
+          <li>A unique, sequential entry number — assigned only after payment is verified</li>
+          <li>Your nickname, country and message on a public page</li>
+          <li>A downloadable, printable certificate with a QR link</li>
+          <li>Your real name only if you separately choose to show it</li>
+        </ul>
+        <p class="small" style="margin:18px 0 8px;color:var(--ivory)">What you are not buying</p>
+        <ul class="list-x no">
+          <li>Equity, shares, ownership or any financial return</li>
+          <li>A share of the founder’s fortune, or a promise the challenge succeeds</li>
+          <li>A charitable donation (it is not tax-deductible)</li>
+        </ul>
+        <p class="small muted" style="margin-top:14px"><a href="/terms">Terms</a> · <a href="/refunds">Refunds</a> · <a href="/privacy">Privacy</a></p>
+      </div>
+    </div>
   </div>
 </section>
-
-<section class="dark">
+</main>
+<footer class="site-foot">
   <div class="wrap">
-    <div class="kicker">Beyond a trillion</div>
-    <h2 class="serif">Civilisation-scale <i>scenarios</i> live next door.</h2>
-    <p class="lede">What happens if AI, electric transport or clean energy keeps growing at a given rate? QuadrillionEuro models it — with every number labelled fact, estimate, assumption or scenario.</p>
-    <a class="cta" href="https://quadrillioneuro.com/">Open QuadrillionEuro →</a>
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="/"><span class="brand-mark">Trillion<b>€</b>uro</span></a>
+        <p style="margin-top:14px;max-width:38ch">One founder’s public attempt to build a €1 trillion personal fortune — and the permanent record of the people who joined the story.</p>
+      </div>
+      <div><h4>Explore</h4><ul>
+        <li><a href="/record">The Founders’ Record</a></li><li><a href="/countries">Countries</a></li>
+        <li><a href="/journal">Journal</a></li><li><a href="/challenge">The Challenge</a></li><li><a href="/join">Join</a></li></ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="/about">About &amp; disclosure</a></li><li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact</a></li><li><a href="/report">Report content</a></li><li><a href="/manage">Manage your entry</a></li></ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li>
+        <li><a href="/refunds">Refunds</a></li><li><a href="/cookies">Cookies</a></li></ul></div>
+    </div>
+    <p class="foot-legal">An entry in the Founders’ Record is a digital product: a numbered public entry and certificate. It is not an investment, a share, a loan, a donation or a charitable gift, and it carries no right to any part of the founder’s wealth or any financial return. The challenge may not succeed. “Beat Elon” names the founder’s own ambition; TrillionEuro.com has no affiliation with, and no endorsement from, Elon Musk or any of his companies.</p>
   </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <h2 class="serif" style="font-size:40px">Questions, <i>answered plainly.</i></h2>
-    <details><summary>Is this investment advice?</summary><p>No. TrillionEuro does arithmetic on assumptions you choose, alongside published facts. It does not predict outcomes or recommend investments.</p></details>
-    <details><summary>Where do the facts come from?</summary><p>From the organisation named on each card — the IMF, Eurostat, the CSO, the IEA and the UN. Each shows its date. When a figure is itself an estimate by that organisation, the card says so.</p></details>
-    <details><summary>Do you store my analyses?</summary><p>Saved analyses live in your own browser. Share links carry the assumptions in the URL. Nothing is sent to us.</p></details>
-    <details><summary>What happened to the numbered list?</summary><p>The founders’ record still exists and every claimed number keeps its place: <a href="/record" style="color:var(--gold)">see the record</a> or <a href="/claim" style="color:var(--gold)">claim a number</a>.</p></details>
-  </div>
-</section>
-
-<footer><div class="wrap"><a href="/record">Founders’ record</a><a href="/claim">Claim a number</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><span>© TrillionEuro · a Conjora product</span></div></footer>
-
-<script type="module">
-import { FACTS, scaleLadder, analyseIdea, fmtMoney, fmtCount, MILESTONES } from '/lib/scale.js';
-
-const track = (name, data) => { try { if (typeof window.va === 'function') window.va('event', { name, data: data || {} }); } catch (_) {} };
-const $ = (id) => document.getElementById(id);
-const POP = { world: FACTS.worldPopulation.value, eu: 450.6e6, ie: 5.46e6 };
-
-function renderLadder() {
-  const price = Math.max(1, Number($('price').value) || 1);
-  const pop = POP[$('pop').value];
-  $('ladder-body').innerHTML = scaleLadder(price, pop).map((r) => {
-    const pct = r.share * 100;
-    const share = !r.possible ? `<span class="impossible">${r.share.toFixed(1)}× everyone</span>` : pct < 0.01 ? '<span class="ok">&lt;0.01%</span>' : `${pct >= 1 ? pct.toFixed(1) : pct.toFixed(2)}%`;
-    return `<tr><td class="num"><b>${fmtMoney(r.revenue)}</b></td><td class="num">${fmtCount(r.customers)}</td><td>${share}<div class="bar"><i style="width:${Math.min(100, pct)}%"></i></div></td></tr>`;
-  }).join('');
-}
-let ladderTouched = false;
-['price', 'pop'].forEach((id) => $(id).addEventListener('input', () => { renderLadder(); if (!ladderTouched) { ladderTouched = true; track('ladder_used'); } }));
-renderLadder();
-
-const ids = ['i-price', 'i-margin', 'i-cac', 'i-churn', 'i-new', 'i-growth', 'i-years', 'i-name'];
-function readIdea() {
-  return {
-    name: $('i-name').value.trim().slice(0, 60),
-    pricePerYear: Number($('i-price').value) || 0, grossMargin: Number($('i-margin').value) / 100,
-    cac: Number($('i-cac').value) || 0, annualChurn: Number($('i-churn').value) / 100,
-    newCustomersPerMonth: Number($('i-new').value) || 0, monthlyAcquisitionGrowth: Number($('i-growth').value) / 100,
-    years: Number($('i-years').value) || 5,
-  };
-}
-function writeIdea(v) {
-  $('i-price').value = v.pricePerYear; $('i-margin').value = Math.round(v.grossMargin * 100); $('i-cac').value = v.cac;
-  $('i-churn').value = Math.round(v.annualChurn * 100); $('i-new').value = v.newCustomersPerMonth;
-  $('i-growth').value = +(v.monthlyAcquisitionGrowth * 100).toFixed(1); $('i-years').value = v.years; $('i-name').value = v.name || '';
-}
-function renderIdea() {
-  const v = readIdea();
-  $('i-margin-v').textContent = `${Math.round(v.grossMargin * 100)}%`;
-  $('i-churn-v').textContent = `${Math.round(v.annualChurn * 100)}%`;
-  $('i-growth-v').textContent = `${(v.monthlyAcquisitionGrowth * 100).toFixed(1)}%`;
-  $('i-years-v').textContent = `${v.years}`;
-  const r = analyseIdea(v);
-  const ms = MILESTONES.filter((m) => r.firstMilestone[m]).map((m) => `${fmtMoney(m)} in year ${r.firstMilestone[m]}`);
-  const good = r.ltvToCac >= 3, pay = r.paybackMonths <= 12;
-  $('kpis').innerHTML = [
-    ['Customer lifetime value', Number.isFinite(r.ltv) ? fmtMoney(r.ltv) : '∞', 'gross profit per customer over their life'],
-    ['LTV ÷ acquisition cost', Number.isFinite(r.ltvToCac) ? `${r.ltvToCac.toFixed(1)}×` : '∞', good ? 'above 3× is the usual rule of thumb' : '<span class="impossible">below 3× — growth burns cash</span>'],
-    ['Payback on acquisition', Number.isFinite(r.paybackMonths) ? `${r.paybackMonths.toFixed(1)} months` : '—', pay ? 'under a year' : '<span class="impossible">over a year to earn it back</span>'],
-    ['Milestones reached', ms.length ? ms[ms.length - 1] : 'none yet', ms.length ? ms.slice(0, -1).join(' · ') : `within ${v.years} years on these assumptions`],
-  ].map(([k, val, s]) => `<div class="kpi"><div class="k">${k}</div><div class="v">${val}</div><div class="s">${s}</div></div>`).join('');
-  $('years').innerHTML = r.years.map((y) => `<tr><td>${y.year}</td><td class="num">${fmtCount(y.customers)}</td><td class="num">${fmtMoney(y.revenue)}</td><td class="num">${fmtMoney(y.grossProfit)}</td><td class="num ${y.contribution < 0 ? 'impossible' : ''}">${fmtMoney(y.contribution)}</td></tr>`).join('');
-}
-let ideaTouched = false;
-ids.forEach((id) => $(id).addEventListener('input', () => { renderIdea(); if (!ideaTouched) { ideaTouched = true; track('idea_analysis_started'); } }));
-
-// Share links carry the assumptions in the hash; nothing goes to a server.
-const enc = (v) => btoa(unescape(encodeURIComponent(JSON.stringify(v))));
-const dec = (s) => JSON.parse(decodeURIComponent(escape(atob(s))));
-try { const m = location.hash.match(/^#a=(.+)$/); if (m) { writeIdea(dec(m[1])); track('shared_analysis_opened'); document.getElementById('idea').scrollIntoView(); } } catch (_) {}
-renderIdea();
-
-const KEY = 'trillioneuro_analyses';
-const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (_) { return []; } };
-function renderSaved() {
-  const list = load();
-  $('saved').innerHTML = list.length ? 'Saved: ' + list.map((a, i) => `<a data-i="${i}">${(a.name || 'Untitled').replace(/[<>&"]/g, '')}</a>`).join(' · ') : '';
-  $('saved').querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { writeIdea(list[Number(a.dataset.i)]); renderIdea(); }));
-}
-$('save').addEventListener('click', () => {
-  const v = readIdea();
-  const list = load().filter((a) => (a.name || '') !== (v.name || '')).slice(-9);
-  list.push(v);
-  try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (_) {}
-  renderSaved(); track('analysis_saved');
-});
-$('share').addEventListener('click', async () => {
-  const url = `${location.origin}/#a=${enc(readIdea())}`;
-  try { await navigator.clipboard.writeText(url); $('share').textContent = 'Link copied'; } catch (_) { prompt('Copy this link', url); }
-  track('analysis_shared');
-});
-renderSaved();
-
-const FACT_KEYS = ['worldGdp', 'euGdp', 'energyInvestment', 'irelandGniStar', 'evSales', 'dataCentreElectricity'];
-$('factgrid').innerHTML = FACT_KEYS.map((k) => {
-  const f = FACTS[k];
-  const n = f.unit.startsWith('US$') ? fmtMoney(f.value, '$') : f.unit.startsWith('€') ? fmtMoney(f.value) : f.unit === 'TWh' ? `${f.value} TWh` : fmtCount(f.value);
-  return `<div class="fact"><span class="tag t-fact">Fact</span><div class="n">${n}</div><div class="l">${f.label}</div><div class="m">${f.unit.includes('year') ? 'per year · ' : ''}${f.asOf}${f.note ? ` · ${f.note}` : ''}<br><a href="${f.url}" target="_blank" rel="noopener">${f.source}</a></div></div>`;
-}).join('');
-document.querySelectorAll('[data-track]').forEach((el) => el.addEventListener('click', () => track(el.dataset.track)));
-</script>
+</footer>
+<script defer src="/assets/te/core.js?v=20261014"></script>
+<script defer src="/assets/te/world.js?v=20261014"></script>
+<script defer src="/assets/te/home.js?v=20261014"></script>
 </body>
 </html>

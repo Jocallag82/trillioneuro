@@ -50,19 +50,43 @@ const cases = [
   [T, '/privacy',       'serve',    '/privacy.html'],
   [T, '/terms',         'serve',    '/terms.html'],
   [T, '/record.html',   'redirect', '/record'],
-  [T, '/claim',         'serve',    '/claim.html'],
-  [T, '/claim.html',    'redirect', '/claim'],
+  [T, '/claim',         'redirect', '/join'],
+  [T, '/claim.html',    'redirect', '/join'],
+  [T, '/join',          'serve',    '/join.html'],
+  [T, '/join/success',  'serve',    '/join-success.html'],
+  [T, '/join/cancelled','serve',    '/join-cancelled.html'],
+  [T, '/record/42',     'serve',    '/api/te-render?kind=entry&id=42'],
+  [T, '/countries',     'serve',    '/countries.html'],
+  [T, '/countries/ie',  'serve',    '/api/te-render?kind=country&id=ie'],
+  [T, '/journal',       'serve',    '/journal.html'],
+  [T, '/journal/first-update', 'serve', '/api/te-render?kind=journal&id=first-update'],
+  [T, '/challenge',     'serve',    '/challenge.html'],
+  [T, '/about',         'serve',    '/about.html'],
+  [T, '/faq',           'serve',    '/faq.html'],
+  [T, '/contact',       'serve',    '/contact.html'],
+  [T, '/refunds',       'serve',    '/refunds.html'],
+  [T, '/cookies',       'serve',    '/cookies.html'],
+  [T, '/report',        'serve',    '/report.html'],
+  [T, '/manage',        'serve',    '/manage.html'],
+  [T, '/admin',         'serve',    '/admin.html'],
+  [T, '/early-record',  'serve',    '/early-record.html'],
+  [T, '/faq.html',      'redirect', '/faq'],
+  [T, '/entry.html',    'serve',    '/entry.html'],
+  [T, '/api/te-checkout', 'serve',  '/api/te-checkout'],
+  [T, '/api/te-stripe-webhook', 'serve', '/api/te-stripe-webhook'],
+  [T, '/assets/te/core.js', 'serve', '/assets/te/core.js'],
   [T, '/lib/scale.js',  'serve',    '/lib/scale.js'],
   [T, '/index.html',    'redirect', '/'],
-  [T, '/sitemap.xml',   'serve',    '/sitemap.xml'],
+  [T, '/sitemap.xml',   'serve',    '/api/te-sitemap'],
   [T, '/robots.txt',    'serve',    '/robots.txt'],
   [T, '/og-image.png',  'serve',    '/og-image.png'],
   [T, '/_vercel/insights/script.js', 'serve', '/_vercel/insights/script.js'],
   [T, '/quadrillioneuro/',          'redirect', 'https://quadrillioneuro.com/'],
   [T, '/quadrillioneuro/auction.html','redirect','https://quadrillioneuro.com/auction.html'],
 
-  ['www.trillioneuro.com',     '/record', 'redirect', 'https://trillioneuro.com/record'],
-  ['www.quadrillioneuro.com',  '/auction','redirect', 'https://quadrillioneuro.com/auction'],
+  // apex -> www is a Vercel domain redirect (outside vercel.json); www serves directly
+  ['www.trillioneuro.com',     '/record', 'serve', '/record.html'],
+  ['www.quadrillioneuro.com',  '/auction','serve', '/quadrillioneuro/auction.html'],
 
   [Q, '/',             'serve', '/quadrillioneuro/index.html'],
   [Q, '/auction',      'serve', '/quadrillioneuro/auction.html'],
@@ -144,7 +168,7 @@ for (const [host, path] of cases) {
   const got = resolve(host, path);
   if (got.kind !== 'serve') continue;
   if (got.file.startsWith('/_vercel/')) continue;         // Vercel-internal
-  let rel = got.file === '/' ? 'index.html' : got.file.replace(/^\//, '');
+  let rel = got.file === '/' ? 'index.html' : got.file.replace(/^\//, '').split('?')[0];
   if (rel.startsWith('api/')) rel += '.mjs';               // serverless function
   const exists = existsSync(new URL(rel, root));
   if (!exists) { bad++; console.log(`FAIL missing file: ${host}${path} -> ${got.file}`); }
