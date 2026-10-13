@@ -478,7 +478,7 @@ export class BakeryScene extends Phaser.Scene {
     this.teddy = createTeddy(this, 165, 318, 0.78, this.calm);
     this.layer.add(this.teddy.root);
     // Not passing is never a telling-off: Teddy stays warm and encouraging.
-    this.teddy.react(passed ? 'celebrate' : 'smile');
+    this.teddy.react(passed ? 'celebrate' : 'oops');
     const headline = passed
       ? (boss ? 'The bakery is open!' : 'Sign finished!')
       : 'The oven needs a little more warmth.';

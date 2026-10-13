@@ -9,8 +9,8 @@ const INK = 0x1d1a1a;
 
 // Teddy is the brand's own 3D plush renders (game/art/teddy-think.webp, teddy-cheer.webp),
 // cut out of their studio backgrounds. Two poses: thinking (calm, working) and cheering.
-export const TEDDY_POSES = ['think', 'cheer'];
-const POSE_FOR = { smile: 'think', think: 'think', oops: 'think', happy: 'cheer', celebrate: 'cheer' };
+export const TEDDY_POSES = ['think', 'cheer', 'oops'];
+const POSE_FOR = { smile: 'think', think: 'think', oops: 'oops', happy: 'cheer', celebrate: 'cheer' };
 const TEDDY_HEIGHT = 640; // game units at scale 1, feet to ears
 
 // Returns a controller for one Teddy in a Phaser scene. Uses the renders when they
