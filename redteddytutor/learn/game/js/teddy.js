@@ -34,23 +34,17 @@ export function createTeddy(scene, x, y, scale = 1, calm = false) {
     mood = POSE_FOR[name] || 'think';
     show(mood);
   }
-  function idle() {
-    if (calm) return;
-    scene.tweens.add({ targets: root, y: y - 5, scaleY: S * 1.01, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-  }
+  // Teddy stands still. The rendered poses carry the emotion; motion would cheapen it.
+  function idle() {}
   function startBlinking() {}
   function react(name) {
+    const before = mood;
     setMood(name);
-    if (calm) return;
-    scene.tweens.killTweensOf(root);
-    root.setPosition(x, y).setAngle(0).setScale(S);
-    if (name === 'happy' || name === 'celebrate') {
-      scene.tweens.add({ targets: root, y: y - 30, duration: 220, yoyo: true, repeat: name === 'celebrate' ? 3 : 1, ease: 'Quad.easeOut', onComplete: idle });
-    } else if (name === 'oops') {
-      scene.tweens.add({ targets: root, angle: -5, duration: 240, yoyo: true, onComplete: idle });
-    } else if (name === 'think') {
-      scene.tweens.add({ targets: root, angle: 3, duration: 320, yoyo: true, onComplete: idle });
-    } else idle();
+    if (calm || before === mood) return;
+    // A short cross-fade into the new pose, nothing more.
+    scene.tweens.killTweensOf(img);
+    img.setAlpha(0.35);
+    scene.tweens.add({ targets: img, alpha: 1, duration: 180, ease: 'Quad.easeOut' });
   }
   setMood('think');
   idle();
