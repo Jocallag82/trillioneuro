@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://redteddytutor.com/sitemap.xml
+Sitemap: https://www.redteddytutor.com/sitemap.xml
