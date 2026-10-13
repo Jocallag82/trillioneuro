@@ -1,5 +1,4 @@
-// Red Teddy in the bakery: the illustrated version, with a code-drawn fallback.
-// Same palette and scarf as the brand mark.
+// Red Teddy in the bakery: the brand's plush renders, with a code-drawn fallback.
 const RED = 0xa3171f;
 const RED_D = 0x7d0f17;
 const RED_L = 0xc8353d;
@@ -8,44 +7,38 @@ const NAVY = 0x0e1830;
 const GOLD = 0xd9a441;
 const INK = 0x1d1a1a;
 
-// The illustrated Teddy (game/art/teddy-*.svg, built by scripts/build-bakery-art.mjs).
-// Each mood is its own drawing, so expressions change without redrawing shapes.
-export const TEDDY_POSES = ['smile', 'blink', 'happy', 'think', 'oops', 'cheer'];
-const POSE_FOR = { smile: 'smile', happy: 'happy', think: 'think', oops: 'oops', celebrate: 'cheer' };
+// Teddy is the brand's own 3D plush renders (game/art/teddy-think.webp, teddy-cheer.webp),
+// cut out of their studio backgrounds. Two poses: thinking (calm, working) and cheering.
+export const TEDDY_POSES = ['think', 'cheer'];
+const POSE_FOR = { smile: 'think', think: 'think', oops: 'think', happy: 'cheer', celebrate: 'cheer' };
+const TEDDY_HEIGHT = 640; // game units at scale 1, feet to ears
 
-// Returns a controller for one Teddy in a Phaser scene. Uses the illustrations when
-// they loaded, and the drawn version otherwise, with the same controls either way.
-// `calm` disables all movement (reduced-motion mode); expressions still change.
+// Returns a controller for one Teddy in a Phaser scene. Uses the renders when they
+// loaded, and the drawn version otherwise, with the same controls either way.
+// `calm` disables all movement (reduced-motion mode); poses still change.
 export function createTeddy(scene, x, y, scale = 1, calm = false) {
   if (!TEDDY_POSES.every((p) => scene.textures.exists(`teddy-${p}`))) return createDrawnTeddy(scene, x, y, scale, calm);
-  // Art is 400 x 460 with the feet at the bottom; the drawn Teddy was centred on its body.
   const S = scale * 0.62;
   const root = scene.add.container(x, y).setScale(S);
-  const img = scene.add.image(0, 40, 'teddy-smile').setOrigin(0.5, 0.5);
+  // Feet sit on a fixed line, so swapping poses of different widths never jumps.
+  const img = scene.add.image(0, 270, 'teddy-think').setOrigin(0.5, 1);
   root.add(img);
-  let mood = 'smile';
-  let blinkEvent = null;
+  let mood = 'think';
+  const blinkEvent = null;
 
-  const show = (pose) => img.setTexture(`teddy-${pose}`);
+  const show = (pose) => {
+    img.setTexture(`teddy-${pose}`);
+    img.setScale(TEDDY_HEIGHT / img.frame.realHeight);
+  };
   function setMood(name) {
-    mood = POSE_FOR[name] || 'smile';
+    mood = POSE_FOR[name] || 'think';
     show(mood);
   }
   function idle() {
     if (calm) return;
-    scene.tweens.add({ targets: root, y: y - 6, scaleY: S * 1.012, duration: 1400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    scene.tweens.add({ targets: root, y: y - 5, scaleY: S * 1.01, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
-  function startBlinking() {
-    if (calm || blinkEvent) return;
-    blinkEvent = scene.time.addEvent({
-      delay: 2800 + Math.random() * 1800, loop: true,
-      callback: () => {
-        if (mood !== 'smile') return;
-        show('blink');
-        scene.time.delayedCall(130, () => { if (mood === 'smile' && img.active) show('smile'); });
-      },
-    });
-  }
+  function startBlinking() {}
   function react(name) {
     setMood(name);
     if (calm) return;
@@ -59,7 +52,7 @@ export function createTeddy(scene, x, y, scale = 1, calm = false) {
       scene.tweens.add({ targets: root, angle: 3, duration: 320, yoyo: true, onComplete: idle });
     } else idle();
   }
-  setMood('smile');
+  setMood('think');
   idle();
   startBlinking();
   return {

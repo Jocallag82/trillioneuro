@@ -20,7 +20,6 @@ const ART = '/learn/game/art/';
 const BUNS = ['bun', 'bun-pink', 'bun-choc'];
 // Original illustrations (scripts/build-bakery-art.mjs). Rasterised at 1.5x for sharp edges.
 const ART_FILES = {
-  ...Object.fromEntries(TEDDY_POSES.map((p) => [`teddy-${p}`, [600, 690]])),
   bun: [240, 225], 'bun-pink': [240, 225], 'bun-choc': [240, 225],
   ...Object.fromEntries(['circle', 'square', 'triangle', 'rectangle'].flatMap((s) => [[`tin-${s}`, [270, 270]], [`cookie-${s}`, [270, 270]]])),
   'macaron-red': [180, 180], 'macaron-blue': [180, 180], 'macaron-yellow': [180, 180], 'macaron-green': [180, 180],
@@ -34,6 +33,7 @@ export class BakeryScene extends Phaser.Scene {
   preload() {
     this.load.on('loaderror', (file) => console.warn(`[bakery] art missing: ${file.key}`));
     for (const [key, [width, height]] of Object.entries(ART_FILES)) this.load.svg(key, `${ART}${key}.svg`, { width, height });
+    for (const pose of TEDDY_POSES) this.load.image(`teddy-${pose}`, `${ART}teddy-${pose}.webp`);
   }
 
   has(key) { return this.textures.exists(key); }
@@ -175,7 +175,7 @@ export class BakeryScene extends Phaser.Scene {
   // ---------- Map ----------
   showMap({ levels, boss, bossOpen, headline }) {
     this.clearStage();
-    this.teddy = createTeddy(this, 110, 330, 0.62, this.calm);
+    this.teddy = createTeddy(this, 98, 336, 0.56, this.calm);
     this.layer.add(this.teddy.root);
     this.stage(this.add.rectangle(W / 2, 130, 540, 50, C.ivory).setStrokeStyle(3, C.red));
     this.stage(this.add.text(W / 2, 130, headline || 'Teddy\u2019s Bakery', {
