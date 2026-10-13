@@ -8,7 +8,7 @@ import { openRemote, syncSettings, syncReset } from './sync.js';
 import { OBJECTIVES, SUBJECTS, STRANDS, objectivesFor } from './curriculum/framework.js';
 import { MISCONCEPTIONS } from './curriculum/misconceptions.js';
 import { LOCALES, pickLocale, localise, stageName } from './curriculum/locales.js';
-import { learnerReport, plan, STATE_LABEL } from './learner.js';
+import { learnerReport, plan, STATE_LABEL, mid } from './learner.js';
 
 const GAME_TITLES = { 'bakery-counting': 'Teddy’s Bakery: Counting Cakes', 'bakery-numbers': 'Teddy’s Bakery: The Number Shop', 'bakery-shapes': 'Teddy’s Bakery: Shape Delivery', 'bakery-patterns': 'Teddy’s Bakery: Pattern Oven', 'bakery-grand-opening': 'Teddy’s Bakery: Grand Opening' };
 const DAY = 86400000;
@@ -108,12 +108,12 @@ function render() {
   const subjects = Object.keys(SUBJECTS).filter((s) => shown.some((r) => r.subject === s));
   const skills = el('section', { class: 'panel', 'aria-labelledby': 'skills-h' }, [
     el('h2', { id: 'skills-h', text: `What ${name() === 'Your child' ? 'your child is' : `${name()} is`} learning` }),
-    notYet.length ? el('p', { class: 'muted', text: `Not started yet for this age: ${notYet.map((r) => L(r.label).toLowerCase()).join(', ')}.` }) : null,
+    notYet.length ? el('p', { class: 'muted', text: `Not started yet for this age: ${notYet.map((r) => mid(L(r.label))).join(', ')}.` }) : null,
     el('p', { class: 'muted small', text: '“Answers” and “first time” are exactly what was recorded. The status is an estimate from those answers, weighted towards recent, harder and unaided ones. “Probably known” comes from the quick check and has no answers behind it yet.' }),
     ...subjects.map((s) => el('div', { class: 'report-subject' }, [
       el('h3', { text: L(SUBJECTS[s].label) }),
       el('div', { class: 'table-wrap' }, el('table', {}, [
-        el('thead', {}, el('tr', {}, ['Skill', 'Answers', 'First time', 'Status', 'Last practised', 'Notes'].map((h) => el('th', { scope: 'col', text: h })))),
+        el('thead', {}, el('tr', {}, ['Skill', 'Answers', 'First time', 'Status', 'Last practiced', 'Notes'].map((h) => el('th', { scope: 'col', text: h })))),
         el('tbody', {}, SUBJECTS[s].strands.flatMap((strand) => shown.filter((r) => r.subject === s && r.strand === strand)
           .sort((a, b) => OBJECTIVES[a.id].order - OBJECTIVES[b.id].order)
           .map((r, i) => el('tr', { class: i === 0 ? 'strand-start' : '' }, [
@@ -125,7 +125,7 @@ function render() {
             el('td', { 'data-label': 'Answers', text: r.mastery.attempts ? String(r.mastery.attempts) : '—' }),
             el('td', { 'data-label': 'First time', text: r.mastery.attempts ? `${r.mastery.firstTry}` : '—' }),
             el('td', { 'data-label': 'Status' }, [el('span', { class: `status state-${r.state}`, text: STATE_LABEL[r.state] }), el('span', { class: 'cell-goal', text: sureness(r) })]),
-            el('td', { 'data-label': 'Last practised', text: r.mastery.lastAt ? ago(r.mastery.lastAt, now) : '—' }),
+            el('td', { 'data-label': 'Last practiced', text: r.mastery.lastAt ? ago(r.mastery.lastAt, now) : '—' }),
             el('td', { 'data-label': 'Notes', text: notes(r, now) }),
           ])))),
       ])),
@@ -199,7 +199,7 @@ function settingsPanel() {
       ...BANDS.map((band) => el('label', { class: 'chip' }, [
         el('input', { type: 'radio', name: 'band', value: band, checked: state.settings.band === band,
           onchange: () => { save(updateSettings(state, { band })); render(); } }),
-        el('span', { text: `Age ${band.replace('-', '–')}` }),
+        el('span', { text: `${stageName(band, locale())} · age ${band.replace('-', '–')}` }),
       ])),
     ]),
     el('label', { class: 'field-label', for: 'p-locale', text: 'Country' }),

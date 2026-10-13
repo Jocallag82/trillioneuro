@@ -4,6 +4,7 @@ import { BANDS, SKILLS } from './content.js';
 import { OBJECTIVES, SUBJECTS } from './curriculum/framework.js';
 import { isMisconception } from './curriculum/misconceptions.js';
 import { LOCALES } from './curriculum/locales.js';
+import { isGrade, GRADE_BAND } from './curriculum/grades.js';
 
 export const STORAGE_KEY = 'rtt.learn.v1';
 const MAX_STEPS = 2000;
@@ -16,6 +17,8 @@ export function emptyState() {
       band: '3-5', audio: true, volume: 1, showAll: false,
       // Added with the learning engine. All optional; older saved progress gets defaults.
       locale: null, onboarded: false, focus: 'all', placement: {}, assumed: [],
+      // US school grade (PK, K, 1-12). Optional; the band is what the engine uses.
+      grade: null,
     },
     steps: [],
     sessions: [],
@@ -41,6 +44,8 @@ export function normalize(raw) {
       .filter(([k, v]) => SUBJECTS[k] && OBJECTIVES[v])),
     // Objectives a diagnostic suggested are already known. Inferred, never shown as mastered.
     assumed: (Array.isArray(s.assumed) ? s.assumed : []).filter((id) => OBJECTIVES[id]).slice(0, 30),
+    // A grade only counts if it matches the band; otherwise the band wins.
+    grade: isGrade(s.grade) && GRADE_BAND[s.grade] === (BANDS.includes(s.band) ? s.band : base.settings.band) ? s.grade : null,
   };
   base.steps = (Array.isArray(raw.steps) ? raw.steps : [])
     .filter((x) => x && typeof x.activityId === 'string' && typeof x.skill === 'string'

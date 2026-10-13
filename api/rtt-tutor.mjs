@@ -36,7 +36,7 @@ async function callModel(credential, model, system, messages) {
       Authorization: `Bearer ${credential}`, 'x-api-key': credential,
       'anthropic-version': '2023-06-01', 'content-type': 'application/json',
     },
-    body: JSON.stringify({ model, system, messages, max_tokens: 350, temperature: 0.4 }),
+    body: JSON.stringify({ model, system, messages, max_tokens: 600, temperature: 0.4 }),
     signal: AbortSignal.timeout(TIMEOUT_MS),
   });
   if (!res.ok) return { ok: false, status: res.status };

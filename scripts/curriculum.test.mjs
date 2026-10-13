@@ -360,7 +360,7 @@ test('progress keeps evidence detail and drops anything malformed', () => {
 test('locales: picked from browser preferences, words and stage names localised', () => {
   assert.equal(pickLocale(['en-US', 'en']), 'en-US');
   assert.equal(pickLocale(['fr-IE']), 'en-IE');
-  assert.equal(pickLocale(['de-DE']), 'en-GB');
+  assert.equal(pickLocale(['de-DE']), 'en-US', 'the US is the default market');
   assert.equal(localise('Maths and colours', 'en-US'), 'Math and colors');
   assert.match(stageName('5-7', 'en-US'), /Kindergarten/);
   for (const l of Object.values(LOCALES)) for (const b of BANDS) assert.ok(l.stages[b]);

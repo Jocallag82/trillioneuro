@@ -439,6 +439,39 @@
       "dest": "/redteddytutor/learn/game/index.html"
     },
     {
+      "src": "/curriculum/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/curriculum.html"
+    },
+    {
+      "src": "/curriculum\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/curriculum"
+      },
+      "status": 308
+    },
+    {
       "src": "/privacy/?",
       "has": [
         {

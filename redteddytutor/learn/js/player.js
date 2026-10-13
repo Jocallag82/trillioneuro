@@ -21,6 +21,9 @@ import {
 } from './learner.js';
 import { askTutor, itemFor, reasonText } from './tutor.js';
 import { mulberry32 } from '../game/js/rng.js';
+import { renderCurriculum, renderLesson, renderAsk } from './explore.js';
+import { LESSONS } from './curriculum/lessons.js';
+import { US_GRADES, GRADE_BAND, gradeLabel } from './curriculum/grades.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
 const app = document.getElementById('app');
@@ -50,6 +53,9 @@ const L = (text) => localise(text, locale());
 const band = () => state.settings.band;
 const stage = () => STAGES[band()];
 const isPrimary = () => stage().id === 'primary';
+const isOlder = () => ['primary', 'middle', 'high'].includes(stage().id);
+const usGrades = () => locale() === 'en-US';
+const gradeName = () => (usGrades() && state.settings.grade ? gradeLabel(state.settings.grade) : stageName(band(), locale()));
 const tutorAllowed = () => bandIndex(band()) >= 2;
 const byId = (id) => ACTIVITIES.find((a) => a.id === id);
 const completedIds = () => new Set(state.sessions.map((s) => s.activityId));
@@ -85,6 +91,15 @@ function teddy(cls = '') {
   return el('img', { src: '/teddy-mark.webp', width: 64, height: 64, alt: '', class: `teddy ${cls}`.trim() });
 }
 
+// What the curriculum, lesson and Ask Red Teddy screens need from the app.
+const ctx = {
+  state: () => state, remote: () => remote, storage, L, say,
+  setScreen: (nodes, focus) => setScreen(nodes, focus),
+  renderHome: () => renderHome(),
+  startPractice: (id, why, opts) => startPractice(id, why, opts),
+  focus: (sel) => app.querySelector(sel)?.focus(),
+};
+
 function saveSettings(patch) {
   state = updateSettings(state, patch);
   persist();
@@ -97,12 +112,25 @@ function renderSetup(step = 'age') {
   if (step === 'age') {
     const loc = el('select', { id: 'locale', class: 'field field-inline', onchange: (e) => { saveSettings({ locale: e.target.value }); renderSetup('age'); } },
       Object.entries(LOCALES).map(([id, l]) => el('option', { value: id, text: l.label, selected: id === locale() })));
+    const pickGrade = (g) => { saveSettings({ grade: g, band: GRADE_BAND[g], locale: locale() }); renderSetup(bandIndex(GRADE_BAND[g]) >= 2 ? 'focus' : 'start'); };
+    const gradeGrid = el('div', { class: 'grade-grid', role: 'group', 'aria-label': 'Grade' }, [
+      el('button', { type: 'button', class: 'grade-card', onclick: () => { saveSettings({ grade: null, band: '2-3', locale: locale() }); renderSetup('start'); } }, [
+        el('span', { class: 'grade-big', text: '2–3' }), el('span', { class: 'band-note', text: 'Toddler, with a grown-up' })]),
+      ...US_GRADES.map((g) => el('button', {
+        type: 'button', class: `grade-card${g === state.settings.grade && state.settings.onboarded ? ' is-current' : ''}`, onclick: () => pickGrade(g),
+      }, [
+        el('span', { class: 'grade-big', text: g === 'PK' ? 'Pre-K' : g }),
+        el('span', { class: 'band-note', text: g === 'PK' ? 'Preschool' : g === 'K' ? 'Kindergarten' : Number(g) <= 5 ? 'Elementary' : Number(g) <= 8 ? 'Middle school' : 'High school' }),
+      ])),
+    ]);
     setScreen([
       el('div', { class: 'setup' }, [
         el('p', { class: 'eyebrow', text: 'Getting started' }),
-        el('h2', { id: 'setup-title', tabindex: '-1', text: 'Who is learning today?' }),
-        el('p', { class: 'lead', text: 'Choose an age. It sets the starting point and how the screens look. It is not a measure of ability, and you can change it any time.' }),
-        el('div', { class: 'band-grid', role: 'group', 'aria-label': 'Age' }, BANDS.map((b) => el('button', {
+        el('h2', { id: 'setup-title', tabindex: '-1', text: usGrades() ? 'What grade is the learner in?' : 'Who is learning today?' }),
+        el('p', { class: 'lead', text: usGrades()
+          ? 'Pick the school grade. It sets the starting point, the curriculum shown and how the screens look. It is not a measure of ability, and you can change it any time.'
+          : 'Choose an age. It sets the starting point and how the screens look. It is not a measure of ability, and you can change it any time.' }),
+        usGrades() ? gradeGrid : el('div', { class: 'band-grid', role: 'group', 'aria-label': 'Age' }, BANDS.map((b) => el('button', {
           type: 'button', class: `band-card${b === band() && state.settings.onboarded ? ' is-current' : ''}`,
           onclick: () => { saveSettings({ band: b, locale: locale() }); renderSetup(bandIndex(b) >= 2 ? 'focus' : 'start'); },
         }, [
@@ -110,17 +138,22 @@ function renderSetup(step = 'age') {
           el('span', { class: 'band-name', text: stageName(b, locale()) }),
           el('span', { class: 'band-note', text: STAGES[b].supervised ? 'With a grown-up' : STAGES[b].reading === 'independent' ? 'Reads on their own' : 'Early reader' }),
         ]))),
-        el('label', { class: 'field-row' }, [el('span', { class: 'field-label', text: 'Country (changes words like Maths/Math and stage names)' }), loc]),
-        el('p', { class: 'muted small', text: 'Activities are written for these ages. They are not yet matched to any country’s official curriculum.' }),
+        el('label', { class: 'field-row' }, [el('span', { class: 'field-label', text: 'Country (changes grade names and spellings)' }), loc]),
+        el('p', { class: 'muted small', text: usGrades()
+          ? 'Skills are mapped to related Common Core and NGSS standards where they exist. No state’s own standards have been checked yet.'
+          : 'Activities are written for these ages. They are not yet matched to this country’s official curriculum.' }),
       ]),
     ], '#setup-title');
-    say('Who is learning today? Choose an age.');
+    say(usGrades() ? 'What grade is the learner in?' : 'Who is learning today? Choose an age.');
     return;
   }
   if (step === 'focus') {
-    const choices = [['maths', L('Maths'), 'Number, calculation, fractions, shape and measuring'],
-      ['literacy', 'Reading & words', 'Letters, sounds, building words and sentences'],
-      ['all', 'A bit of everything', L('Maths') + ', reading and thinking skills']];
+    const older = bandIndex(band()) >= 5;
+    const choices = [['maths', L('Maths'), older ? 'Algebra, geometry, statistics and more' : 'Number, calculation, fractions, shape and measuring'],
+      ['literacy', usGrades() ? 'English' : 'Reading & words', older ? 'Grammar, vocabulary, literature and argument' : 'Letters, sounds, building words and sentences'],
+      ...(bandIndex(band()) >= 3 ? [['science', 'Science', 'Life, physical, and Earth and space science'], ['social', usGrades() ? 'Social studies' : 'History & society', 'Government, history, geography and economics']] : []),
+      ...(older ? [['computing', 'Computer science', 'Reading and tracing code']] : []),
+      ['all', 'A bit of everything', older ? 'Every subject' : L('Maths') + ', reading and thinking skills']];
     setScreen([
       el('div', { class: 'setup' }, [
         el('button', { type: 'button', class: 'link', onclick: () => renderSetup('age'), text: '← Back' }),
@@ -246,7 +279,7 @@ function renderHome(focusSelector = '#home-title') {
         el('span', { class: 'plan-reason', text: p.reason }),
       ]),
       el('button', { type: 'button', class: i === 0 ? 'btn btn-red' : 'btn btn-line', dataset: { objective: p.objective },
-        onclick: () => startPractice(p.objective, p.kind === 'review' ? 'review' : 'practice'), text: i === 0 ? 'Start' : 'Practise' }),
+        onclick: () => startPractice(p.objective, p.kind === 'review' ? 'review' : 'practice'), text: i === 0 ? 'Start' : 'Practice' }),
     ])))
     : el('p', { class: 'muted', text: 'Nothing is planned for this focus yet. Try another focus or age in settings.' });
 
@@ -268,13 +301,17 @@ function renderHome(focusSelector = '#home-title') {
     el('section', { class: 'hero-banner' }, [
       teddy('teddy-hero'),
       el('div', {}, [
-        el('p', { class: 'eyebrow', text: `${stageName(band(), locale())} · Age ${band().replace('-', '–')}` }),
+        el('p', { class: 'eyebrow', text: usGrades() && state.settings.grade ? gradeName() : `${stageName(band(), locale())} · Age ${band().replace('-', '–')}` }),
         el('h2', { id: 'home-title', tabindex: '-1', text: who ? `${who}’s plan for today` : 'Today’s plan' }),
         el('p', { class: 'hero-copy', text: isPrimary()
           ? 'Short practice sets that adapt to your answers. Do the first one, then pick what you like.'
           : 'A few short activities chosen from what has been tried so far.' }),
       ]),
     ]),
+    isOlder() || usGrades() ? el('div', { class: 'home-tools' }, [
+      el('button', { type: 'button', class: 'tool-btn', onclick: () => renderCurriculum(ctx) }, [el('strong', { text: 'Browse the curriculum' }), el('span', { text: 'Every skill by grade and subject' })]),
+      tutorAllowed() ? el('button', { type: 'button', class: 'tool-btn', onclick: () => renderAsk(ctx) }, [el('strong', { text: 'Ask Red Teddy' }), el('span', { text: 'Help with any topic' })]) : null,
+    ]) : null,
     remote?.profile
       ? el('p', { class: 'learning-as' }, ['Learning as ', el('strong', { text: remote.profile.nickname }), ' · ', el('a', { href: '/learn/account.html', text: 'Change profile' })])
       : el('p', { class: 'learning-as muted' }, ['Saved on this device. ', el('a', { href: '/learn/account.html', text: 'Sign in to sync and use Teddy’s explanations' })]),
@@ -328,7 +365,10 @@ function mapSection(now) {
               el('span', { class: 'dot', 'aria-hidden': 'true' }),
               el('span', { class: 'skill-name', text: L(OBJECTIVES[id].label) }),
               el('span', { class: 'skill-meta', text: [STATE_SHORT[r.state], evidence, r.retention.due ? 'review due' : ''].filter(Boolean).join(' · ') }),
-              el('button', { type: 'button', class: 'link', 'aria-label': `Practise ${OBJECTIVES[id].label}`, onclick: () => startPractice(id, r.retention.due ? 'review' : 'practice'), text: 'Practise' }),
+              el('span', { class: 'skill-actions' }, [
+                LESSONS[id] ? el('button', { type: 'button', class: 'link', 'aria-label': `Lesson: ${OBJECTIVES[id].label}`, onclick: () => renderLesson(ctx, id), text: 'Lesson' }) : null,
+                el('button', { type: 'button', class: 'link', 'aria-label': `Practice ${OBJECTIVES[id].label}`, onclick: () => startPractice(id, r.retention.due ? 'review' : 'practice', { skipLesson: true }), text: 'Practice' }),
+              ]),
             ]);
           })),
         ]);
@@ -356,8 +396,13 @@ function startLibrary(id) {
   begin(byId(id));
 }
 
-function startPractice(objective, why = 'practice') {
+// A skill the learner has never answered starts with its lesson, when there is one.
+function startPractice(objective, why = 'practice', { skipLesson = false } = {}) {
   const report = objectiveReport(state, objective, Date.now());
+  if (!skipLesson && why !== 'review' && LESSONS[objective] && report.mastery.attempts === 0 && bandIndex(band()) >= 3) {
+    renderLesson(ctx, objective);
+    return;
+  }
   const d = nextDifficulty(report, band());
   purpose = why;
   begin(practiceActivity(objective, why === 'review' ? [d, d, d] : rampFor(d), (Date.now() ^ (Math.random() * 1e9)) >>> 0, why === 'review' ? 3 : 5, why));
@@ -393,7 +438,7 @@ function renderStep(intro = false, viewState = session) {
       el('p', { class: 'step-count', text: label }),
       diagnostic ? null : el('progress', { max: total, value: viewState.index, 'aria-label': 'Activity progress' }),
     ]),
-    el('h2', { id: 'prompt', tabindex: '-1', text: current.generated ? `${current.purpose === 'review' ? 'Review' : 'Practise'}: ${L(current.title)}` : L(current.title) }),
+    el('h2', { id: 'prompt', tabindex: '-1', text: current.generated ? `${current.purpose === 'review' ? 'Review' : 'Practice'}: ${L(current.title)}` : L(current.title) }),
     el('p', { class: 'prompt', text: L(step.prompt) }),
     bodyFor(step, viewState),
     el('div', { id: 'feedback', class: 'feedback', role: 'status', 'aria-live': 'polite' }),
@@ -829,7 +874,7 @@ function helpPanel(step, viewState) {
     m.followUp ? el('p', { class: 'help-follow' }, [el('strong', { text: 'Try this: ' }), m.followUp]) : null,
   ])));
   const ask = (mode, message) => tutorTurn(step, stepIndex, mode, message, attempts);
-  const chat = isPrimary() && signedIn ? el('form', { class: 'help-ask', onsubmit: (e) => {
+  const chat = isOlder() && signedIn ? el('form', { class: 'help-ask', onsubmit: (e) => {
     e.preventDefault();
     const input = e.target.querySelector('input');
     const text = input.value.trim();
@@ -968,6 +1013,9 @@ openRemote(storage).then((r) => {
   const practise = params.get('practise');
   if (requested && byId(requested)) { state = updateSettings(state, { onboarded: true }); startLibrary(requested); }
   else if (practise && OBJECTIVES[practise]) { state = updateSettings(state, { onboarded: true }); startPractice(practise); }
+  else if (params.get('view') === 'curriculum') renderCurriculum(ctx, US_GRADES.includes(params.get('grade')) ? params.get('grade') : undefined);
+  else if (params.get('view') === 'ask') renderAsk(ctx, OBJECTIVES[params.get('topic')] ? params.get('topic') : undefined);
+  else if (params.get('lesson') && OBJECTIVES[params.get('lesson')]) renderLesson(ctx, params.get('lesson'));
   else if (!state.settings.onboarded && !state.steps.length) renderSetup('age');
   else renderHome();
 });

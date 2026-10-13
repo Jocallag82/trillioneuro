@@ -8,15 +8,26 @@ import { pickLocale, localise } from '/learn/js/curriculum/locales.js';
 import { grade, MAX_MISSES } from '/learn/js/engine.js';
 import { el, visualNode } from '/learn/js/dom.js';
 import { mulberry32 } from '/learn/game/js/rng.js';
+import { US_CATALOGUE } from '/learn/js/curriculum/catalogues/us.js';
 
 const locale = pickLocale(navigator.languages || []);
 const L = (t) => localise(t, locale);
 
 /* ---------- skill list ---------- */
-const ageRange = (bands) => {
-  const lo = bands[0].split('-')[0];
-  const hi = bands[bands.length - 1].split('-')[1];
-  return `ages ${lo}–${hi}`;
+// Grades come from the US catalogue, so the list matches the curriculum page.
+const gradeSpan = (grades) => {
+  const name = (g) => (g === 'PK' ? 'Pre-K' : g === 'K' ? 'K' : g);
+  if (!grades.length) return '';
+  const first = name(grades[0]); const last = name(grades[grades.length - 1]);
+  return grades.length === 1 ? (first === 'K' || first === 'Pre-K' ? first : `Grade ${first}`) : `Grades ${first}–${last}`;
+};
+const BLURBS = {
+  maths: 'Counting to calculus: place value, the four operations, fractions and decimals, ratios, algebra, geometry, trigonometry and derivatives.',
+  literacy: 'Phonics and reading to literary analysis: spelling, vocabulary, grammar, figurative language, comprehension and argument.',
+  science: 'States of matter, ecosystems, cells, photosynthesis, the Earth–sun–moon system, density, forces, chemistry and genetics.',
+  social: 'US government and the Bill of Rights, a US history timeline, states and capitals, supply and demand, and personal finance.',
+  computing: 'Reading and tracing Python: variables, loops and conditions.',
+  thinking: 'Colors, sorting, patterns, sequences, memory and logic puzzles for younger learners.',
 };
 
 function renderSubjects() {
@@ -25,25 +36,24 @@ function renderSubjects() {
   const ids = Object.keys(OBJECTIVES);
   document.getElementById('obj-count').textContent = String(ids.length);
   document.querySelectorAll('[data-obj-count]').forEach((n) => { n.textContent = String(ids.length); });
-  const blurbs = [...host.querySelectorAll('.subject > p')].map((p) => p.textContent);
   // On a phone the full list is long, so each subject starts folded.
   const open = window.matchMedia('(min-width: 641px)').matches;
-  host.replaceChildren(...Object.entries(SUBJECTS).map(([sid, subject], i) => {
+  host.replaceChildren(...Object.entries(SUBJECTS).map(([sid, subject]) => {
     const mine = ids.filter((id) => OBJECTIVES[id].subject === sid);
     return el('article', { class: 'subject' }, [
-      el('h3', { text: L(subject.label) }),
-      blurbs[i] ? el('p', { text: blurbs[i] }) : null,
+      el('h3', { text: US_CATALOGUE.subjectNames[sid] || L(subject.label) }),
+      BLURBS[sid] ? el('p', { text: BLURBS[sid] }) : null,
       el('details', { class: 'strands', open }, [
         el('summary', { text: `All ${mine.length} skills` }),
         ...subject.strands.map((strand) => {
           const list = mine.filter((id) => OBJECTIVES[id].strand === strand)
-            .sort((a, b) => OBJECTIVES[a].order - OBJECTIVES[b].order);
+            .sort((x, y) => OBJECTIVES[x].order - OBJECTIVES[y].order);
           if (!list.length) return null;
           return el('div', { class: 'strand' }, [
             el('h4', { text: STRANDS[strand] }),
             el('ul', {}, list.map((id) => el('li', {}, [
               el('span', { text: L(OBJECTIVES[id].label) }),
-              el('span', { text: ageRange(OBJECTIVES[id].bands) }),
+              el('span', { text: gradeSpan(US_CATALOGUE.placement[id]?.grades || []) }),
             ]))),
           ]);
         }),
@@ -58,9 +68,12 @@ const DEMO = {
   '3-5': ['number-names', 'subitise', 'patterns', 'rhyme', 'compare-numbers'],
   '5-7': ['add-within-20', 'shape-words', 'subtract-within-20', 'measure-length', 'place-value-100'],
   '7-9': ['tell-time', 'bar-charts', 'word-problems', 'comprehension', 'logic-puzzles', 'subtract-2digit', 'unit-fractions'],
-  '9-11': ['decimals', 'area-perimeter', 'comprehension', 'logic-puzzles', 'times-tables', 'fractions-compare', 'spelling'],
+  '9-11': ['decimals', 'area-perimeter', 'comprehension', 'logic-puzzles', 'times-tables', 'fractions-compare', 'spelling', 'states-capitals'],
+  '11-14': ['equations-two-step', 'ratios-rates', 'integers', 'probability', 'pythagorean', 'context-clues', 'cells', 'code-tracing', 'percent'],
+  '14-18': ['quadratics', 'trig-ratios', 'systems', 'function-notation', 'derivatives', 'forces-motion', 'literary-analysis', 'simple-interest', 'logarithms'],
 };
-const LEVEL = { '3-5': [1, 2], '5-7': [1, 2, 3], '7-9': [2, 3], '9-11': [2, 3] };
+const LEVEL = { '3-5': [1, 2], '5-7': [1, 2, 3], '7-9': [2, 3], '9-11': [2, 3], '11-14': [1, 2, 3], '14-18': [1, 2, 3] };
+const BAND_NAME = { '3-5': 'Pre-K', '5-7': 'Grades K–1', '7-9': 'Grades 2–3', '9-11': 'Grades 4–5', '11-14': 'Grades 6–8', '14-18': 'Grades 9–12' };
 
 const panel = document.getElementById('demo-panel');
 const body = document.getElementById('demo-body');
@@ -71,7 +84,7 @@ const nextBtn = document.getElementById('demo-next');
 const tabs = [...document.querySelectorAll('.book-tabs [role=tab]')];
 const rand = mulberry32((Date.now() ^ (Math.random() * 1e9)) >>> 0);
 
-let band = '5-7';
+let band = '11-14';
 let turn = Object.fromEntries(Object.keys(DEMO).map((b) => [b, Math.floor(rand() * DEMO[b].length)]));
 let q = null; // { id, step, misses, hintsShown, done }
 
@@ -136,7 +149,7 @@ function render() {
   feedback.replaceChildren();
   if (!q) { body.replaceChildren(el('p', { class: 'demo-prompt', text: 'Could not make a question just now.' })); return; }
   const { step, id } = q;
-  skillLine.replaceChildren(`Age ${band.replace('-', '–')} · `, el('b', { text: L(OBJECTIVES[id].label) }));
+  skillLine.replaceChildren(`${BAND_NAME[band]} · `, el('b', { text: L(OBJECTIVES[id].label) }));
   const pictorial = step.options?.every((o) => o.visual);
   const parts = [
     el('p', { class: 'demo-prompt', id: 'demo-prompt', text: L(step.prompt) }),

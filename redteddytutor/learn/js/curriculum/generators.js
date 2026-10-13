@@ -9,49 +9,9 @@
 // practiceActivity(objective, difficulty, seed, count) -> a full activity
 import { OBJECTIVES } from './framework.js';
 import { mulberry32 } from '../../game/js/rng.js';
-
-const int = (rand, lo, hi) => lo + Math.floor(rand() * (hi - lo + 1));
-const pick = (rand, list) => list[Math.floor(rand() * list.length)];
-
-function shuffled(list, rand) {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-// Builds a choice step from the right value and candidate wrong values.
-// Wrong values equal to the answer, duplicates and out-of-range values are dropped.
-function choice(rand, { prompt, visual, answer, wrong, hints, label = String, visualFor, listen, min = -Infinity, max = Infinity, size = 4 }) {
-  const seen = new Set([String(answer)]);
-  const distractors = [];
-  for (const w of wrong) {
-    const key = String(w.value);
-    if (seen.has(key) || (typeof w.value === 'number' && (w.value < min || w.value > max))) continue;
-    seen.add(key);
-    distractors.push(w);
-  }
-  const chosen = [{ value: answer }, ...distractors.slice(0, size - 1)];
-  const options = shuffled(chosen, rand).map((w) => ({
-    id: String(w.value),
-    label: label(w.value),
-    ...(visualFor ? { visual: visualFor(w.value) } : {}),
-    ...(w.misconception ? { misconception: w.misconception } : {}),
-  }));
-  return { prompt, ...(visual ? { visual } : {}), ...(listen ? { listen: true } : {}), options, answer: String(answer), hints };
-}
-
-// Typed numeric answer. `wrong` maps a wrong value to the mistake it shows.
-function input(prompt, answer, hints, wrong = {}, visual) {
-  const map = {};
-  for (const [k, v] of Object.entries(wrong)) if (Number(k) !== answer && v) map[String(k)] = v;
-  return { kind: 'input', prompt, ...(visual ? { visual } : {}), answer: String(answer), wrong: map, hints };
-}
-
-const dots = (count) => ({ kind: 'dots', count });
-const text = (t) => ({ kind: 'text', text: String(t) });
+import { int, pick, shuffled, choice, input, dots, text, order } from './kit.js';
+import { SECONDARY_MATH } from './gen-secondary-math.js';
+import { SUBJECT_GENERATORS } from './gen-subjects.js';
 
 // ---------- Maths ----------
 const RANGES = {
@@ -429,12 +389,6 @@ const WORDS = [
   ['ship', 'frog', 'fish', 'duck', 'milk', 'tent', 'drum', 'chip', 'crab', 'nest'],
   ['plant', 'train', 'sheep', 'brush', 'stamp', 'cloud', 'crisp', 'shell'],
 ];
-function order(prompt, tokens, accept, rand, hints, misconception, extra = {}) {
-  const tiles = tokens.map((label, i) => ({ id: `t${i}`, label }));
-  let order = shuffled(tiles, rand);
-  if (order.map((t) => t.label).join(' ') === accept[0]) order = [...order.slice(1), order[0]];
-  return { kind: 'order', prompt, tiles: order, accept, answer: accept[0], hints, misconception, ...extra };
-}
 function buildWords(d, rand) {
   const word = pick(rand, WORDS[d - 1]);
   return order(`Build the word “${word}”.`, word.split(''), [word.split('').join(' ')], rand,
@@ -909,6 +863,8 @@ export const GENERATORS = {
   'decimals': decimals,
   'spelling': spelling,
   'comprehension': comprehension,
+  ...SECONDARY_MATH,
+  ...SUBJECT_GENERATORS,
 };
 
 export function generateStep(objective, difficulty, rand) {
@@ -922,6 +878,9 @@ const INSTRUCTIONS = {
   maths: 'Take your time. Hints are there if you need them.',
   literacy: 'Say the words aloud if it helps.',
   thinking: 'Look carefully before you choose.',
+  science: 'Think about what you know, then check each choice against it.',
+  social: 'Read each choice carefully. Hints are there if you need them.',
+  computing: 'Trace the program one line at a time and keep track of each variable.',
 };
 
 // A practice set for one objective. `difficulties` may vary per item, so a set can

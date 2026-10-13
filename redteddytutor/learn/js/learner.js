@@ -179,6 +179,8 @@ export function rampFor(d, count = 5) {
   return count === 5 ? ramp : Array.from({ length: count }, (_, i) => ramp[Math.min(i, 4)]);
 }
 
+// Lower-cases a label for use mid-sentence, keeping proper nouns such as Pythagorean.
+export const mid = (label) => (/^[A-Z][a-z]+ [A-Z]/.test(label) || /Pythagorean|Newton|Punnett|Bill of Rights|US |Earth/.test(label) ? label.replace(/^The /, 'the ') : label.toLowerCase());
 const days = (ms) => Math.max(1, Math.round(ms / DAY));
 
 // The plan for today: a short, ordered list of objectives with a reason for each.
@@ -191,6 +193,15 @@ export function plan(state, now = Date.now(), limit = 4) {
   const near = objectivesFor(band, 1).filter(inFocus);
   const here = new Set(objectivesFor(band, 0));
   const placement = state.settings.placement || {};
+  // For planning only: a prerequisite usually met in an earlier age band, with no
+  // answers either way, is taken as known. A learner in grade 9 is not asked to prove
+  // counting first. As soon as answers show a gap, it is no longer taken as known,
+  // and the plan steps back to it. Nothing here is recorded as mastery.
+  const bi = bandIndex(band);
+  const below = (p) => Math.max(...OBJECTIVES[p].bands.map(bandIndex)) < bi;
+  // Only from middle school up: younger children build foundations first.
+  const metForPlan = (p) => isMet(reports[p]) || (bi >= 5 && reports[p].state === 'not-started' && below(p));
+  const isReady = (_reports, id) => OBJECTIVES[id].prereqs.every(metForPlan);
   const out = [];
   const add = (id, kind, reason) => {
     if (out.some((x) => x.objective === id)) return;
@@ -206,6 +217,9 @@ export function plan(state, now = Date.now(), limit = 4) {
     .sort((a, b) => a.mastery.level - b.mastery.level);
   if (support[0]) {
     const mc = support[0].misconceptions.find((m) => m.active);
+    // Struggling with a skill whose foundation has no evidence yet: check the foundation first.
+    const gap = OBJECTIVES[support[0].id].prereqs.find((p) => !isMet(reports[p]) && GENERATORS[p]);
+    if (gap) add(gap, 'support', `Builds the foundation for ${mid(OBJECTIVES[support[0].id].label)}, which has been tricky so far.`);
     add(support[0].id, 'support', mc
       ? `Working on a common mix-up: ${mc.label.toLowerCase()}.`
       : `${support[0].mastery.firstTry} of ${support[0].mastery.attempts} answers right first time so far. More practice will help.`);
@@ -224,7 +238,7 @@ export function plan(state, now = Date.now(), limit = 4) {
       return placed(a) - placed(b) || (here.has(b) - here.has(a)) || OBJECTIVES[a].order - OBJECTIVES[b].order;
     });
   fresh.forEach((id) => {
-    const after = OBJECTIVES[id].prereqs.map((p) => OBJECTIVES[p].label.toLowerCase());
+    const after = OBJECTIVES[id].prereqs.map((p) => mid(OBJECTIVES[p].label));
     add(id, 'new', Object.values(placement).includes(id)
       ? 'Your starting point from the quick check.'
       : after.length ? `Ready to start. It builds on ${after.join(' and ')}.` : 'A good place to start.');

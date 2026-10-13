@@ -182,6 +182,26 @@ export function visualNode(v) {
     }
     return s;
   }
+  if (v.kind === 'rtri') {
+    // Right angle at bottom left; a = vertical leg, b = horizontal leg, c = hypotenuse.
+    // With `angle`, θ is marked at the bottom right, so a is opposite and b adjacent.
+    const s = svg('svg', { viewBox: '0 0 300 210', class: 'visual-rtri', role: 'img',
+      'aria-label': `Right triangle. Vertical leg ${v.a === '?' ? 'unknown' : v.a}, horizontal leg ${v.b === '?' ? 'unknown' : v.b}, hypotenuse ${v.c === '?' ? 'unknown' : v.c}${v.angle ? ', angle theta at the bottom right' : ''}` });
+    s.append(svg('polygon', { points: '50,170 250,170 50,30', fill: 'var(--red-soft)', stroke: 'var(--ink)', 'stroke-width': 3, 'stroke-linejoin': 'round' }));
+    s.append(svg('polyline', { points: '50,150 70,150 70,170', fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2 }));
+    const label = (x, y, t, anchor = 'middle') => { const n = svg('text', { x, y, 'text-anchor': anchor, 'font-size': 20, 'font-weight': 700, fill: t === '?' ? 'var(--red)' : 'var(--ink)' }); n.textContent = t; s.append(n); };
+    label(36, 106, v.a, 'end');
+    label(150, 196, v.b);
+    label(162, 92, v.c, 'start');
+    if (v.angle) {
+      s.append(svg('path', { d: 'M 215 170 A 35 35 0 0 0 222 150', fill: 'none', stroke: 'var(--red)', 'stroke-width': 3 }));
+      label(198, 160, 'θ', 'end');
+    }
+    return s;
+  }
+  if (v.kind === 'code') {
+    return el('pre', { class: 'visual-code', 'aria-label': 'Python program' }, [el('code', { text: v.text })]);
+  }
   if (v.kind === 'passage') {
     return el('article', { class: 'visual-passage' }, [
       el('h3', { text: v.title }),

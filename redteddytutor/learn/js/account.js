@@ -6,12 +6,13 @@ import {
   loadActiveProfile, saveActiveProfile,
 } from './api.js';
 import { BANDS } from './content.js';
-import { LOCALES, pickLocale } from './curriculum/locales.js';
+import { LOCALES, pickLocale, stageName } from './curriculum/locales.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
 const app = document.getElementById('account-app');
 const notice = document.getElementById('notice');
-const BAND_LABEL = Object.fromEntries(BANDS.map((b) => [b, `Age ${b.replace('-', '–')}`]));
+// Grade names follow the parent's browser country (US by default), with the age alongside.
+const BAND_LABEL = Object.fromEntries(BANDS.map((b) => [b, `${stageName(b, pickLocale(navigator.languages || []))} · age ${b.replace('-', '–')}`]));
 
 function say(text) { notice.textContent = text; }
 
@@ -85,7 +86,7 @@ async function renderAccount(session) {
 
   const nickname = el('input', { id: 'nickname', maxlength: 20, required: true, placeholder: 'e.g. Sam or Bear', class: 'field' });
   const band = el('select', { id: 'band', class: 'field' }, BANDS.map((b) => el('option', { value: b, text: BAND_LABEL[b] })));
-  band.value = '3-5';
+  band.value = '5-7';
   const locale = el('select', { id: 'locale', class: 'field' }, Object.entries(LOCALES).map(([id, l]) => el('option', { value: id, text: l.label })));
   locale.value = pickLocale(navigator.languages || []);
 

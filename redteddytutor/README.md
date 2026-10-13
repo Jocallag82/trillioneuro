@@ -46,3 +46,22 @@ two-step word problems, area and perimeter, decimals, spelling in context, readi
 (six original passages; retrieval, inference, word choice) and logic puzzles (every puzzle is
 solved by brute force in the tests to prove it has exactly one answer). New visuals in `dom.js`:
 `clock`, `bars`, `grid`, `passage`. The comprehension passage is sent to the AI helper as context.
+
+## K-12 for the US (October 2026)
+- **Bands** now run to 14-18 (`11-14` middle school, `14-18` high school). DB constraint widened in
+  `supabase/migrations/20261013_rtt_grades_6_12.sql` (additive).
+- **Grades** (`curriculum/grades.js`): PK, K, 1-12 map onto bands. US is the default locale; the
+  learner app asks for a grade in the US and stores it as `settings.grade`.
+- **Catalogue** (`curriculum/catalogues/us.js`): courses, grade placement and related standards
+  (Common Core math/ELA, NGSS) with `fit: aligned|partial`. Codes are only added when certain;
+  tests check every code's shape. Social studies and computer science have no mapped codes.
+- **Coverage** (`curriculum/coverage.js`): computed inventory, shown on `/curriculum`.
+- **New objectives** (80 total): grades 6-12 maths (`gen-secondary-math.js`), English, science,
+  social studies and computer science (`gen-subjects.js`). Every computed answer is re-solved
+  independently in `scripts/secondary.test.mjs`; authored banks are checked for one right answer.
+- **Lessons** (`curriculum/lessons.js`): shown before a learner's first practice of a skill.
+- **Ask Red Teddy** (`learn/js/explore.js` + tutor mode `ask`): topic-level tutoring for
+  signed-in families, same quotas and safety rules; older learners get an older voice.
+- **Planning**: from middle school up, earlier-band prerequisites with no evidence are assumed
+  for planning only; struggling sends the learner back to the missing foundation.
+- Compliance notes: `docs/compliance/us-child-privacy.md`.

@@ -124,6 +124,81 @@ export const MISCONCEPTIONS = {
     parent: 'Did the first part of a two-step problem correctly but stopped before the second part. Asking “what does the question want?” at the end helps.',
     tip: 'Read the question again. Is there another step after that one?',
   },
+  'additive-scaling': {
+    label: 'Adding instead of scaling',
+    parent: 'Added the same amount to both quantities instead of multiplying both by the same factor. Ratios grow by multiplying.',
+    tip: 'A ratio stays the same when both parts are multiplied by the same number, not when the same amount is added.',
+  },
+  'integer-sign': {
+    label: 'Sign error with negative numbers',
+    parent: 'Got the size of the answer right but the sign wrong. Picturing a number line, or the rules for signs, helps.',
+    tip: 'Check the sign separately: which direction do you move on the number line?',
+  },
+  'median-unsorted': {
+    label: 'Finding the median without ordering',
+    parent: 'Took the middle value of the list as written, without putting the numbers in order first.',
+    tip: 'Put the numbers in order from smallest to largest before you find the middle.',
+  },
+  'part-to-part': {
+    label: 'Comparing part to part instead of part to whole',
+    parent: 'Wrote a probability as one group compared with another group, instead of compared with the total.',
+    tip: 'Probability compares the outcomes you want with all the possible outcomes.',
+  },
+  'inverse-operation': {
+    label: 'Undoing with the wrong operation',
+    parent: 'When solving an equation, undid an addition by adding (or a subtraction by subtracting) instead of using the opposite operation.',
+    tip: 'To undo + 5, subtract 5 from both sides. Do the opposite operation.',
+  },
+  'power-as-product': {
+    label: 'Multiplying the base by the exponent',
+    parent: 'Worked out 2⁵ as 2 × 5 instead of 2 × 2 × 2 × 2 × 2.',
+    tip: 'The exponent says how many times the base is multiplied by itself.',
+  },
+  'exponent-law-mix': {
+    label: 'Mixing up the laws of exponents',
+    parent: 'Multiplied exponents when they should be added (or the other way round). x³ · x⁴ = x⁷, but (x³)⁴ = x¹².',
+    tip: 'Same base multiplied: add the exponents. A power of a power: multiply them.',
+  },
+  'pythagorean-no-square': {
+    label: 'Adding sides without squaring',
+    parent: 'Added the two shorter sides instead of their squares. The theorem is about the areas of squares on each side.',
+    tip: 'Square each side first: a² + b² = c². Then take the square root.',
+  },
+  'slope-inverted': {
+    label: 'Run over rise instead of rise over run',
+    parent: 'Divided the change in x by the change in y. Slope is the change in y divided by the change in x.',
+    tip: 'Slope = rise ÷ run: the change in y, divided by the change in x.',
+  },
+  'distribution-error': {
+    label: 'Not multiplying every term in the parentheses',
+    parent: 'Multiplied only the first term inside the parentheses. 3(x + 2) is 3x + 6, not 3x + 2.',
+    tip: 'Multiply the number outside by every term inside the parentheses.',
+  },
+  'factor-sign': {
+    label: 'Sign error in the solutions of a quadratic',
+    parent: 'Factored correctly but gave solutions with the wrong signs. If (x − 2)(x − 3) = 0, then x = 2 or x = 3.',
+    tip: 'Set each factor equal to zero: x − 2 = 0 gives x = 2.',
+  },
+  'trig-ratio-mix': {
+    label: 'Mixing up sine, cosine and tangent',
+    parent: 'Used the wrong pair of sides for the ratio. SOH CAH TOA is a common memory aid.',
+    tip: 'SOH CAH TOA: sine = opposite ÷ hypotenuse, cosine = adjacent ÷ hypotenuse, tangent = opposite ÷ adjacent.',
+  },
+  'simple-vs-compound': {
+    label: 'Using simple interest for compound interest',
+    parent: 'Calculated interest only on the starting amount each year. Compound interest also earns interest on earlier interest.',
+    tip: 'With compound interest, each year’s interest is added before the next year’s is worked out.',
+  },
+  'capital-largest-city': {
+    label: 'Choosing the largest city instead of the capital',
+    parent: 'Chose a state’s best-known or largest city. Many state capitals are smaller cities.',
+    tip: 'The capital is where the state government meets. It is often not the biggest city.',
+  },
+  'density-inverted': {
+    label: 'Dividing volume by mass',
+    parent: 'Worked out volume ÷ mass instead of mass ÷ volume.',
+    tip: 'Density = mass ÷ volume.',
+  },
 };
 
 export const isMisconception = (code) => typeof code === 'string' && Object.hasOwn(MISCONCEPTIONS, code);

@@ -455,3 +455,78 @@ tr.strand-start th,tr.strand-start td{border-top:2px solid var(--line)}
 .options.long{grid-template-columns:1fr;gap:10px}
 .options.long .option{min-height:64px;align-items:flex-start;text-align:left;padding:14px 18px}
 .options.long .option-label{font-size:1.02rem;font-weight:600}
+
+/* ---------- Grades, curriculum, lessons, Ask Red Teddy (K-12) ---------- */
+.grade-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin:8px 0 24px}
+.grade-card{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 14px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;cursor:pointer;min-height:84px;transition:border-color .15s,box-shadow .15s}
+.grade-card:hover{border-color:var(--red)}
+.grade-card.is-current{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy)}
+.grade-big{font:700 1.6rem/1.1 var(--serif)}
+.home-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 18px}
+.tool-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;cursor:pointer;min-height:64px}
+.tool-btn:hover{border-color:var(--red)}
+.tool-btn strong{font-size:1.02rem}
+.tool-btn span{color:var(--mute);font-size:.9rem}
+.skill-actions{display:inline-flex;gap:6px;justify-self:end}
+.grade-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 22px}
+.grade-tab{min-width:48px;min-height:44px;padding:0 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:700 .95rem var(--sans);cursor:pointer}
+.grade-tab:hover{border-color:var(--ink)}
+.grade-tab.is-current{background:var(--navy);border-color:var(--navy);color:#fff}
+.cur-grid{display:grid;gap:22px}
+.cur-subject h3{font-size:1.35rem;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.cur-course{padding:12px 0 14px;border-bottom:1px solid var(--line)}
+.cur-course-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px;margin-bottom:6px}
+.cur-course-head h4{font-size:1.05rem}
+.cur-course.is-planned h4{color:var(--mute)}
+.tag-planned{background:var(--ivory2);color:var(--mute)}
+.std{display:block;font-size:.78rem;color:var(--mute);font-weight:400;letter-spacing:.01em}
+.lesson{max-width:44rem}
+.lesson h2{margin:6px 0 10px}
+.lesson-goal{padding:12px 16px;border-left:4px solid var(--red);background:var(--paper);border-radius:0 10px 10px 0;margin-bottom:16px}
+.lesson-intro{font-size:1.12rem;margin-bottom:10px}
+.lesson-ideas{margin:0 0 20px 20px;display:grid;gap:8px}
+.worked{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.worked h3{font-size:1.1rem;margin-bottom:8px}
+.worked-problem{font-family:var(--serif);font-size:1.2rem;font-weight:700;margin-bottom:10px}
+.worked-steps{margin:0 0 10px 22px;display:grid;gap:6px}
+.worked-answer{padding-top:10px;border-top:1px dashed var(--line)}
+.lesson-watch{margin-bottom:12px;color:var(--mute)}
+.lesson-watch strong{color:var(--ink)}
+.ask{max-width:46rem}
+.ask-head{display:flex;gap:18px;align-items:center;margin-bottom:12px}
+.ask-teddy{width:72px;height:auto;flex:none}
+.ask-links{margin:4px 0 10px}
+.ask-suggest{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip-btn{min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:600 .92rem var(--sans);cursor:pointer;text-align:left}
+.chip-btn:hover:not([disabled]){border-color:var(--red)}
+.chip-btn[disabled]{opacity:.5;cursor:not-allowed}
+.ask-log{display:grid;gap:10px;margin:10px 0 14px;min-height:60px}
+.ask-text{white-space:pre-wrap}
+.ask-form{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
+.ask-form textarea{width:100%;min-height:76px;padding:12px 14px;font:1rem var(--sans);border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);resize:vertical}
+.ask-form textarea:focus{outline:3px solid var(--gold);outline-offset:1px}
+.ask-form textarea[disabled]{opacity:.6}
+.ask-error{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-left:4px solid var(--amber,#b7791f);background:var(--paper);border-radius:0 10px 10px 0;margin-bottom:12px}
+.notice-box{padding:12px 16px;background:var(--ivory2);border-radius:10px;margin:8px 0}
+.visual-rtri{width:min(100%,300px);height:auto}
+.visual-code{background:#0f1a30;color:#e8edf7;border-radius:12px;padding:16px 18px;font:500 1rem/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:left;overflow-x:auto;max-width:100%;margin:0}
+
+/* Middle and high school: quieter, denser, grown-up. The bear steps back. */
+body[data-stage="middle"],body[data-stage="high"]{--radius:10px;background:var(--ivory)}
+body[data-stage="middle"] .hero-banner,body[data-stage="high"] .hero-banner{padding:18px 22px;border-radius:12px;margin-bottom:16px}
+body[data-stage="middle"] .teddy-hero,body[data-stage="high"] .teddy-hero{width:44px;height:44px}
+body[data-stage="high"] .teddy-hero{display:none}
+body[data-stage="middle"] .hero-banner h2,body[data-stage="high"] .hero-banner h2{font-size:clamp(1.4rem,2.6vw,1.7rem)}
+body[data-stage="middle"] .btn,body[data-stage="high"] .btn{min-height:44px;padding:0 18px;border-radius:10px}
+body[data-stage="middle"] .option,body[data-stage="high"] .option{min-height:64px;border-radius:10px;box-shadow:none}
+body[data-stage="middle"] .stage,body[data-stage="high"] .stage{min-height:0;border-radius:12px;box-shadow:none}
+body[data-stage="middle"] .prompt,body[data-stage="high"] .prompt{font-size:1.15rem}
+body[data-stage="high"] h1,body[data-stage="high"] h2{letter-spacing:-.005em}
+body[data-stage="high"] .teddy-large{width:72px;height:72px}
+@media (max-width:640px){
+  .home-tools{grid-template-columns:1fr}
+  .grade-grid{grid-template-columns:repeat(3,1fr)}
+  .ask-form{grid-template-columns:1fr}
+  .ask-teddy{width:52px}
+  .skill-actions{grid-row:1/3;grid-column:3}
+}

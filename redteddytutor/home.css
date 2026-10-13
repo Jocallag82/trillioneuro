@@ -86,7 +86,7 @@ nav .btn{min-height:42px;padding:0 18px;color:#fff}
 .book-tabs button{flex:none;font:700 .95rem var(--sans);color:var(--mute);background:none;border:0;border-bottom:3px solid transparent;min-height:46px;padding:0 14px;cursor:pointer}
 .book-tabs button[aria-selected=true]{color:var(--red);border-bottom-color:var(--red)}
 .book-tabs button:hover{color:var(--ink)}
-.book-tabs button::before{content:"Age ";font-weight:400}
+.book-tabs button::before{content:"Gr ";font-weight:400}
 .page{padding:28px 32px 30px 56px;min-height:420px;display:flex;flex-direction:column;
   background-image:linear-gradient(to right,transparent 40px,rgba(200,53,61,.45) 40px 42px,transparent 42px),repeating-linear-gradient(to bottom,transparent 0 33px,var(--rule) 33px 34px);background-position:0 0,0 12px}
 .page-skill{font-size:.82rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
@@ -150,8 +150,8 @@ nav .btn{min-height:42px;padding:0 18px;color:#fff}
 /* inside */
 .inside{background:#fff}
 .subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
-.subject{padding:28px 28px 8px 0}
-.subject+.subject{padding-left:28px;border-left:1px solid var(--line)}
+.subject{padding:28px 28px 20px;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.subject:nth-child(3n+1){padding-left:0;border-left:0}
 .subject h3{font-size:1.6rem;margin-bottom:6px}
 .subject>p{color:var(--mute);font-size:.98rem}
 .strands summary{list-style:none;cursor:pointer;margin-top:16px;font-weight:700;color:var(--red);min-height:44px;display:inline-flex;align-items:center;gap:8px}
@@ -282,7 +282,8 @@ form .btn{width:100%}
   .try{background:var(--ivory);padding-top:0}
   .try-notes{display:none}
   .subjects{grid-template-columns:1fr 1fr}
-  .subject:nth-child(3){grid-column:1/-1;padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .subject,.subject:nth-child(3n+1){padding:24px 24px 18px;border-left:1px solid var(--line)}
+  .subject:nth-child(2n+1){padding-left:0;border-left:0}
   .parents-grid,.safety-grid,.faq-grid{grid-template-columns:1fr;gap:32px}
   .parents-note{grid-column:auto}
   .bakery-grid{gap:40px}
@@ -310,8 +311,7 @@ form .btn{width:100%}
   body{font-size:1rem}
   .cta-row .btn{width:100%}
   .journey,.subjects,.evidence,.safety-list{grid-template-columns:1fr}
-  .subject,.subject+.subject{padding:24px 0 8px;border-left:0}
-  .subject+.subject{border-top:1px solid var(--line)}
+  .subject,.subject:nth-child(2n+1),.subject:nth-child(3n+1){padding:22px 0 12px;border-left:0}
   .evidence>div,.evidence>div:nth-child(even){padding:18px 0;border-left:0}
   .book{border-radius:4px 14px 14px 4px;margin-inline:-6px}
   .book-tabs{padding:10px 8px 0 18px}
@@ -350,3 +350,49 @@ form .btn{width:100%}
 .visual-passage h3{font-size:1.1rem;margin-bottom:6px}
 .demo-options.long{grid-template-columns:1fr;gap:8px}
 .demo-options.long .demo-opt{align-items:flex-start;text-align:left;font-size:1rem;min-height:52px;padding:10px 14px}
+.demo-stage .visual-rtri{width:min(100%,260px);height:auto}
+.visual-code{background:#0f1a30;color:#e8edf7;border-radius:10px;padding:14px 16px;font:500 .98rem/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:left;margin:0;overflow-x:auto;max-width:100%}
+.book-tabs{scrollbar-width:thin}
+
+/* curriculum page */
+.cur-page{padding:48px 0 88px;max-width:1000px}
+.cur-page h1{font-size:clamp(2.1rem,4.6vw,3.1rem);margin:12px 0 14px;max-width:18ch}
+.cur-page h2{font-size:1.6rem;margin:52px 0 14px}
+.cur-lead{color:var(--mute);font-size:1.12rem;max-width:44rem}
+.cur-totals{margin-top:16px;font-weight:700;max-width:44rem}
+.cur-honest dl{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--ink)}
+.cur-honest dl>div{padding:16px 18px 16px 0;border-bottom:1px solid var(--line)}
+.cur-honest dl>div:nth-child(even){padding-left:18px;border-left:1px solid var(--line)}
+.cur-honest dt{font-family:var(--serif);font-weight:700;font-size:1.1rem;margin-bottom:4px}
+.cur-honest dd{color:var(--mute);font-size:.98rem}
+.cur-grades{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.cur-grades button{min-width:48px;min-height:44px;padding:0 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:700 .95rem var(--sans);cursor:pointer}
+.cur-grades button[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.cur-grade-title{font-size:1.3rem;margin-bottom:12px}
+.cur-card{border-top:2px solid var(--ink);padding:14px 0 16px}
+.cur-card-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:6px}
+.cur-card-head h4{font:700 1.15rem var(--serif)}
+.cur-subject{color:var(--mute);font-size:.9rem}
+.cur-badge{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);background:var(--ivory2);padding:3px 8px;border-radius:6px}
+.cur-card.is-planned h4{color:var(--mute)}
+.cur-skills{list-style:none}
+.cur-skills li{display:grid;grid-template-columns:1fr minmax(160px,auto);gap:4px 18px;padding:10px 0;border-bottom:1px dotted #d8cfbf}
+.cur-skill a{font-weight:700;color:var(--ink);text-decoration-color:var(--red)}
+.cur-goal{display:block;color:var(--mute);font-size:.94rem}
+.cur-meta{font-size:.86rem;color:var(--mute);text-align:right;font-variant-numeric:tabular-nums}
+.cur-matrix-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+.cur-matrix{width:100%;border-collapse:collapse;font-size:.95rem}
+.cur-matrix th,.cur-matrix td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.cur-matrix thead th{background:var(--ivory2);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em}
+.cur-matrix td.none{color:#b5aca0}
+.cur-matrix td span{color:var(--mute);font-size:.85rem}
+.cur-sources{margin:0 0 10px 20px}
+.cur-sources li{margin:6px 0}
+.cur-sources a{color:var(--red);font-weight:700}
+.muted-p{color:var(--mute);margin-bottom:12px}
+@media (max-width:640px){
+  .cur-honest dl{grid-template-columns:1fr}
+  .cur-honest dl>div,.cur-honest dl>div:nth-child(even){padding:14px 0;border-left:0}
+  .cur-skills li{grid-template-columns:1fr}
+  .cur-meta{text-align:left}
+}

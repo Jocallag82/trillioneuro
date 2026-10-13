@@ -113,6 +113,8 @@ const cases = [
   ['redteddytutor.com',     '/learn/parent', 'serve',    '/redteddytutor/learn/parent.html'],
   ['redteddytutor.com',     '/learn/game/', 'serve',    '/redteddytutor/learn/game/index.html'],
   ['redteddytutor.com',     '/privacy',      'serve',    '/redteddytutor/privacy.html'],
+  ['redteddytutor.com',     '/curriculum',   'serve',    '/redteddytutor/curriculum.html'],
+  ['redteddytutor.com',     '/curriculum.html', 'redirect', '/curriculum'],
   ['redteddytutor.com',     '/home.js',      'serve',    '/redteddytutor/home.js'],
   ['redteddytutor.com',     '/privacy.html', 'redirect', '/privacy'],
   ['redteddytutor.com',     '/learn/game/js/main.js', 'serve', '/redteddytutor/learn/game/js/main.js'],

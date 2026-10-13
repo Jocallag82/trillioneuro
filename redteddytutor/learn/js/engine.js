@@ -11,7 +11,7 @@
 import { BANDS, DOMAINS, SKILLS } from './content.js';
 import { isMisconception } from './curriculum/misconceptions.js';
 
-const VISUAL_KINDS = ['dots', 'shape', 'swatch', 'text', 'sequence', 'tenframe', 'blocks', 'groups', 'fraction', 'ruler', 'clock', 'bars', 'grid', 'passage'];
+const VISUAL_KINDS = ['dots', 'shape', 'swatch', 'text', 'sequence', 'tenframe', 'blocks', 'groups', 'fraction', 'ruler', 'clock', 'bars', 'grid', 'passage', 'rtri', 'code'];
 const RESPOND_KINDS = ['input', 'numberline', 'order', 'build'];
 const isInt = (n, lo, hi) => Number.isInteger(n) && n >= lo && n <= hi;
 const SHAPES = ['circle', 'square', 'triangle', 'rectangle'];
@@ -37,6 +37,8 @@ function validVisual(v, allowSequence = true) {
   if (v.kind === 'swatch') return typeof v.label === 'string' && /^#[0-9a-f]{6}$/i.test(v.hex);
   if (v.kind === 'text') return typeof v.text === 'string' && v.text.length > 0 && v.text.length <= 6;
   if (v.kind === 'clock') return isInt(v.h, 1, 12) && isInt(v.m, 0, 59);
+  if (v.kind === 'rtri') return ['a', 'b', 'c'].every((k) => typeof v[k] === 'string' && v[k].length <= 4) && (v.angle === undefined || typeof v.angle === 'boolean');
+  if (v.kind === 'code') return typeof v.text === 'string' && v.text.length > 0 && v.text.length <= 400;
   if (v.kind === 'grid') return isInt(v.w, 1, 12) && isInt(v.h, 1, 12) && typeof v.labels === 'boolean';
   if (v.kind === 'passage') return typeof v.title === 'string' && v.title.length <= 60 && typeof v.text === 'string' && v.text.length >= 40 && v.text.length <= 900;
   if (v.kind === 'bars') {
@@ -254,7 +256,8 @@ function judge(session, activity, correct, misconception, answer) {
 // Pure, so the tutor service and tests can use it too.
 export function grade(step, response) {
   if (step.kind === 'input') {
-    const value = String(response ?? '').trim().replace(/\s+/g, '').replace(/^\+/, '');
+    // A typed minus may be a hyphen, a real minus sign or a dash.
+    const value = String(response ?? '').trim().replace(/\s+/g, '').replace(/^\+/, '').replace(/[−–—]/g, '-');
     const norm = (x) => (/^-?\d+$/.test(x) ? String(Number(x)) : x.toLowerCase());
     const v = norm(value);
     if (!value) return { valid: false };
