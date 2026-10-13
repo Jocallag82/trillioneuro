@@ -100,9 +100,9 @@ const failure = async (res, fallback) => {
   return err;
 };
 
-export const listProfiles = (s) => rest(s, 'GET', 'rtt_profiles?select=id,nickname,age_band,settings&order=created_at.asc');
-export const createProfile = (s, nickname, ageBand) => rest(s, 'POST', 'rtt_profiles?select=id,nickname,age_band,settings',
-  { nickname, age_band: ageBand }, 'return=representation').then((r) => r[0]);
+export const listProfiles = (s) => rest(s, 'GET', 'rtt_profiles?select=id,nickname,age_band,locale,settings&order=created_at.asc');
+export const createProfile = (s, nickname, ageBand, locale = null) => rest(s, 'POST', 'rtt_profiles?select=id,nickname,age_band,locale,settings',
+  { nickname, age_band: ageBand, ...(locale ? { locale } : {}) }, 'return=representation').then((r) => r[0]);
 export const updateProfile = (s, id, patch) => rest(s, 'PATCH', `rtt_profiles?id=eq.${id}`, patch, 'return=minimal');
 export const deleteProfile = (s, id) => rest(s, 'DELETE', `rtt_profiles?id=eq.${id}`);
 export const resetProgress = async (s, id) => {
@@ -112,15 +112,19 @@ export const resetProgress = async (s, id) => {
 
 export async function fetchProgress(s, profileId) {
   const [attempts, sessions] = await Promise.all([
-    rest(s, 'GET', `rtt_attempts?profile_id=eq.${profileId}&select=activity_id,skill,first_try,created_at&order=created_at.asc&limit=2000`),
+    rest(s, 'GET', `rtt_attempts?profile_id=eq.${profileId}&select=activity_id,skill,first_try,correct,hints,difficulty,misconception,source,created_at&order=created_at.asc&limit=2000`),
     rest(s, 'GET', `rtt_sessions?profile_id=eq.${profileId}&select=activity_id,total,correct_first,hints_used,created_at&order=created_at.asc&limit=200`),
   ]);
   return { attempts, sessions };
 }
 
-export const pushAttempt = (s, profileId, a) => rest(s, 'POST', 'rtt_attempts', {
+export const attemptRow = (profileId, a) => ({
   profile_id: profileId, activity_id: a.activityId, skill: a.skill, first_try: a.firstTry,
-}, 'return=minimal');
+  correct: a.correct ?? null, hints: a.hints ?? null, difficulty: a.difficulty ?? null,
+  misconception: a.misconception ?? null, source: a.source ?? null,
+});
+
+export const pushAttempt = (s, profileId, a) => rest(s, 'POST', 'rtt_attempts', attemptRow(profileId, a), 'return=minimal');
 
 export const pushSession = (s, profileId, x) => rest(s, 'POST', 'rtt_sessions', {
   profile_id: profileId, activity_id: x.activityId, total: x.total,
@@ -128,11 +132,21 @@ export const pushSession = (s, profileId, x) => rest(s, 'POST', 'rtt_sessions', 
 }, 'return=minimal');
 
 // ---- Mapping between database rows and the local progress model (pure) ----
+// The result goes through progress.normalize() before use, which drops anything malformed.
 export function rowsToState(profile, { attempts, sessions }) {
+  const st = profile.settings || {};
+  const opt = (v) => (v === null || v === undefined ? undefined : v);
   return {
     v: 1,
-    settings: { band: profile.age_band, audio: profile.settings?.audio ?? true, volume: profile.settings?.volume ?? 1, showAll: profile.settings?.showAll ?? false },
-    steps: attempts.map((r) => ({ activityId: r.activity_id, skill: r.skill, firstTry: r.first_try, at: Date.parse(r.created_at) })),
+    settings: {
+      band: profile.age_band, audio: st.audio ?? true, volume: st.volume ?? 1, showAll: st.showAll ?? false,
+      locale: profile.locale ?? st.locale ?? null, onboarded: st.onboarded ?? false, focus: st.focus ?? 'all',
+      placement: st.placement ?? {}, assumed: st.assumed ?? [],
+    },
+    steps: attempts.map((r) => ({
+      activityId: r.activity_id, skill: r.skill, firstTry: r.first_try, at: Date.parse(r.created_at),
+      correct: opt(r.correct), hints: opt(r.hints), difficulty: opt(r.difficulty), misconception: opt(r.misconception), source: opt(r.source),
+    })),
     sessions: sessions.map((r) => ({ activityId: r.activity_id, at: Date.parse(r.created_at), total: r.total, correctFirst: r.correct_first, hintsUsed: r.hints_used })),
   };
 }

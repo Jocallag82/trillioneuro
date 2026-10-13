@@ -3,8 +3,9 @@
 import {
   loadSession, ensureSession, loadActiveProfile, saveActiveProfile,
   listProfiles, fetchProgress, pushAttempt, pushSession, updateProfile, resetProgress,
-  rowsToState, queueWrite, flushQueue,
+  rowsToState, queueWrite, flushQueue, attemptRow,
 } from './api.js';
+import { normalize } from './progress.js';
 
 // Returns { session, profile, state } when a profile is active and reachable, else null.
 export async function openRemote(storage) {
@@ -18,7 +19,7 @@ export async function openRemote(storage) {
     if (!profile) { saveActiveProfile(storage, null); return { session, profile: null, state: null }; }
     const data = await fetchProgress(session, profile.id);
     flushQueue(storage, session).catch(() => {});
-    return { session, profile, state: rowsToState(profile, data) };
+    return { session, profile, state: normalize(rowsToState(profile, data)) };
   } catch {
     return { session, profile: null, state: null, offline: true };
   }
@@ -27,9 +28,8 @@ export async function openRemote(storage) {
 // Writes one finished step or session. A failed write is queued and retried later.
 export async function syncStep(storage, remote, step) {
   if (!remote?.profile) return;
-  const row = { activityId: step.activityId, skill: step.skill, firstTry: step.firstTry };
-  try { await pushAttempt(remote.session, remote.profile.id, row); }
-  catch { queueWrite(storage, { path: 'rtt_attempts', body: { profile_id: remote.profile.id, activity_id: row.activityId, skill: row.skill, first_try: row.firstTry } }); }
+  try { await pushAttempt(remote.session, remote.profile.id, step); }
+  catch { queueWrite(storage, { path: 'rtt_attempts', body: attemptRow(remote.profile.id, step) }); }
 }
 
 export async function syncSession(storage, remote, s) {
@@ -41,8 +41,8 @@ export async function syncSession(storage, remote, s) {
 
 export async function syncSettings(remote, settings) {
   if (!remote?.profile) return;
-  const { band, ...rest } = settings;
-  await updateProfile(remote.session, remote.profile.id, { age_band: band, settings: rest });
+  const { band, locale, ...rest } = settings;
+  await updateProfile(remote.session, remote.profile.id, { age_band: band, locale: locale || null, settings: rest });
 }
 
 export async function syncReset(remote) {

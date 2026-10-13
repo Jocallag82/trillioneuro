@@ -116,6 +116,8 @@ const cases = [
   ['redteddytutor.com',     '/learn/vendor/phaser-3.90.0.min.js', 'serve', '/redteddytutor/learn/vendor/phaser-3.90.0.min.js'],
   ['redteddytutor.com',     '/learn/js/player.js', 'serve', '/redteddytutor/learn/js/player.js'],
   ['redteddytutor.com',     '/learn/learn.css',    'serve', '/redteddytutor/learn/learn.css'],
+  ['redteddytutor.com',     '/learn/js/curriculum/framework.js', 'serve', '/redteddytutor/learn/js/curriculum/framework.js'],
+  ['redteddytutor.com',     '/api/rtt-tutor',      'serve', '/api/rtt-tutor'],
 ];
 
 let bad = 0;
@@ -134,7 +136,8 @@ for (const [host, path] of cases) {
   const got = resolve(host, path);
   if (got.kind !== 'serve') continue;
   if (got.file.startsWith('/_vercel/')) continue;         // Vercel-internal
-  const rel = got.file === '/' ? 'index.html' : got.file.replace(/^\//, '');
+  let rel = got.file === '/' ? 'index.html' : got.file.replace(/^\//, '');
+  if (rel.startsWith('api/')) rel += '.mjs';               // serverless function
   const exists = existsSync(new URL(rel, root));
   if (!exists) { bad++; console.log(`FAIL missing file: ${host}${path} -> ${got.file}`); }
 }

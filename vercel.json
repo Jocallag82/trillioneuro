@@ -454,7 +454,7 @@
       "dest": "/redteddytutor/learn/parent.html"
     },
     {
-      "src": "/((?!_vercel/).*)",
+      "src": "/((?!_vercel/|api/).*)",
       "has": [
         {
           "type": "host",

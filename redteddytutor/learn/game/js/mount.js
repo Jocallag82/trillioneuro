@@ -187,7 +187,7 @@ export async function mountBakery({ root, storage, Phaser = window.Phaser, seed 
 
     if (checkAnswer(round, value)) {
       const firstTry = session.misses === 0;
-      settle(firstTry);
+      settle(firstTry, true);
       session.busy = true;
       ui.hint.disabled = true;
       game.events.emit('show-feedback', { type: 'correct' });
@@ -206,7 +206,7 @@ export async function mountBakery({ root, storage, Phaser = window.Phaser, seed 
       ui.hintText.textContent = `Hint: ${hint}`;
       sfx.play('hint');
     } else {
-      settle(false);
+      settle(false, false);
       session.busy = true;
       ui.hint.disabled = true;
       const answerLabel = labelFor(round, round.answer);
@@ -217,8 +217,10 @@ export async function mountBakery({ root, storage, Phaser = window.Phaser, seed 
   }
 
   // Records one round's outcome (what the child did, not the score) and adapts.
-  function settle(firstTry) {
-    state = recordStep(state, session.level.id, session.round.skill, firstTry, Date.now());
+  function settle(firstTry, correct) {
+    state = recordStep(state, session.level.id, session.round.skill, firstTry, Date.now(), {
+      correct, hints: session.misses, difficulty: session.round.tier, source: 'game',
+    });
     syncStep(storage, remote, state.steps[state.steps.length - 1]);
     persist();
     session.consecutive = firstTry ? 0 : session.consecutive + 1;

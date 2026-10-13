@@ -3,6 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { ACTIVITIES, BANDS, DOMAINS, SKILLS } from '../redteddytutor/learn/js/content.js';
+import { GENERATORS } from '../redteddytutor/learn/js/curriculum/generators.js';
 import { validateActivity, validateLibrary, startSession, submit, placeItem, placeCard, shuffle, MAX_MISSES } from '../redteddytutor/learn/js/engine.js';
 import {
   emptyState, normalize, readState, writeState, clearState, recordStep, recordCompletion,
@@ -32,19 +33,22 @@ test('starter library is valid', () => {
   assert.deepEqual(validateLibrary(ACTIVITIES), []);
 });
 
-test('every age band and domain has content', () => {
-  for (const band of BANDS) {
+test('every early-years band has authored activities, and every domain is taught', () => {
+  for (const band of ['2-3', '3-5', '5-7']) {
     assert.ok(ACTIVITIES.filter((a) => a.band === band).length >= 3, `band ${band} needs at least 3 activities`);
   }
+  // Older bands are served by generated practice (see curriculum.test.mjs).
   for (const domain of DOMAINS) {
-    assert.ok(ACTIVITIES.some((a) => a.domain === domain), `domain ${domain} has no activity`);
+    const authored = ACTIVITIES.some((a) => a.domain === domain);
+    const generated = Object.entries(SKILLS).some(([id, s]) => s.domain === domain && GENERATORS[id]);
+    assert.ok(authored || generated, `domain ${domain} has no activity`);
   }
 });
 
 test('every skill used by an activity is defined and every skill is taught', () => {
   for (const a of ACTIVITIES) assert.ok(SKILLS[a.skill], `${a.id} uses unknown skill ${a.skill}`);
   for (const skill of Object.keys(SKILLS)) {
-    assert.ok(ACTIVITIES.some((a) => a.skill === skill), `skill ${skill} has no activity`);
+    assert.ok(ACTIVITIES.some((a) => a.skill === skill) || GENERATORS[skill], `skill ${skill} has no activity`);
   }
 });
 

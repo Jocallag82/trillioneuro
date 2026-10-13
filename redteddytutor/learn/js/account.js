@@ -6,11 +6,12 @@ import {
   loadActiveProfile, saveActiveProfile,
 } from './api.js';
 import { BANDS } from './content.js';
+import { LOCALES, pickLocale } from './curriculum/locales.js';
 
 const storage = (() => { try { return window.localStorage; } catch { return null; } })();
 const app = document.getElementById('account-app');
 const notice = document.getElementById('notice');
-const BAND_LABEL = { '2-3': 'Age 2–3', '3-5': 'Age 3–5', '5-7': 'Age 5–7' };
+const BAND_LABEL = Object.fromEntries(BANDS.map((b) => [b, `Age ${b.replace('-', '–')}`]));
 
 function say(text) { notice.textContent = text; }
 
@@ -76,6 +77,7 @@ async function renderAccount(session) {
       ]),
       el('div', { class: 'profile-actions' }, [
         el('button', { type: 'button', class: 'btn btn-red', onclick: () => { saveActiveProfile(storage, p.id); window.location.href = '/learn/'; }, text: 'Learn as ' + p.nickname }),
+        el('button', { type: 'button', class: 'btn btn-line', onclick: () => { saveActiveProfile(storage, p.id); window.location.href = '/learn/parent.html'; }, text: 'Progress' }),
         el('button', { type: 'button', class: 'btn btn-line', onclick: () => removeProfile(session, p), text: 'Delete' }),
       ]),
     ])))
@@ -84,6 +86,8 @@ async function renderAccount(session) {
   const nickname = el('input', { id: 'nickname', maxlength: 20, required: true, placeholder: 'e.g. Sam or Bear', class: 'field' });
   const band = el('select', { id: 'band', class: 'field' }, BANDS.map((b) => el('option', { value: b, text: BAND_LABEL[b] })));
   band.value = '3-5';
+  const locale = el('select', { id: 'locale', class: 'field' }, Object.entries(LOCALES).map(([id, l]) => el('option', { value: id, text: l.label })));
+  locale.value = pickLocale(navigator.languages || []);
 
   app.replaceChildren(
     el('section', { class: 'panel', 'aria-labelledby': 'profiles-h' }, [
@@ -101,7 +105,7 @@ async function renderAccount(session) {
         const name = nickname.value.trim();
         if (!name) return say('Enter a nickname for your child.');
         try {
-          const p = await createProfile(session, name, band.value);
+          const p = await createProfile(session, name, band.value, locale.value);
           saveActiveProfile(storage, p.id);
           say(`Profile created for ${p.nickname}.`);
           renderAccount(session);
@@ -113,6 +117,8 @@ async function renderAccount(session) {
       nickname,
       el('label', { for: 'band', class: 'field-label', text: 'Age band (a starting point, not a measure of ability)' }),
       band,
+      el('label', { for: 'locale', class: 'field-label', text: 'Country (for words like Maths/Math)' }),
+      locale,
       el('button', { type: 'submit', class: 'btn btn-red', text: 'Add profile' }),
     ]) : null,
     el('section', { class: 'panel' }, [

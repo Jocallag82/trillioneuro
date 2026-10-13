@@ -17,4 +17,16 @@ Static, no build step. Served from `redteddytutor.com/learn/` (routes in root `v
 - `learn/js/player.js`, `learn/js/parent.js` — UI. Spoken instructions use the browser's speech synthesis, start only after a tap, and always appear as captions.
 - `learn/parent.html` — parent summary of what that device recorded, with the ability to delete it.
 
-Pages are `noindex`. No accounts, payments or server-side storage exist yet. Test: `node --test scripts/learn.test.mjs`.
+Pages are `noindex`.
+
+## Learning engine (ages 2–11)
+- `learn/js/curriculum/framework.js` — subjects, strands and 35 objectives with prerequisites and usual ages. Objective ids are the `skill` ids stored with every answer.
+- `learn/js/curriculum/generators.js` — rule-based practice for every objective (number lines, ten frames, typed answers, tile ordering, fractions, rulers, phonics, sentences). Wrong options built from a known mistake carry its code.
+- `learn/js/curriculum/misconceptions.js` — the closed list of mistake codes. `locales.js` — en-GB/IE/US/AU words and stage names (labels only; no national curriculum has been mapped or reviewed).
+- `learn/js/learner.js` — mastery (difficulty, independence and recency weighted, with confidence; adapted from GradeA/ExplainIt), spaced review, active mistakes, today's plan, and the adaptive placement check. Pure.
+- `learn/js/tutor.js` + `api/rtt-tutor.mjs` (+ `api/_rtt/tutor-core.mjs`) — Teddy, the AI helper. Signed-in profiles only. Quota enforced in Supabase (`rtt_tutor_begin`, 20 turns/day free, 200 plus; 6/minute). The model never marks answers; replies that leak the answer, contain links or are malformed fall back to authored hints; unsafe messages get a fixed reply with no model call. No message text is stored. Uses the Vercel AI Gateway via the deployment's OIDC token or `AI_GATEWAY_API_KEY`; model `RTT_TUTOR_MODEL` (default Haiku 4.5, falls back to Sonnet 4.6).
+- Database: `supabase/migrations/20261012_rtt_learning_engine.sql` (evidence columns, ages 7–11, locale, entitlements, tutor usage).
+
+No billing provider is connected: `rtt_entitlements` exists for a future webhook and everyone is on the free plan.
+
+Tests: `node --test scripts/*.test.mjs`. Browser: `PLAYWRIGHT_MODULE=… node scripts/learn-e2e.mjs [screenshot-dir]` and `scripts/game-e2e.mjs`.

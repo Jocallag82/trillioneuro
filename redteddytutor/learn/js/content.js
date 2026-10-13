@@ -6,29 +6,13 @@
 //   step: { prompt, visual?, options: [{ id, label, visual? }], answer, hints: [string, ...] }
 // Visual shapes: dots, shape, swatch, text, sequence (items may be null = "?").
 
-export const BANDS = ['2-3', '3-5', '5-7'];
+// Bands, domains and skills now come from the shared learning framework, so the
+// starter library, the generated practice and Teddy's Bakery use one set of ids.
+import { BANDS, DOMAINS, SKILLS } from './curriculum/framework.js';
+
+export { BANDS, DOMAINS, SKILLS };
 
 export const LEVEL_NAMES = { 1: 'Starter', 2: 'Practice', 3: 'Challenge' };
-
-export const DOMAINS = [
-  'Counting', 'Numbers', 'Colours', 'Shapes', 'Sorting',
-  'Patterns', 'Letters & sounds', 'Sequencing', 'Observation',
-];
-
-export const SKILLS = {
-  'count-to-5': { label: 'Counting to 5', domain: 'Counting' },
-  'count-to-10': { label: 'Counting to 10', domain: 'Counting' },
-  'number-names': { label: 'Recognising numbers', domain: 'Numbers' },
-  'colours': { label: 'Colours', domain: 'Colours' },
-  'shapes': { label: 'Shapes', domain: 'Shapes' },
-  'shape-words': { label: 'Matching words to shapes', domain: 'Shapes' },
-  'sorting': { label: 'Sorting', domain: 'Sorting' },
-  'patterns': { label: 'Patterns', domain: 'Patterns' },
-  'letters': { label: 'Letter recognition', domain: 'Letters & sounds' },
-  'letter-sounds': { label: 'Letter sounds', domain: 'Letters & sounds' },
-  'sequencing': { label: 'Sequencing', domain: 'Sequencing' },
-  'observation': { label: 'Spotting differences', domain: 'Observation' },
-};
 
 const RED = '#c8353d';
 const BLUE = '#2f6fb3';
