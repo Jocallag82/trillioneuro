@@ -77,7 +77,6 @@ export class BakeryScene extends Phaser.Scene {
   drawEnvironment() {
     if (this.has('shop')) {
       this.env.add(this.add.image(W / 2, H / 2, 'shop').setDisplaySize(W, H));
-      this.addMotes();
       return;
     }
     const g = this.add.graphics();
@@ -211,7 +210,9 @@ export class BakeryScene extends Phaser.Scene {
       const hit = this.add.zone(x, y, 250, 92).setInteractive({ useHandCursor: true });
       hit.on('pointerdown', () => this.game.events.emit('map-pick', { levelId: lv.id }));
       this.layer.add(hit);
-      this.tweens.add({ targets: card, scaleX: 1.03, scaleY: 1.03, duration: this.calm ? 0 : 1200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      // No idle pulsing: an open sign answers the pointer instead.
+      hit.on('pointerover', () => card.setStrokeStyle(5, C.red));
+      hit.on('pointerout', () => card.setStrokeStyle(4, 0x7a4f2a));
     }
   }
 
