@@ -82,7 +82,12 @@ function say(text, clipKey = null) {
   else speak(text, { volume: state.settings.volume });
 }
 
-function setScreen(nodes, focusSelector) {
+// Entrance animations run only when something new is shown (a new screen or a new
+// question), never when the same question re-renders after a tap. See learn.css.
+let shownKey = null;
+function setScreen(nodes, focusSelector, key = Symbol('screen')) {
+  app.dataset.enter = String(key !== shownKey);
+  shownKey = key;
   app.replaceChildren(...[].concat(nodes).filter(Boolean));
   document.body.dataset.stage = stage().id;
   const target = focusSelector ? app.querySelector(focusSelector) : app;
@@ -456,7 +461,7 @@ function renderStep(intro = false, viewState = session) {
     bodyFor(step, viewState),
     el('div', { id: 'feedback', class: 'feedback', role: 'status', 'aria-live': 'polite' }),
     !diagnostic && tutorAllowed() && remote?.profile ? helpPanel(step, viewState) : null,
-  ], '#prompt');
+  ], '#prompt', `${current.id}|${current.seed ?? ''}|${viewState.index}|${diagnostic ? diag.current.asked : ''}`);
 
   const words = step.listen && step.say ? `${step.prompt}` : step.prompt;
   if (intro && current.instruction) say(`${current.instruction} ${words}`);
@@ -933,7 +938,10 @@ function workItOut(step) {
 
 function refreshWork(step) {
   const node = app.querySelector('#work');
-  if (node) node.replaceWith(workItOut(step));
+  if (!node) return;
+  const fresh = workItOut(step);
+  fresh.classList.add('is-new');
+  node.replaceWith(fresh);
 }
 
 // ---------- Teddy's help ----------
@@ -984,7 +992,9 @@ function refreshHelp() {
   const panel = app.querySelector('.help');
   if (!panel || !current) return;
   const viewIndex = help.index;
-  panel.replaceWith(helpPanel(current.steps[viewIndex], { index: viewIndex }));
+  const fresh = helpPanel(current.steps[viewIndex], { index: viewIndex });
+  fresh.classList.add('is-new');
+  panel.replaceWith(fresh);
 }
 
 async function tutorTurn(step, stepIndex, mode, message, attempts) {

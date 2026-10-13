@@ -188,6 +188,19 @@ progress::-moz-progress-bar{background:var(--red)}
 .feedback{margin-top:22px;min-height:3em;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .feedback:empty{display:none}
 .feedback>*{animation:rise .45s var(--ease) both}
+/* Gentle entrances so questions, lessons and help never snap in. Each part fades up as
+   it is inserted; reduced-motion users get none (see the media query below). */
+@keyframes fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+#app[data-enter=true]>*{animation:fade-in .3s var(--ease) backwards}
+#app[data-enter=true] .prompt,#app[data-enter=true] .stage,#app[data-enter=true] .lesson>*{animation:fade-up .4s var(--ease) backwards}
+#app[data-enter=true] .option{animation:fade-up .4s var(--ease) backwards}
+#app[data-enter=true] .option:nth-child(2){animation-delay:.05s}
+#app[data-enter=true] .option:nth-child(3){animation-delay:.1s}
+#app[data-enter=true] .option:nth-child(4){animation-delay:.15s}
+#app[data-enter=true] .lesson>:nth-child(n+4){animation-delay:.08s}
+#app[data-enter=true] .worked+.worked{animation-delay:.16s}
+#work.is-new>:last-child,.help.is-new .help-msg:last-child,.help.is-new .help-busy{animation:fade-up .4s var(--ease) backwards}
 .fb{font-weight:700;font-size:1.15rem}
 .hint{background:var(--paper);border-left:4px solid var(--gold);border-radius:12px;padding:14px 18px;font-size:1.02rem;box-shadow:var(--shadow);max-width:36em}
 .teddy{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:50% 25%;border:3px solid var(--red-l);box-shadow:0 6px 16px rgba(163,23,31,.25)}
