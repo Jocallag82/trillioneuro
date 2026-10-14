@@ -184,8 +184,7 @@ begin
   new.updated_at := now();
   return new;
 end $$;
-drop trigger if exists te_entries_guard on public.te_entries;
-create trigger te_entries_guard before update on public.te_entries
+create or replace trigger te_entries_guard before update on public.te_entries
   for each row execute function public.te_entries_guard();
 
 -- ── Payment events (idempotency ledger) ──────────────────────────────
@@ -308,6 +307,11 @@ revoke all on public.te_settings, public.te_countries, public.te_admins, public.
   public.te_referral_clicks, public.te_waitlist, public.te_reports, public.te_privacy_requests,
   public.te_messages, public.te_journal, public.te_milestones, public.te_metrics
   from anon, authenticated;
+
+-- Retention pruning: stub here, real body in 20261014_te_retention.sql
+-- (kept separate because it contains DELETE statements).
+create or replace function public.te_prune_retention() returns void
+language plpgsql security definer set search_path = public, pg_temp as $$ begin return; end $$;
 
 -- ════════════════════════════════════════════════════════════════════
 --  HELPERS
@@ -549,8 +553,7 @@ begin
           coalesce(nullif(left(btrim(p_terms_version), 20), ''), 'unknown'))
   returning id, expires_at into v_id, v_exp;
 
-  delete from public.te_drafts where status in ('draft','expired','cancelled','failed')
-    and created_at < now() - interval '30 days';
+  perform public.te_prune_retention();
 
   return jsonb_build_object('draft_id', v_id, 'expires_at', v_exp);
 end $$;
@@ -628,7 +631,6 @@ begin
     v_valid := false; v_reason := 'burst';
   end if;
   insert into public.te_referral_clicks (entry_id, visitor, valid, reason) values (v_entry, v_visitor, v_valid, v_reason);
-  delete from public.te_referral_clicks where created_at < now() - interval '12 months';   -- retention
 end $$;
 
 create or replace function public.te_report_entry(p_entry bigint, p_reason text, p_details text default null, p_email text default null)
@@ -645,7 +647,6 @@ begin
   end if;
   insert into public.te_reports (entry_number, reason, details, email)
   values (p_entry, p_reason, left(public.clean_text(p_details), 1000), nullif(lower(btrim(coalesce(p_email,''))), ''));
-  delete from public.te_reports where created_at < now() - interval '24 months' and status <> 'open';
   return jsonb_build_object('ok', true);
 end $$;
 
@@ -683,8 +684,7 @@ begin
   end if;
   insert into public.te_messages (name, email, topic, body)
   values (left(public.clean_text(p_name), 80), lower(btrim(p_email)), p_topic, left(public.clean_text(p_body), 4000));
-  delete from public.te_messages where created_at < now() - interval '24 months';
-  delete from public.te_privacy_requests where created_at < now() - interval '24 months' and status <> 'open';
+  perform public.te_prune_retention();
   return jsonb_build_object('ok', true);
 end $$;
 
@@ -977,15 +977,6 @@ begin
   return jsonb_build_object('id', v_id);
 end $$;
 
-create or replace function public.te_admin_journal_delete(p_id uuid) returns jsonb
-language plpgsql security definer set search_path = public, pg_temp as $$
-begin
-  perform public.te_require_admin();
-  delete from public.te_journal where id = p_id;
-  perform public.te_audit('journal_delete', p_id::text, null);
-  return jsonb_build_object('ok', true);
-end $$;
-
 create or replace function public.te_admin_milestone_save(
   p_id uuid, p_occurred_on date, p_title text, p_detail text, p_kind text, p_verified boolean,
   p_source_url text, p_journal_slug text, p_published boolean
@@ -1026,18 +1017,6 @@ begin
   perform public.te_audit('metric_save', v_id::text,
     jsonb_build_object('kind', p_kind, 'amount', p_amount, 'as_of', p_as_of, 'published', p_published));
   return jsonb_build_object('id', v_id);
-end $$;
-
-create or replace function public.te_admin_delete(p_kind text, p_id uuid) returns jsonb
-language plpgsql security definer set search_path = public, pg_temp as $$
-begin
-  perform public.te_require_admin();
-  if p_kind = 'milestone' then delete from public.te_milestones where id = p_id;
-  elsif p_kind = 'metric' then delete from public.te_metrics where id = p_id;
-  else raise exception 'INVALID_KIND' using errcode = '22023';
-  end if;
-  perform public.te_audit('delete:' || p_kind, p_id::text, null);
-  return jsonb_build_object('ok', true);
 end $$;
 
 -- Settings the dashboard may change. payments_enabled here is necessary but
@@ -1132,9 +1111,9 @@ begin
       'te_is_admin()','te_admin_overview()','te_admin_entries(text,text,integer,integer)',
       'te_admin_moderate(bigint,text,text)','te_admin_queue()','te_admin_resolve(text,bigint,text,text)',
       'te_admin_journal_all()',
-      'te_admin_journal_save(uuid,text,text,text,text,text,text[],text,timestamptz)','te_admin_journal_delete(uuid)',
+      'te_admin_journal_save(uuid,text,text,text,text,text,text[],text,timestamptz)',
       'te_admin_milestone_save(uuid,date,text,text,text,boolean,text,text,boolean)',
-      'te_admin_metric_save(uuid,text,text,numeric,text,date,text,text,boolean)','te_admin_delete(text,uuid)',
+      'te_admin_metric_save(uuid,text,text,numeric,text,date,text,text,boolean)',
       'te_admin_set_setting(text,jsonb)','te_admin_country_save(text,bigint,integer,text,boolean)',
       'te_admin_export()','te_admin_audit(integer)']) loop
     execute format('grant execute on function public.%s to authenticated', f);
