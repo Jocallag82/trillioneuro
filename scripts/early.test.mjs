@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { STAGES, LOOK_CARDS, CARDS_PER_SITTING } from '../redteddytutor/early/data.js';
+import { STAGES, TOPICS, LOOK_CARDS, CARDS_PER_SITTING } from '../redteddytutor/early/data.js';
 import { ART } from '../redteddytutor/early/art.js';
 import { ACTIVITIES } from '../redteddytutor/learn/js/content.js';
 
@@ -66,5 +66,32 @@ test('built pages are current and have SEO basics', () => {
 test('free early-years code makes no network calls', () => {
   for (const f of ['early/look.js', 'early/print.js', 'early/art.js', 'early/data.js']) {
     assert.doesNotMatch(rd(f), /fetch\(|XMLHttpRequest|\/api\/|supabase|localStorage/i, f);
+  }
+});
+
+test('topic pages reference real activities and are built, indexable and in the sitemap', () => {
+  const ids = new Set(all.map((a) => a.id));
+  const map = rd('sitemap.xml');
+  const titles = new Set();
+  for (const t of TOPICS) {
+    assert.ok(t.ids.length >= 4 && t.stages.length >= 2 && t.tips.length >= 3 && t.intro.length > 150, t.slug);
+    for (const id of t.ids) assert.ok(ids.has(id), `${t.slug}: ${id}`);
+    const h = rd(`early/${t.slug}.html`);
+    assert.match(h, new RegExp(`canonical" href="https://www.redteddytutor.com/${t.slug}"`));
+    for (const id of t.ids) assert.ok(h.includes(`id="${id}"`), `${t.slug} missing ${id}`);
+    assert.ok(map.includes(`/${t.slug}</loc>`), t.slug);
+    titles.add(t.metaTitle);
+  }
+  assert.equal(titles.size, TOPICS.length);
+  const routes = readFileSync(new URL('../vercel.json', import.meta.url), 'utf8');
+  for (const t of TOPICS) assert.ok(routes.includes(t.slug), `route for ${t.slug}`);
+});
+
+test('every age has a printable PDF pack, linked from its page', () => {
+  for (const s of STAGES) {
+    const pdf = readFileSync(new URL(`../redteddytutor/early/printables/${s.slug}.pdf`, import.meta.url));
+    assert.equal(pdf.subarray(0, 5).toString(), '%PDF-');
+    assert.ok(pdf.length < 600_000, `${s.slug}.pdf too large`);
+    assert.ok(rd(`early/${s.slug}.html`).includes(`/early/printables/${s.slug}.pdf`));
   }
 });

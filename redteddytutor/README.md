@@ -95,3 +95,10 @@ practice and a US placement. Definition of completeness, sources, figures and ba
 - New subject `enrichment` (study skills, health, Spanish, art, music) sits outside the denominator.
 - Planner fix: a quick check that finds gaps below every nearby skill now steps back to foundations
   instead of leaving a one-item or empty plan.
+
+## Early years, ages 1-6 (14 October 2026)
+Free, no sign-up, nothing stored or sent. Source: `early/data.js` (`STAGES`: 4 age pages, 35 activities;
+`TOPICS`: 6 skill pages that reference activities by id). Build: `node scripts/build-early.mjs`, then
+with the preview server running, `node scripts/build-printables.mjs` (one PDF pack per age in
+`early/printables/`). Little World's Look and Name cards: `early/look.js` + `early/art.js`.
+Tests: `scripts/early.test.mjs`; browser: `scripts/early-e2e.mjs` (preview server on 4321).

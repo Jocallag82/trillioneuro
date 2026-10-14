@@ -19,7 +19,7 @@ export const STAGES = [
     name: 'Red Teddy’s Little World',
     short: 'Little World',
     metaTitle: 'Activities for 1 and 2 year olds — free, parent-guided | Red Teddy',
-    metaDesc: 'Free, parent-guided learning ideas for babies and young toddlers aged 1–2: colours, animal sounds, first words, shapes, songs and real-world play. No sign-up.',
+    metaDesc: 'Free, parent-guided learning ideas for babies and young toddlers aged 1–2: colors, animal sounds, first words, shapes, songs and real-world play. No sign-up.',
     h1: 'Little World: look, point and name together.',
     lead: 'For ages 1 to 2, the best learning happens in your lap and around the house. These are short, shared moments to do together, most of them away from the screen.',
     guidance: [
@@ -32,17 +32,17 @@ export const STAGES = [
     activities: [
       {
         id: 'lw-look-and-name', title: 'Look and Name cards', area: 'First words', minutes: 2, where: 'screen', play: '/little-world/play',
-        objective: 'Hear and connect everyday words to pictures: colours, animals and familiar things.',
+        objective: 'Hear and connect everyday words to pictures: colors, animals and familiar things.',
         materials: ['A phone or tablet, on your lap together'],
         steps: ['Open the cards and hold the screen where you can both see it.', 'Point to the picture and name it slowly: “A duck!”', 'Tap the card to hear the word and the sound, then wait for your child to look, point or babble.', 'After six cards, put the screen away and find one of the things for real.'],
         talk: ['Where is the duck?', 'What does the cow say? Moo!', 'Your ball is red too.'],
         extend: 'Find one thing from the cards in your home and give it to your child to hold.',
       },
       {
-        id: 'lw-colour-basket', title: 'One-colour treasure basket', area: 'Colours', minutes: 10, where: 'offline',
-        objective: 'Notice that different things can share a colour, while hearing its name many times.',
-        materials: ['A shallow basket or box', '4 to 6 safe household things of one colour (too big to swallow)'],
-        steps: ['Fill the basket with things that are all red: a cup, a sock, a block, a ball.', 'Let your child take things out and put them back.', 'Name each one with its colour: “A red sock.”', 'Next week, try a different colour.'],
+        id: 'lw-color-basket', title: 'One-color treasure basket', area: 'Colors', minutes: 10, where: 'offline',
+        objective: 'Notice that different things can share a color, while hearing its name many times.',
+        materials: ['A shallow basket or box', '4 to 6 safe household things of one color (too big to swallow)'],
+        steps: ['Fill the basket with things that are all red: a cup, a sock, a block, a ball.', 'Let your child take things out and put them back.', 'Name each one with its color: “A red sock.”', 'Next week, try a different color.'],
         talk: ['Red cup. Red ball.', 'Can you give me the red one?', 'Oh, it goes back in the basket!'],
         extend: 'On a walk, stop and point to anything red you see.',
       },
@@ -64,7 +64,7 @@ export const STAGES = [
       },
       {
         id: 'lw-shape-posting', title: 'Posting box', area: 'Shapes and matching', minutes: 10, where: 'offline',
-        objective: 'Practise matching an object to a space, hand control and cause and effect.',
+        objective: 'Practice matching an object to a space, hand control and cause and effect.',
         materials: ['A cardboard box with a circle hole cut in the lid', 'Large lids or blocks that fit (too big to swallow)'],
         steps: ['Show your child how a lid drops through the hole.', 'Let them try. Turn the lid to help if they need it.', 'Open the box together and find everything again.'],
         talk: ['In it goes!', 'Where did it go?', 'Round, like a circle.'],
@@ -95,7 +95,7 @@ export const STAGES = [
     name: 'Explore and Discover',
     short: 'Toddlers',
     metaTitle: 'Toddler learning activities for 2 and 3 year olds — free | Red Teddy',
-    metaDesc: 'Free toddler activities for ages 2–3: colours, shapes, counting, sorting, first letters, listening and pretend play. Short on-screen games plus hands-on ideas. No sign-up.',
+    metaDesc: 'Free toddler activities for ages 2–3: colors, shapes, counting, sorting, first letters, listening and pretend play. Short on-screen games plus hands-on ideas. No sign-up.',
     h1: 'Explore and Discover: toddler learning for ages 2 to 3.',
     lead: 'Short, picture-led activities to play together, with a hands-on version of each. Every on-screen game opens straight away, with no account.',
     guidance: [
@@ -107,12 +107,12 @@ export const STAGES = [
     elof: ['Language and Communication', 'Mathematics Development', 'Perceptual, Motor and Physical Development', 'Approaches to Learning'],
     activities: [
       {
-        id: 'ed-find-colour', title: 'Find the colour', area: 'Colours', minutes: 2, where: 'both', play: '/learn/?activity=colours-find',
-        objective: 'Recognise and name the basic colours.',
-        materials: ['Coloured socks, blocks or toys'],
-        steps: ['Play the short on-screen game together.', 'Then lay out three coloured socks and ask for one by colour.', 'Swap roles: your child asks you for a colour.'],
+        id: 'ed-find-color', title: 'Find the color', area: 'Colors', minutes: 2, where: 'both', play: '/learn/?activity=colours-find',
+        objective: 'Recognize and name the basic colors.',
+        materials: ['Colored socks, blocks or toys'],
+        steps: ['Play the short on-screen game together.', 'Then lay out three colored socks and ask for one by color.', 'Swap roles: your child asks you for a color.'],
         talk: ['Can you find the blue one?', 'Yes, blue like the sky.', 'Which one is yellow?'],
-        extend: 'Sort laundry by colour into piles.',
+        extend: 'Sort laundry by color into piles.',
       },
       {
         id: 'ed-count-dots', title: 'Count the dots', area: 'Counting', minutes: 2, where: 'both', play: '/learn/?activity=count-dots-3',
@@ -148,9 +148,9 @@ export const STAGES = [
       },
       {
         id: 'ed-sort-toys', title: 'Tidy-up sorting', area: 'Sorting', minutes: 10, where: 'offline',
-        objective: 'Group things by one feature: kind, colour or size.',
+        objective: 'Group things by one feature: kind, color or size.',
         materials: ['Toys to put away', 'Two boxes'],
-        steps: ['Choose one rule: cars in this box, animals in that box.', 'Hand over toys one by one and ask where each goes.', 'Next time, sort by colour or by big and small.'],
+        steps: ['Choose one rule: cars in this box, animals in that box.', 'Hand over toys one by one and ask where each goes.', 'Next time, sort by color or by big and small.'],
         talk: ['Is this a car or an animal?', 'Big ones here, small ones there.', 'You sorted them all!'],
         extend: 'Sort spoons and forks when unloading the dishwasher (safe items only).',
       },
@@ -160,7 +160,7 @@ export const STAGES = [
         materials: ['A soft toy or teddy', 'Toy or real cups and plates'],
         steps: ['Set up a picnic for teddy.', 'Ask your child to give teddy a cup, a plate, one snack.', 'Talk about how teddy feels: hungry, full, happy, sleepy.'],
         talk: ['Teddy is hungry. What shall we give him?', 'One for you, one for teddy.', 'Is teddy happy now?'],
-        extend: 'Add a second toy and practise sharing fairly.',
+        extend: 'Add a second toy and practice sharing fairly.',
       },
       {
         id: 'ed-playdough', title: 'Play dough rolls and pinches', area: 'Fine motor', minutes: 15, where: 'offline',
@@ -225,16 +225,16 @@ export const STAGES = [
       {
         id: 'ls-pattern', title: 'Finish the pattern', area: 'Patterns', minutes: 3, where: 'both', play: '/learn/?activity=pattern-colours',
         objective: 'See what repeats and continue a simple AB pattern.',
-        materials: ['Two colours of blocks, or forks and spoons'],
+        materials: ['Two colors of blocks, or forks and spoons'],
         steps: ['Play the pattern game together.', 'Make red, blue, red, blue with blocks and ask what comes next.', 'Clap and stomp a pattern: clap, stomp, clap, stomp.'],
         talk: ['Red, blue, red, blue… what’s next?', 'What keeps happening again?', 'Can you make a pattern for me?'],
         extend: 'Thread a bead necklace in a pattern.',
       },
       {
-        id: 'ls-memory-colours', title: 'Colour pairs', area: 'Memory', minutes: 3, where: 'both', play: '/learn/?activity=memory-colours',
+        id: 'ls-memory-colors', title: 'Color pairs', area: 'Memory', minutes: 3, where: 'both', play: '/learn/?activity=memory-colours',
         objective: 'Hold where things are in mind and find matching pairs.',
         materials: ['A tray and five household objects', 'A tea towel'],
-        steps: ['Play the colour pairs game together.', 'Put five objects on a tray, cover them and remove one.', 'Ask which one is missing.'],
+        steps: ['Play the color pairs game together.', 'Put five objects on a tray, cover them and remove one.', 'Ask which one is missing.'],
         talk: ['Where was the other green one?', 'What’s missing?', 'How did you remember?'],
         extend: 'Make it six objects when five is easy.',
       },
@@ -300,7 +300,7 @@ export const STAGES = [
       },
       {
         id: 'pk-rhyme', title: 'Rhyme time', area: 'Phonological awareness', minutes: 3, where: 'both', play: '/learn/?activity=listen-rhyme', standards: ['RF.K.2.a'],
-        objective: 'Recognise and produce rhyming words.',
+        objective: 'Recognize and produce rhyming words.',
         materials: ['None'],
         steps: ['Play the rhyming game together.', 'Say a word and take turns finding rhymes, real or silly.', 'Read a Dr. Seuss-style rhyming book and pause before the rhyme.'],
         talk: ['Cat, bat, hat… what else?', 'Does sun rhyme with run?', 'That’s a silly word, but it rhymes!'],
@@ -364,9 +364,9 @@ export const STAGES = [
       },
       {
         id: 'pk-ready-routines', title: 'School-ready routines', area: 'Independence', minutes: 10, where: 'offline',
-        objective: 'Practise the everyday independence kindergarten asks for: coats, bags, lunch boxes and turn-taking.',
+        objective: 'Practice the everyday independence kindergarten asks for: coats, bags, lunch boxes and turn-taking.',
         materials: ['Coat, backpack, lunch box'],
-        steps: ['Practise putting on a coat and zipping it.', 'Pack and unpack a backpack.', 'Play a turn-taking board game to practise waiting and losing kindly.'],
+        steps: ['Practice putting on a coat and zipping it.', 'Pack and unpack a backpack.', 'Play a turn-taking board game to practice waiting and losing kindly.'],
         talk: ['What goes in your bag?', 'Can you open your lunch box by yourself?', 'Whose turn is it?'],
         extend: 'Visit the school playground before term starts.',
       },
@@ -391,3 +391,97 @@ export const LOOK_CARDS = [
 ];
 
 export const CARDS_PER_SITTING = 6;
+
+// Topic pages: one skill across the ages, for parents searching for that skill.
+// Activities are referenced by id from STAGES (never copied), so each lives in one place.
+export const TOPICS = [
+  {
+    slug: 'learning-colors-for-toddlers',
+    short: 'Colors',
+    metaTitle: 'Learning colors for toddlers: free activities by age | Red Teddy',
+    metaDesc: 'How toddlers learn colors, what to expect at each age, and free hands-on and on-screen color activities for ages 1–4. No sign-up.',
+    h1: 'Learning colors with toddlers.',
+    intro: 'Most children understand color words before they can say them, and many mix colors up well into age three. That is normal: color is abstract, because a red cup and a red sock share nothing but their color. Lots of relaxed naming in everyday life does more than drilling.',
+    stages: [
+      ['1–2', 'Hearing color words attached to things: “the red ball”. No need to ask questions yet.'],
+      ['2–3', 'Matching same colors, then pointing to a color when asked. Saying color names often comes later.'],
+      ['3–4', 'Naming the basic colors, sorting by color and noticing colors in patterns.'],
+    ],
+    tips: ['Say the color with the object: “blue cup”, not just “blue”.', 'Start with one or two colors that look very different, like red and blue.', 'If your child says the wrong color, just say the right one back warmly: “It’s green, like grass.”'],
+    ids: ['lw-color-basket', 'lw-look-and-name', 'ed-find-color', 'ed-sort-toys', 'ls-memory-colors'],
+  },
+  {
+    slug: 'counting-activities-for-preschoolers',
+    short: 'Counting',
+    metaTitle: 'Counting activities for preschoolers and toddlers — free | Red Teddy',
+    metaDesc: 'Free counting activities for ages 2–6: counting objects, matching numbers to groups, comparing and counting in twos, with tips on how counting develops.',
+    h1: 'Counting activities, from toddlers to kindergarten.',
+    intro: 'Reciting “one, two, three” is not the same as counting. Real counting means saying one number for each thing, and knowing the last number says how many. Children usually get there in steps, and touching each object helps more than anything else.',
+    stages: [
+      ['2–3', 'Saying number words, and counting two or three things with help.'],
+      ['3–4', 'Counting up to about five objects and answering “how many?” with the last number.'],
+      ['4–6', 'Counting up to 20 objects, comparing groups, and counting on from a number other than one.'],
+    ],
+    tips: ['Line objects up in a row. Scattered objects are much harder to count.', 'Count things that move: stairs, jumps, claps.', 'After counting, ask “so how many?” to connect the count to the total.'],
+    ids: ['ed-count-dots', 'ed-playdough', 'ls-count-five', 'ls-number-group', 'pk-count-ten', 'pk-compare', 'pk-twos'],
+  },
+  {
+    slug: 'letter-sounds-activities',
+    short: 'Letter sounds',
+    metaTitle: 'Letter sounds activities for preschool and kindergarten — free | Red Teddy',
+    metaDesc: 'Free letter-sound and early phonics activities for ages 2–6: first letters, hearing first sounds, matching sounds to letters and print awareness.',
+    h1: 'Letter sounds: early phonics through play.',
+    intro: 'Reading starts with hearing sounds in spoken words, often before a child knows any letters. Playing with sounds out loud, then linking them to letters, builds the foundation kindergarten phonics depends on.',
+    stages: [
+      ['2–3', 'Noticing letters, especially the first letter of their own name.'],
+      ['3–4', 'Hearing the first sound in a word, like the /s/ in sun.'],
+      ['4–6', 'Matching sounds to letters and following print from left to right.'],
+    ],
+    tips: ['Say the sound, not the letter name: /m/, not “em”.', 'Keep sounds short and clean: /b/, not “buh”.', 'Start with sounds that can be stretched, like /s/, /m/ and /f/.'],
+    ids: ['ed-find-b', 'ls-sound-s', 'pk-first-sound', 'pk-starts-with', 'pk-print-walk'],
+  },
+  {
+    slug: 'shapes-activities-for-toddlers',
+    short: 'Shapes',
+    metaTitle: 'Shapes activities for toddlers and preschoolers — free | Red Teddy',
+    metaDesc: 'Free shape activities for ages 1–6: posting boxes, shape sorters, shape pairs, naming shapes and counting sides and corners.',
+    h1: 'Shapes, from posting boxes to sides and corners.',
+    intro: 'Children learn shapes with their hands first: fitting, turning and posting. Names come next, and only later do they notice what makes a shape a triangle, like three sides and three corners, whichever way up it is.',
+    stages: [
+      ['1–2', 'Fitting a round thing into a round hole, with lots of turning and trying.'],
+      ['2–3', 'Matching circles, squares and triangles by outline.'],
+      ['3–6', 'Naming shapes, then describing them by sides and corners.'],
+    ],
+    tips: ['Show triangles upside down and stretched too, not only the textbook version.', 'Let your child struggle a little with a shape sorter before helping.', 'Find shapes in real life: plates, windows, pizza slices.'],
+    ids: ['lw-shape-posting', 'ed-shape-holes', 'ed-shape-pairs', 'ls-shape-name', 'pk-shapes-sides'],
+  },
+  {
+    slug: 'rhyming-activities-for-kids',
+    short: 'Rhyming',
+    metaTitle: 'Rhyming activities for preschool and kindergarten — free | Red Teddy',
+    metaDesc: 'Free rhyming activities for ages 1–6: lap rhymes, listening for rhymes and making rhymes, with tips on why rhyme matters for reading.',
+    h1: 'Rhyming games, from lap rhymes to rhyme chains.',
+    intro: 'Rhyme helps children hear that words are made of smaller sounds, which is a key step towards reading. It starts with simply enjoying rhymes, then hearing when words rhyme, then making new ones.',
+    stages: [
+      ['1–2', 'Enjoying the rhythm of nursery rhymes and songs.'],
+      ['3–4', 'Hearing whether two words rhyme.'],
+      ['4–6', 'Making rhymes, including silly made-up words.'],
+    ],
+    tips: ['Silly rhymes count: “bear, chair, flair, zair.”', 'Pause before the rhyming word in a familiar book and let your child fill it in.', 'Make the ending sound a little louder: “c-AT, h-AT”.'],
+    ids: ['lw-rhyme-time', 'ls-rhyme', 'pk-rhyme', 'ls-story-sequence'],
+  },
+  {
+    slug: 'first-words-activities-for-babies',
+    short: 'First words',
+    metaTitle: 'First words and animal sounds activities for 1 year olds | Red Teddy',
+    metaDesc: 'Free, parent-led ideas to build first words with babies and young toddlers: naming walks, animal sounds, picture books and pretend play.',
+    h1: 'First words and animal sounds, together.',
+    intro: 'Toddlers learn words from people, not screens: from back-and-forth talk about the things in front of them. Animal sounds are often among the first “words”, because they are fun, repeatable and easy to copy.',
+    stages: [
+      ['1–2', 'Understanding many more words than they say. Pointing, babbling and animal sounds all count.'],
+      ['2–3', 'Word spurts, two-word phrases, and words used in pretend play.'],
+    ],
+    tips: ['Wait. Leave a pause after you talk so your child can take a turn.', 'Follow their pointing and name what they are interested in.', 'If you have concerns about your child’s speech, talk to your pediatrician.'],
+    ids: ['lw-name-everything', 'lw-animal-sounds', 'lw-story-point', 'lw-look-and-name', 'ed-pretend-picnic'],
+  },
+];

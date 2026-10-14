@@ -89,3 +89,26 @@
   .ey-act{break-inside:avoid;background-image:none;border:1px solid #999}
   section{padding:12px 0!important}
 }
+/* skill links, topic pages, printable pack */
+.ey-topics{margin-top:32px}
+.ey-topics-h{font-size:1.3rem!important;margin-bottom:12px!important}
+.ey-topics ul{display:flex;flex-wrap:wrap;gap:10px;list-style:none}
+.ey-topics a{display:inline-flex;min-height:44px;align-items:center;padding:0 18px;border-radius:999px;background:var(--paper);border:2px solid var(--line);font-weight:700;text-decoration:none}
+.ey-topics a:hover,.ey-topics a[aria-current]{border-color:var(--red);color:var(--red)}
+.ey-stages{display:grid;gap:12px;margin-bottom:12px}
+.ey-stages div{display:grid;grid-template-columns:7rem 1fr;gap:12px}
+.ey-stages dt{font-family:var(--serif);font-weight:700}
+.ey-note{color:var(--mute);font-size:.95rem;margin-bottom:20px}
+.ey-tips-h{font-size:1.2rem;margin-bottom:12px}
+.ey-dl{color:var(--blue);font-weight:700}
+@media print{.ey-topics,.ey-dl{display:none!important}.ey-act .ey-meta{color:#333}}
+@media print{
+  body{font-size:10.5pt}
+  .ey-hero h1{max-width:none;font-size:22pt}
+  .ey-act{padding:12px 16px;margin-bottom:12px}
+  .ey-act h3{font-size:14pt}
+  .ey-cols{grid-template-columns:1fr 1fr!important}
+  .ey-act h4{margin:6px 0 2px}
+  .ey-hero-art{display:none}
+  .ey-guide-grid{grid-template-columns:1fr!important;gap:8px}
+}

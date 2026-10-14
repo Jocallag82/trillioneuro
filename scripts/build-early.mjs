@@ -2,7 +2,7 @@
    into static HTML in redteddytutor/early/. No runtime build: re-run after editing data.js.
    Run: node scripts/build-early.mjs */
 import { writeFileSync } from 'node:fs';
-import { STAGES, SITE, CARDS_PER_SITTING } from '../redteddytutor/early/data.js';
+import { STAGES, TOPICS, SITE, CARDS_PER_SITTING } from '../redteddytutor/early/data.js';
 import { svg } from '../redteddytutor/early/art.js';
 
 const out = new URL('../redteddytutor/early/', import.meta.url);
@@ -94,14 +94,14 @@ ${STAGES.map((s) => `  <li><a class="ey-age${s.slug === current ? ' is-current' 
   </a></li>
 </ol>`;
 
-function activity(a) {
+function activity(a, ages) {
   const std = a.standards?.length ? `<p class="ey-std"><span>Relates to Common Core:</span> ${a.standards.map((c) => `<code>${esc(c)}</code>`).join(' ')}</p>` : '';
   const play = a.play ? `<a class="btn btn-red ey-play" href="${a.play}">${a.play.startsWith('/little-world') ? 'Open the cards' : 'Play now — free'}</a>` : '';
   return `<article class="ey-act" id="${a.id}">
   <header>
     <p class="ey-area">${esc(a.area)}</p>
     <h3>${esc(a.title)}</h3>
-    <p class="ey-meta"><span>${WHERE[a.where]}</span><span>About ${a.minutes} min</span></p>
+    <p class="ey-meta">${ages ? `<span>Ages ${ages}</span>` : ''}<span>${WHERE[a.where]}</span><span>About ${a.minutes} min</span></p>
   </header>
   <p class="ey-obj"><strong>What it builds:</strong> ${esc(a.objective)}</p>
   <div class="ey-cols">
@@ -113,6 +113,50 @@ function activity(a) {
   ${std}
   ${play}
 </article>`;
+}
+
+
+const topicLinks = (current) => `<div class="ey-topics"><h2 class="ey-topics-h">Or choose a skill</h2><ul>${TOPICS.map((t) => `<li><a href="/${t.slug}"${t.slug === current ? ' aria-current="page"' : ''}>${esc(t.short)}</a></li>`).join('')}</ul></div>`;
+const where = Object.fromEntries(STAGES.flatMap((s) => s.activities.map((a) => [a.id, { a, s }])));
+
+function topicPage(t) {
+  const acts = t.ids.map((id) => where[id]);
+  const body = `<nav class="wrap ey-crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/early-years">Early years</a></li><li aria-current="page">${esc(t.short)}</li></ol></nav>
+<section class="ey-hero" aria-labelledby="h1">
+  <div class="wrap">
+    <p class="eyebrow">${esc(t.short)} · Free · No sign-up</p>
+    <h1 id="h1">${esc(t.h1)}</h1>
+    <p class="lead">${esc(t.intro)}</p>
+    <div class="cta-row"><a class="btn btn-red btn-lg" href="#activities">See ${acts.length} activities</a></div>
+  </div>
+</section>
+<section class="ey-guide" aria-labelledby="dev-h">
+  <div class="wrap ey-guide-grid">
+    <h2 id="dev-h">What it often looks like by age</h2>
+    <div><dl class="ey-stages">${t.stages.map(([ages, txt]) => `<div><dt>Ages ${ages}</dt><dd>${esc(txt)}</dd></div>`).join('')}</dl>
+    <p class="ey-note">Every child is different, and these are broad patterns, not milestones to test against.</p>
+    <h3 class="ey-tips-h">Tips that help</h3><ul>${t.tips.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+  </div>
+</section>
+<section class="ey-list" id="activities" aria-labelledby="acts-h">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">${acts.length} activities</p><h2 id="acts-h">${esc(t.short)} activities to do together</h2>
+    <p>Each one is also on its age page, with the rest of that age’s activities. <button type="button" class="ey-print" data-print>Print this page</button></p></div>
+    ${acts.map(({ a, s }) => activity(a, s.ages)).join('\n')}
+  </div>
+</section>
+<section class="ey-more" aria-labelledby="more-h">
+  <div class="wrap">
+    <h2 id="more-h">Choose an age</h2>
+    ${ageCards(null)}
+    ${topicLinks(t.slug)}
+  </div>
+</section>`;
+  return page({
+    path: `/${t.slug}`, title: t.metaTitle, desc: t.metaDesc, body,
+    jsonld: [crumbs([['Home', '/'], ['Early years', '/early-years'], [t.short, `/${t.slug}`]])],
+    scripts: '<script src="/early/print.js" defer></script>',
+  });
 }
 
 function stagePage(s, idx) {
@@ -143,10 +187,10 @@ function stagePage(s, idx) {
     <div class="sec-head">
       <p class="eyebrow">${s.activities.length} activities</p>
       <h2 id="acts-h">Things to do together</h2>
-      <p>Each one has a clear purpose, a way to play, and words to use. <button type="button" class="ey-print" data-print>Print this page</button></p>
+      <p>Each one has a clear purpose, a way to play, and words to use. <a class="ey-dl" href="/early/printables/${s.slug}.pdf" download>Download the free printable pack (PDF)</a><span class="ey-dl"> · </span><button type="button" class="ey-print" data-print>Print this page</button></p>
     </div>
     <ul class="ey-jump" aria-label="Jump to an activity">${s.activities.map((a) => `<li><a href="#${a.id}">${esc(a.title)}</a></li>`).join('')}</ul>
-    ${s.activities.map(activity).join('\n')}
+    ${s.activities.map((a) => activity(a)).join('\n')}
     <p class="honest">These activities relate to the Head Start Early Learning Outcomes Framework domains of ${s.elof.slice(0, -1).join(', ')} and ${s.elof.at(-1)}${s.band === '5-7' ? ', and to the Common Core kindergarten standards shown on each card' : ''}. That is our own mapping, not an official review or endorsement.</p>
   </div>
 </section>
@@ -154,6 +198,7 @@ function stagePage(s, idx) {
   <div class="wrap">
     <h2 id="more-h">Choose another age</h2>
     ${ageCards(s.slug)}
+    ${topicLinks(null)}
     <p class="ey-pn">${prev ? `<a href="/${prev.slug}">← ${esc(prev.name)} (ages ${prev.ages})</a>` : '<span></span>'}${next ? `<a href="/${next.slug}">${esc(next.name)} (ages ${next.ages}) →</a>` : '<a href="/learn/">Ready for school learning? Grades K–12 →</a>'}</p>
   </div>
 </section>`;
@@ -182,6 +227,7 @@ const hub = page({
   <div class="wrap">
     <h2 id="pick-h" class="ey-sr">Choose an age</h2>
     ${ageCards(null)}
+    ${topicLinks(null)}
   </div>
 </section>
 <section class="ey-guide" aria-labelledby="promise-h">
@@ -193,6 +239,7 @@ const hub = page({
       <li>Built for doing together. Screen moments are short and every one has an off-screen version.</li>
       <li>No streaks, scores or leaderboards. A wrong tap gets a kind hint.</li>
       <li>No promises of faster development. Just good play with a purpose, explained.</li>
+      <li>Every age has a free printable pack: <a href="/early/printables/little-world.pdf" download>1–2</a>, <a href="/early/printables/toddler-activities.pdf" download>2–3</a>, <a href="/early/printables/preschool-activities.pdf" download>3–4</a>, <a href="/early/printables/pre-k-kindergarten-readiness.pdf" download>4–6</a> (PDF).</li>
     </ul>
   </div>
 </section>`,
@@ -219,4 +266,5 @@ const play = page({
 writeFileSync(new URL('early-years.html', out), hub);
 writeFileSync(new URL('little-world-play.html', out), play);
 STAGES.forEach((s, i) => writeFileSync(new URL(`${s.slug}.html`, out), stagePage(s, i)));
-console.log(`early-years: wrote ${STAGES.length + 2} pages, ${total} activities`);
+TOPICS.forEach((t) => writeFileSync(new URL(`${t.slug}.html`, out), topicPage(t)));
+console.log(`early-years: wrote ${STAGES.length + TOPICS.length + 2} pages, ${total} activities`);

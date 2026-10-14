@@ -156,6 +156,8 @@ const cases = [
   ['redteddytutor.com',     '/preschool-activities', 'serve', '/redteddytutor/early/preschool-activities.html'],
   ['redteddytutor.com',     '/pre-k-kindergarten-readiness', 'serve', '/redteddytutor/early/pre-k-kindergarten-readiness.html'],
   ['redteddytutor.com',     '/early/little-world.html', 'redirect', '/little-world'],
+  ['redteddytutor.com',     '/learning-colors-for-toddlers', 'serve', '/redteddytutor/early/learning-colors-for-toddlers.html'],
+  ['redteddytutor.com',     '/early/printables/little-world.pdf', 'serve', '/redteddytutor/early/printables/little-world.pdf'],
   ['redteddytutor.com',     '/early/look.js', 'serve', '/redteddytutor/early/look.js'],
   ['redteddytutor.com',     '/early/early.css', 'serve', '/redteddytutor/early/early.css'],
   ['redteddytutor.com',     '/api/rtt-tutor',      'serve', '/api/rtt-tutor'],

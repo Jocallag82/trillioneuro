@@ -41,7 +41,7 @@ await step('home -> age picker -> toddler page -> free activity, completed witho
   await page.waitForURL(/\/toddler-activities$/);
   await noHScroll(page);
   await shot(page, 'toddler-mobile');
-  await page.locator('#ed-find-colour .ey-play').click();
+  await page.locator('#ed-find-color .ey-play').click();
   await page.waitForURL(/activity=colours-find/);
   const act = ACTIVITIES.find((a) => a.id === 'colours-find');
   for (const [i, s] of act.steps.entries()) {
@@ -65,7 +65,10 @@ await step('home -> age picker -> toddler page -> free activity, completed witho
 });
 
 await step('every early-years page loads clean, with one h1, canonical and working anchors', async () => {
-  for (const p of ['/early-years', '/little-world', '/toddler-activities', '/preschool-activities', '/pre-k-kindergarten-readiness']) {
+  for (const p of ['/early-years', '/little-world', '/toddler-activities', '/preschool-activities', '/pre-k-kindergarten-readiness', '/learning-colors-for-toddlers', '/counting-activities-for-preschoolers', '/letter-sounds-activities', '/shapes-activities-for-toddlers', '/rhyming-activities-for-kids', '/first-words-activities-for-babies']) {
+    {
+      const r = await fetch(`${BASE}/early/printables/little-world.pdf`); assert.equal(r.status, 200);
+    }
     const { ctx, page, errors, requests } = await open(p);
     assert.equal(await page.locator('h1').count(), 1, p);
     assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'), `https://www.redteddytutor.com${p}`);

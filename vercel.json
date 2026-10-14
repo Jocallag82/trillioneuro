@@ -584,7 +584,7 @@
       "dest": "/redteddytutor/early/little-world-play.html"
     },
     {
-      "src": "/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness)/?",
+      "src": "/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness|learning-colors-for-toddlers|counting-activities-for-preschoolers|letter-sounds-activities|shapes-activities-for-toddlers|rhyming-activities-for-kids|first-words-activities-for-babies)/?",
       "has": [
         {
           "type": "host",
@@ -599,7 +599,7 @@
       "dest": "/redteddytutor/early/$1.html"
     },
     {
-      "src": "/early/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness)\\.html",
+      "src": "/early/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness|learning-colors-for-toddlers|counting-activities-for-preschoolers|letter-sounds-activities|shapes-activities-for-toddlers|rhyming-activities-for-kids|first-words-activities-for-babies)\\.html",
       "has": [
         {
           "type": "host",

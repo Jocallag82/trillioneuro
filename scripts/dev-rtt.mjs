@@ -9,11 +9,11 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', 'redteddytutor');
 const PORT = Number(process.argv[2] || process.env.PORT || 4321);
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.vtt': 'text/vtt', '.json': 'application/json', '.txt': 'text/plain', '.xml': 'application/xml' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg', '.mp4': 'video/mp4', '.vtt': 'text/vtt', '.json': 'application/json', '.txt': 'text/plain', '.xml': 'application/xml', '.pdf': 'application/pdf' };
 const vercel = JSON.parse(await readFile(join(HERE, '..', 'vercel.json'), 'utf8'));
 const CSP = vercel.routes.find((r) => r.headers?.['Content-Security-Policy'])?.headers['Content-Security-Policy'];
 const ALIASES = { '/learn/parent': '/learn/parent.html', '/learn/account': '/learn/account.html', '/privacy': '/privacy.html', '/curriculum': '/curriculum.html', '/little-world/play': '/early/little-world-play.html' };
-for (const s of ['early-years', 'little-world', 'toddler-activities', 'preschool-activities', 'pre-k-kindergarten-readiness']) ALIASES[`/${s}`] = `/early/${s}.html`;
+for (const s of ['early-years', 'little-world', 'toddler-activities', 'preschool-activities', 'pre-k-kindergarten-readiness', ...'learning-colors-for-toddlers|counting-activities-for-preschoolers|letter-sounds-activities|shapes-activities-for-toddlers|rhyming-activities-for-kids|first-words-activities-for-babies'.split('|')]) ALIASES[`/${s}`] = `/early/${s}.html`;
 
 createServer(async (req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/\/$/, '') || '/';
