@@ -50,7 +50,7 @@ ${groups}</div></section>`;
 
 writeFileSync(new URL('games.html', DIR), page({
   path: '/early-years/games', robots: 'index, follow',
-  title: 'Free learning games for ages 1–6 with real photos | Red Teddy',
+  title: 'Free learning games for ages 1–6 | Red Teddy',
   desc: `${ACTIVITIES.length} free early-years games for ages 1 to 6: animals, first words, colors, counting, letter sounds, patterns, memory and feelings. No sign-up, no ads, nothing recorded.`,
   body: `<nav class="wrap ey-crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/early-years">Ages 1–6</a></li><li aria-current="page">Games</li></ol></nav>
 <section class="g-hero"><div class="wrap"><p class="eyebrow">Free · no sign-up · no ads</p><h1>Red Teddy’s early-years games</h1>
