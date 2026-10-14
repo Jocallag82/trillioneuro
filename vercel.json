@@ -569,6 +569,36 @@
       "dest": "/redteddytutor/learn/parent.html"
     },
     {
+      "src": "/early-years/games/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/early/games/games.html"
+    },
+    {
+      "src": "/early-years/games/play/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/early/games/play.html"
+    },
+    {
       "src": "/little-world/play/?",
       "has": [
         {

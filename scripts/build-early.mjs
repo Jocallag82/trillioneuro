@@ -4,6 +4,8 @@
 import { writeFileSync } from 'node:fs';
 import { STAGES, TOPICS, SITE, CARDS_PER_SITTING } from '../redteddytutor/early/data.js';
 import { svg } from '../redteddytutor/early/art.js';
+import { BANDS, ACTIVITIES as GAMES } from '../redteddytutor/early/games/content.js';
+const gamesFor = (slug) => BANDS.find((b) => b.page === `/${slug}`);
 
 const out = new URL('../redteddytutor/early/', import.meta.url);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -176,6 +178,7 @@ function stagePage(s, idx) {
       <p class="lead">${esc(s.lead)}</p>
       <div class="cta-row">
         <a class="btn btn-red btn-lg" href="${s.activities.find((a) => a.play)?.play}">${s.band ? 'Play the first activity' : 'Open the Look and Name cards'}</a>
+        <a class="btn btn-ghost btn-lg" href="/early-years/games#${gamesFor(s.slug).slug}">${GAMES.filter((g) => g.band === gamesFor(s.slug).band).length} ${esc(gamesFor(s.slug).name)} games</a>
         <a class="btn btn-ghost btn-lg" href="#activities">See all ${s.activities.length} activities</a>
       </div>
     </div>
@@ -227,6 +230,7 @@ const hub = page({
     <p class="eyebrow">Ages 1 to 6 · Always free · No account</p>
     <h1 id="h1">Learn together with Red Teddy, from first words to kindergarten.</h1>
     <p class="lead">${total} activities, each with a purpose, a way to play and words to use. Short on-screen games where they help, and off-screen play where that is better. Pick an age to start.</p>
+    <div class="cta-row"><a class="btn btn-red btn-lg" href="/early-years/games">Play ${GAMES.length} learning games</a></div>
   </div>
 </section>
 <section class="ey-more ey-pick" aria-labelledby="pick-h">

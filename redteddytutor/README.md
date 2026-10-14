@@ -102,3 +102,11 @@ Free, no sign-up, nothing stored or sent. Source: `early/data.js` (`STAGES`: 4 a
 with the preview server running, `node scripts/build-printables.mjs` (one PDF pack per age in
 `early/printables/`). Little World's Look and Name cards: `early/look.js` + `early/art.js`.
 Tests: `scripts/early.test.mjs`; browser: `scripts/early-e2e.mjs` (preview server on 4321).
+
+## Early-years games (October 2026)
+`/early-years/games` — 72 games across four journeys (Little World 1–2, Explore and Discover 2–3,
+Learn Through Play 3–4, Ready for School 4–6) on 8 reusable mechanics. Content, rules and screen are
+separate (`early/games/content.js`, `engine.js`, `player.js`). Photos/sounds come from
+`early/games/manifest.json` via `scripts/import-early-assets.mjs`; until a photo is imported a labelled
+symbol tile is shown. No accounts, no network calls, nothing recorded. Details: `early/games/README.md`.
+Tests: `node --test scripts/early-games.test.mjs`, `scripts/early-games-e2e.mjs`.
