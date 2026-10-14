@@ -11,6 +11,7 @@ const WHERE = { offline: 'Off-screen', screen: 'On-screen, together', both: 'On-
 const PHOTO = {
   'little-world': ['/early/img/little-world.webp', 684, 706, 'Red Teddy on a play rug with a grown-up, wooden blocks, a ball and a board book.'],
   'toddler-activities': ['/early/img/toddler-activities.webp', 684, 322, 'Red Teddy in a garden at a little table with toy animals, fruit and colored blocks.'],
+  'pre-k-kindergarten-readiness': ['/early/img/pre-k-kindergarten-readiness.webp', 900, 491, 'Red Teddy with a school bag at a classroom table with letter cards, an abacus and a picture book.'],
   'preschool-activities': ['/early/img/preschool-activities.webp', 684, 316, 'Red Teddy at a classroom table with letter blocks, number blocks and picture cards.'],
 };
 const STAGE_ART = { 'little-world': 'duck', 'toddler-activities': 'ball', 'preschool-activities': 'star', 'pre-k-kindergarten-readiness': 'apple' };
