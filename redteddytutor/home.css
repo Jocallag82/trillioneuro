@@ -469,3 +469,4 @@ form .btn{width:100%}
 @media (max-width:980px){.age-pick{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.age-pick{grid-template-columns:1fr}.ages .sec-head{padding:22px 18px}}
 @media (prefers-reduced-motion:reduce){.age-pick a{transition:none}.age-pick a:hover{transform:none}}
+.ap-img{width:calc(100% + 40px);height:auto;margin:-20px -20px 8px;aspect-ratio:16/10;object-fit:cover;border-radius:8px 8px 0 0;max-width:none}

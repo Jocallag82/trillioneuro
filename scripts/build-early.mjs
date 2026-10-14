@@ -8,6 +8,11 @@ import { svg } from '../redteddytutor/early/art.js';
 const out = new URL('../redteddytutor/early/', import.meta.url);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const WHERE = { offline: 'Off-screen', screen: 'On-screen, together', both: 'On-screen game + off-screen play' };
+const PHOTO = {
+  'little-world': ['/early/img/little-world.webp', 684, 706, 'Red Teddy on a play rug with a grown-up, wooden blocks, a ball and a board book.'],
+  'toddler-activities': ['/early/img/toddler-activities.webp', 684, 322, 'Red Teddy in a garden at a little table with toy animals, fruit and colored blocks.'],
+  'preschool-activities': ['/early/img/preschool-activities.webp', 684, 316, 'Red Teddy at a classroom table with letter blocks, number blocks and picture cards.'],
+};
 const STAGE_ART = { 'little-world': 'duck', 'toddler-activities': 'ball', 'preschool-activities': 'star', 'pre-k-kindergarten-readiness': 'apple' };
 
 function page({ path, title, desc, body, robots = 'index, follow', jsonld = [], scripts = '' }) {
@@ -83,7 +88,7 @@ const crumbs = (items) => ({
 
 const ageCards = (current) => `<ol class="ey-ages" aria-label="Choose an age">
 ${STAGES.map((s) => `  <li><a class="ey-age${s.slug === current ? ' is-current' : ''}" href="/${s.slug}"${s.slug === current ? ' aria-current="page"' : ''}>
-    <span class="ey-age-art" aria-hidden="true">${svg(STAGE_ART[s.slug], '')}</span>
+    ${PHOTO[s.slug] ? `<span class="ey-age-photo"><img src="${PHOTO[s.slug][0]}" width="${PHOTO[s.slug][1]}" height="${PHOTO[s.slug][2]}" alt="" loading="lazy"></span>` : `<span class="ey-age-art" aria-hidden="true">${svg(STAGE_ART[s.slug], '')}</span>`}
     <span class="ey-age-n">Ages ${s.ages}</span>
     <span class="ey-age-name">${esc(s.name)}</span>
   </a></li>`).join('\n')}
@@ -173,7 +178,7 @@ function stagePage(s, idx) {
         <a class="btn btn-ghost btn-lg" href="#activities">See all ${s.activities.length} activities</a>
       </div>
     </div>
-    <figure class="ey-hero-art" aria-hidden="true">${svg(STAGE_ART[s.slug], '')}</figure>
+    ${PHOTO[s.slug] ? `<figure class="ey-hero-photo"><img src="${PHOTO[s.slug][0]}" width="${PHOTO[s.slug][1]}" height="${PHOTO[s.slug][2]}" alt="${esc(PHOTO[s.slug][3])}" fetchpriority="high"></figure>` : `<figure class="ey-hero-art" aria-hidden="true">${svg(STAGE_ART[s.slug], '')}</figure>`}
   </div>
 </section>
 <section class="ey-guide" aria-labelledby="guide-h">

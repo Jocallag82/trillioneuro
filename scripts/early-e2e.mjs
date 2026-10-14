@@ -72,6 +72,7 @@ await step('every early-years page loads clean, with one h1, canonical and worki
     const { ctx, page, errors, requests } = await open(p);
     assert.equal(await page.locator('h1').count(), 1, p);
     assert.equal(await page.locator('link[rel=canonical]').getAttribute('href'), `https://www.redteddytutor.com${p}`);
+    await page.evaluate(() => Promise.all([...document.images].map((i) => { i.loading = 'eager'; return i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }); })));
     for (const img of await page.locator('img').all()) assert.ok(await img.evaluate((i) => i.complete && i.naturalWidth > 0), `${p} broken image`);
     for (const a of await page.locator('a[href^="#"]').all()) {
       const id = (await a.getAttribute('href')).slice(1);
