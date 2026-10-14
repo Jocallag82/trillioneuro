@@ -569,6 +569,72 @@
       "dest": "/redteddytutor/learn/parent.html"
     },
     {
+      "src": "/little-world/play/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/early/little-world-play.html"
+    },
+    {
+      "src": "/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness)/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/early/$1.html"
+    },
+    {
+      "src": "/early/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness)\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/$1"
+      },
+      "status": 308
+    },
+    {
+      "src": "/early/little-world-play\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/little-world/play"
+      },
+      "status": 308
+    },
+    {
       "src": "/((?!_vercel/|api/).*)",
       "has": [
         {

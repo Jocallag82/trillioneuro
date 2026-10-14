@@ -149,6 +149,15 @@ const cases = [
   ['redteddytutor.com',     '/learn/js/player.js', 'serve', '/redteddytutor/learn/js/player.js'],
   ['redteddytutor.com',     '/learn/learn.css',    'serve', '/redteddytutor/learn/learn.css'],
   ['redteddytutor.com',     '/learn/js/curriculum/framework.js', 'serve', '/redteddytutor/learn/js/curriculum/framework.js'],
+  ['redteddytutor.com',     '/early-years',  'serve',    '/redteddytutor/early/early-years.html'],
+  ['www.redteddytutor.com', '/little-world', 'serve',    '/redteddytutor/early/little-world.html'],
+  ['redteddytutor.com',     '/little-world/play', 'serve', '/redteddytutor/early/little-world-play.html'],
+  ['redteddytutor.com',     '/toddler-activities/', 'serve', '/redteddytutor/early/toddler-activities.html'],
+  ['redteddytutor.com',     '/preschool-activities', 'serve', '/redteddytutor/early/preschool-activities.html'],
+  ['redteddytutor.com',     '/pre-k-kindergarten-readiness', 'serve', '/redteddytutor/early/pre-k-kindergarten-readiness.html'],
+  ['redteddytutor.com',     '/early/little-world.html', 'redirect', '/little-world'],
+  ['redteddytutor.com',     '/early/look.js', 'serve', '/redteddytutor/early/look.js'],
+  ['redteddytutor.com',     '/early/early.css', 'serve', '/redteddytutor/early/early.css'],
   ['redteddytutor.com',     '/api/rtt-tutor',      'serve', '/api/rtt-tutor'],
 ];
 

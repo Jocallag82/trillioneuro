@@ -1,6 +1,7 @@
 # Narration clips
 
-Put one recorded clip per step prompt here, named `<activity-id>-<step-index>.mp3`
+Add each clip's key to `CLIPS` in `learn/js/speech.js` (unlisted keys use the built-in voice
+with no request). Put one recorded clip per step prompt here, named `<activity-id>-<step-index>.mp3`
 (step index starts at 0). Example: `count-dots-3-0.mp3` for the first question of
 "Count the dots". When a clip is missing, the built-in voice reads the same text.
 

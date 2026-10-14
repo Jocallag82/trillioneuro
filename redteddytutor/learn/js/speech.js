@@ -68,15 +68,16 @@ export function stopSpeaking() {
   try { window.speechSynthesis.cancel(); } catch { /* ignore */ }
 }
 
-// Recorded narration. A clip at /learn/audio/<key>.mp3 is played when present,
-// otherwise the built-in voice speaks the same text. A missing clip is remembered
-// per key so the page does not re-request it on every tap.
+// Recorded narration. A clip at /learn/audio/<key>.mp3 is played when its key is
+// listed in CLIPS, otherwise the built-in voice speaks the same text straight away
+// (no request, so no 404 and no delay). Add a key here when its clip is committed.
+export const CLIPS = new Set([]);
 const clipState = new Map(); // key -> true (exists) | false (missing)
 let currentClip = null;
 
 export function narrate(key, text, { volume = 1, muted = false } = {}) {
   if (muted) return false;
-  if (!key || clipState.get(key) === false || typeof Audio !== 'function') {
+  if (!key || !CLIPS.has(key) || clipState.get(key) === false || typeof Audio !== 'function') {
     return speak(text, { volume, muted });
   }
   try {
