@@ -3,7 +3,7 @@
 // or sent. After CARDS_PER_SITTING cards the screen suggests off-screen play.
 import { LOOK_CARDS, CARDS_PER_SITTING } from './data.js';
 import { svg } from './art.js';
-import { speak as say } from '/learn/js/speech.js';
+import { say } from './games/media.js';
 
 const stage = document.getElementById('look');
 const status = document.getElementById('look-status');

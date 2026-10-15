@@ -63,6 +63,7 @@ function play(path, fallback) {
 // Speaks a line: a recorded Red Teddy clip when one exists for exactly this text,
 // otherwise the device voice. Always cancels whatever was playing.
 export function say(text) {
+  if (text != null) text = String(text);
   if (muted || !text) return false;
   stop();
   const rec = VOICE[norm(text)];
@@ -78,10 +79,10 @@ export function sound(id, after = '') {
   if (s?.status === 'ready' && s.path && typeof Audio === 'function') {
     const a = new Audio(s.path);
     clip = a;
-    a.addEventListener('ended', () => { if (clip === a) { clip = null; if (after) speak(after); } });
-    a.play().catch(() => { if (clip === a) { clip = null; speak([s.say, after].filter(Boolean).join(' ')); } });
+    a.addEventListener('ended', () => { if (clip === a) { clip = null; if (after) say(after); } });
+    a.play().catch(() => { if (clip === a) { clip = null; say([s.say, after].filter(Boolean).join(' ')); } });
     return true;
   }
-  return speak([s?.say, after].filter(Boolean).join(' '));
+  return say([s?.say, after].filter(Boolean).join(' '));
 }
 export const soundText = (id) => SOUNDS[id]?.say || '';
