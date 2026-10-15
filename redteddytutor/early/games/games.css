@@ -150,7 +150,7 @@
 .bin-head{display:flex;align-items:center;gap:8px}
 .bin-head .ph,.bin-head .art,.swatch{width:44px;height:44px;flex:none}
 .swatch{display:block;border-radius:50%;border:3px solid var(--ink)}
-.swatch[data-color=red]{background:#d23b3b}.swatch[data-color=yellow]{background:#f6cf3c}
+.swatch[data-color=red]{background:#e52521}.swatch[data-color=yellow]{background:#ffd500}
 .bin-label{font:700 1.15rem var(--serif)}
 .bin-in{display:flex;flex-wrap:wrap;gap:6px}
 .bin-in .card{pointer-events:none;width:58px;padding:3px;min-height:0;box-shadow:none;border-width:2px}

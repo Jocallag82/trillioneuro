@@ -425,7 +425,7 @@ function start() {
   teddy(A.intro, { speakIt: false });
   progress(0, stepsOf(A));
   root.innerHTML = `<div class="intro"><button type="button" class="btn btn-red btn-lg" id="go"><span aria-hidden="true">▶</span> Let’s play</button></div>`;
-  $('#go').addEventListener('click', () => RUN[A.kind]());
+  $('#go').addEventListener('click', () => { if (A.kind === 'explore') say(A.intro); RUN[A.kind](); });
   $('#go').focus({ preventScroll: true });
 }
 start();

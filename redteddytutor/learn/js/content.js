@@ -14,11 +14,11 @@ export { BANDS, DOMAINS, SKILLS };
 
 export const LEVEL_NAMES = { 1: 'Starter', 2: 'Practice', 3: 'Challenge' };
 
-const RED = '#c8353d';
-const BLUE = '#2f6fb3';
-const YELLOW = '#f2c230';
-const GREEN = '#3c9a5f';
-const ORANGE = '#ee8a2b';
+const RED = '#e52521';
+const BLUE = '#1e6fd9';
+const YELLOW = '#ffd500';
+const GREEN = '#2ba84a';
+const ORANGE = '#ff8c1a';
 
 const swatch = (id, label, hex) => ({ id, label, visual: { kind: 'swatch', label, hex } });
 const shape = (id, label) => ({ id, label, visual: { kind: 'shape', shape: id } });

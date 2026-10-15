@@ -3,6 +3,7 @@
 // or sent. After CARDS_PER_SITTING cards the screen suggests off-screen play.
 import { LOOK_CARDS, CARDS_PER_SITTING } from './data.js';
 import { svg } from './art.js';
+import { speak as say } from '/learn/js/speech.js';
 
 const stage = document.getElementById('look');
 const status = document.getElementById('look-status');
@@ -13,18 +14,9 @@ const offline = [
   'Roll a real ball back and forth and say “ball” each time.',
 ];
 
-let voice = null;
-const canSpeak = 'speechSynthesis' in window && typeof window.SpeechSynthesisUtterance === 'function';
 function speak(text) {
-  if (!canSpeak || document.getElementById('look-sound')?.checked === false) return;
-  try {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    voice ||= speechSynthesis.getVoices().find((v) => /^en[-_]US/i.test(v.lang)) || null;
-    if (voice) u.voice = voice;
-    u.rate = 0.85; u.pitch = 1.1;
-    speechSynthesis.speak(u);
-  } catch { /* sound is optional */ }
+  if (document.getElementById('look-sound')?.checked === false) return;
+  say(text);
 }
 
 function shuffled(list) {

@@ -69,7 +69,7 @@
 .look-art{width:80%;flex:1;display:flex}
 .look-art svg{width:100%;height:100%}
 .look-word{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,7vw,3rem);line-height:1}
-.hue-red{background:#fde8e6}.hue-yellow{background:#fff6d6}.hue-blue{background:#e5eefb}.hue-green{background:#e6f2e6}.hue-orange{background:#fdecdc}.hue-neutral{background:#f4efe6}
+.hue-red{background:#ffe3e1}.hue-yellow{background:#fff7c2}.hue-blue{background:#e5eefb}.hue-green{background:#e6f2e6}.hue-orange{background:#fdecdc}.hue-neutral{background:#f4efe6}
 .look-card.is-named .look-art{animation:ey-bob .6s ease}
 @keyframes ey-bob{50%{transform:scale(1.06)}}
 .look-done{max-width:34rem;padding:32px;background:var(--paper);border-radius:20px;border:1px solid var(--line)}

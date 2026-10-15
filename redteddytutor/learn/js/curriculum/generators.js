@@ -441,7 +441,7 @@ function wordParts(d, rand) {
 }
 
 // ---------- Thinking skills ----------
-const COLOURS = [['red', '#c8353d'], ['blue', '#2f6fb3'], ['yellow', '#f2c230'], ['green', '#3c9a5f'], ['orange', '#ee8a2b'], ['purple', '#7a4fb3']];
+const COLOURS = [['red', '#e52521'], ['blue', '#1e6fd9'], ['yellow', '#ffd500'], ['green', '#2ba84a'], ['orange', '#ff8c1a'], ['purple', '#8e44ad']];
 function colours(d, rand) {
   const [name, hex] = pick(rand, COLOURS);
   const others = shuffled(COLOURS.filter(([n]) => n !== name), rand).slice(0, d === 1 ? 1 : 3);

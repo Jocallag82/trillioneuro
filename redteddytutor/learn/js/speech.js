@@ -31,32 +31,51 @@ export function canSpeak() {
 }
 
 let cachedVoice = null;
+let brokenVoice = null;
+let current = null;
 function currentVoice() {
   const synth = window.speechSynthesis;
   const voices = synth.getVoices();
   if (!voices.length) return null;
-  if (!cachedVoice || !voices.includes(cachedVoice)) cachedVoice = pickVoice(voices);
+  if (!cachedVoice || !voices.includes(cachedVoice)) cachedVoice = pickVoice(voices.filter((v) => v !== brokenVoice));
   return cachedVoice;
 }
 
 if (typeof window !== 'undefined' && canSpeak()) {
   // Voices load asynchronously in most browsers.
   window.speechSynthesis.addEventListener?.('voiceschanged', () => { cachedVoice = null; });
+  window.speechSynthesis.getVoices(); // starts the async voice load early
 }
 
 export function speak(text, { volume = 1, muted = false } = {}) {
-  if (!canSpeak() || muted) return false;
+  if (!canSpeak() || muted || !text) return false;
   try {
     const synth = window.speechSynthesis;
+    const busy = synth.speaking || synth.pending;
     synth.cancel();
-    const utterance = new window.SpeechSynthesisUtterance(text);
+    const make = (voice) => {
+      const u = new window.SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = voice ? voice.lang : 'en-US';
+      u.rate = 0.92;   // slightly slower reads clearer for young listeners
+      u.pitch = 1;
+      u.volume = Math.min(1, Math.max(0, volume));
+      return u;
+    };
     const voice = currentVoice();
-    if (voice) utterance.voice = voice;
-    utterance.lang = voice ? voice.lang : 'en-US';
-    utterance.rate = 0.92;   // slightly slower reads clearer for young listeners
-    utterance.pitch = 1;
-    utterance.volume = Math.min(1, Math.max(0, volume));
-    synth.speak(utterance);
+    const u = make(voice);
+    // Network voices (e.g. Microsoft "Natural" on Windows) can fail silently;
+    // retry once with the device's default voice and stop preferring it.
+    u.onerror = (e) => {
+      if (voice && e.error !== 'interrupted' && e.error !== 'canceled') {
+        brokenVoice = voice; cachedVoice = null;
+        try { synth.speak(make(null)); } catch { /* ignore */ }
+      }
+    };
+    current = u; // keep a reference: Chrome can garbage-collect a playing utterance
+    const go = () => { if (synth.paused) synth.resume(); synth.speak(u); };
+    // Chrome drops an utterance queued in the same tick as cancel().
+    if (busy) setTimeout(go, 60); else go();
     return true;
   } catch {
     return false;

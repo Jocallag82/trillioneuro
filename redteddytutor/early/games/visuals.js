@@ -3,7 +3,7 @@
 // /early/art.js. Each returns an SVG string with role="img" and a label.
 const INK = '#3a2a24';
 const O = `stroke="${INK}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"`;
-export const COLORS = { red: '#d23b3b', blue: '#3b78c4', gold: '#f2b632', green: '#4f9a4a', yellow: '#f6cf3c', orange: '#ee8a2b', purple: '#8a4fb5', white: '#ffffff' };
+export const COLORS = { red: '#e52521', blue: '#1e6fd9', green: '#2ba84a', yellow: '#ffd500', orange: '#ff8c1a', purple: '#8e44ad', white: '#ffffff' };
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const wrap = (body, label, vb = '0 0 200 200') => `<svg viewBox="${vb}" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg" focusable="false">${body}</svg>`;
 
@@ -54,7 +54,7 @@ export function frame(total, have) {
 
 const FACES = {
   happy: '<path d="M70 120c16 22 44 22 60 0" fill="none"/>',
-  sad: '<path d="M70 138c16-20 44-20 60 0" fill="none"/><path d="M76 96l-4 14" fill="none" stroke="#3b78c4"/>',
+  sad: '<path d="M70 138c16-20 44-20 60 0" fill="none"/><path d="M76 96l-4 14" fill="none" stroke="#1e6fd9"/>',
   angry: '<path d="M64 74l26 12M136 74l-26 12M72 134h56" fill="none"/>',
   surprised: '<ellipse cx="100" cy="130" rx="14" ry="18" fill="#3a2a24"/>',
   sleepy: '<path d="M70 92q10 8 20 0M110 92q10 8 20 0M84 130h32" fill="none"/><text x="140" y="60" font-size="28" font-family="sans-serif" fill="#3a2a24" stroke="none">z</text>',
@@ -62,7 +62,7 @@ const FACES = {
 };
 export function feeling(name) {
   const eyes = ['sleepy'].includes(name) ? '' : '<circle cx="80" cy="96" r="7" fill="#3a2a24"/><circle cx="120" cy="96" r="7" fill="#3a2a24"/>';
-  return wrap(`<circle cx="100" cy="104" r="78" fill="#f6cf3c" ${O}/>${eyes}<g ${O}>${FACES[name]}</g>`, `${name} face`);
+  return wrap(`<circle cx="100" cy="104" r="78" fill="#ffd500" ${O}/>${eyes}<g ${O}>${FACES[name]}</g>`, `${name} face`);
 }
 
 // A ball (or other object) placed relative to a box, for position words.
@@ -83,12 +83,12 @@ export function place({ where, obj = 'ball' }) {
 }
 
 export function art(a) {
-  if (a.type === 'updown') return wrap(`<path d="M10 180h180" stroke="${INK}" stroke-width="4"/><g transform="translate(${a.up ? 100 : 100},${a.up ? 40 : 158})"><ellipse rx="26" ry="16" fill="#3b78c4" ${O}/><path d="M-6 -4l-18-22 26 12z" fill="#3b78c4" ${O}/><circle cx="16" cy="-6" r="3" fill="${INK}"/><path d="M26 0l12 4-12 4z" fill="#ee8a2b" ${O}/></g>${a.up ? '<circle cx="160" cy="36" r="16" fill="#f6cf3c" stroke="#3a2a24" stroke-width="4"/>' : ''}`, a.up ? 'bird up high in the sky' : 'bird down low on the ground');
+  if (a.type === 'updown') return wrap(`<path d="M10 180h180" stroke="${INK}" stroke-width="4"/><g transform="translate(${a.up ? 100 : 100},${a.up ? 40 : 158})"><ellipse rx="26" ry="16" fill="#1e6fd9" ${O}/><path d="M-6 -4l-18-22 26 12z" fill="#1e6fd9" ${O}/><circle cx="16" cy="-6" r="3" fill="${INK}"/><path d="M26 0l12 4-12 4z" fill="#ff8c1a" ${O}/></g>${a.up ? '<circle cx="160" cy="36" r="16" fill="#ffd500" stroke="#3a2a24" stroke-width="4"/>' : ''}`, a.up ? 'bird up high in the sky' : 'bird down low on the ground');
   if (a.type === 'glass') return wrap(`<path d="M60 30h80l-10 150H70z" fill="#fff" ${O}/>${a.full ? `<path d="M64 46h72l-8 130H72z" fill="#7fb6e6"/>` : ''}<path d="M60 30h80l-10 150H70z" fill="none" ${O}/>`, a.full ? 'full glass' : 'empty glass');
   if (a.type === 'box') return wrap(a.open
     ? `<rect x="40" y="90" width="120" height="80" fill="#d9a441" ${O}/><path d="M40 90l-20-40 100 0 40 40" fill="#e9bf6b" ${O}/><circle cx="100" cy="110" r="16" fill="${COLORS.red}" ${O}/>`
     : `<rect x="40" y="90" width="120" height="80" fill="#d9a441" ${O}/><rect x="32" y="74" width="136" height="20" fill="#e9bf6b" ${O}/>`, a.open ? 'open box' : 'closed box');
   if (a.type === 'bar') return wrap(`<rect x="10" y="80" width="${a.len * 20}" height="40" rx="20" fill="${COLORS[a.color]}" ${O}/><circle cx="${a.len * 20 - 6}" cy="94" r="4" fill="${INK}"/>`, `${a.len > 5 ? 'long' : 'short'} ${a.color} shape`);
-  if (a.type === 'tower') return wrap(Array.from({ length: a.h }, (_, i) => `<rect x="70" y="${170 - (i + 1) * 26}" width="60" height="26" fill="${[COLORS.red, COLORS.blue, COLORS.gold, COLORS.green][i % 4]}" ${O}/>`).join('') + `<path d="M20 172h160" stroke="${INK}" stroke-width="4"/>`, `tower of ${a.h} blocks`);
+  if (a.type === 'tower') return wrap(Array.from({ length: a.h }, (_, i) => `<rect x="70" y="${170 - (i + 1) * 26}" width="60" height="26" fill="${[COLORS.red, COLORS.blue, COLORS.yellow, COLORS.green][i % 4]}" ${O}/>`).join('') + `<path d="M20 172h160" stroke="${INK}" stroke-width="4"/>`, `tower of ${a.h} blocks`);
   return '';
 }
