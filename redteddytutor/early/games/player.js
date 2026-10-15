@@ -5,6 +5,7 @@
 import { ACTIVITIES, BANDS } from './content.js';
 import { rng, shuffle, opt, isCorrect, attempt, fresh, stepsOf, nextInSequence } from './engine.js';
 import { shape, dots, frame, feeling, place, art } from './visuals.js';
+import { award, celebrate } from '../zone/stickers.js';
 import { photo, guardImages, say, sound, stop, isMuted, setMuted, audioAvailable, nameOf, soundText } from './media.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -403,8 +404,9 @@ function finish() {
     <p class="done-off"><strong>Off-screen idea:</strong> ${esc(A.offline)}</p>
     <div class="cta-row"><button type="button" class="btn btn-line" id="again">Play again</button>
     <a class="btn btn-red" href="/early-years/games/play?a=${esc(next.id)}">Next: ${esc(next.title)}</a>
-    <a class="btn btn-line" href="${backHref}">Back to ${esc(band.name)}</a></div></div>`;
+    <a class="btn btn-line" href="${backHref}">Back to ${esc(band.name)}</a><a class="btn btn-line" href="/early-years/play-zone">🎈 Play Zone</a></div></div>`;
   teddy('All done! Lovely playing.');
+  setTimeout(() => celebrate(award()), 600);
   $('#again').addEventListener('click', () => { location.search = `?a=${A.id}`; });
   $('.done h2').focus();
 }

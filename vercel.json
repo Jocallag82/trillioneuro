@@ -599,6 +599,36 @@
       "dest": "/redteddytutor/early/games/play.html"
     },
     {
+      "src": "/early-years/play-zone/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/early/zone/zone.html"
+    },
+    {
+      "src": "/early-years/stickers/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/early/zone/stickers.html"
+    },
+    {
       "src": "/little-world/play/?",
       "has": [
         {

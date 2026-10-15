@@ -55,6 +55,7 @@ writeFileSync(new URL('games.html', DIR), page({
   body: `<nav class="wrap ey-crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/early-years">Ages 1–6</a></li><li aria-current="page">Games</li></ol></nav>
 <section class="g-hero"><div class="wrap"><p class="eyebrow">Free · no sign-up · no ads</p><h1>Red Teddy’s early-years games</h1>
 <p class="lead">Four learning journeys for ages 1 to 6. Short, calm games with big pictures, Red Teddy’s gentle help, and an idea to carry on away from the screen. No timers, no scores, nothing recorded.</p>
+<p class="cta-row"><a class="btn btn-red btn-lg" href="/early-years/play-zone">🎈 Play Zone: endless games</a> <a class="btn btn-line btn-lg" href="/early-years/stickers">⭐ My sticker book</a></p>
 <ul class="g-bands">${BANDS.map((b) => `<li><a href="#${b.slug}">${b.name} · ${b.ages}</a></li>`).join('')}</ul></div></section>
 ${bands}
 <section class="ey-more"><div class="wrap g-honest"><h2>About these games</h2>
