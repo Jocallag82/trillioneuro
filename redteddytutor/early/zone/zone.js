@@ -3,9 +3,10 @@
 // child succeeds and eases off after misses. Every 5 wins earns a sticker.
 //   /early-years/play-zone            → the game picker
 //   /early-years/play-zone?g=<id>     → one game
-import { say, stop, isMuted, setMuted } from '../games/media.js';
+import { say, stop, isMuted, setMuted, sound, soundText } from '../games/media.js';
 import { shape, COLORS } from '../games/visuals.js';
 import { award, celebrate, load } from './stickers.js';
+import { pop, chime, burst, confetti } from './sfx.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -30,6 +31,15 @@ const FOODS = [
 ];
 const BALLOON = ['red', 'yellow', 'blue', 'green', 'orange', 'purple'];
 const SHAPES = ['circle', 'square', 'triangle', 'star', 'heart', 'rectangle'];
+// Real animal recording when one is imported (manifest `sounds`), else Red Teddy says it.
+const animal = (a, after = '') => (soundText(a[0]) ? sound(a[0], after) : say([a[2], after].filter(Boolean).join(' ')));
+// Glossy balloon: body, highlight, knot and a wavy string.
+const balloon = (c) => `<svg viewBox="0 0 100 190" aria-hidden="true"><defs><radialGradient id="g${c}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".35" stop-color="${COLORS[c]}" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></radialGradient></defs>
+  <path d="M50 118c0 0 3 10 1 20s4 18-1 28 3 16 0 22" fill="none" stroke="#5a4a40" stroke-width="2" stroke-linecap="round"/>
+  <path d="M50 4C22 4 6 28 6 54c0 32 26 58 44 62 18-4 44-30 44-62C94 28 78 4 50 4z" fill="${COLORS[c]}"/>
+  <path d="M50 4C22 4 6 28 6 54c0 32 26 58 44 62 18-4 44-30 44-62C94 28 78 4 50 4z" fill="url(#g${c})"/>
+  <ellipse cx="32" cy="32" rx="9" ry="15" fill="#fff" opacity=".6" transform="rotate(-25 32 32)"/>
+  <path d="M44 122l6-7 6 7z" fill="${COLORS[c]}" stroke="rgba(0,0,0,.25)" stroke-width="1"/></svg>`;
 const article = (w) => (/^[aeiou]/.test(w) ? 'an' : 'a');
 
 // ── shell: speech bubble, level, win counter, stickers ──
@@ -44,6 +54,7 @@ function stars() { $('#z-stars').innerHTML = Array.from({ length: 5 }, (_, i) =>
 async function win(text) {
   S.wins += 1; S.miss = 0; S.level = Math.min(10, S.level + 1);
   teddy(text || pick(PRAISE));
+  chime(); confetti();
   stars();
   if (S.wins % 5 === 0) { stars(); await wait(900); $('#z-stars').innerHTML = '★★★★★'.split('').map(() => '<span class="on">★</span>').join(''); await celebrate(award()); stars(); }
   else await wait(1300);
@@ -63,15 +74,15 @@ const GAMES = [
       const others = BALLOON.filter((c) => c !== target);
       const want = S.level < 4 ? 1 : Math.min(1 + Math.floor(Math.random() * 3), 3);
       const cols = shuffle([...Array(want).fill(target), ...Array.from({ length: k - want }, () => pick(others))]);
-      stage().innerHTML = `<div class="z-sky">${cols.map((c, i) => `<button type="button" class="z-balloon" style="--c:${COLORS[c]};--x:${(i + 0.5) * (100 / k)}%;--t:${(i % 3) * 0.4}s" data-c="${c}" aria-label="${c} balloon"></button>`).join('')}</div>`;
+      stage().innerHTML = `<div class="z-sky">${cols.map((c, i) => `<button type="button" class="z-balloon" style="--c:${COLORS[c]};--x:${(i + 0.5) * (100 / k)}%;--t:${(i % 3) * 0.4}s" data-c="${c}" aria-label="${c} balloon">${balloon(c)}</button>`).join('')}</div>`;
       teddy(want === 1 ? `Pop the ${target} balloon!` : `Pop all the ${target} balloons!`);
       return new Promise((done) => {
         let left = want;
         stage().querySelectorAll('.z-balloon').forEach((b) => b.addEventListener('click', async () => {
           if (b.classList.contains('is-pop')) return;
           if (b.dataset.c === target) {
-            b.classList.add('is-pop'); left -= 1;
-            if (left === 0) { await win(`Pop! ${pick(PRAISE)}`); done(); } else teddy(`Pop! ${cap(target)}!`);
+            pop(); burst(b, COLORS[target]); b.classList.add('is-pop'); left -= 1;
+            if (left === 0) { await win(pick(PRAISE)); done(); } else teddy(`${cap(target)}! More ${target}!`);
           } else { wiggle(b); miss(); teddy(`That one is ${b.dataset.c}. Find ${target}!`); }
         }));
       });
@@ -114,7 +125,7 @@ const GAMES = [
       const hides = ['🌳', '📦', '🪨', '🌷', '🧺', '⛺'];
       const h = pick(hides);
       stage().innerHTML = `<div class="z-hide">${Array.from({ length: k }, (_, i) => `<button type="button" class="z-spot" data-i="${i}" aria-label="Look here"><span class="z-cover">${h}</span><span class="z-who" hidden>${i === at ? a[1] : ''}</span></button>`).join('')}</div>`;
-      teddy(`${a[2]} Where is the ${a[0]}?`);
+      $('#z-say').textContent = `${a[2]} Where is the ${a[0]}?`; animal(a, `Where is the ${a[0]}?`);
       return new Promise((done) => {
         stage().querySelectorAll('.z-spot').forEach((b) => b.addEventListener('click', async () => {
           if (b.classList.contains('is-open')) return;
@@ -132,12 +143,12 @@ const GAMES = [
       const set = sample(ANIMALS, k);
       const a = pick(set);
       stage().innerHTML = `<div class="z-grid z-k${k}">${set.map((x) => `<button type="button" class="z-tile" data-a="${x[0]}" aria-label="${x[0]}">${x[1]}</button>`).join('')}</div>`;
-      teddy(`Who says ${a[2].replace(/!$/, '')}?`);
+      $('#z-say').textContent = `Who says ${a[2].replace(/!$/, '')}?`; animal(a, 'Who says that?');
       return new Promise((done) => {
         stage().querySelectorAll('.z-tile').forEach((b) => b.addEventListener('click', async () => {
           const x = ANIMALS.find((y) => y[0] === b.dataset.a);
-          if (x === a) { bounce(b); await win(`${a[2]} The ${a[0]}!`); done(); }
-          else { wiggle(b); miss(); teddy(`The ${x[0]} says ${x[2]}`); }
+          if (x === a) { bounce(b); animal(a); await wait(1200); await win(`The ${a[0]}!`); done(); }
+          else { wiggle(b); miss(); $('#z-say').textContent = `The ${x[0]} says ${x[2]}`; animal(x, soundText(x[0]) ? `That's the ${x[0]}.` : ''); }
         }));
       });
     },
@@ -153,7 +164,7 @@ const GAMES = [
         let c = 0;
         stage().querySelectorAll('.z-bubble').forEach((b) => b.addEventListener('click', async () => {
           if (b.classList.contains('is-pop') || c >= n) return;
-          b.classList.add('is-pop'); c += 1;
+          pop(true); burst(b, '#9fd3ff', ''); b.classList.add('is-pop'); c += 1;
           stage().querySelector('.z-count').textContent = c;
           if (c === n) { await win(`${cap(NUM[n])}! ${pick(PRAISE)}`); done(); } else say(cap(NUM[c]));
         }));

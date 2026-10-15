@@ -77,3 +77,30 @@
 .book li.have{border-style:solid;border-color:var(--ink)}.book li .e{font-size:3.4rem;line-height:1}.book li:not(.have) .e{filter:grayscale(1) brightness(1.6);opacity:.25}
 .book li small{font-size:.8rem;color:var(--mute)}
 @media (prefers-reduced-motion:reduce){.z-balloon,.z-bubble,.stk-confetti i,.stk-big,.stk-card{animation:none}}
+/* balloons v2: glossy SVG balloons, wavy strings, clouds */
+.z-sky{background:linear-gradient(#7cc4ff 0%,#bfe3ff 55%,#eaf6ff 100%)}
+.z-sky::before,.z-sky::after{content:"";position:absolute;width:180px;height:60px;border-radius:60px;background:#fff;opacity:.85;box-shadow:40px -25px 0 10px #fff,90px 0 0 0 #fff;animation:zcl 40s linear infinite}
+.z-sky::before{top:12%;left:-200px}.z-sky::after{top:40%;left:-200px;transform:scale(.7);animation-duration:55s;animation-delay:-20s}
+@keyframes zcl{to{left:110%}}
+.z-balloon{border:0;border-radius:0;background:none;padding:0;width:clamp(72px,14vw,120px);aspect-ratio:auto;height:auto;filter:drop-shadow(0 6px 6px rgba(20,40,80,.25));transform-origin:50% 100%;animation:zf 3.4s ease-in-out var(--t) infinite alternate,zsw 2.2s ease-in-out var(--t) infinite alternate;z-index:1}
+.z-balloon::after{content:none}
+.z-balloon svg{display:block;width:100%;height:auto;overflow:visible}
+.z-balloon:hover svg,.z-balloon:focus-visible svg{transform:scale(1.06)}
+.z-balloon.is-pop{animation:zp2b .14s forwards}
+@keyframes zsw{from{transform:translateX(-50%) rotate(-5deg)}to{transform:translateX(-50%) rotate(5deg)}}
+@keyframes zp2b{0%{transform:translateX(-50%) scale(1)}60%{transform:translateX(-50%) scale(1.25,1.15)}100%{transform:translateX(-50%) scale(1.4);opacity:0}}
+.z-bubble.is-pop{animation:zp2 .18s forwards}
+/* explosion + confetti */
+.fx{position:fixed;width:0;height:0;pointer-events:none;z-index:60}
+.fx i{position:absolute;left:0;top:0;background:var(--c);animation:zfx .9s cubic-bezier(.15,.8,.3,1) forwards}
+.fx-bit{width:10px;height:14px;border-radius:2px}
+.fx-shard{width:22px;height:16px;border-radius:60% 10% 70% 20%}
+@keyframes zfx{0%{transform:translate(-50%,-50%) scale(var(--s))}80%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy) + 70px)) rotate(var(--r)) scale(var(--s));opacity:0}}
+.fx-ring{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;border:6px solid var(--c);transform:translate(-50%,-50%);animation:zring .45s ease-out forwards}
+@keyframes zring{to{transform:translate(-50%,-50%) scale(5);opacity:0;border-width:1px}}
+.fx-word{position:absolute;left:0;top:0;font:900 clamp(2.4rem,7vw,3.6rem)/1 var(--serif);color:#fff;-webkit-text-stroke:3px #3a2a24;paint-order:stroke;text-shadow:0 4px 0 #3a2a24;white-space:nowrap;animation:zword .9s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes zword{0%{transform:translate(-50%,-50%) scale(.2) rotate(-12deg)}30%{transform:translate(-50%,-50%) scale(1.15) rotate(-6deg)}75%{opacity:1}100%{transform:translate(-50%,-110%) scale(1) rotate(-6deg);opacity:0}}
+.fx-rain{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden}
+.fx-rain i{position:absolute;top:-24px;left:var(--x);width:var(--w);height:calc(var(--w) * 1.6);background:var(--c);border-radius:2px;animation:zrain var(--t) cubic-bezier(.3,.1,.6,1) var(--d) forwards}
+@keyframes zrain{to{transform:translate(var(--sway),110vh) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){.z-sky::before,.z-sky::after{animation:none}}
