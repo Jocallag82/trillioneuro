@@ -41,9 +41,9 @@ Commons and Openverse: each file has its own licence (CC BY / CC BY-SA need attr
 
 ## Red Teddy's voice
 
-The current voice is the device's built-in speech (`/learn/js/speech.js`, preferring natural US voices).
-It is free, offline and starts only after a tap. The Red Teddy welcome video's voice cannot be reused
-as clips from this repository (no separate narration track or licence record is here); do not assume it can.
+Every line the games speak has a recorded clip in `audio/voice/` (listed under `voice` in `manifest.json`),
+generated with Kokoro TTS (`af_heart`, Apache-2.0). Any line without a clip falls back to the device voice
+(`/learn/js/speech.js`). Planned: regenerate all clips in the Google Vids intro voice via Google Cloud TTS.
 
 To add recorded narration for free: record with Audacity (free) or Windows Sound Recorder, one short
 clip per line, then add an entry to `voice` in `manifest.json`:
