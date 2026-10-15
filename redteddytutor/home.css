@@ -154,13 +154,13 @@ nav .btn{min-height:42px;padding:0 18px;color:#fff}
 .subject:nth-child(3n+1){padding-left:0;border-left:0}
 .subject h3{font-size:1.6rem;margin-bottom:6px}
 .subject>p{color:var(--mute);font-size:.98rem}
-.strands summary{list-style:none;cursor:pointer;margin-top:16px;font-weight:700;color:var(--red);min-height:44px;display:inline-flex;align-items:center;gap:8px}
-.strands summary::-webkit-details-marker{display:none}
-.strands summary::after{content:"+";font-size:1.3rem;line-height:1}
-.strands[open] summary::after{content:"−"}
-@media (min-width:641px){.strands summary{display:none}}
-.strand{margin-top:22px}
-.strand h4{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+.strands>summary{list-style:none;cursor:pointer;margin-top:16px;font-weight:700;color:var(--red);min-height:44px;display:inline-flex;align-items:center;gap:8px}
+.strands>summary::-webkit-details-marker{display:none}
+.strands>summary::after{content:"+";font-size:1.3rem;line-height:1}
+.strands[open]>summary::after{content:"−"}
+.strand{margin-top:6px}
+.strand{border-bottom:1px solid var(--line)}.strand summary{list-style:none;cursor:pointer;font-size:.82rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);min-height:44px;display:flex;align-items:center;justify-content:space-between}
+.strand summary::-webkit-details-marker{display:none}.strand summary::after{content:"+";font-size:1.2rem}.strand[open] summary::after{content:"−"}
 .strand ul{list-style:none}
 .strand li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dotted #d8cfbf;font-size:.98rem}
 .strand li span:last-child{color:var(--mute);font-size:.88rem;white-space:nowrap;font-variant-numeric:tabular-nums}

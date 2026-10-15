@@ -38,21 +38,19 @@ function renderSubjects() {
   const ids = Object.keys(OBJECTIVES);
   document.getElementById('obj-count').textContent = String(ids.length);
   document.querySelectorAll('[data-obj-count]').forEach((n) => { n.textContent = String(ids.length); });
-  // On a phone the full list is long, so each subject starts folded.
-  const open = window.matchMedia('(min-width: 641px)').matches;
   host.replaceChildren(...Object.entries(SUBJECTS).map(([sid, subject]) => {
     const mine = ids.filter((id) => OBJECTIVES[id].subject === sid);
     return el('article', { class: 'subject' }, [
       el('h3', { text: US_CATALOGUE.subjectNames[sid] || L(subject.label) }),
       BLURBS[sid] ? el('p', { text: BLURBS[sid] }) : null,
-      el('details', { class: 'strands', open }, [
+      el('details', { class: 'strands' }, [
         el('summary', { text: `All ${mine.length} skills` }),
         ...subject.strands.map((strand) => {
           const list = mine.filter((id) => OBJECTIVES[id].strand === strand)
             .sort((x, y) => OBJECTIVES[x].order - OBJECTIVES[y].order);
           if (!list.length) return null;
-          return el('div', { class: 'strand' }, [
-            el('h4', { text: STRANDS[strand] }),
+          return el('details', { class: 'strand' }, [
+            el('summary', { text: `${STRANDS[strand]} (${list.length})` }),
             el('ul', {}, list.map((id) => el('li', {}, [
               el('span', { text: L(OBJECTIVES[id].label) }),
               el('span', { text: gradeSpan(US_CATALOGUE.placement[id]?.grades || []) }),
