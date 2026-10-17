@@ -7,6 +7,7 @@
   'use strict';
 
   var RPC = 'https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/';
+  var FN = 'https://kxzywyflylkcqoidiqmo.supabase.co/functions/v1/';
   var KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
   var STORE = 'rs_member_key';
   var main = document.getElementById('main');
@@ -36,6 +37,16 @@
         throw err;
       });
     }, function (e) { clearTimeout(timer); throw e; });
+  }
+
+  function upload(f) {
+    var fd = new FormData(); fd.append('key', key); fd.append('file', f);
+    return fetch(FN + 'rsp-media', { method: 'POST', headers: { 'apikey': KEY }, body: fd }).then(function (res) {
+      return res.json().catch(function () { return null; }).then(function (b) {
+        if (res.ok && b && b.path) return b;
+        throw new Error((b && b.message) || 'UPLOAD_FAILED: try again');
+      });
+    });
   }
 
   // Server messages look like "CODE: human text"; show the human part.
@@ -78,6 +89,21 @@
     return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
   }
   function initials(n) { return String(n || '?').trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join('').toUpperCase(); }
+  // Post text → DOM: @handles link to profiles, http(s) links open safely.
+  function rich(text, cls) {
+    var p = h('p', { class: cls || 'body' });
+    var re = /(^|[^A-Za-z0-9_])@([A-Za-z0-9_]{3,20})|(https?:\/\/[^\s<>"']+[^\s<>"'.,;:!?)\]])/g, last = 0, m;
+    while ((m = re.exec(text))) {
+      var start = m.index + (m[1] ? m[1].length : 0);
+      if (start > last) p.appendChild(document.createTextNode(text.slice(last, start)));
+      if (m[2]) p.appendChild(h('a', { href: '#/u/' + m[2].toLowerCase(), class: 'mention', text: '@' + m[2] }));
+      else p.appendChild(h('a', { href: m[3], target: '_blank', rel: 'noopener noreferrer nofollow ugc', text: m[3] }));
+      last = re.lastIndex;
+    }
+    if (last < text.length) p.appendChild(document.createTextNode(text.slice(last)));
+    return p;
+  }
+
   var WHY = { yours: 'Your post', following: 'You follow them', community: 'From a community you joined', everyone: 'Everyone · newest first' };
 
   function busy(btn, on) { if (btn) { btn.disabled = on; btn.classList.toggle('busy', on); } }
@@ -147,8 +173,10 @@
         h('span', { class: 't', text: '· ' + ago(p.at), title: new Date(p.at).toLocaleString('en-GB') }),
         p.community ? h('a', { class: 't', href: '#/c/' + p.community.slug, text: 'in ' + p.community.name }) : null
       ])),
-      h('p', { class: 'body', text: p.body }),
+      rich(p.body),
+      p.image ? h('a', { href: p.image, target: '_blank', rel: 'noopener', class: 'pimg' }, [h('img', { src: p.image, alt: 'Image shared by ' + ((p.author && p.author.name) || 'a member'), loading: 'lazy', decoding: 'async' })]) : null,
       h('div', { class: 'pf' }, [
+        ctx !== 'single' ? h('a', { href: '#/p/' + p.id, text: 'Link', title: 'Open this post' }) : null,
         cBtn,
         ctx === 'feed' ? h('span', { class: 'why', title: 'Why you’re seeing this', text: WHY[p.why] || '' }) : null,
         p.mine ? h('button', { type: 'button', text: 'Delete', onclick: function () {
@@ -181,7 +209,7 @@
           c.mine ? h('button', { type: 'button', class: 't', text: 'Delete', onclick: function () {
             rpc('rsp_delete', { p_kind: 'comment', p_id: c.id }).then(function () { row.remove(); }).catch(function (x) { toast(human(x)); });
           } }) : h('button', { type: 'button', class: 't', text: 'Report', onclick: function () { report('comment', c.id); } })])),
-        h('p', { class: 'body', text: c.body })
+        rich(c.body)
       ]);
       return row;
     }).concat([h('form', { class: 'reply', onsubmit: function (e) {
@@ -211,15 +239,29 @@
     }
     var btn = h('button', { class: 'btn sm', type: 'submit', text: 'Post' });
     var err = h('p', { class: 'err' });
+    var image = null, preview = h('div', { class: 'prev', hidden: true });
+    var file = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/gif,image/webp', class: 'sr', id: 'img-' + Math.random().toString(36).slice(2) });
+    var pick = h('label', { class: 'btn quiet', for: file.id, text: 'Add image' });
+    function clearImage() { image = null; preview.hidden = true; preview.replaceChildren(); file.value = ''; }
+    file.addEventListener('change', function () {
+      var f = file.files && file.files[0]; if (!f) return;
+      if (f.size > 5 * 1024 * 1024) { err.textContent = 'Images can be up to 5 MB.'; file.value = ''; return; }
+      err.textContent = ''; busy(btn, true); pick.textContent = 'Uploading\u2026';
+      upload(f).then(function (r) {
+        image = r.path; busy(btn, false); pick.textContent = 'Add image';
+        preview.replaceChildren(h('img', { src: r.url, alt: 'Image to post' }), h('button', { type: 'button', class: 'btn quiet', text: 'Remove image', onclick: clearImage }));
+        preview.hidden = false;
+      }).catch(function (x) { busy(btn, false); pick.textContent = 'Add image'; file.value = ''; err.textContent = human(x); });
+    });
     return h('form', { class: 'panel compose', onsubmit: function (e) {
-      e.preventDefault(); if (!ta.value.trim()) return; err.textContent = ''; busy(btn, true);
-      rpc('rsp_post', { p_body: ta.value, p_community: community ? community.slug : (sel.value || null) }).then(function (p) {
-        busy(btn, false); ta.value = ''; count.textContent = '0 / 2000';
+      e.preventDefault(); if (!ta.value.trim()) { err.textContent = image ? 'Add a caption to go with your image.' : ''; return; } err.textContent = ''; busy(btn, true);
+      rpc('rsp_post', { p_body: ta.value, p_community: community ? community.slug : (sel.value || null), p_image: image }).then(function (p) {
+        busy(btn, false); ta.value = ''; count.textContent = '0 / 2000'; clearImage();
         track('post_created', { in_community: !!p.community });
         var empty = list.querySelector('.empty'); if (empty) empty.remove();
         list.insertBefore(postEl(p, community ? 'community' : 'feed'), list.firstChild);
       }).catch(function (x) { busy(btn, false); err.textContent = human(x); });
-    } }, [ta, err, h('div', { class: 'row' }, [sel, h('span', { class: 'grow' }), count, btn])]);
+    } }, [ta, preview, err, h('div', { class: 'row' }, [file, pick, sel, h('span', { class: 'grow' }), count, btn])]);
   }
 
   function feedList(args, ctx, emptyMsg) {
@@ -392,24 +434,86 @@
     ]), h('aside', { class: 'side' }, [profileForm(false)])]));
   }
 
+  var NOTE = { reply: 'replied to your post', mention: 'mentioned you', follow: 'followed you' };
+  function viewNotifications() {
+    var list = h('ul', { class: 'comms' }, [h('li', {}, [h('span', { class: 'skel', style: 'height:70px' })])]);
+    rpc('rsp_notifications', {}).then(function (ns) {
+      setUnread(0);
+      list.replaceChildren.apply(list, ns.length ? ns.map(function (n) {
+        return h('li', { class: 'comm note-item' + (n.unread ? ' unread' : '') }, [h('div', {}, [
+          h('div', { class: 'ph' }, authorBits(n.actor).concat([h('span', { class: 't', text: NOTE[n.kind] + ' \u00b7 ' + ago(n.at) })])),
+          n.snippet ? h('p', { text: n.snippet }) : null]),
+          h('a', { class: 'btn quiet', href: n.post ? '#/p/' + n.post : '#/u/' + (n.actor && n.actor.handle), text: n.post ? 'View' : 'Profile' })]);
+      }) : [h('li', { class: 'empty', text: 'Nothing yet. Replies, mentions and new followers show up here.' })]);
+    }).catch(function (x) { list.replaceChildren(h('li', { class: 'empty', text: human(x) })); });
+    render(h('div', {}, [h('h1', { class: 'display', text: 'Notifications' }), list]));
+  }
+
+  function viewPost(id) {
+    rpc('rsp_post_get', { p_id: id }).then(function (p) {
+      var li = postEl(p, 'single'), list = h('ul', { class: 'posts' }, [li]);
+      render(h('div', { class: 'layout' }, [h('div', {}, [list]), h('aside', { class: 'side' }, [])]));
+      li.querySelector('.pf button').click();
+    }).catch(function (x) { render(h('div', { class: 'empty', text: human(x) })); });
+  }
+
+  function viewAdmin() {
+    var list = h('ul', { class: 'posts' }, [h('li', {}, [h('span', { class: 'skel', style: 'height:120px' })])]);
+    function draw(rs) {
+      list.replaceChildren.apply(list, rs.length ? rs.map(function (r) {
+        var c = r.content;
+        function act(a, label, cls) {
+          return h('button', { class: 'btn ' + (cls || 'quiet'), type: 'button', text: label, onclick: function () {
+            if (a !== 'dismiss' && !confirm(a === 'suspend' ? 'Remove this and suspend its author?' : 'Remove this ' + r.kind + '?')) return;
+            rpc('rsp_admin_act', { p_kind: r.kind, p_target: r.target, p_action: a }).then(function (l) { toast('Done'); draw(l); }).catch(function (x) { toast(human(x)); });
+          } });
+        }
+        return h('li', { class: 'post' }, [
+          h('p', { class: 'k', text: r.kind + ' \u00b7 ' + r.reports + (r.reports === 1 ? ' report' : ' reports') }),
+          c ? h('div', { class: 'ph', style: 'margin-top:10px' }, authorBits(c.author).concat([h('span', { class: 't', text: '\u00b7 ' + ago(c.at) })])) : h('p', { class: 'meta', text: 'Already deleted by its author.' }),
+          c ? h('p', { class: 'body', text: c.body }) : null,
+          c && c.image ? h('div', { class: 'pimg' }, [h('img', { src: c.image, alt: 'Reported image', loading: 'lazy' })]) : null,
+          h('ul', { class: 'reasons' }, r.reasons.map(function (t) { return h('li', { text: t }); })),
+          h('div', { class: 'row' }, [act('dismiss', 'Keep it'), c ? act('remove', 'Remove') : null, c ? act('suspend', 'Remove & suspend author', 'sm') : null])
+        ]);
+      }) : [h('li', { class: 'empty', text: 'No open reports.' })]);
+    }
+    rpc('rsp_admin_reports', {}).then(draw).catch(function (x) { list.replaceChildren(h('li', { class: 'empty', text: human(x) })); });
+    render(h('div', {}, [h('h1', { class: 'display', text: 'Moderation' }), h('p', { class: 'lede', text: 'Open reports, newest first. Removing deletes the content for good.' }), list]));
+  }
+
+  /* ── unread badge ── */
+  var badge = h('span', { class: 'badge', hidden: true });
+  function setUnread(n) { badge.textContent = n > 99 ? '99+' : String(n); badge.hidden = !n; badge.setAttribute('aria-label', n + ' unread'); }
+  function pollUnread() { if (!document.hidden && me && me.profile) rpc('rsp_unread', {}).then(setUnread).catch(function () {}); }
+  setInterval(pollUnread, 60000);
+  document.addEventListener('visibilitychange', pollUnread);
+
   /* ── router ── */
   function route() {
     if (!me) return;
     if (!me.profile) { nav.hidden = true; return render(profileForm(true)); }
     nav.hidden = false;
     var hash = location.hash.replace(/^#\/?/, ''), parts = hash.split('/');
-    var cur = parts[0] === 'communities' || parts[0] === 'c' ? '#/communities' : parts[0] === 'settings' ? '#/settings' : parts[0] === '' ? '#/' : null;
+    if (!nav.querySelector('[href="#/notifications"]')) {
+      nav.insertBefore(h('a', { href: '#/notifications' }, ['Notifications', badge]), nav.children[2]);
+      if (me.admin) nav.insertBefore(h('a', { href: '#/admin', text: 'Moderation' }), nav.lastChild);
+    }
+    var cur = parts[0] === 'communities' || parts[0] === 'c' ? '#/communities' : parts[0] === '' ? '#/' : ['settings', 'notifications', 'admin'].indexOf(parts[0]) >= 0 ? '#/' + parts[0] : null;
     [].forEach.call(nav.querySelectorAll('a'), function (a) { if (a.getAttribute('href') === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     window.scrollTo(0, 0);
     if (parts[0] === 'communities') viewCommunities();
     else if (parts[0] === 'c' && parts[1]) viewCommunity(decodeURIComponent(parts[1]).toLowerCase());
     else if (parts[0] === 'u' && parts[1]) viewProfile(decodeURIComponent(parts[1]).toLowerCase());
     else if (parts[0] === 'settings') viewSettings();
+    else if (parts[0] === 'notifications') viewNotifications();
+    else if (parts[0] === 'p' && /^\d+$/.test(parts[1] || '')) viewPost(Number(parts[1]));
+    else if (parts[0] === 'admin' && me.admin) viewAdmin();
     else viewStream();
   }
   window.addEventListener('hashchange', route);
 
   if (!key) return noKey();
   render(h('span', { class: 'skel', style: 'height:220px' }));
-  rpc('rsp_me', {}).then(function (m) { me = m; track('app_open'); route(); }).catch(gateError);
+  rpc('rsp_me', {}).then(function (m) { me = m; setUnread(m.unread || 0); track('app_open'); route(); }).catch(gateError);
 })();
