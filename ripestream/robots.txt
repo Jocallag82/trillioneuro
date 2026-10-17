@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /member
 
-Sitemap: https://ripestream.com/sitemap.xml
+Sitemap: https://www.ripestream.com/sitemap.xml

@@ -29,6 +29,9 @@
   }
   var registered = store(true);
 
+  // Cookie-free Vercel Web Analytics custom events; no personal data is sent.
+  function track(name, data) { try { if (window.va) window.va('event', data ? { name: name, data: data } : { name: name }); } catch (e) {} }
+
   function rpc(name, args, timeoutMs) {
     var ctrl = 'AbortController' in window ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, timeoutMs || 15000);
@@ -107,12 +110,18 @@
       var banner = $('#invite-banner');
       if (r && r.status === 'valid') {
         var who = r.inviter ? String(r.inviter).replace(/[<>&"]/g, '') : 'A member';
-        if (banner) { banner.innerHTML = '<span><b>' + who + '</b> invited you to RipeStream.</span>'; banner.hidden = false; }
+        if (banner) {
+          var span = document.createElement('span'), b = document.createElement('b');
+          b.textContent = who; span.appendChild(b); span.appendChild(document.createTextNode(' invited you to RipeStream.'));
+          banner.replaceChildren(span); banner.hidden = false;
+        }
+        track('invite_link_valid');
         $$('[data-invite-intro]').forEach(function (p) { p.textContent = who + "'s invitation is ready below. Add your email to use it."; });
         setInviteMsg(who + "'s invitation · " + code, 'ok');
       } else {
         var msg = INVITE_MSG[r && r.status] || INVITE_MSG.invalid;
         if (banner) { banner.textContent = msg; banner.classList.add('bad'); banner.hidden = false; }
+        track('invite_link_invalid', { status: (r && r.status) || 'invalid' });
         setInviteMsg(msg, 'bad');
       }
     }).catch(function () { /* the join call re-checks it anyway */ });
@@ -253,6 +262,8 @@
   /* ── "register" links: scroll to the form and focus it ─ */
   $$('[data-focus-form]').forEach(function (a) {
     a.addEventListener('click', function (e) {
+      var from = a.closest('nav, header, .dock, section');
+      track('cta_click', { from: from ? (from.id || from.className.split(' ')[0] || from.tagName.toLowerCase()) : 'page' });
       var host = $('#join');
       if (!host) return;
       e.preventDefault();
@@ -319,8 +330,11 @@
   $$('.rs-form').forEach(function (form) {
     var email = $('input[name=email]', form);
     var invite = $('input[name=invite]', form);
-    var busy = false;
+    var busy = false, started = false;
     syncForm(form);
+    form.addEventListener('focusin', function () {
+      if (!started) { started = true; track('join_form_start', { source: form.getAttribute('data-source') }); }
+    });
 
     email.addEventListener('input', function () {
       if (email.getAttribute('aria-invalid') && EMAIL_RE.test(email.value.trim())) setError(form, '');
@@ -364,12 +378,13 @@
         var done = showDone(host, { name: name, email: value, invite: !!code });
         done.focus({ preventScroll: true });
         if (dock && dock.hideForGood) dock.hideForGood();
-        if (window.va) window.va('event', { name: 'founding_join', data: { source: form.getAttribute('data-source'), invited: !!code } });
+        track('founding_join', { source: form.getAttribute('data-source'), invited: !!code });
       }).catch(function (err) {
         busy = false;
         setLoading(form, false);
         var msg = String(err && err.message || '');
         var inv = msg.match(/^INVITE_(USED|EXPIRED|REVOKED|INVALID)/);
+        track('join_error', { reason: (err && err.name === 'AbortError') ? 'timeout' : (msg.match(/^[A-Z_]+/) || ['other'])[0] });
         if (err && err.code === '54000' || msg.indexOf('RATE_LIMIT') === 0) {
           setError(form, 'Too many attempts from this connection. Give it a few minutes and try again.');
         } else if (msg.indexOf('INVALID_EMAIL') === 0) {

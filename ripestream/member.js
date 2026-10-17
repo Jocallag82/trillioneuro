@@ -1,6 +1,6 @@
 /* RipeStream member area — founding status and invitations.
    There are no passwords yet. A member's way in is a personal key emailed
-   as https://ripestream.com/member#k=… (the fragment never reaches a server
+   as https://www.ripestream.com/member#k=… (the fragment never reaches a server
    log or a Referer). It's kept in this browser so the page works on return.
    Every rule — who is a member, founding numbers, the monthly invitation
    allowance, single-use codes — is enforced by the rs_* functions in the
@@ -11,7 +11,7 @@
   var RPC = 'https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/';
   var KEY = 'sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
   var STORE = 'rs_member_key';
-  var SITE = 'https://ripestream.com';
+  var SITE = 'https://www.ripestream.com';
   var EMAIL_RE = /^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$/;
   var app = document.getElementById('app');
   var state = null;
