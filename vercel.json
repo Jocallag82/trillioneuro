@@ -293,6 +293,51 @@
       "dest": "/ripestream/index.html"
     },
     {
+      "src": "/communities/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/api/rs-community"
+    },
+    {
+      "src": "/c/([a-z0-9-]{3,30})/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/api/rs-community?slug=$1"
+    },
+    {
+      "src": "/sitemap\\.xml",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/api/rs-sitemap"
+    },
+    {
       "src": "/privacy/?",
       "has": [
         {

@@ -8,8 +8,8 @@
 //
 // Purge: POST JSON { "purge": true } — sent by the rsp_posts delete trigger
 // and run after every upload. Removes files whose post was deleted, and files
-// never attached to a post after an hour. Safe to call by anyone: it only
-// deletes what the database says is unused.
+// never attached to a post after an hour. Live profile pictures (kept) stay.
+// Safe to call by anyone: it only deletes what the database says is unused.
 //
 // Deployed with verify_jwt = false; it authenticates members itself.
 import { createClient } from "jsr:@supabase/supabase-js@2";
@@ -48,7 +48,7 @@ function sniff(b: Uint8Array): { ext: string; type: string } | null {
 async function purge() {
   const cutoff = new Date(Date.now() - 3600_000).toISOString();
   const { data } = await db.from("rsp_uploads").select("path")
-    .is("post_id", null).or(`used.eq.true,created_at.lt.${cutoff}`).limit(100);
+    .is("post_id", null).eq("kept", false).or(`used.eq.true,created_at.lt.${cutoff}`).limit(100);
   const paths = (data ?? []).map((r) => r.path as string);
   if (!paths.length) return 0;
   const { error } = await db.storage.from(BUCKET).remove(paths);

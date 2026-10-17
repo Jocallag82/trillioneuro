@@ -154,11 +154,17 @@
     ]);
   }
 
+  function avatar(a, size) {
+    var st = 'width:' + size + 'px;height:' + size + 'px;font-size:' + Math.round(size * .38) + 'px';
+    if (a && a.avatar) return h('img', { class: 'av', src: a.avatar, alt: '', width: size, height: size, loading: 'lazy', style: st });
+    return h('span', { class: 'av', 'aria-hidden': 'true', style: st, text: initials(a && a.name) });
+  }
+
   /* ── posts ── */
   function authorBits(a) {
     a = a || { handle: '?', name: 'Unknown' };
     return [
-      h('span', { class: 'av', 'aria-hidden': 'true', text: initials(a.name) }),
+      avatar(a, 34),
       h('a', { class: 'nm', href: '#/u/' + a.handle, text: a.name }),
       h('span', { class: 'h', text: '@' + a.handle }),
       a.founding ? h('span', { class: 'fm', title: 'Founding Member #' + a.founding, text: 'Founding' }) : null
@@ -375,7 +381,8 @@
         c.joined ? composer(f.list, c) : null, f.list, f.more]),
         h('aside', { class: 'side' }, [h('section', { class: 'panel' }, [h('h2', { text: c.joined ? 'You’re in' : 'Join to post' }),
           h('p', { text: c.joined ? 'Posts here show in your stream when your feed is set to Communities or Everyone.' : 'Anyone can read. Members of the community can post.' }),
-          h('div', { class: 'row' }, [join])])])]));
+          h('div', { class: 'row' }, [join]),
+          h('p', { style: 'margin-top:12px' }, ['Invite people with the ', h('a', { href: '/c/' + slug, target: '_blank', rel: 'noopener', text: 'public page' }), ' \u2014 it shows the name, description and counts, never posts.'])])])]));
     }).catch(function (x) { render(h('div', { class: 'empty', text: human(x) })); });
   }
 
@@ -391,7 +398,7 @@
         } });
       }
       render(h('div', { class: 'layout' }, [h('div', {}, [
-        h('div', { class: 'ph' }, [h('span', { class: 'av', style: 'width:56px;height:56px;font-size:20px', 'aria-hidden': 'true', text: initials(p.name) }),
+        h('div', { class: 'ph' }, [avatar(p, 56),
           h('div', {}, [h('h1', { class: 'display', style: 'font-size:clamp(30px,5vw,48px);margin:0', text: p.name }),
             h('span', { class: 'h', text: '@' + p.handle }), p.founding ? h('span', { class: 'fm', style: 'margin-left:8px', text: 'Founding Member #' + p.founding }) : null])]),
         p.bio ? h('p', { class: 'lede', style: 'margin-top:14px', text: p.bio }) : null,
@@ -400,6 +407,37 @@
           : h('div', { class: 'row' }, [rel('follow', p.i_follow, p.i_follow ? 'Following' : 'Follow'), rel('mute', p.i_mute, p.i_mute ? 'Unmute' : 'Mute')]),
         f.list, f.more]), h('aside', { class: 'side' }, [])]));
     }).catch(function (x) { render(h('div', { class: 'empty', text: human(x) })); });
+  }
+
+  function emailBox() {
+    var cb = h('input', { type: 'checkbox' }); cb.checked = me.prefs.email_notify !== false;
+    cb.addEventListener('change', function () {
+      cb.disabled = true;
+      rpc('rsp_set_email_notify', { p_on: cb.checked }).then(function (r) {
+        me = r; cb.disabled = false; toast(cb.checked ? 'Email alerts on' : 'Email alerts off');
+      }).catch(function (x) { cb.disabled = false; cb.checked = !cb.checked; toast(human(x)); });
+    });
+    return cb;
+  }
+
+  function avatarPanel() {
+    var prof = me.profile, err = h('p', { class: 'err' });
+    var file = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/gif,image/webp', class: 'sr', id: 'av-file' });
+    var pick = h('label', { class: 'btn quiet', for: 'av-file', text: prof.avatar ? 'Change picture' : 'Add a picture' });
+    function save(path) {
+      return rpc('rsp_set_avatar', { p_path: path }).then(function (r) { me = r; toast(path ? 'Picture updated' : 'Picture removed'); viewSettings(); });
+    }
+    file.addEventListener('change', function () {
+      var f = file.files && file.files[0]; if (!f) return;
+      if (f.size > 5 * 1024 * 1024) { err.textContent = 'Images can be up to 5 MB.'; return; }
+      err.textContent = ''; pick.textContent = 'Uploading\u2026';
+      upload(f).then(function (r) { track('avatar_set'); return save(r.path); })
+        .catch(function (x) { pick.textContent = 'Add a picture'; err.textContent = human(x); });
+    });
+    return h('section', { class: 'panel' }, [h('h2', { text: 'Profile picture' }),
+      h('div', { class: 'row' }, [avatar({ name: prof.name, avatar: prof.avatar }, 64), file, pick,
+        prof.avatar ? h('button', { class: 'btn quiet', type: 'button', text: 'Remove', onclick: function () { save(null).catch(function (x) { toast(human(x)); }); } }) : null]),
+      err]);
   }
 
   function viewSettings() {
@@ -429,6 +467,10 @@
       h('section', { class: 'panel' }, [h('h2', { text: 'Muted people' }), me.muted.length
         ? h('div', { class: 'tags' }, me.muted.map(function (m) { return h('a', { class: 'tag', href: '#/u/' + m, text: '@' + m }); }))
         : h('p', { text: 'Nobody. Mute someone from their profile — they won’t know.' })]),
+      avatarPanel(),
+      h('section', { class: 'panel' }, [h('h2', { text: 'Email' }),
+        h('label', { class: 'sw-row' }, [emailBox(), ' Email me when someone replies to my posts or mentions me']),
+        h('p', { style: 'margin-top:8px', text: 'At most one email every 15 minutes. Follows and everything else stay in the app.' })]),
       h('section', { class: 'panel' }, [h('h2', { text: 'Your data' }), h('p', {}, ['Delete posts and replies any time from the post itself. To see, export or delete everything, email ',
         h('a', { href: 'mailto:privacy@ripestream.com', text: 'privacy@ripestream.com' }), '.'])])
     ]), h('aside', { class: 'side' }, [profileForm(false)])]));
