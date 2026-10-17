@@ -1,0 +1,20 @@
+export function LogoMark({ size = 32 }: { size?: number }) {
+  // A rating tile: rounded square with a star cut from a speech-bubble tail — "rate" + "voice".
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+      <path d="M8 3h24a5 5 0 0 1 5 5v19a5 5 0 0 1-5 5H17l-7.5 5.5c-.8.6-1.9 0-1.9-.9V32A5 5 0 0 1 3 27V8a5 5 0 0 1 5-5Z" fill="#0d5c61" />
+      <path d="m20 9.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.4-5.8-3-5.8 3 1.1-6.4-4.7-4.6 6.5-.9L20 9.5Z" fill="#f2b70f" />
+    </svg>
+  );
+}
+
+export function Logo() {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <LogoMark />
+      <span className="display text-[1.35rem] font-semibold tracking-tight text-ink">
+        RateMe<span className="text-sea">.ie</span>
+      </span>
+    </span>
+  );
+}

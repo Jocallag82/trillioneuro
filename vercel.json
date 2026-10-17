@@ -26,6 +26,10 @@
       "continue": true
     },
     {
+      "src": "/rateme(?:/.*)?",
+      "status": 404
+    },
+    {
       "src": "/quadrillioneuro/?",
       "has": [
         {
