@@ -27,7 +27,8 @@
     },
     {
       "src": "/rateme(?:/.*)?",
-      "status": 404
+      "status": 404,
+      "dest": "/__rateme-not-served"
     },
     {
       "src": "/quadrillioneuro/?",
