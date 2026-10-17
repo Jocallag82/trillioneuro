@@ -4,7 +4,7 @@
 // a row's mail_kind is set:
 //   confirm  first email after joining: "confirm your email to claim your place"
 //   link     a known member asked for their link again
-// Both carry a freshly minted member key (https://ripestream.com/member#k=…).
+// Both carry a freshly minted member key (https://www.ripestream.com/member#k=…).
 // Opening it is what confirms the email, and it's the only way into the member
 // area — so the key never exists anywhere but this email and the member's
 // browser. The database keeps only its SHA-256.
@@ -20,7 +20,7 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import nodemailer from "npm:nodemailer@6.9.16";
 
-const SITE = "https://ripestream.com";
+const SITE = "https://www.ripestream.com";
 const db = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,

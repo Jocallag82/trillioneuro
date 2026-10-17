@@ -38,8 +38,8 @@ footer a{color:var(--mute);text-decoration:none}footer a:hover{color:var(--cream
 <header class="bar"><a class="logo" href="/"><img src="/favicon.svg" alt="" width="28" height="28">RipeStream</a><a class="cta" href="/#join">Join</a></header>
 <main>
 <h1>Privacy</h1>
-<p class="upd">Last updated: 29 September 2026</p>
-<p class="note">A plain-English summary of what we collect and why. RipeStream is in development; this page covers membership sign-up, founding places and invitations, and will be replaced with a full policy before the app launches.</p>
+<p class="upd">Last updated: 17 October 2026</p>
+<p class="note">A plain-English summary of what we collect and why. RipeStream is in early beta; this page covers membership, founding places, invitations and the members-only beta app.</p>
 <h2>What we collect</h2>
 <p>When you join, we store:</p>
 <ul>
@@ -50,16 +50,17 @@ footer a{color:var(--mute);text-decoration:none}footer a:hover{color:var(--cream
 <li>If you joined with an invitation: which one, and who sent it</li>
 <li>If you create invitations: their codes, the optional note you add (only you see it), and whether they've been used</li>
 </ul>
+<p>If you use the beta app, we also store your handle, display name and bio; your posts and replies; the communities you join or create; who you follow; who and which words you mute; your feed setting; and any reports you make.</p>
 <p>Your member link is a random key. We keep only a one-way hash of it, so even we can't read it back.</p>
 <p>We don't ask for a password, a phone number, payment details or your location. We don't set advertising or tracking cookies. We use cookie-free, first-party page analytics (Vercel Web Analytics) to count visits.</p>
 <h2>What we use it for</h2>
 <p>To run your membership — confirming your email, your founding place and your invitations — and to tell you about RipeStream: progress, previews and when there's something you can try. We don't sell, rent or share your email address with anyone for their own marketing.</p>
 <h2>Who can see what</h2>
-<p>If you join with someone's invitation, they can see your first name (if you gave one) and whether you've joined — nothing else, and never your email address. Nobody else can see that you're a member. The public site shows only the total number of founding places claimed.</p>
+<p>If you join with someone's invitation, they can see your first name (if you gave one) and whether you've joined — nothing else, and never your email address. If you use the beta app, other confirmed members can see your handle, display name, bio, Founding Member number, posts, replies, the communities you're in (via member counts) and your follower counts. Your email is never shown. Mutes, muted words and reports are private — the person or post isn't told. Nothing in the app is public on the web or available to search engines.</p>
 <h2>Where it's stored</h2>
 <p>With Supabase (a hosted Postgres database) in the EU (Ireland). The tables holding your details cannot be read by the public website at all — the site can only call a small set of checked functions, and none of them return an email address.</p>
 <h2>How long we keep it</h2>
-<p>Until you ask us to remove it, or until we decide not to continue with RipeStream — in which case we delete the list.</p>
+<p>When you delete a post or reply, it's deleted from our database straight away (with its replies, for a post). Everything else is kept until you ask us to remove it, or until we decide not to continue with RipeStream — in which case we delete the list.</p>
 <h2>Your rights</h2>
 <p>You can ask to see, correct or delete what we hold about you at any time. Email <a href="mailto:privacy@ripestream.com">privacy@ripestream.com</a> and we'll act on it within 30 days. You also have the right to complain to your local data protection authority — in Ireland, the Data Protection Commission.</p>
 <h2>Legal basis</h2>

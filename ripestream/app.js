@@ -147,7 +147,7 @@
   try {
     if (localStorage.getItem(MEMBER_KEY)) {       // a member on this device: straight to their invitations
       var cta = $('[data-nav-cta]');
-      if (cta) { cta.href = '/member'; cta.removeAttribute('data-focus-form'); cta.removeAttribute('data-nav-cta'); cta.innerHTML = '<span>Your invitations</span>'; }
+      if (cta) { cta.href = '/app'; cta.removeAttribute('data-focus-form'); cta.removeAttribute('data-nav-cta'); cta.innerHTML = '<span>Open your stream</span>'; }
     }
   } catch (e) {}
   function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 24); }

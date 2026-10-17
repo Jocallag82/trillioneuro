@@ -193,8 +193,11 @@
     state = s;
     paint(
       identity(s) +
+      (s.status === 'member' ? '<p style="margin:14px 0"><a class="btn" href="/app">Open your stream</a></p>' : '') +
       invitations(s) +
-      '<p class="note"><svg aria-hidden="true"><use href="#i-info"/></svg><span>RipeStream is still being built. Your place' + (s.status === 'member' ? ' and your invitations are' : ' is') + ' real and kept — the app itself isn’t open yet. We’ll email you when it is.</span></p>' +
+      '<p class="note"><svg aria-hidden="true"><use href="#i-info"/></svg><span>' + (s.status === 'member'
+        ? 'The RipeStream beta is open to members: post, join communities and choose exactly what your feed shows. It’s early — tell us what to fix in the Feedback community.'
+        : 'Your place is real and kept. The beta opens to you once your membership is confirmed.') + '</span></p>' +
       '<p class="foot-acts">Using a shared computer? <button type="button" id="forget">Remove your link from this browser</button></p>'
     );
     wire();
