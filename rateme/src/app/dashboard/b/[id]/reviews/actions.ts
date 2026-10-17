@@ -6,6 +6,7 @@ import { DISPUTE_REASONS } from '@/lib/reviews';
 import { screenText } from '@/lib/screening';
 import { audit } from '@/lib/audit';
 import { rateLimit } from '@/lib/security';
+import { openReconfirmation } from '@/lib/disputes';
 
 const back = (id: string, k: 'msg' | 'err', m: string) => `/dashboard/b/${id}/reviews?${k}=${encodeURIComponent(m)}`;
 
@@ -39,14 +40,8 @@ export async function disputeReview(form: FormData) {
   const allegation = String(form.get('allegation') ?? '').trim().slice(0, 3000);
   if (!(reason in DISPUTE_REASONS) || allegation.length < 10) redirect(back(id, 'err', 'Choose a reason and explain the problem.'));
   if (!(await rateLimit(`dispute:${id}`, 20, 86400))) redirect(back(id, 'err', 'You’ve raised many disputes today. A moderator will work through the existing ones first.'));
-  const [r] = await sql`select 1 from reviews where id = ${reviewId} and business_id = ${id} and status = 'published'`;
-  if (!r) redirect(back(id, 'err', 'Review not found.'));
-  try {
-    await sql`insert into disputes (review_id, business_id, raised_by, reason, allegation) values (${reviewId}, ${id}, ${ctx.user.id}, ${reason}, ${allegation})`;
-  } catch (e) {
-    if ((e as { code?: string }).code === '23505') redirect(back(id, 'err', 'There is already an open dispute for this review.'));
-    throw e;
-  }
-  await sql`insert into moderation_actions (review_id, actor_user_id, action, reason) values (${reviewId}, ${ctx.user.id}, 'dispute_opened', ${DISPUTE_REASONS[reason as keyof typeof DISPUTE_REASONS]})`;
-  redirect(back(id, 'msg', 'Dispute submitted. The review stays visible while a moderator reviews it.'));
+  const res = await openReconfirmation({ reviewId, businessId: id, source: 'business', raisedBy: ctx.user.id,
+    reason: DISPUTE_REASONS[reason as keyof typeof DISPUTE_REASONS], allegation });
+  if (!res.ok) redirect(back(id, 'err', res.error));
+  redirect(back(id, 'msg', 'Dispute submitted. We’ve asked the reviewer to reconfirm. If they don’t within 14 days, the review is removed automatically.'));
 }

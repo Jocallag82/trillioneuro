@@ -20,9 +20,9 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <h1 className="text-3xl font-semibold">Report a review</h1>
-      <p className="mt-2 text-ink-2">Tell us how this review of <strong>{r.name}</strong> breaks our <Link className="text-sea underline" href="/review-policy">review policy</Link>. A moderator will check it. Reporting a review doesn’t remove it automatically.</p>
+      <p className="mt-2 text-ink-2">Tell us how this review of <strong>{r.name}</strong> breaks our <Link className="text-sea underline" href="/review-policy">review policy</Link>. When several people report the same review, the reviewer is automatically asked to reconfirm it — unconfirmed reviews are removed.</p>
       {sent ? (
-        <div className="mt-6 space-y-4"><Notice kind="ok">Thanks — your report has been sent to our moderators.</Notice><Link className="btn btn-ghost" href={`/business/${slug}`}>Back to the business</Link></div>
+        <div className="mt-6 space-y-4"><Notice kind="ok">Thanks — your report has been recorded.</Notice><Link className="btn btn-ghost" href={`/business/${slug}`}>Back to the business</Link></div>
       ) : (
         <form action={reportReview} className="mt-6 space-y-5">
           {error && <Notice kind="error">{error}</Notice>}
@@ -39,7 +39,7 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
             ))}
           </fieldset>
           <label className="field"><span className="label">Details <span className="font-normal text-muted">(optional)</span></span>
-            <textarea name="details" className="textarea" maxLength={2000} placeholder="Anything that helps a moderator understand the problem." /></label>
+            <textarea name="details" className="textarea" maxLength={2000} placeholder="Anything that explains the problem." /></label>
           <label className="field"><span className="label">Your email <span className="font-normal text-muted">(optional)</span></span>
             <input name="email" type="email" className="input" autoComplete="email" /><span className="hint">Only if you’d like us to be able to follow up. Never shown publicly.</span></label>
           <SubmitButton pendingText="Sending…">Send report</SubmitButton>

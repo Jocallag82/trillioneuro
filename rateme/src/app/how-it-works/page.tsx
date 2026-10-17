@@ -13,8 +13,8 @@ export default function HowItWorks() {
       <h2>What we check — and what we don’t</h2>
       <ul>
         <li><strong>Email confirmation.</strong> A review is only published after the reviewer clicks a link sent to their email address. One person can have one live review per business.</li>
-        <li><strong>Automated, rating-blind checks.</strong> We look for personal information, links, threats and abusive language, conflicts of interest (for example a reviewer email on the business’s own domain), unusual bursts of reviews and repeated submissions from the same network. These checks treat a 1-star review and a 5-star review in exactly the same way.</li>
-        <li><strong>Human moderation.</strong> Anything flagged, reported or disputed is reviewed by a moderator against our <Link href="/review-policy">review policy</Link>.</li>
+        <li><strong>Rating-blind checks.</strong> We check for personal information, links, threats and abusive language, conflicts of interest (for example a reviewer email on the business’s own domain) and repeat reviews from the same network. A 1-star review and a 5-star review are treated in exactly the same way.</li>
+        <li><strong>Fully automated decisions.</strong> Reviews containing personal contact details, links, threats or abuse can’t be submitted. Reviews from people connected to the business are rejected automatically. Nobody at RateMe.ie picks which reviews appear.</li>
         <li><strong>What we don’t do:</strong> we don’t independently verify that a purchase or visit took place. That’s why you won’t see a “verified purchase” badge on RateMe.ie. A reviewer’s declaration is not the same as independent proof, and we say so.</li>
       </ul>
 
@@ -29,8 +29,8 @@ export default function HowItWorks() {
         <li><strong>Paid member</strong> — the business pays an annual RateMe.ie membership for tools such as a QR code, replying to reviews and profile editing. It has no effect on ratings.</li>
       </ul>
 
-      <h2>Businesses can reply, not remove</h2>
-      <p>Verified owners can reply publicly to reviews and can ask a moderator to check a review they believe breaks the policy. A dispute is the business’s allegation — not a finding. The review stays visible while it’s checked and is only removed if a moderator concludes it breaks the policy. Reviewers are told the outcome and can ask for reconsideration.</p>
+      <h2>Disputes are settled by the reviewer, automatically</h2>
+      <p>Verified owners can reply publicly and can dispute a review. A dispute doesn’t remove anything by itself: we email the reviewer and ask them to reconfirm that it’s their own genuine experience. If they reconfirm, the review stays and can’t be disputed again by the business. If they don’t respond within 14 days, it’s removed automatically — and they can restore it later by reconfirming. When several visitors report the same review, the same check runs. Businesses can dispute up to 5 reviews every 30 days.</p>
 
       <h2>Asking customers for reviews</h2>
       <p>Businesses may invite customers to rate them, for example with their QR code. They must ask customers fairly — not just the happy ones — and must not offer incentives for reviews or pressure anyone to change a rating. Every customer sees the same form; there is no route that sends unhappy customers somewhere private instead.</p>

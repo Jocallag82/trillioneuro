@@ -3,7 +3,7 @@ import { sql } from './db';
 import type { Tx } from './db';
 import { randomToken, sha256 } from './util';
 
-export type TokenPurpose = 'verify_email' | 'reset_password' | 'business_email' | 'review_confirm' | 'review_manage';
+export type TokenPurpose = 'verify_email' | 'reset_password' | 'business_email' | 'review_confirm' | 'review_manage' | 'review_reconfirm';
 
 export async function createToken(purpose: TokenPurpose, opts: { userId?: string | null; refId?: string | null; ttlHours: number }, tx?: Tx) {
   const raw = randomToken(32);

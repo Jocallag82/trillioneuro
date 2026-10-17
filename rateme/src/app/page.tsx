@@ -113,10 +113,10 @@ export default async function Home() {
           <ul className="grid gap-4 sm:grid-cols-2">
             {[
               ['No paying to look better', 'Membership never changes a rating, the order of reviews or whether a review is shown.'],
-              ['Negative reviews stay', 'A business can’t delete a legitimate review. Disputes are decided by a RateMe.ie moderator under a published policy.'],
+              ['Disputes settled automatically', 'If a business questions a review, the reviewer is asked to reconfirm it. Reviews people stand behind stay; unconfirmed ones are removed.'],
               ['No review gating', 'Every customer gets the same form. Happy and unhappy customers are never routed differently.'],
               ['Honest labels', 'We don’t claim a review is a “verified purchase”. Reviewers declare it’s their own genuine experience.'],
-              ['Checks before publishing', 'Email confirmation, rate limits and rating-blind automated checks catch spam and abuse.'],
+              ['Checks before publishing', 'Email confirmation, rate limits and rating-blind automated checks block spam, abuse and conflicts of interest.'],
               ['Scores need real data', 'We only show a score once real customers have rated a business. No invented numbers.'],
             ].map(([t, d]) => (
               <li key={t} className="card p-5">
@@ -158,7 +158,7 @@ export default async function Home() {
             { q: 'Do I have to pay to leave a rating?', a: 'No. Rating a business is free and always will be. Only businesses pay, and only for membership tools.' },
             { q: 'Will my email address be shown?', a: 'Never. We use it to confirm your review is genuine and to let you manage it later. Only the display name you choose is shown.' },
             { q: 'Are the reviews verified purchases?', a: 'No, and we don’t claim they are. Reviewers declare that they personally used the business. We confirm their email and run automated and human checks, but we can’t independently verify every transaction.' },
-            { q: 'Can a business remove a bad review?', a: <>No. A business can reply publicly or ask a moderator to check a review against our <Link className="text-sea underline" href="/review-policy">policy</Link>. A review is only removed if it breaks the policy — not because the business dislikes it.</> },
+            { q: 'Can a business remove a bad review?', a: <>Not directly. A business can reply publicly or dispute a review. A dispute automatically asks the reviewer to reconfirm it: if they stand by it, it stays; if they don’t respond within 14 days, it’s removed. The same applies to good and bad reviews. <Link className="text-sea underline" href="/review-policy">Review policy</Link></> },
             { q: 'Does paying for membership improve a business’s rating?', a: 'No. Ratings are calculated the same way for every business from published reviews only. Membership is clearly labelled.' },
             { q: 'My business is listed but I didn’t add it. What can I do?', a: <>Customers can suggest businesses so they can rate them. You can <Link className="text-sea underline" href="/dashboard/claim">claim the listing</Link>, verify you’re the owner and keep its details accurate — or <Link className="text-sea underline" href="/contact">contact us</Link> if something is wrong.</> },
           ]} />

@@ -12,7 +12,7 @@ export default function Privacy() {
       <p>The data controller is {operator.name}{operator.address ? `, ${operator.address}` : ''}{operator.cro ? ` (CRO ${operator.cro})` : ''}. Contact us about privacy at <a href={`mailto:${operator.privacyEmail}`}>{operator.privacyEmail}</a>.</p>
       <h2>Reviewers</h2>
       <table className="table-rm"><thead><tr><th>Data</th><th>Why</th><th>Lawful basis</th><th>Kept</th></tr></thead><tbody>
-        <tr><td>Email address</td><td>Confirm the review, let you manage it, tell you about moderation decisions</td><td>Legitimate interests (review integrity); contract</td><td>While the review exists, then up to 12 months</td></tr>
+        <tr><td>Email address</td><td>Confirm the review, let you manage it, tell you about automated decisions and ask you to reconfirm if your review is disputed</td><td>Legitimate interests (review integrity); contract</td><td>While the review exists, then up to 12 months</td></tr>
         <tr><td>Display name, rating, review text, experience month/type</td><td>Publishing your review</td><td>Contract (our terms)</td><td>Until you withdraw it or it’s removed</td></tr>
         <tr><td>Keyed hash of your IP address</td><td>Preventing spam, fake and duplicate reviews</td><td>Legitimate interests</td><td>90 days</td></tr>
         <tr><td>Unconfirmed reviews</td><td>Waiting for email confirmation</td><td>Legitimate interests</td><td>Deleted after 14 days</td></tr>
@@ -40,7 +40,7 @@ export default function Privacy() {
       <h2>Your rights</h2>
       <p>You can ask to access, correct, erase, restrict or port your data, and object to processing based on legitimate interests. Account holders can download their data and delete their account from Account settings. Anyone can use our <Link href="/data-request">privacy request form</Link>. We reply within one month. You can also complain to the Data Protection Commission (dataprotection.ie).</p>
       <h2>Automated decisions</h2>
-      <p>Automated checks may hold a review for human moderation. They never reject or remove a review on their own — a person decides.</p>
+      <p>Reviews are moderated automatically, without human review. Automated rules can reject a review (for example a conflict of interest) or remove it if the reviewer doesn’t reconfirm it after a dispute. We always tell you which rule applied, and you can restore a removed review by reconfirming it, write a new review, or contact us to object to an automated decision.</p>
     </LegalPage>
   );
 }

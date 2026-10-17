@@ -133,15 +133,15 @@ test('owner can respond publicly to a review', async ({ page }) => {
   await expect(page.getByText(/added a second mechanic/)).toBeVisible();
 });
 
-test('owner reviewing their own business is held as a conflict of interest', async ({ page }) => {
+test('owner reviewing their own business is rejected automatically (conflict of interest)', async ({ page }) => {
   const { fillReview } = await import('./helpers');
   await page.goto('/business/murphy-e2e-garage/review');
   await fillReview(page, { stars: 5, title: 'Best garage', name: 'Declan', email: 'someone@e2e-garage.ie' });
   await page.goto(await emailLink('someone@e2e-garage.ie', 'review_confirm'));
   await page.getByRole('button', { name: 'Yes, publish my review' }).click();
-  await expect(page.getByText(/moderator is checking it/)).toBeVisible();
+  await expect(page.getByText(/couldn’t be published/)).toBeVisible();
   const [r] = await db`select status, hold_reasons from reviews where reviewer_email = 'someone@e2e-garage.ie'`;
-  expect(r.status).toBe('held');
+  expect(r.status).toBe('rejected');
   expect(r.hold_reasons).toContain('possible_conflict');
 });
 

@@ -1,6 +1,7 @@
 'use server';
 import { z } from 'zod';
 import { submitReview, EXPERIENCE_TYPES } from '@/lib/reviews';
+import { screenText } from '@/lib/screening';
 import { clientIp, hashIp, ipRateLimit, looksAutomated } from '@/lib/security';
 
 export type ReviewFormState = { ok?: boolean; error?: string; fieldErrors?: Record<string, string>; delivered?: boolean; email?: string };
@@ -28,6 +29,16 @@ export async function submitReviewAction(_prev: ReviewFormState, form: FormData)
     return { error: 'Please check the highlighted fields.', fieldErrors };
   }
   const d = parsed.data;
+  // Policy breaches are blocked here, instantly and automatically, so the reviewer can fix them.
+  const flags = screenText(d.title ?? null, d.body ?? null);
+  if (flags.length) {
+    const msg = flags.includes('threat') || flags.includes('abusive_language')
+      ? 'Please remove threatening or abusive language — reviews must describe your experience.'
+      : flags.includes('contact_details')
+        ? 'Please remove phone numbers and email addresses — personal contact details can’t be published.'
+        : 'Please remove web links — reviews can’t contain links.';
+    return { error: msg, fieldErrors: { body: msg } };
+  }
   // The experience must be in the past (up to 3 years) — this is about real, previous experiences.
   const [y, m] = d.experience_month.split('-').map(Number);
   const month = new Date(Date.UTC(y, m - 1, 1));

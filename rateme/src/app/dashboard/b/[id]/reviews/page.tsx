@@ -26,7 +26,6 @@ export default async function Reviews({ params, searchParams }: { params: Promis
       (select d.finding from disputes d where d.review_id = r.id order by d.created_at desc limit 1) dispute_finding
     from reviews r left join review_responses rr on rr.review_id = r.id
     where r.business_id = ${id} and r.status = 'published' order by r.published_at desc limit 200`;
-  const [{ held }] = await sql<{ held: number }[]>`select count(*)::int held from reviews where business_id = ${id} and status = 'held'`;
   const canRespond = ctx.verified && ctx.ent.active;
   return (
     <div>
@@ -34,7 +33,6 @@ export default async function Reviews({ params, searchParams }: { params: Promis
       <div className="space-y-3">
         {sp.msg && <Notice kind="ok">{sp.msg}</Notice>}
         {sp.err && <Notice kind="error">{sp.err}</Notice>}
-        {held > 0 && <Notice kind="info">{held} {held === 1 ? 'review is' : 'reviews are'} being checked by moderators. Moderators apply the same policy to every review, positive or negative.</Notice>}
         {!canRespond && ctx.verified && <Notice kind="info">Replying to reviews is a member feature. <Link className="underline" href={`/dashboard/b/${id}/membership`}>Activate membership</Link>. Disputing a review that breaks our policy is free.</Notice>}
       </div>
       <details className="card mt-4 p-4 text-sm">
@@ -71,15 +69,16 @@ export default async function Reviews({ params, searchParams }: { params: Promis
                 </details>
               )}
               {ctx.verified && (
-                r.dispute_status === 'open' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">Dispute under review by a moderator.</p> :
+                r.dispute_status === 'open' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">Waiting for the reviewer to reconfirm. If they don’t, it’s removed automatically.</p> :
+                r.dispute_status === 'rejected' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">The reviewer reconfirmed this review, so it stays.</p> :
                 <details className="rounded-xl border border-line p-3">
-                  <summary className="cursor-pointer text-sm font-semibold">Dispute this review{r.dispute_status ? ` (previous: ${r.dispute_status})` : ''}</summary>
+                  <summary className="cursor-pointer text-sm font-semibold">Dispute this review</summary>
                   {r.dispute_finding && <p className="mt-2 text-xs text-muted">Previous finding: {r.dispute_finding}</p>}
                   <form action={disputeReview} className="mt-3 space-y-2">
                     <input type="hidden" name="business_id" value={id} /><input type="hidden" name="review_id" value={r.id} />
                     <select name="reason" className="select" required defaultValue="" aria-label="Reason"><option value="" disabled>Reason</option>{Object.entries(DISPUTE_REASONS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
-                    <textarea name="allegation" className="textarea" minLength={10} maxLength={3000} required placeholder="Explain why this review breaks the policy. Include any evidence (e.g. no booking under that name in that month)." aria-label="Explanation" />
-                    <p className="text-xs text-muted">The review stays visible while a moderator looks at it. Disagreeing with a review isn’t enough on its own for removal.</p>
+                    <textarea name="allegation" className="textarea" minLength={10} maxLength={3000} required placeholder="Briefly explain the problem (e.g. no booking under that name in that month). The reviewer sees the reason you choose." aria-label="Explanation" />
+                    <p className="text-xs text-muted">We automatically ask the reviewer to reconfirm. If they don’t within 14 days, the review is removed; if they do, it stays. Up to 5 disputes every 30 days.</p>
                     <SubmitButton className="btn btn-ghost btn-sm" pendingText="Sending…">Submit dispute</SubmitButton>
                   </form>
                 </details>

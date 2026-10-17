@@ -52,8 +52,8 @@ export async function submitReview(input: ReviewInput): Promise<SubmitResult> {
   }
 }
 
-/** Automated, rating-blind checks applied when the reviewer confirms their email. */
-export async function automatedHoldReasons(tx: Tx, reviewId: string): Promise<HoldReason[]> {
+/** Automated, rating-blind checks applied when the reviewer confirms their email. Any hit rejects automatically. */
+export async function automatedRejectReasons(tx: Tx, reviewId: string): Promise<HoldReason[]> {
   const [r] = await tx<{ title: string | null; body: string | null; reviewer_email: string; business_id: string; ip_hash: string | null; website_domain: string | null }[]>`
     select r.title, r.body, r.reviewer_email, r.business_id, r.ip_hash, b.website_domain
     from reviews r join businesses b on b.id = r.business_id where r.id = ${reviewId}`;
@@ -62,15 +62,10 @@ export async function automatedHoldReasons(tx: Tx, reviewId: string): Promise<Ho
   const [member] = await tx`select 1 from business_members m join users u on u.id = m.user_id
                             where m.business_id = ${r.business_id} and u.email = ${r.reviewer_email} and m.status in ('pending','verified')`;
   if (member) reasons.push('reviewer_is_member');
-  const [s] = await tx<{ value: { burst_threshold_per_business_per_hour?: number } }[]>`select value from settings where key = 'reviews'`;
-  const [{ recent }] = await tx<{ recent: number }[]>`
-    select count(*)::int recent from reviews where business_id = ${r.business_id} and id <> ${reviewId}
-      and confirmed_at > now() - interval '1 hour'`;
-  if (recent >= Number(s?.value?.burst_threshold_per_business_per_hour ?? 8)) reasons.push('burst');
   if (r.ip_hash) {
     const [{ same }] = await tx<{ same: number }[]>`
       select count(*)::int same from reviews where business_id = ${r.business_id} and id <> ${reviewId}
-        and ip_hash = ${r.ip_hash} and created_at > now() - interval '30 days' and status in ('published','held')`;
+        and ip_hash = ${r.ip_hash} and created_at > now() - interval '30 days' and status = 'published'`;
     if (same >= 1) reasons.push('repeat_device');
   }
   return reasons;
@@ -81,13 +76,13 @@ export async function confirmReview(reviewId: string): Promise<{ status: string;
     const [r] = await tx<{ id: string; status: string; business_id: string; rating: number }[]>`
       select id, status, business_id, rating from reviews where id = ${reviewId} for update`;
     if (!r || r.status !== 'pending_confirmation') return null;
-    const reasons = await automatedHoldReasons(tx, r.id);
-    const status = reasons.length ? 'held' : 'published';
+    const reasons = await automatedRejectReasons(tx, r.id);
+    const status = reasons.length ? 'rejected' : 'published';
     await tx`update reviews set status = ${status}, hold_reasons = ${reasons}, confirmed_at = now(),
                published_at = ${status === 'published' ? new Date() : null}, updated_at = now() where id = ${r.id}`;
     await tx`insert into moderation_actions (review_id, action, from_status, to_status, reason)
              values (${r.id}, 'email_confirmed', 'pending_confirmation', ${status},
-                     ${reasons.length ? `Automated checks: ${reasons.join(', ')}` : 'Passed automated checks'})`;
+                     ${reasons.length ? `Automatically rejected: ${reasons.join(', ')}` : 'Passed automated checks'})`;
     const manageToken = await createToken('review_manage', { refId: r.id, ttlHours: 24 * 365 * 3 }, tx);
     const [b] = await tx<{ slug: string; name: string }[]>`select slug, name from businesses where id = ${r.business_id}`;
     return { status, manageToken, businessSlug: b.slug, businessName: b.name, businessId: r.business_id, rating: r.rating };
@@ -142,8 +137,8 @@ export const DISPUTE_REASONS = {
 export const STATUS_LABELS: Record<string, string> = {
   pending_confirmation: 'Awaiting email confirmation',
   published: 'Published',
-  held: 'Being checked by a moderator',
+  held: 'Being checked',
   rejected: 'Not published — breaches the review policy',
-  removed: 'Removed after moderation',
+  removed: 'Removed — not reconfirmed after a dispute',
   withdrawn: 'Withdrawn by the reviewer',
 };

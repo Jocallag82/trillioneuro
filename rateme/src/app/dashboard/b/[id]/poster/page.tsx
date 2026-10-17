@@ -27,7 +27,7 @@ export default async function Poster({ params }: { params: Promise<{ id: string 
         <div className="mx-auto mt-6 w-64" dangerouslySetInnerHTML={{ __html: svg }} role="img" aria-label="QR code" />
         <p className="mt-4 text-lg">Scan with your phone camera — it takes about a minute.</p>
         <p className="mt-1 text-sm text-muted">{qrUrl(code)}</p>
-        <p className="mt-6 text-xs text-muted">Free for customers. We welcome all honest feedback — good or bad. Reviews are moderated under the RateMe.ie review policy.</p>
+        <p className="mt-6 text-xs text-muted">Free for customers. We welcome all honest feedback — good or bad. Reviews follow the RateMe.ie review policy.</p>
       </section>
       <section className="mt-8 grid grid-cols-2 gap-4">
         {[0, 1, 2, 3].map((i) => (

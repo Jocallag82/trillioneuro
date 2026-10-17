@@ -26,7 +26,7 @@ export default function Terms() {
         <li>Businesses must not manipulate reviews — see section 8 of the review policy.</li>
       </ul>
       <h2>5. Our role</h2>
-      <p>We host content provided by users and moderate it under our review policy. We act on notices of illegal content and explain our decisions. We don’t check every review in advance beyond the steps described in <Link href="/how-it-works">How ratings work</Link>.</p>
+      <p>We host content provided by users and enforce our review policy using automated rules. We act on notices of illegal content and explain our decisions. We don’t check every review in advance beyond the steps described in <Link href="/how-it-works">How ratings work</Link>.</p>
       <h2>6. Acceptable use</h2>
       <p>No scraping at scale, automated submissions, attempts to bypass rate limits or security, or use of the service to harass anyone.</p>
       <h2>7. Liability</h2>

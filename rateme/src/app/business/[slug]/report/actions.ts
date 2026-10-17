@@ -5,6 +5,7 @@ import { REPORT_REASONS } from '@/lib/reviews';
 import { clientIp, hashIp, ipRateLimit, looksAutomated } from '@/lib/security';
 import { currentUser } from '@/lib/auth';
 import { slugify } from '@/lib/util';
+import { maybeTriggerFromReports } from '@/lib/disputes';
 
 export async function reportReview(form: FormData) {
   const reviewId = String(form.get('review_id') ?? '');
@@ -25,6 +26,7 @@ export async function reportReview(form: FormData) {
     await sql`insert into reports (kind, review_id, business_id, reason, details, reporter_email, reporter_user_id, ip_hash)
               values ('review', ${reviewId}, ${r.business_id}, ${reason}, ${details}, ${email && email.includes('@') ? email : null}, ${user?.id ?? null}, ${ipHash})`;
     await sql`insert into moderation_actions (review_id, action, reason) values (${reviewId}, 'reported', ${REPORT_REASONS[reason as keyof typeof REPORT_REASONS]})`;
+    await maybeTriggerFromReports(reviewId);
   }
   redirect(`${back}&sent=1`);
 }

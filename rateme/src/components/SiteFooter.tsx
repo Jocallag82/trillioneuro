@@ -4,7 +4,7 @@ import { LogoMark } from './Logo';
 const COLS = [
   { title: 'Discover', links: [['/search', 'Find a business'], ['/categories', 'Browse categories'], ['/counties', 'Browse by county'], ['/add-business', 'Suggest a business']] },
   { title: 'Businesses', links: [['/for-business', 'Membership & pricing'], ['/register', 'Create an account'], ['/dashboard', 'Business dashboard'], ['/for-business#faq', 'Business FAQ']] },
-  { title: 'Trust', links: [['/how-it-works', 'How ratings work'], ['/review-policy', 'Review & moderation policy'], ['/contact', 'Complaints & contact'], ['/data-request', 'Privacy requests']] },
+  { title: 'Trust', links: [['/how-it-works', 'How ratings work'], ['/review-policy', 'Review policy'], ['/contact', 'Complaints & contact'], ['/data-request', 'Privacy requests']] },
   { title: 'Legal', links: [['/terms', 'Terms of service'], ['/privacy', 'Privacy notice'], ['/cookies', 'Cookies'], ['/membership-terms', 'Membership terms']] },
 ];
 

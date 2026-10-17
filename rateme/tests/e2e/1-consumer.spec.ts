@@ -63,22 +63,22 @@ test('one review per person per business', async ({ page }) => {
   await expect(page.getByText(/already reviewed this business/)).toBeVisible();
 });
 
-test('reviews containing personal information are held for a moderator', async ({ page }) => {
+test('personal information is blocked at submission — automatically, before anything is saved', async ({ page }) => {
   await page.goto('/business/nolans-e2e-bakery/review');
   await fillReview(page, { stars: 5, title: 'Ask for Mary', body: 'Call Mary on 087 123 4567, she is great', name: 'Pat', email: 'pat@example.ie' });
-  await page.goto(await emailLink('pat@example.ie', 'review_confirm'));
-  await page.getByRole('button', { name: 'Yes, publish my review' }).click();
-  await expect(page.getByText(/moderator is checking it/)).toBeVisible();
-  await page.goto('/business/nolans-e2e-bakery');
-  await expect(page.getByText('Ask for Mary')).toHaveCount(0);
-  const [r] = await db`select status, hold_reasons from reviews where reviewer_email = 'pat@example.ie'`;
-  expect(r.status).toBe('held');
-  expect(r.hold_reasons).toContain('contact_details');
+  await expect(page.getByText(/remove phone numbers and email addresses/).first()).toBeVisible();
+  const rows = await db`select 1 from reviews where reviewer_email = 'pat@example.ie'`;
+  expect(rows.length).toBe(0);
 });
 
 test('reviewer can manage and withdraw their review', async ({ page }) => {
-  await page.goto(await emailLink('pat@example.ie', 'review_status'));
-  await expect(page.getByText('Being checked by a moderator')).toBeVisible();
+  await page.goto('/business/nolans-e2e-bakery/review');
+  await fillReview(page, { stars: 3, title: 'Grand', body: 'Decent scones.', name: 'Seán', email: 'sean@example.ie' });
+  await page.goto(await emailLink('sean@example.ie', 'review_confirm'));
+  await page.getByRole('button', { name: 'Yes, publish my review' }).click();
+  await expect(page.getByText('your review is now published')).toBeVisible();
+  await page.goto(await emailLink('sean@example.ie', 'review_status'));
+  await expect(page.getByText('Status: Published')).toBeVisible();
   await page.getByRole('button', { name: 'Withdraw review' }).click();
   await expect(page.getByText('has been withdrawn')).toBeVisible();
 });
@@ -91,7 +91,7 @@ test('report a problematic review', async ({ page }) => {
   await page.getByLabel(/Details/).fill('Mentions a staff member by full name.');
   await page.waitForTimeout(2600);
   await page.getByRole('button', { name: 'Send report' }).click();
-  await expect(page.getByText('your report has been sent')).toBeVisible();
+  await expect(page.getByText('your report has been recorded')).toBeVisible();
   const [r] = await db`select count(*)::int n from reports where kind = 'review' and reason = 'personal_info'`;
   expect(r.n).toBe(1);
   // Reporting does not remove the review

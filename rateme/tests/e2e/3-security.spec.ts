@@ -57,7 +57,7 @@ test('ordinary members cannot use admin; moderators cannot use admin-only tools'
   await page.context().clearCookies();
   await login(page, 'mod@e2e.rateme.test', 'moderator-password-1');
   await page.goto('/admin');
-  await expect(page.getByRole('heading', { name: 'Work queues' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Overview' })).toBeVisible();
   await page.goto('/admin/pricing');
   await expect(page).toHaveURL(/\/dashboard\?denied=1/);
 });
@@ -96,43 +96,6 @@ test('private pages are not indexable; previews block all crawlers', async ({ re
   const home = await request.get('/');
   expect(home.headers()['content-security-policy']).toContain("frame-ancestors 'none'");
   expect(home.headers()['x-powered-by']).toBeUndefined();
-});
-
-test('moderation: held reviews need a decision; rejection needs a policy reason; all logged', async ({ page }) => {
-  await login(page, 'mod@e2e.rateme.test', 'moderator-password-1');
-  const [held] = await db`select id from reviews where status = 'held' order by created_at limit 1`;
-  await page.goto(`/admin/reviews/${held.id}`);
-  await page.getByRole('button', { name: 'Reject' }).click();
-  await expect(page.getByText('Choose a policy reason')).toBeVisible();
-  await page.getByLabel('Policy reason (for reject/remove)').selectOption('Conflict of interest (owner, staff, competitor or connected person)');
-  await page.getByRole('button', { name: 'Reject' }).click();
-  await expect(page.getByText('Decision recorded.')).toBeVisible();
-  const [r] = await db`select status from reviews where id = ${held.id}`;
-  expect(r.status).toBe('rejected');
-  const log = await db`select action, actor_user_id from moderation_actions where review_id = ${held.id} and action = 'moderator_rejected'`;
-  expect(log[0].actor_user_id).toBeTruthy();
-  await expect(page.getByText(/moderator_rejected/)).toBeVisible();
-});
-
-test('business disputes do not remove a review until a moderator upholds them', async ({ page }) => {
-  await login(page, 'owner@e2e-garage.ie', 'garage-owner-pass-1');
-  await page.goto(`/dashboard/b/${garageId}/reviews`);
-  await page.getByText('Dispute this review').first().click();
-  await page.getByLabel('Reason').first().selectOption('not_a_customer');
-  await page.getByLabel('Explanation').first().fill('We have no booking under this name in September.');
-  await page.getByRole('button', { name: 'Submit dispute' }).first().click();
-  await expect(page.getByText(/Dispute submitted/)).toBeVisible();
-  const [d] = await db`select d.id, d.review_id, r.status from disputes d join reviews r on r.id = d.review_id where d.status = 'open'`;
-  expect(d.status).toBe('published');
-  await page.context().clearCookies();
-  await login(page, 'mod@e2e.rateme.test', 'moderator-password-1');
-  await page.goto(`/admin/reviews/${d.review_id}`);
-  await expect(page.getByText('Allegation by the business (not a finding)')).toBeVisible();
-  await page.getByLabel('Finding').fill('Reviewer supplied a dated invoice; experience is genuine.');
-  await page.getByRole('button', { name: /Reject dispute/ }).click();
-  await expect(page.getByText('Dispute resolved.')).toBeVisible();
-  const [after] = await db`select status from reviews where id = ${d.review_id}`;
-  expect(after.status).toBe('published');
 });
 
 test('admin can change pricing centrally', async ({ page }) => {

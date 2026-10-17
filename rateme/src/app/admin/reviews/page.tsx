@@ -5,16 +5,16 @@ import { Stars } from '@/components/Stars';
 import { formatDate } from '@/lib/format';
 import { HOLD_REASON_LABELS, type HoldReason } from '@/lib/screening';
 
-const FILTERS: Record<string, string> = { held: 'Held', reported: 'Reported', disputed: 'Disputed', appealed: 'Appealed', published: 'Published', rejected: 'Rejected', removed: 'Removed', pending_confirmation: 'Unconfirmed' };
+const FILTERS: Record<string, string> = { disputed: 'Awaiting reconfirmation', reported: 'Reported', published: 'Published', rejected: 'Rejected', removed: 'Removed', pending_confirmation: 'Unconfirmed' };
 
 export default async function AdminReviews({ searchParams }: { searchParams: Promise<{ status?: string; q?: string }> }) {
   await requireStaff();
-  const { status = 'held', q } = await searchParams;
+  const { status = 'disputed', q } = await searchParams;
   const cond =
     status === 'reported' ? sql`r.id in (select review_id from reports where status = 'open' and review_id is not null)`
     : status === 'disputed' ? sql`r.id in (select review_id from disputes where status = 'open')`
     : status === 'appealed' ? sql`r.id in (select review_id from appeals where status = 'open')`
-    : sql`r.status = ${FILTERS[status] ? status : 'held'}`;
+    : sql`r.status = ${FILTERS[status] ? status : 'published'}`;
   const rows = await sql<{ id: string; rating: number; title: string | null; body: string | null; status: string; hold_reasons: string[]; created_at: Date; business: string; reports: number }[]>`
     select r.id, r.rating, r.title, r.body, r.status, r.hold_reasons, r.created_at, b.name business,
       (select count(*)::int from reports p where p.review_id = r.id and p.status = 'open') reports
@@ -24,7 +24,7 @@ export default async function AdminReviews({ searchParams }: { searchParams: Pro
   return (
     <div>
       <h1 className="text-3xl font-semibold">Review moderation</h1>
-      <p className="mt-1 text-sm text-muted">Oldest first. Decide on policy grounds only — never on star rating or on whether the business is a paying member.</p>
+      <p className="mt-1 text-sm text-muted">Monitoring view. Decisions are automatic; manual overrides are optional and logged.</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {Object.entries(FILTERS).map(([k, v]) => <Link key={k} href={`/admin/reviews?status=${k}`} className={`badge px-3 py-1.5 ${status === k ? 'badge-sea' : 'badge-muted'}`}>{v}</Link>)}
       </div>
