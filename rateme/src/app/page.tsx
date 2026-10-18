@@ -117,7 +117,7 @@ export default async function Home() {
       <div className="mt-24"><ProductShowcase /></div>
 
       <section className="container-x mt-20" aria-labelledby="biz">
-        <div className="grid items-start gap-10 lg:grid-cols-[1.15fr_1fr]">
+        <div className="grid items-start gap-10 lg:grid-cols-[1.15fr_1fr] [&>*]:min-w-0">
           <div>
             <p className="eyebrow">For Irish businesses</p>
             <h2 id="biz" className="mt-2 text-3xl font-bold sm:text-4xl">One membership. Your profile, QR card and dashboard.</h2>
@@ -126,7 +126,7 @@ export default async function Home() {
               their published review appears on your profile — helping the next customer choose you.
               {plan ? ` All for ${formatEuro(plan.amount_cents)} a year.` : ''}
             </p>
-            <div className="relative mt-8 grid grid-cols-[1fr_auto] items-center gap-4 rounded-3xl bg-paper-2/70 p-4 sm:p-6" inert aria-hidden="true">
+            <div className="relative mt-8 hidden grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:grid rounded-3xl bg-paper-2/70 p-4 sm:p-6" inert aria-hidden="true">
               <div className="space-y-4 [&_.card]:text-[13px]"><div className="max-h-56 overflow-hidden rounded-2xl"><ProfilePreview /></div><div className="hidden max-h-44 overflow-hidden rounded-2xl sm:block"><DashboardPreview /></div></div>
               <div className="w-32 sm:w-44"><QrCardPreview compact /></div>
               <span className="absolute right-3 top-3"><SampleTag /></span>

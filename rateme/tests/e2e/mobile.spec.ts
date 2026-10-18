@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-for (const p of ['/', '/search?q=bakery', '/business/nolans-e2e-bakery', '/business/nolans-e2e-bakery/review', '/for-business', '/privacy', '/register', '/categories']) {
+for (const p of ['/how-it-works', '/', '/search?q=bakery', '/business/nolans-e2e-bakery', '/business/nolans-e2e-bakery/review', '/for-business', '/privacy', '/register', '/categories']) {
   test(`mobile layout has no horizontal scroll: ${p}`, async ({ page }) => {
     await page.goto(p);
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    // Compare with the device width: on mobile emulation innerWidth grows to fit overflowing content.
+    const width = page.viewportSize()!.width;
+    const overflow = await page.evaluate((w) => document.documentElement.scrollWidth - w, width);
     expect(overflow).toBeLessThanOrEqual(0);
   });
 }
