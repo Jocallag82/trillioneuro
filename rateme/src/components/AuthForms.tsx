@@ -35,7 +35,7 @@ export function RegisterForm({ intent }: { intent?: string }) {
       <label className="field"><span className="label">Your name</span><input name="display_name" className="input" autoComplete="name" required maxLength={80} /></label>
       <label className="field"><span className="label">Email</span><input name="email" type="email" className="input" autoComplete="email" required /><span className="hint">Use your business email if you have one (e.g. you@yourbusiness.ie) — it can verify ownership instantly.</span></label>
       <label className="field"><span className="label">Password</span><input name="password" type="password" className="input" autoComplete="new-password" required minLength={10} /><span className="hint">At least 10 characters.</span></label>
-      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="terms" value="yes" required className="mt-0.5 h-4 w-4 accent-[#0d5c61]" />
+      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="terms" value="yes" required className="mt-0.5 h-4 w-4 accent-[#1d4a35]" />
         <span>I agree to the <Link className="text-sea underline" href="/terms" target="_blank">terms of service</Link> and have read the <Link className="text-sea underline" href="/privacy" target="_blank">privacy notice</Link>.</span></label>
       <SubmitButton className="btn btn-primary w-full" pendingText="Creating account…">Create account</SubmitButton>
     </form>

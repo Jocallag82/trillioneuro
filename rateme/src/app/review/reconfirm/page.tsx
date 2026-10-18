@@ -33,7 +33,7 @@ export default async function Reconfirm({ searchParams }: { searchParams: Promis
             <blockquote className="mt-4 rounded-xl bg-paper p-4 text-sm"><Stars value={d.rating} size={13} />{d.title && <p className="mt-2 font-semibold">{d.title}</p>}{d.body && <p className="mt-1 text-ink-2">{d.body}</p>}</blockquote>
             <form action={reconfirmAction} className="mt-5 space-y-3">
               <input type="hidden" name="token" value={token} />
-              <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="confirm" value="yes" required className="mt-0.5 h-4 w-4 accent-[#0d5c61]" />
+              <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="confirm" value="yes" required className="mt-0.5 h-4 w-4 accent-[#1d4a35]" />
                 <span>I confirm this review describes my own genuine experience and I have no connection to the business or its competitors.</span></label>
               <SubmitButton className="btn btn-primary w-full" pendingText="Saving…">Yes — keep my review published</SubmitButton>
             </form>

@@ -11,7 +11,7 @@ export function Stars({ value, size = 18, label }: { value: number; size?: numbe
           <span key={i} className="relative inline-block overflow-hidden rounded-[5px] bg-paper-2" style={{ width: size + 6, height: size + 6 }}>
             <span className="absolute inset-y-0 left-0 bg-gorse" style={{ width: `${fill * 100}%` }} />
             <svg viewBox="0 0 24 24" width={size} height={size} className="absolute" style={{ left: 3, top: 3 }} aria-hidden="true">
-              <path d={STAR} fill={fill > 0 ? '#10202b' : '#b9b1a3'} />
+              <path d={STAR} fill={fill > 0 ? '#16211b' : '#b9b1a3'} />
             </svg>
           </span>
         );

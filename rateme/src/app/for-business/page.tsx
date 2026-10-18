@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { publicPlan } from '@/lib/membership';
 import { MembershipCard } from '@/components/MembershipCard';
 import { Faq } from '@/components/Faq';
+import { ProductShowcase } from '@/components/ProductShowcase';
 import { formatEuro } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
@@ -44,7 +45,9 @@ export default async function ForBusiness() {
         <MembershipCard plan={plan} />
       </section>
 
-      <section className="container-x mt-6">
+      <ProductShowcase />
+
+      <section className="container-x mt-16">
         <div className="card grid gap-6 p-6 sm:p-8 md:grid-cols-3">
           {[
             ['Fair for everyone', 'You can’t buy a better rating — and neither can your competitors. That’s exactly why customers trust what they read.'],

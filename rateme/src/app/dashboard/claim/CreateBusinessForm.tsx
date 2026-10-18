@@ -18,7 +18,7 @@ export function CreateBusinessForm({ fields }: { fields: ReactNode }) {
       )}
       {fields}
       <label className="flex items-start gap-3 rounded-xl border border-line bg-white p-4 text-sm">
-        <input type="checkbox" name="authority" value="yes" required className="mt-0.5 h-4 w-4 accent-[#0d5c61]" />
+        <input type="checkbox" name="authority" value="yes" required className="mt-0.5 h-4 w-4 accent-[#1d4a35]" />
         <span>I own or am authorised to manage this business, it’s a legitimate business operating in the Republic of Ireland, and the details are accurate.</span>
       </label>
       <SubmitButton pendingText="Creating…">Create listing and verify</SubmitButton>

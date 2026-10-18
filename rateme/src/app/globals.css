@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #10202b;
-  --color-ink-2: #2b3a46;
-  --color-muted: #59656f;
-  --color-paper: #f7f4ee;
-  --color-paper-2: #efe9df;
-  --color-line: #e2dbcf;
+  --color-ink: #16211b;
+  --color-ink-2: #34413a;
+  --color-muted: #5b655f;
+  --color-paper: #f8f6f1;
+  --color-paper-2: #eeeae1;
+  --color-line: #e1dcd1;
   --color-surface: #ffffff;
-  --color-sea: #0d5c61;
-  --color-sea-2: #0a4a4e;
-  --color-sea-soft: #e2efed;
-  --color-gorse: #f2b70f;
-  --color-gorse-soft: #fdf3d3;
+  --color-sea: #1d4a35;
+  --color-sea-2: #133526;
+  --color-sea-soft: #e7efe9;
+  --color-gorse: #e9a514;
+  --color-gorse-soft: #fbf0d6;
   --color-danger: #b3261e;
   --color-danger-soft: #fbe9e7;
   --color-ok: #1f6b3a;
   --color-ok-soft: #e5f2e8;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display: var(--font-figtree), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --radius-card: 1.1rem;
 }
@@ -26,7 +26,11 @@
 html { -webkit-text-size-adjust: 100%; }
 body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); }
 
-h1, h2, h3, .display { font-family: var(--font-display); font-optical-sizing: auto; letter-spacing: -0.015em; }
+h1, h2, h3, .display { font-family: var(--font-display); letter-spacing: -0.022em; text-wrap: balance; }
+h1 { font-weight: 750; }
+.eyebrow { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--color-sea); }
+.sample-tag { display: inline-flex; align-items: center; gap: .35rem; border-radius: 999px; background: var(--color-gorse-soft); color: #6b4f00; border: 1px dashed #c99a2e; padding: .15rem .6rem; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.shadow-float { box-shadow: 0 1px 2px rgba(22,33,27,.06), 0 24px 48px -28px rgba(22,33,27,.35); }
 
 :focus-visible { outline: 3px solid var(--color-gorse); outline-offset: 2px; border-radius: 6px; }
 
@@ -46,7 +50,7 @@ a { text-underline-offset: 3px; }
 .btn-ink { background: var(--color-ink); color: #fff; }
 .btn-ink:hover { background: var(--color-ink-2); }
 .btn-gorse { background: var(--color-gorse); color: var(--color-ink); }
-.btn-gorse:hover { background: #e3aa06; }
+.btn-gorse:hover { background: #d4940c; }
 .btn-ghost { background: transparent; color: var(--color-ink); border: 1px solid var(--color-line); }
 .btn-ghost:hover { background: var(--color-paper-2); }
 .btn-danger { background: var(--color-danger); color: #fff; }
@@ -94,6 +98,11 @@ a { text-underline-offset: 3px; }
 @media (prefers-reduced-motion: no-preference) {
   .rise { animation: rise .45s ease-out both; }
   @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  /* Three-step flow: each step is highlighted in turn. All content is visible without this. */
+  .flow-step { animation: flow-pulse 9s ease-in-out infinite both; }
+  .flow-step:nth-child(2) { animation-delay: 3s; }
+  .flow-step:nth-child(3) { animation-delay: 6s; }
+  @keyframes flow-pulse { 0%, 30% { border-color: var(--color-sea); box-shadow: 0 0 0 3px var(--color-sea-soft); } 36%, 100% { border-color: var(--color-line); box-shadow: none; } }
 }
 
 @media print {

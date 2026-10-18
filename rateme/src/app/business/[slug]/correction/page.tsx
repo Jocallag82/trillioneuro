@@ -37,7 +37,7 @@ export default async function Correction({ params, searchParams }: { params: Pro
           <fieldset className="space-y-2">
             <legend className="mb-2 font-semibold">What’s wrong?</legend>
             {Object.entries(CORRECTION_REASONS).map(([k, v]) => (
-              <label key={k} className="flex items-center gap-3 rounded-xl border border-line bg-white p-3"><input type="radio" name="reason" value={k} required className="h-4 w-4 accent-[#0d5c61]" />{v}</label>
+              <label key={k} className="flex items-center gap-3 rounded-xl border border-line bg-white p-3"><input type="radio" name="reason" value={k} required className="h-4 w-4 accent-[#1d4a35]" />{v}</label>
             ))}
           </fieldset>
           <label className="field"><span className="label">Details</span><textarea name="details" className="textarea" required minLength={5} maxLength={2000} /></label>

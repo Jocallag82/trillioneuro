@@ -75,7 +75,7 @@ export default async function Membership({ params, searchParams }: { params: Pro
               ) : (
                 <form action={startCheckout} className="mt-5 space-y-3">
                   <input type="hidden" name="id" value={id} />
-                  <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="agree" value="yes" required className="mt-0.5 h-4 w-4 accent-[#0d5c61]" />
+                  <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="agree" value="yes" required className="mt-0.5 h-4 w-4 accent-[#1d4a35]" />
                     <span>I agree to the <Link className="text-sea underline" href="/membership-terms" target="_blank">membership terms</Link>, including automatic annual renewal until I cancel, and I understand membership doesn’t affect ratings.</span></label>
                   <SubmitButton className="btn btn-primary w-full text-base" pendingText="Opening secure checkout…">Continue to secure payment</SubmitButton>
                   <p className="text-xs text-muted">You’ll pay on Stripe’s secure checkout page. We never see or store your card details.</p>

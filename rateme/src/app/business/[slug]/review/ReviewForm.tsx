@@ -51,7 +51,7 @@ export function ReviewForm({ businessId, businessName, source, months, experienc
               <label key={n} className="cursor-pointer" onMouseEnter={() => setHover(n)}>
                 <input type="radio" name="rating" value={n} className="peer sr-only" checked={rating === n} onChange={() => setRating(n)} aria-label={`${n} star${n > 1 ? 's' : ''} — ${LABELS[n]}`} />
                 <span className={`grid h-12 w-12 place-items-center rounded-xl border-2 transition peer-focus-visible:ring-4 peer-focus-visible:ring-gorse/60 sm:h-14 sm:w-14 ${active ? 'border-gorse bg-gorse' : 'border-line bg-white'}`}>
-                  <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M12 2.8l2.8 5.7 6.3.9-4.6 4.5 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.4l6.3-.9L12 2.8z" fill={active ? '#10202b' : '#c9c1b3'} /></svg>
+                  <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M12 2.8l2.8 5.7 6.3.9-4.6 4.5 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.4l6.3-.9L12 2.8z" fill={active ? '#16211b' : '#c9c1b3'} /></svg>
                 </span>
               </label>
             );
@@ -109,7 +109,7 @@ export function ReviewForm({ businessId, businessName, source, months, experienc
       </div>
 
       <label className="flex items-start gap-3 rounded-xl border border-line bg-white p-4">
-        <input type="checkbox" name="declaration" value="yes" className="mt-1 h-5 w-5 accent-[#0d5c61]" required aria-invalid={!!fe.declaration} />
+        <input type="checkbox" name="declaration" value="yes" className="mt-1 h-5 w-5 accent-[#1d4a35]" required aria-invalid={!!fe.declaration} />
         <span className="text-sm leading-relaxed">
           <strong>I confirm this review is based on my own genuine experience</strong> with {businessName}. I’m not the owner, an employee,
           a relative or a competitor, and I haven’t been offered anything in return for this review.

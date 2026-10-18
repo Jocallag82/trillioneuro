@@ -5,7 +5,6 @@ import { SiteFooter } from '@/components/SiteFooter';
 import { siteUrl } from '@/lib/site';
 import './globals.css';
 
-const fraunces = localFont({ src: '../fonts/fraunces.woff2', variable: '--font-fraunces', weight: '300 900', display: 'swap' });
 const figtree = localFont({ src: '../fonts/figtree.woff2', variable: '--font-figtree', weight: '300 900', display: 'swap' });
 
 export const metadata: Metadata = {
@@ -17,11 +16,11 @@ export const metadata: Metadata = {
   icons: { icon: '/icon.svg' },
 };
 
-export const viewport: Viewport = { themeColor: '#0d5c61', width: 'device-width', initialScale: 1 };
+export const viewport: Viewport = { themeColor: '#1d4a35', width: 'device-width', initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IE" className={`${fraunces.variable} ${figtree.variable}`}>
+    <html lang="en-IE" className={figtree.variable}>
       <body className="min-h-screen antialiased">
         <a href="#main" className="skip-link">Skip to content</a>
         <SiteHeader />

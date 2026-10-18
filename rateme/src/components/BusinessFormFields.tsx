@@ -51,7 +51,7 @@ export function BusinessFormFields({ cats, counties, localities, d = {}, errors 
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="field"><span className="label">Eircode <span className="font-normal text-muted">(optional)</span></span><input name="eircode" className="input uppercase" maxLength={10} defaultValue={d.eircode ?? ''} placeholder="D02 X285" /><Err e={errors.eircode} /></label>
             <label className="flex items-start gap-3 self-end rounded-xl border border-line bg-white p-3 text-sm">
-              <input type="checkbox" name="show_address" defaultChecked={!!d.show_address} className="mt-0.5 h-4 w-4 accent-[#0d5c61]" />
+              <input type="checkbox" name="show_address" defaultChecked={!!d.show_address} className="mt-0.5 h-4 w-4 accent-[#1d4a35]" />
               <span><strong>Show street address publicly.</strong> Leave unticked if you work from home — we’ll only show your town and county.</span>
             </label>
           </div>

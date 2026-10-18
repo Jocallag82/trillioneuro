@@ -59,7 +59,7 @@ export default async function ManageReview({ searchParams }: { searchParams: Pro
           <input type="hidden" name="token" value={token} />
           <h2 className="font-sans text-lg font-bold tracking-normal">{canRestore ? 'Restore your review' : 'Reconfirm your review'}</h2>
           <p className="mt-1 text-sm text-ink-2">Confirm this is your own genuine experience and the review {canRestore ? 'is published again' : 'stays published'}. No one at RateMe.ie needs to approve it.</p>
-          <label className="mt-3 flex items-start gap-3 text-sm"><input type="checkbox" name="confirm" value="yes" required className="mt-0.5 h-4 w-4 accent-[#0d5c61]" /><span>I confirm this is my own genuine experience.</span></label>
+          <label className="mt-3 flex items-start gap-3 text-sm"><input type="checkbox" name="confirm" value="yes" required className="mt-0.5 h-4 w-4 accent-[#1d4a35]" /><span>I confirm this is my own genuine experience.</span></label>
           <SubmitButton className="btn btn-primary mt-3" pendingText="Saving…">{canRestore ? 'Restore my review' : 'Keep my review published'}</SubmitButton>
         </form>
       )}

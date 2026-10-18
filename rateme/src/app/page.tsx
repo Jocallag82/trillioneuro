@@ -5,6 +5,7 @@ import { CategoryIcon } from '@/components/CategoryIcon';
 import { BusinessCard } from '@/components/BusinessCard';
 import { Faq } from '@/components/Faq';
 import { MembershipCard } from '@/components/MembershipCard';
+import { ProductShowcase, ReviewFlow, ProfilePreview, QrCardPreview, DashboardPreview, SampleTag } from '@/components/ProductShowcase';
 import { getCategories, topLevel } from '@/lib/catalog';
 import { recentlyReviewed, platformCounts } from '@/lib/businesses';
 import { publicPlan } from '@/lib/membership';
@@ -18,15 +19,11 @@ export default async function Home() {
   const tops = topLevel(cats);
   return (
     <>
-      <section className="relative overflow-hidden">
-        <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 h-[34rem] w-[34rem] rounded-full bg-sea-soft blur-2xl" />
-        <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-60 h-72 w-72 rounded-full bg-gorse-soft blur-2xl" />
-        <div className="container-x relative pb-16 pt-14 sm:pt-20">
-          <p className="rise mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-sm font-medium text-ink-2">
-            <span className="h-2 w-2 rounded-full bg-gorse" aria-hidden="true" /> Irish businesses, rated by their customers
-          </p>
-          <h1 className="rise max-w-3xl text-[2.6rem] font-semibold leading-[1.05] sm:text-6xl">
-            Choose Irish businesses <span className="italic text-sea">with confidence.</span>
+      <section className="border-b border-line bg-paper">
+        <div className="container-x pb-14 pt-12 sm:pb-20 sm:pt-20">
+          <p className="rise eyebrow">Irish businesses, rated by their customers</p>
+          <h1 className="rise mt-4 max-w-3xl text-[2.5rem] leading-[1.04] text-ink sm:text-[4.1rem]">
+            Choose Irish businesses <span className="text-sea">with confidence.</span>
           </h1>
           <p className="rise mt-5 max-w-2xl text-lg leading-relaxed text-ink-2 sm:text-xl">
             Discover local businesses, share your own experience and help people choose well. Ratings come from customers who
@@ -37,10 +34,16 @@ export default async function Home() {
             Free for customers. No account needed to start a rating.{' '}
             <Link href="/how-it-works" className="font-medium text-sea underline">How ratings work</Link>
           </p>
+          <p className="mt-10 inline-flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-line pt-5 text-sm text-ink-2">
+            <span>Own a business?</span>
+            <Link href="#product" className="font-semibold text-sea hover:underline">See what members get</Link>
+            <span aria-hidden="true" className="text-line">|</span>
+            <Link href="/dashboard/claim" className="font-semibold text-sea hover:underline">Claim your listing</Link>
+          </p>
         </div>
       </section>
 
-      <section className="container-x" aria-labelledby="cats">
+      <section className="container-x mt-16" aria-labelledby="cats">
         <div className="flex items-end justify-between gap-4">
           <h2 id="cats" className="text-2xl font-semibold sm:text-3xl">Browse by category</h2>
           <Link href="/categories" className="text-sm font-semibold text-sea hover:underline">All categories</Link>
@@ -81,29 +84,12 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="mt-24 bg-ink py-20 text-white" aria-labelledby="how">
-        <div className="container-x">
-          <h2 id="how" className="text-3xl font-semibold sm:text-4xl">Rating a business takes about a minute</h2>
-          <ol className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              ['Find it or scan it', 'Search for the business, or scan the RateMe QR code on their counter, receipt or van.'],
-              ['Rate your experience', 'Choose 1 to 5 stars, add a few words if you like, and tell us roughly when it happened.'],
-              ['Confirm it’s you', 'We email you a link to confirm. Your email address is never published.'],
-            ].map(([t, d], i) => (
-              <li key={t} className="rounded-2xl border border-white/10 bg-white/[.04] p-6">
-                <span className="display text-4xl text-gorse">{i + 1}</span>
-                <p className="mt-3 text-lg font-semibold text-white">{t}</p>
-                <p className="mt-2 leading-relaxed text-white/70">{d}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      <ReviewFlow />
 
       <section className="container-x mt-20" aria-labelledby="trust">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[.12em] text-sea">Our trust rules</p>
+            <p className="eyebrow">Our trust rules</p>
             <h2 id="trust" className="mt-2 text-3xl font-semibold sm:text-4xl">Fair to customers. Fair to businesses.</h2>
             <p className="mt-4 text-lg text-ink-2">
               Businesses pay for membership tools — not for better ratings. These rules apply to every business, whether it pays or not.
@@ -128,23 +114,26 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="container-x mt-24" aria-labelledby="biz">
-        <div className="grid items-start gap-10 lg:grid-cols-2">
+      <div className="mt-24"><ProductShowcase /></div>
+
+      <section className="container-x mt-20" aria-labelledby="biz">
+        <div className="grid items-start gap-10 lg:grid-cols-[1.15fr_1fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[.12em] text-sea">For Irish businesses</p>
-            <h2 id="biz" className="mt-2 text-3xl font-semibold sm:text-4xl">Turn happy customers into your best advertising</h2>
+            <p className="eyebrow">For Irish businesses</p>
+            <h2 id="biz" className="mt-2 text-3xl font-bold sm:text-4xl">One membership. Your profile, QR card and dashboard.</h2>
             <p className="mt-4 text-lg leading-relaxed text-ink-2">
-              Put your QR code on the counter, a receipt or the back of the van. Customers scan, rate in under a minute and
-              their experience appears on your profile — helping the next customer choose you.
+              Put your QR code on the counter, an invoice or the back of the van. Customers scan, rate in about a minute and
+              their published review appears on your profile — helping the next customer choose you.
+              {plan ? ` All for ${formatEuro(plan.amount_cents)} a year.` : ''}
             </p>
-            <ul className="mt-6 space-y-2 text-ink-2">
-              <li>• Plumbers, garages, cafés, salons, shops, accountants — any legitimate Irish business</li>
-              <li>• One simple annual price{plan ? ` — ${formatEuro(plan.amount_cents)} a year` : ''}</li>
-              <li>• Ownership checks protect your listing from impostors</li>
-            </ul>
+            <div className="relative mt-8 grid grid-cols-[1fr_auto] items-center gap-4 rounded-3xl bg-paper-2/70 p-4 sm:p-6" inert aria-hidden="true">
+              <div className="space-y-4 [&_.card]:text-[13px]"><div className="max-h-56 overflow-hidden rounded-2xl"><ProfilePreview /></div><div className="hidden max-h-44 overflow-hidden rounded-2xl sm:block"><DashboardPreview /></div></div>
+              <div className="w-32 sm:w-44"><QrCardPreview compact /></div>
+              <span className="absolute right-3 top-3"><SampleTag /></span>
+            </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/for-business" className="btn btn-primary">See how membership works</Link>
-              <Link href="/dashboard/claim" className="btn btn-ghost">Claim your business</Link>
+              <Link href="/dashboard/claim" className="btn btn-ghost text-base">Claim your business</Link>
+              <Link href="/for-business" className="btn btn-ghost text-base">How membership works</Link>
             </div>
           </div>
           <MembershipCard plan={plan} />
