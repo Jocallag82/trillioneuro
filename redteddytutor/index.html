@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Red Teddy Tutor — free learning from age 1 to grade 12</title>
+<title>Red Teddy Tutor — learning for preschool, primary and high school</title>
 <meta name="description" content="Free, no-sign-up learning activities for ages 1 to kindergarten, then lessons, adaptive practice and a tutor that helps students think through grade 12. Math, English, science, social studies and computer science, mapped to related Common Core and NGSS standards, with a parent view built from real answers.">
 <link rel="canonical" href="https://www.redteddytutor.com/">
 <meta property="og:type" content="website">
@@ -22,13 +22,13 @@
 <meta name="twitter:image" content="https://www.redteddytutor.com/og-image.jpg">
 <meta name="theme-color" content="#0e1830">
 <link rel="icon" href="/teddy-mark.webp" type="image/webp">
-<link rel="preload" as="image" href="/hero.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&display=swap">
 <link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/paths.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"Red Teddy Tutor","url":"https://www.redteddytutor.com/","inLanguage":"en"}
+{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"Red Teddy Tutor","url":"https://www.redteddytutor.com/","inLanguage":"en"},{"@type":"Organization","name":"Red Teddy Tutor","url":"https://www.redteddytutor.com/","logo":"https://www.redteddytutor.com/teddy-mark.webp"}]}
 </script>
 </head>
 <body>
@@ -43,9 +43,9 @@
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav id="nav" aria-label="Main">
       <ul>
-        <li><a href="/early-years">Ages 1–6</a></li>
-        <li><a href="/early-years/play-zone">🎈 Play Zone</a></li>
-        <li><a href="#try">Try a question</a></li>
+        <li><a href="/preschool">Preschool</a></li>
+        <li><a href="/primary">Primary</a></li>
+        <li><a href="/high-school">High School</a></li>
         <li><a href="/curriculum">Curriculum</a></li>
         <li><a href="#parents">For parents</a></li>
         <li><a href="#plans">Plans</a></li>
@@ -58,45 +58,76 @@
 
 <main id="main">
 
-<section class="hero" aria-labelledby="hero-h">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="eyebrow">Ages 1 to Grade 12 · Free early years · Math · Reading · Science</p>
-      <h1 id="hero-h">Practice that notices what your child <em>nearly</em> knows.</h1>
-      <p class="lead">A short lesson, then practice that starts at the right level, gives a hint instead of the answer, spots the mistake behind a wrong answer and brings skills back before they fade. When something doesn’t click, your child can ask Red Teddy.</p>
-      <div class="cta-row">
-        <a class="btn btn-red btn-lg" href="/learn/">Start learning — free</a>
-        <a class="btn btn-ghost btn-lg" href="#try">Try a real question</a>
+<section class="paths-hero" id="paths" aria-labelledby="hero-h">
+  <div class="wrap">
+    <div class="ph-top">
+      <div>
+        <p class="eyebrow">Preschool · Primary School · High School</p>
+        <h1 id="hero-h">Big discoveries start small. <em>Big goals start here.</em></h1>
+        <p class="lead">A smarter, friendlier way for children to learn, practise and grow — with a learning experience suited to their stage.</p>
       </div>
-      <p class="cta-row"><a class="btn btn-ghost" href="/early-years/play-zone">🎈 Play Zone: games for ages 1–5</a> <a class="btn btn-ghost" href="/early-years/stickers">⭐ Sticker book</a></p>
-      <ul class="hero-facts" aria-label="Before you start">
-        <li>Ages 1–6 always free</li>
-        <li>No account needed</li>
-        <li>No adverts</li>
-        <li>Phone, tablet or computer</li>
-      </ul>
-      <button type="button" class="meet" data-welcome aria-describedby="meet-note">
-        <span class="meet-thumb">
-          <img src="/media/red-teddy-welcome-poster-640.webp" width="640" height="360" alt="" decoding="async">
-          <span class="meet-play" aria-hidden="true"></span>
-        </span>
-        <span class="meet-text">
-          <strong><span class="meet-first">Meet Red Teddy</span><span class="meet-again">Watch Red Teddy’s hello again</span></strong>
-          <span id="meet-note" class="meet-note">A 10-second hello. Sound plays only when you press play.</span>
-        </span>
-      </button>
+      <img class="ph-teddy" src="/teddy-mark.webp" width="150" height="150" alt="" fetchpriority="high">
     </div>
-    <figure class="hero-art">
-      <img src="/hero.webp" width="1376" height="768" alt="Red Teddy, a deep-red teddy bear in a navy scarf, at a desk with an open book among bookshelves." fetchpriority="high">
-    </figure>
+
+    <ul class="path-grid" aria-label="Choose a learning stage">
+      <li class="path-card pc-pre" id="pc-pre">
+        <svg class="pc-art" viewBox="0 0 120 120" aria-hidden="true"><circle cx="70" cy="50" r="38" fill="#f6c34a"/><rect x="18" y="66" width="34" height="34" rx="6" fill="#5f9b4c"/><path d="M92 72l20 36H72z" fill="#e0632f"/></svg>
+        <span class="pc-stage">Preschool · getting ready for school</span>
+        <h2>Little learners. Big discoveries.</h2>
+        <p>Playful, picture-led activities to do together. Always free, no sign-up.</p>
+        <ul><li>Counting and first numbers</li><li>Letter sounds and rhyme</li><li>Shapes, colours and patterns</li></ul>
+        <div class="pc-actions">
+          <a class="btn btn-pre pc-main" href="/preschool">Explore Preschool Learning</a>
+          <a class="btn btn-soft" href="/preschool#how">See How It Works</a>
+        </div>
+      </li>
+      <li class="path-card pc-pri" id="pc-pri">
+        <svg class="pc-art" viewBox="0 0 120 120" aria-hidden="true"><rect x="22" y="26" width="74" height="74" rx="8" fill="#e5f3f7" stroke="#1f6f8b" stroke-width="4"/><path d="M40 64l12 12 26-28" fill="none" stroke="#2f6b3a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="pc-stage">Primary School · kindergarten to grade 5</span>
+        <h2>Confidence grows with every lesson.</h2>
+        <p>Reading, spelling and maths with hints and worked steps, not just answers.</p>
+        <ul><li>Phonics, reading and spelling</li><li>Number, times tables, fractions</li><li>Homework-style word problems</li></ul>
+        <div class="pc-actions">
+          <a class="btn btn-pri pc-main" href="/primary">Explore Primary Learning</a>
+          <a class="btn btn-soft" href="/primary#example">Try a Learning Example</a>
+        </div>
+      </li>
+      <li class="path-card pc-hs" id="pc-hs">
+        <svg class="pc-art" viewBox="0 0 120 120" aria-hidden="true"><path d="M20 96 L50 60 L70 74 L102 30" fill="none" stroke="#d9a441" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="102" cy="30" r="8" fill="#d9a441"/></svg>
+        <span class="pc-stage">High School · grades 6–12</span>
+        <h2>Understand more. Achieve your potential.</h2>
+        <p>Subject explanations, step-by-step solutions and revision that plans itself.</p>
+        <ul><li>Algebra to calculus, English, science</li><li>Guided problem-solving</li><li>Spaced review before tests</li></ul>
+        <div class="pc-actions">
+          <a class="btn btn-hs pc-main" href="/high-school">Explore High School Learning</a>
+          <a class="btn btn-soft" href="/high-school#tutor">See the Tutor in Action</a>
+        </div>
+      </li>
+    </ul>
+
+    <form class="chooser" id="stage-chooser" aria-describedby="chooser-out">
+      <fieldset>
+        <legend>Not sure? Which stage is your child at?</legend>
+        <div class="opts">
+          <label><input type="radio" name="stage" value="pre"><span>Preschool / getting ready for school</span></label>
+          <label><input type="radio" name="stage" value="pri"><span>Primary school</span></label>
+          <label><input type="radio" name="stage" value="hs"><span>High school</span></label>
+          <label><input type="radio" name="stage" value="unsure"><span>Not sure yet</span></label>
+        </div>
+      </fieldset>
+      <div class="chooser-out" id="chooser-out" aria-live="polite"></div>
+    </form>
+    <ul class="hero-facts" aria-label="Before you start">
+      <li>Preschool always free</li><li>No account needed to start</li><li>No adverts</li><li>Phone, tablet or computer</li>
+    </ul>
   </div>
 </section>
 
 <section class="ages" id="ages" aria-labelledby="ages-h">
   <div class="wrap">
     <div class="sec-head">
-      <p class="eyebrow">Start here</p>
-      <h2 id="ages-h">How old is your child?</h2>
+      <p class="eyebrow">Preschool, in more detail</p>
+      <h2 id="ages-h">The early years, age by age.</h2>
       <p>Everything from age 1 to kindergarten is free, with no sign-up and no limits. Each age has short games to play together and real-world activities, with words to use and the skill each one builds.</p>
     </div>
     <ol class="age-pick">
@@ -405,6 +436,9 @@
       <p>Free early-years play for ages 1–6, and lessons with adaptive practice from kindergarten to grade 12.</p>
     </div>
     <ul class="foot-links">
+      <li><a href="/preschool">Preschool</a></li>
+      <li><a href="/primary">Primary School</a></li>
+      <li><a href="/high-school">High School</a></li>
       <li><a href="/learn/">Start learning</a></li>
       <li><a href="/early-years">Early years (ages 1–6)</a></li>
       <li><a href="/early-years/play-zone">Play Zone</a></li>
@@ -420,5 +454,6 @@
   </div>
 </footer>
 <script type="module" src="/home.js"></script>
+<script type="module" src="/paths.js"></script>
 </body>
 </html>

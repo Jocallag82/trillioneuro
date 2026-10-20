@@ -1,0 +1,493 @@
+/* Builds the three pathway pages (redteddytutor/paths/*.html) from one shared
+   shell, so the header, stage switcher and footer never drift apart.
+   Run: node scripts/build-paths.mjs */
+import { writeFileSync, mkdirSync } from 'node:fs';
+
+const OUT = new URL('../redteddytutor/paths/', import.meta.url);
+const SITE = 'https://www.redteddytutor.com';
+const STAGES = [
+  ['preschool', 'pre', 'Preschool'],
+  ['primary', 'pri', 'Primary School'],
+  ['high-school', 'hs', 'High School'],
+];
+
+const stageBar = (cur) => `<nav class="stage-bar" aria-label="Learning stages">
+  <div class="wrap"><ul>
+    <li class="sb-label" aria-hidden="true">Stage</li>
+${STAGES.map(([slug, k, name]) => `    <li><a href="/${slug}"${slug === cur ? ' aria-current="page"' : ''}><span class="dot dot-${k}" aria-hidden="true"></span>${name}</a></li>`).join('\n')}
+  </ul></div>
+</nav>`;
+
+const nextStages = (cur) => {
+  const blurb = {
+    preschool: 'Play-based early learning, done together.',
+    primary: 'Reading, spelling and maths, kindergarten to grade 5.',
+    'high-school': 'Grades 6–12: explanations, problem-solving, revision.',
+  };
+  return `<section class="pg-sec" aria-labelledby="other-h" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="other-h" style="font-size:1.6rem;margin-bottom:18px">Another stage?</h2>
+    <ul class="next-stages">
+${STAGES.filter(([s]) => s !== cur).map(([slug, , name]) => `      <li><a href="/${slug}"><b>${name} →</b><span>${blurb[slug]}</span></a></li>`).join('\n')}
+    </ul>
+  </div>
+</section>`;
+};
+
+function page({ slug, key, title, desc, ogTitle, body }) {
+  const url = `${SITE}/${slug}`;
+  const name = STAGES.find(([s]) => s === slug)[2];
+  const ld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'WebPage', name: title, url, description: desc, inLanguage: 'en', isPartOf: { '@type': 'WebSite', name: 'Red Teddy Tutor', url: `${SITE}/` } },
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+        { '@type': 'ListItem', position: 2, name, item: url },
+      ] },
+    ],
+  };
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>${title}</title>
+<meta name="description" content="${desc}">
+<link rel="canonical" href="${url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Red Teddy Tutor">
+<meta property="og:url" content="${url}">
+<meta property="og:title" content="${ogTitle}">
+<meta property="og:description" content="${desc}">
+<meta property="og:image" content="${SITE}/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Red Teddy, a red teddy bear in a scarf, studying at a desk with an open book and laptop.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${ogTitle}">
+<meta name="twitter:description" content="${desc}">
+<meta name="twitter:image" content="${SITE}/og-image.jpg">
+<meta name="theme-color" content="#0e1830">
+<link rel="icon" href="/teddy-mark.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&display=swap">
+<link rel="stylesheet" href="/home.css">
+<link rel="stylesheet" href="/paths.css">
+<script type="application/ld+json">${JSON.stringify(ld)}</script>
+</head>
+<body class="${key}" data-stage="${slug}">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Red Teddy Tutor home">
+      <img src="/teddy-mark.webp" width="40" height="40" alt="">
+      <span>Red Teddy Tutor</span>
+    </a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav" aria-label="Main">
+      <ul>
+        <li><a href="/#paths">All stages</a></li>
+        <li><a href="/curriculum">Curriculum</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/learn/account.html">Parent sign-in</a></li>
+        <li><a class="btn btn-red" href="/learn/">Start learning</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+${stageBar(slug)}
+<main id="main">
+${body}
+${nextStages(slug)}
+</main>
+<footer class="site-foot">
+  <div class="wrap foot">
+    <div>
+      <a class="brand" href="/"><img src="/teddy-mark.webp" width="40" height="40" alt=""><span>Red Teddy Tutor</span></a>
+      <p>Learning for every stage: preschool play, primary practice and high-school study.</p>
+    </div>
+    <ul class="foot-links">
+${STAGES.map(([s, , n]) => `      <li><a href="/${s}">${n}</a></li>`).join('\n')}
+      <li><a href="/learn/">Start learning</a></li>
+      <li><a href="/curriculum">Curriculum</a></li>
+      <li><a href="/learn/parent.html">Parent view</a></li>
+      <li><a href="/privacy">Privacy</a></li>
+    </ul>
+    <p class="legal">&copy; 2026 Red Teddy Tutor.</p>
+  </div>
+</footer>
+<script type="module" src="/paths.js"></script>
+</body>
+</html>
+`;
+}
+
+/* ---------------- Preschool ---------------- */
+const preschool = page({
+  slug: 'preschool', key: 'pre',
+  title: 'Preschool learning through play — Red Teddy Tutor',
+  ogTitle: 'Little learners. Big discoveries. — Red Teddy Tutor',
+  desc: 'Free, play-based early learning for preschoolers: counting, letter sounds, shapes, colours and patterns. Short activities to do together, no sign-up and no chat.',
+  body: `<section class="pg-hero" aria-labelledby="h1">
+  <div class="wrap pg-hero-grid">
+    <div>
+      <p class="crumbs"><a href="/">Home</a> / Preschool</p>
+      <p class="eyebrow">Preschool · getting ready for school</p>
+      <h1 id="h1">Little learners. Big discoveries.</h1>
+      <p class="lead">Short, picture-led activities for counting, first sounds, shapes and patterns. Made to be done together: you sit alongside, Red Teddy keeps it playful.</p>
+      <div class="cta-row">
+        <a class="btn btn-pre btn-lg" href="/early-years">Explore Preschool Learning</a>
+        <a class="btn btn-line btn-lg" href="#how">See How It Works</a>
+      </div>
+      <ul class="pg-facts">
+        <li>Always free</li><li>No sign-up</li><li>No chat or AI conversation</li><li>No adverts</li>
+      </ul>
+    </div>
+    <div class="pre-art" aria-hidden="true">
+      <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+      <img src="/hero.webp" width="1376" height="768" alt="" fetchpriority="high">
+    </div>
+  </div>
+</section>
+
+<section class="pg-sec" aria-labelledby="try-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">Try it together</p>
+      <h2 id="try-h">How many apples?</h2>
+      <p style="margin-top:14px">This is the kind of activity your child will meet: one clear question, big buttons, and gentle encouragement when they miss. Nothing to type and nothing to read alone.</p>
+      <p class="demo-note">A demonstration with fixed questions. It saves nothing.</p>
+    </div>
+    <div class="count-demo reveal" id="count-demo">
+      <span class="demo-tag">Demonstration</span>
+      <p class="q" id="count-q">Count the apples on the plate.</p>
+      <div class="apples" role="img"></div>
+      <div class="big-opts" role="group" aria-labelledby="count-q"></div>
+      <p class="fb" role="status" aria-live="polite"></p>
+      <button type="button" class="btn btn-pre" id="count-next" hidden>Another plate</button>
+      <p class="grownup"><b>For the grown-up:</b> if they guess, ask them to touch each apple as they say the number. Counting one-by-one is the skill, not getting it fast.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pg-sec" style="background:var(--paper)" aria-labelledby="what-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">What they’ll explore</p>
+      <h2 id="what-h">Five small skills that make school feel easier.</h2>
+    </div>
+    <ul class="cards3">
+      <li class="reveal"><h3>Numbers &amp; counting</h3><p>Counting objects one by one, matching numbers to amounts, and comparing which group has more. <a href="/counting-activities-for-preschoolers">Counting activities</a></p></li>
+      <li class="reveal"><h3>First sounds &amp; phonics</h3><p>Hearing the first sound in a word, rhyme, and early letter–sound links. <a href="/letter-sounds-activities">Letter-sound activities</a></p></li>
+      <li class="reveal"><h3>Shapes, colours &amp; patterns</h3><p>Naming shapes, sorting by colour, and finishing simple patterns. <a href="/shapes-activities-for-toddlers">Shape activities</a></p></li>
+      <li class="reveal"><h3>Words &amp; listening</h3><p>New vocabulary, following short instructions and talking about pictures. <a href="/rhyming-activities-for-kids">Rhyming activities</a></p></li>
+      <li class="reveal"><h3>Play &amp; problem-solving</h3><p>Memory pairs, matching and the Play Zone games for ages 1–5. <a href="/early-years/play-zone">Play Zone</a></p></li>
+      <li class="reveal"><h3>Off-screen ideas</h3><p>Every age page includes real-world activities and the words to use. <a href="/pre-k-kindergarten-readiness">Pre-K readiness</a></p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="pg-sec" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2 id="how-h">Ten minutes, side by side.</h2>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><h3>Pick their age</h3><p>Choose from ages 1–2, 2–3, 3–4 or 4–6 on the <a href="/early-years">early-years page</a>. No account, no details about your child.</p></li>
+      <li class="reveal"><h3>Play one short activity</h3><p>Instructions can be read aloud after a tap and are always shown as text. The question is carried by pictures wherever possible.</p></li>
+      <li class="reveal"><h3>Take it off-screen</h3><p>Each page suggests a real-world version (counting spoons, spotting shapes on a walk) so the screen is only the start.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="pg-sec" style="background:var(--pre-soft)" aria-labelledby="safe-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">Safety &amp; parents</p>
+      <h2 id="safe-h">Designed for a grown-up nearby.</h2>
+      <p style="margin-top:14px"><a href="/privacy">Read the privacy notice</a></p>
+    </div>
+    <ul class="trust reveal">
+      <li><strong>No AI chat for preschoolers.</strong> Activities are pre-written. Ask Red Teddy, the AI helper, is only for signed-in families with children aged 5 and up.</li>
+      <li><strong>No personal details.</strong> Nothing is asked about your child: no name, photo or birthday.</li>
+      <li><strong>No messaging, profiles or feeds.</strong> There is nothing for a child to post and no one to talk to.</li>
+      <li><strong>Sound only after a tap</strong>, every spoken line written on screen, and animation that respects reduced-motion settings.</li>
+      <li><strong>No streaks or scores.</strong> A miss gets a gentle nudge, never a penalty.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta-band" aria-labelledby="cta-h">
+  <div class="wrap">
+    <h2 id="cta-h">Ready for a first discovery?</h2>
+    <p>Free, no sign-up. Choose your child’s age and start with one short activity.</p>
+    <div class="cta-row">
+      <a class="btn btn-pre btn-lg" href="/early-years">Explore Preschool Learning</a>
+      <a class="btn btn-line btn-lg" href="/early-years/play-zone">Open the Play Zone</a>
+    </div>
+  </div>
+</section>`,
+});
+
+/* ---------------- Primary ---------------- */
+const primary = page({
+  slug: 'primary', key: 'pri',
+  title: 'Primary school maths and reading help — Red Teddy Tutor',
+  ogTitle: 'Confidence grows with every lesson — Red Teddy Tutor',
+  desc: 'Reading, spelling and maths practice for kindergarten to grade 5, with hints instead of answers, step-by-step explanations and a parent view. Free to start.',
+  body: `<section class="pg-hero" aria-labelledby="h1">
+  <div class="wrap pg-hero-grid">
+    <div>
+      <p class="crumbs"><a href="/">Home</a> / Primary School</p>
+      <p class="eyebrow">Primary school · kindergarten to grade 5</p>
+      <h1 id="h1">Confidence grows with every lesson.</h1>
+      <p class="lead">Reading, spelling and maths practice that starts at the right level. When your child gets stuck, they get a hint and a worked example, not the answer.</p>
+      <div class="cta-row">
+        <a class="btn btn-pri btn-lg" href="/learn/">Explore Primary Learning</a>
+        <a class="btn btn-line btn-lg" href="#example">Try a Learning Example</a>
+      </div>
+      <ul class="pg-facts"><li>Free to start</li><li>No account needed</li><li>No adverts</li></ul>
+    </div>
+    <div class="pri-art" aria-hidden="true">
+      <div class="sheet">
+        <div>3 × 8 = 24</div>
+        <div>24 − 5 = <s>29</s> 19 <span class="tick">✓</span></div>
+        <div style="font-size:1rem;font-family:var(--sans);font-weight:400;color:var(--mute)">“Take away makes it smaller.”</div>
+      </div>
+      <img src="/hero.webp" width="1376" height="768" alt="" fetchpriority="high">
+    </div>
+  </div>
+</section>
+
+<section class="pg-sec" id="example" aria-labelledby="ex-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">A learning example</p>
+      <h2 id="ex-h">Hints first. The method, not just the answer.</h2>
+      <p style="margin-top:14px">Try a wrong answer on purpose. Common mistakes get a reply about <em>that</em> mistake, then a hint. “Show me how” opens the worked method.</p>
+      <p class="demo-note">A demonstration with one fixed question. In the app, questions are generated for your child’s level and every first try is recorded on your device.</p>
+    </div>
+    <div class="book-demo reveal" id="pri-demo">
+      <span class="demo-tag">Demonstration · Grade 3 maths</span>
+      <p class="q" id="pri-q">Mia has 3 bags with 8 marbles in each. She gives 5 marbles to her brother. How many marbles does Mia have left?</p>
+      <form class="ans-row" novalidate>
+        <label for="pri-ans">Your answer</label>
+        <input id="pri-ans" inputmode="numeric" autocomplete="off" aria-describedby="pri-fb">
+        <button class="btn btn-pri" type="submit">Check</button>
+      </form>
+      <p class="fb" id="pri-fb" role="status" aria-live="polite"></p>
+      <ol class="hints" aria-label="Hints"></ol>
+      <div class="demo-actions2">
+        <button type="button" class="btn btn-line" id="pri-hint">Give me a hint</button>
+        <button type="button" class="btn btn-line" id="pri-how" aria-expanded="false" aria-controls="pri-worked">Show me how</button>
+      </div>
+      <div class="worked" id="pri-worked">
+        <b>A similar one, worked through</b>
+        <p>Sam has 4 boxes with 6 pencils in each. He loses 3. How many are left?</p>
+        <ol>
+          <li>Find the total first: 4 groups of 6 is 4 × 6 = 24.</li>
+          <li>“Loses” means take away: 24 − 3 = 21.</li>
+          <li>Check it makes sense: fewer than 24, so 21 is reasonable.</li>
+        </ol>
+        <p>Now try Mia’s question the same way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-sec" style="background:var(--paper)" aria-labelledby="what-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">What they’ll practise</p>
+      <h2 id="what-h">The foundations that everything else is built on.</h2>
+    </div>
+    <ul class="cards3">
+      <li class="reveal"><h3>Reading</h3><p>Phonics, building words and sentences, then short original passages with retrieval, inference and word-choice questions.</p></li>
+      <li class="reveal"><h3>Spelling &amp; writing</h3><p>Spelling in context, vocabulary, word parts and sentence building.</p></li>
+      <li class="reveal"><h3>Number &amp; calculation</h3><p>Place value, the four operations, times tables and two-step word problems.</p></li>
+      <li class="reveal"><h3>Fractions, decimals &amp; measures</h3><p>Comparing fractions, decimals, telling the time, area and perimeter, reading bar charts.</p></li>
+      <li class="reveal"><h3>Thinking skills</h3><p>Patterns, sequences and logic puzzles, each checked to have exactly one answer.</p></li>
+      <li class="reveal"><h3>Homework help</h3><p>Signed-in families can ask Red Teddy for a simpler explanation or another example. It is built to teach, not to do the homework.</p></li>
+    </ul>
+    <p class="honest">Skills are mapped to related US standards where we are sure of the match, and shown as full or partial coverage on the <a href="/curriculum">curriculum page</a>. No state’s own standards have been checked yet.</p>
+  </div>
+</section>
+
+<section class="pg-sec" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How parents and children use it</p>
+      <h2 id="how-h">A short session most days.</h2>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><h3>Choose their grade</h3><p>A quick check of up to seven questions finds the starting point. No marks are shown.</p></li>
+      <li class="reveal"><h3>Today’s plan</h3><p>Four activities: a review that is due, a mix-up worth fixing, and new skills whose foundations are in place.</p></li>
+      <li class="reveal"><h3>You see what happened</h3><p>The <a href="/learn/parent.html">parent view</a> shows what was practised, what looks secure and which mistakes keep coming back.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="pg-sec" style="background:var(--pri-soft)" aria-labelledby="safe-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">Privacy &amp; parents</p>
+      <h2 id="safe-h">Parents sign in. Children don’t need to.</h2>
+      <p style="margin-top:14px"><a href="/privacy">Read the privacy notice</a></p>
+    </div>
+    <ul class="trust reveal">
+      <li><strong>Start without an account.</strong> Progress then stays in this browser only.</li>
+      <li><strong>Optional parent sign-in</strong> by email link keeps each child’s progress across devices. A child is a nickname and an age range, nothing more.</li>
+      <li><strong>Answers are marked by fixed rules</strong>, never by AI.</li>
+      <li><strong>AI help has limits.</strong> Replies that give away the answer or contain links are replaced with a written hint. Messages are not stored.</li>
+      <li><strong>No streak pressure, no leaderboards, no adverts.</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta-band" aria-labelledby="cta-h">
+  <div class="wrap">
+    <h2 id="cta-h">Start with today’s plan.</h2>
+    <p>Free to start, no card. Pick a grade and the quick check does the rest.</p>
+    <div class="cta-row">
+      <a class="btn btn-pri btn-lg" href="/learn/">Explore Primary Learning</a>
+      <a class="btn btn-line btn-lg" href="/#try">Try a live question</a>
+    </div>
+  </div>
+</section>`,
+});
+
+/* ---------------- High school ---------------- */
+const high = page({
+  slug: 'high-school', key: 'hs',
+  title: 'High school study help, grades 6–12 — Red Teddy Tutor',
+  ogTitle: 'Understand more. Achieve your potential. — Red Teddy Tutor',
+  desc: 'Step-by-step explanations, guided problem-solving and spaced revision for grades 6–12 in maths, English, science, social studies and computer science.',
+  body: `<section class="pg-hero" aria-labelledby="h1">
+  <div class="wrap pg-hero-grid">
+    <div>
+      <p class="crumbs"><a href="/">Home</a> / High School</p>
+      <p class="eyebrow">Middle &amp; high school · grades 6–12</p>
+      <h1 id="h1">Understand more. Achieve your potential.</h1>
+      <p class="lead">Clear explanations, worked solutions you reveal one step at a time, and review timed so topics stick before a test. For students working independently, with a parent view if you want one.</p>
+      <div class="cta-row">
+        <a class="btn btn-hs btn-lg" href="/learn/">Explore High School Learning</a>
+        <a class="btn btn-ghost btn-lg" href="#tutor">See the Tutor in Action</a>
+      </div>
+      <ul class="pg-facts"><li>Free to start</li><li>No adverts</li><li>Works on any device</li></ul>
+    </div>
+    <div class="hs-preview" aria-hidden="true">
+      <div class="bar2"><i></i><i></i><i></i><span>Today’s plan · Grade 10</span></div>
+      <div class="body">
+        <div class="row"><b>Review: linear equations</b><em>due today</em></div>
+        <div class="row"><b>Fix: sign errors when expanding</b><em>2 recent</em></div>
+        <div class="row"><b>New: quadratic factoring</b><em>ready</em></div>
+        <div class="row"><b>Reading: argument &amp; evidence</b><em>new</em></div>
+        <div><div class="meter"><i style="width:62%"></i></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-sec" id="tutor" aria-labelledby="ex-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">See it in action</p>
+      <h2 id="ex-h">Every step, with the reason for it.</h2>
+      <p style="margin-top:14px">Students reveal the solution one step at a time, so they can stop as soon as it clicks and finish the rest themselves. Then a follow-up question checks it transferred.</p>
+      <p class="demo-note">A demonstration with fixed content. In the app, practice is generated for the student’s level; signed-in families can also ask Red Teddy for another explanation.</p>
+    </div>
+    <div class="desk reveal" id="hs-demo">
+      <div class="desk-head"><span class="demo-tag">Demonstration</span><span>Algebra I · Solving linear equations</span></div>
+      <div class="desk-body">
+        <p class="q">Solve for x.</p>
+        <p class="eq">3(x − 4) = 2x + 5</p>
+        <button type="button" class="btn btn-line" id="hs-step">Show step 1</button>
+        <ol class="sol" aria-live="polite">
+          <li><div><code>3x − 12 = 2x + 5</code><span class="why">Expand the bracket: 3 × x and 3 × −4. The minus sign stays with the 4.</span></div></li>
+          <li><div><code>x − 12 = 5</code><span class="why">Subtract 2x from both sides so x appears on one side only.</span></div></li>
+          <li><div><code>x = 17</code><span class="why">Add 12 to both sides.</span></div></li>
+          <li><div><code>3(17 − 4) = 39 and 2(17) + 5 = 39 ✓</code><span class="why">Check by substituting back. Both sides match.</span></div></li>
+        </ol>
+        <div class="follow" role="group" aria-labelledby="fu-q">
+          <p id="fu-q"><b>Follow-up:</b> solve <code style="font-family:var(--mono)">2(x + 3) = x − 4</code></p>
+          <div class="opt-row">
+            <button type="button" data-why="Check the expansion: 2 × 3 is 6, so 2x + 6 = x − 4.">x = −7</button>
+            <button type="button" data-right="1">x = −10</button>
+            <button type="button" data-why="Moving +6 across makes it −6, not +6. Try x = −4 − 6.">x = 2</button>
+          </div>
+          <p class="fb" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-sec" style="background:var(--paper)" aria-labelledby="what-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Subjects</p>
+      <h2 id="what-h">Depth where it matters most.</h2>
+      <p>Maths and English go deepest. Science, social studies and computer science are smaller and growing; the <a href="/curriculum">curriculum page</a> lists exactly what exists at each grade.</p>
+    </div>
+    <ul class="cards3">
+      <li class="reveal"><h3>Maths</h3><p>Ratios, algebra, geometry, trigonometry and derivatives, with computed answers re-checked independently.</p></li>
+      <li class="reveal"><h3>English</h3><p>Grammar, figurative language, comprehension, literary analysis and argument.</p></li>
+      <li class="reveal"><h3>Science</h3><p>Cells, photosynthesis, density, forces, chemistry and genetics.</p></li>
+      <li class="reveal"><h3>Social studies</h3><p>US government and the Bill of Rights, history timelines, supply and demand, personal finance.</p></li>
+      <li class="reveal"><h3>Computer science</h3><p>Reading and tracing Python: variables, loops and conditions.</p></li>
+      <li class="reveal"><h3>Ask Red Teddy</h3><p>Topic-level tutoring for signed-in families: a simpler explanation, another example or a practice question, in a voice suited to older students.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="pg-sec" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How revision works</p>
+      <h2 id="how-h">Study that plans itself.</h2>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><h3>Find the gaps</h3><p>A short placement check per subject. If a foundation from an earlier grade is missing, the plan sends the student back to it.</p></li>
+      <li class="reveal"><h3>Practise what’s due</h3><p>Today’s plan mixes reviews, a mistake worth fixing and new topics whose prerequisites are in place.</p></li>
+      <li class="reveal"><h3>Review before it fades</h3><p>Secure topics return after 1, 3, 7, 14, 30 and 60 days. Shaky ones return sooner, easier first.</p></li>
+    </ol>
+    <p class="honest">We don’t predict grades or promise exam results, and we have not mapped any exam board’s specification. Where a skill relates to a Common Core or NGSS standard, the <a href="/curriculum">curriculum page</a> shows the code and whether coverage is full or partial.</p>
+  </div>
+</section>
+
+<section class="pg-sec" style="background:var(--hs-soft)" aria-labelledby="safe-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">Privacy &amp; independence</p>
+      <h2 id="safe-h">Independent study, with parents in the loop.</h2>
+      <p style="margin-top:14px"><a href="/privacy">Read the privacy notice</a></p>
+    </div>
+    <ul class="trust reveal">
+      <li><strong>The tutor teaches; it doesn’t hand over answers.</strong> Replies that leak the answer are replaced with the written hint, and marking is always by fixed rules.</li>
+      <li><strong>Messages to Red Teddy are not stored.</strong> Daily use is limited per family.</li>
+      <li><strong>Parents hold the account.</strong> A student profile is a nickname and an age range.</li>
+      <li><strong>Parent view</strong> separates what was measured from what is estimated, and progress can be deleted at any time.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta-band" style="background:var(--hs);color:#fff" aria-labelledby="cta-h">
+  <div class="wrap">
+    <h2 id="cta-h" style="color:#fff">Start with one topic tonight.</h2>
+    <p style="color:var(--mute-d)">Free to start. Choose a grade, take the quick check, and the plan takes it from there.</p>
+    <div class="cta-row">
+      <a class="btn btn-hs btn-lg" href="/learn/">Explore High School Learning</a>
+      <a class="btn btn-ghost btn-lg" href="/curriculum">See the curriculum</a>
+    </div>
+  </div>
+</section>`,
+});
+
+mkdirSync(OUT, { recursive: true });
+writeFileSync(new URL('preschool.html', OUT), preschool);
+writeFileSync(new URL('primary.html', OUT), primary);
+writeFileSync(new URL('high-school.html', OUT), high);
+console.log('built 3 pathway pages');

@@ -637,6 +637,39 @@
       "status": 308
     },
     {
+      "src": "/(preschool|primary|high-school)/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/paths/$1.html"
+    },
+    {
+      "src": "/paths/(preschool|primary|high-school)\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/$1"
+      },
+      "status": 308
+    },
+    {
       "src": "/learn/parent/?",
       "has": [
         {
