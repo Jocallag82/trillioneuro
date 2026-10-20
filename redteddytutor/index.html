@@ -25,6 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&display=swap">
+<link rel="preload" as="image" href="/hero.webp" fetchpriority="high">
 <link rel="stylesheet" href="/home.css">
 <link rel="stylesheet" href="/paths.css">
 <script type="application/ld+json">
@@ -61,12 +62,25 @@
 <section class="paths-hero" id="paths" aria-labelledby="hero-h">
   <div class="wrap">
     <div class="ph-top">
-      <div>
+      <div class="ph-copy">
         <p class="eyebrow">Preschool · Primary School · High School</p>
         <h1 id="hero-h">Big discoveries start small. <em>Big goals start here.</em></h1>
         <p class="lead">A smarter, friendlier way for children to learn, practise and grow — with a learning experience suited to their stage.</p>
+        <button type="button" class="meet" data-welcome aria-describedby="meet-note">
+          <span class="meet-thumb">
+            <img src="/media/red-teddy-welcome-poster-640.webp" width="640" height="360" alt="" decoding="async">
+            <span class="meet-play" aria-hidden="true"></span>
+          </span>
+          <span class="meet-text">
+            <strong><span class="meet-first">Meet Red Teddy</span><span class="meet-again">Watch Red Teddy’s hello again</span></strong>
+            <span id="meet-note" class="meet-note">A 10-second hello. Sound plays only when you press play.</span>
+          </span>
+        </button>
+        <p class="cta-row"><a class="btn btn-ghost" href="/early-years/play-zone">🎈 Play Zone: games for ages 1–5</a> <a class="btn btn-ghost" href="/early-years/stickers">⭐ Sticker book</a></p>
       </div>
-      <img class="ph-teddy" src="/teddy-mark.webp" width="150" height="150" alt="" fetchpriority="high">
+      <figure class="ph-art">
+        <img src="/hero.webp" width="1376" height="768" alt="Red Teddy, a deep-red teddy bear in a navy scarf, at a desk with an open book among bookshelves." fetchpriority="high">
+      </figure>
     </div>
 
     <ul class="path-grid" aria-label="Choose a learning stage">
