@@ -283,6 +283,26 @@
       "dest": "/quadrillioneuro/$1"
     },
     {
+      "src": "/\\.well-known/atproto-did",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "ripestream.com",
+              "www.ripestream.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=300",
+        "Access-Control-Allow-Origin": "*"
+      },
+      "dest": "/ripestream/.well-known/atproto-did"
+    },
+    {
       "src": "/",
       "has": [
         {

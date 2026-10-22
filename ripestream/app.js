@@ -30,6 +30,11 @@
   var registered = store(true);
 
   // Cookie-free Vercel Web Analytics custom events; no personal data is sent.
+  // Tag signups with the platform that sent them (?utm_source=x), within rs_join's 20-char limit.
+  var UTM = (function () {
+    try { var u = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); return /^[a-z0-9_-]{1,12}$/.test(u) ? u : ''; } catch (e) { return ''; }
+  })();
+  function joinSource(form) { var s = form.getAttribute('data-source') || ''; return UTM ? s + ':' + UTM : s; }
   function track(name, data) { try { if (window.va) window.va('event', data ? { name: name, data: data } : { name: name }); } catch (e) {} }
 
   function rpc(name, args, timeoutMs) {
@@ -371,14 +376,14 @@
 
       busy = true;
       setLoading(form, true);
-      rpc('rs_join', { p_email: value, p_first_name: name || null, p_invite: code || null, p_source: form.getAttribute('data-source') })
+      rpc('rs_join', { p_email: value, p_first_name: name || null, p_invite: code || null, p_source: joinSource(form) })
       .then(function () {
         registered = { name: name, at: Date.now() };
         store(false, registered);
         var done = showDone(host, { name: name, email: value, invite: !!code });
         done.focus({ preventScroll: true });
         if (dock && dock.hideForGood) dock.hideForGood();
-        track('founding_join', { source: form.getAttribute('data-source'), invited: !!code });
+        track('founding_join', { source: joinSource(form), invited: !!code });
       }).catch(function (err) {
         busy = false;
         setLoading(form, false);
