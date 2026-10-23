@@ -9,9 +9,14 @@ on:
     - cron: '17 9 * * *'   # 09:17 UTC daily
   workflow_dispatch:        # lets you run it manually from the Actions tab
 
+defaults:
+  run:
+    # Git Bash: the steps are bash, and plain 'bash' on Windows can resolve to WSL
+    shell: C:\PROGRA~1\Git\bin\bash.exe --noprofile --norc -eo pipefail {0}
+
 jobs:
   ping:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, minipc]
     steps:
       - name: Query founders_public to keep DB awake
         run: |
