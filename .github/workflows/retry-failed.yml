@@ -1,0 +1,67 @@
+# Keep retrying failed jobs instead of letting them drop.
+#
+# Every two hours, for each workflow in this repo, look at its most recent
+# run. If that run failed, was cancelled, timed out or never started (for
+# example it waited a day for minipc while the PC was off), re-run its failed
+# jobs. When GitHub will not re-run it any more (attempt limit), start a fresh
+# run instead if the workflow can be started by hand. No limit on how many
+# times: a job is retried until its latest run succeeds.
+#
+# SKIP lists workflows that must not be retried blindly: ones that send real
+# emails on every run, or that go red by design to report findings.
+#
+# Runs on minipc, so it costs nothing; a check missed while the PC is off
+# happens at the next one after it is back.
+name: Retry failed jobs
+
+on:
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: retry-failed
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: C:\PROGRA~1\Git\bin\bash.exe --noprofile --norc -eo pipefail {0}
+
+jobs:
+  retry:
+    runs-on: [self-hosted, minipc]
+    timeout-minutes: 15
+    steps:
+      - name: Re-run failed workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SKIP: ''
+        run: |
+          set +e
+          gh api "repos/$REPO/actions/workflows" --paginate --jq '.workflows[] | select(.state=="active") | "\(.id)\t\(.path)\t\(.name)"' |
+          while IFS=$'\t' read -r id path name; do
+            [ "$name" = "Retry failed jobs" ] && continue
+            case "|$SKIP|" in *"|$name|"*) echo "$name: skipped (on the SKIP list)"; continue ;; esac
+            run=$(gh api "repos/$REPO/actions/workflows/$id/runs?per_page=1" --jq '.workflow_runs[0] | "\(.id)\t\(.status)\t\(.conclusion)\t\(.event)"')
+            [ -z "$run" ] && continue
+            IFS=$'\t' read -r rid status conclusion event <<< "$run"
+            [ "$status" != "completed" ] && continue
+            case "$conclusion" in
+              failure|cancelled|timed_out|startup_failure) ;;
+              *) continue ;;
+            esac
+            echo "$name: run $rid ended '$conclusion' — retrying"
+            if gh run rerun "$rid" --failed -R "$REPO" 2>/dev/null || gh run rerun "$rid" -R "$REPO" 2>/dev/null; then
+              echo "  re-ran $rid"
+            elif grep -q 'workflow_dispatch' "$path" 2>/dev/null || gh api "repos/$REPO/contents/$path" -H 'Accept: application/vnd.github.raw' 2>/dev/null | grep -q 'workflow_dispatch'; then
+              gh workflow run "$id" -R "$REPO" && echo "  could not re-run; started a fresh run"
+            else
+              echo "::warning::$name: run $rid could not be re-run and the workflow cannot be started by hand"
+            fi
+          done
+          exit 0
