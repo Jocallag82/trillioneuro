@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed:dev": "node scripts/seed-dev.mjs",
+    "db:import:findit": "node scripts/import-findit.mjs",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "check:secrets": "node scripts/check-client-secrets.mjs"

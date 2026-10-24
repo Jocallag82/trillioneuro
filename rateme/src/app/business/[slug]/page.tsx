@@ -117,7 +117,9 @@ export default async function BusinessPage({ params, searchParams }: P) {
                 <div key={k}><dt className="font-semibold capitalize">{k}</dt><dd><a className="break-all text-sea underline" href={v} rel="nofollow noopener ugc" target="_blank">{v.replace(/^https?:\/\/(www\.)?/, '')}</a></dd></div>
               ))}
             </dl>
-            <p className="mt-4 text-xs text-muted">Contact details are supplied by the business{b.source === 'community' ? ' or the person who suggested this listing' : ''}.{' '}
+            <p className="mt-4 text-xs text-muted">{b.source === 'import'
+                ? <>Listing details © <a className="underline" href="https://www.openstreetmap.org/copyright" rel="noopener" target="_blank">OpenStreetMap contributors</a> (ODbL), via Find It in Ireland.</>
+                : <>Contact details are supplied by the business{b.source === 'community' ? ' or the person who suggested this listing' : ''}.</>}{' '}
               <Link className="underline" href={`/business/${b.slug}/correction`}>Report incorrect information</Link></p>
           </div>
           <p className="text-xs leading-relaxed text-muted">
