@@ -1,14 +1,14 @@
-# Keep retrying failed jobs instead of letting them drop.
+# Keep retrying failed data syncs instead of letting them drop.
 #
-# Every two hours, for each workflow in this repo, look at its most recent
+# Every two hours, for each workflow named in ONLY, look at its most recent
 # run. If that run failed, was cancelled, timed out or never started (for
 # example it waited a day for minipc while the PC was off), re-run its failed
 # jobs. When GitHub will not re-run it any more (attempt limit), start a fresh
 # run instead if the workflow can be started by hand. No limit on how many
 # times: a job is retried until its latest run succeeds.
 #
-# SKIP lists workflows that must not be retried blindly: ones that send real
-# emails on every run, or that go red by design to report findings.
+# Only data syncs are listed. Anything that sends email is never retried: a
+# re-run could email the same people twice.
 #
 # Runs on minipc, so it costs nothing; a check missed while the PC is off
 # happens at the next one after it is back.
@@ -40,13 +40,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
-          SKIP: ''
+          ONLY: 'Supabase Keep-Alive'
         run: |
           set +e
           gh api "repos/$REPO/actions/workflows" --paginate --jq '.workflows[] | select(.state=="active") | "\(.id)\t\(.path)\t\(.name)"' |
           while IFS=$'\t' read -r id path name; do
-            [ "$name" = "Retry failed jobs" ] && continue
-            case "|$SKIP|" in *"|$name|"*) echo "$name: skipped (on the SKIP list)"; continue ;; esac
+            case "|$ONLY|" in *"|$name|"*) ;; *) continue ;; esac
             run=$(gh api "repos/$REPO/actions/workflows/$id/runs?per_page=1" --jq '.workflow_runs[0] | "\(.id)\t\(.status)\t\(.conclusion)\t\(.event)"')
             [ -z "$run" ] && continue
             IFS=$'\t' read -r rid status conclusion event <<< "$run"
