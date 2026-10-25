@@ -158,7 +158,7 @@ export function renderAsk(ctx, objective = askSession.objective) {
     el('nav', { class: 'activity-nav' }, [el('button', { type: 'button', class: 'link', onclick: () => ctx.renderHome(), text: '← Back to my plan' })]),
     el('div', { class: 'ask' }, [
       el('div', { class: 'ask-head' }, [
-        el('img', { src: '/learn/game/art/teddy-think.webp', width: 72, height: 148, alt: '', class: 'ask-teddy' }),
+        el('img', { src: '/learn/game/art/teddy-think.webp', width: 75, height: 148, alt: '', class: 'ask-teddy' }),
         el('div', {}, [
           el('p', { class: 'eyebrow', text: 'Ask Red Teddy' }),
           el('h2', { id: 'ask-title', tabindex: '-1', text: 'What would you like help with?' }),
