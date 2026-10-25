@@ -51,12 +51,35 @@ export function setMuted(v) { muted = v; try { store?.setItem('rtt.ey.muted', v 
 export const audioAvailable = () => canSpeak() || typeof Audio === 'function';
 
 let clip = null;
-export function stop() { if (clip) { clip.pause(); clip = null; } stopSpeaking(); }
+// Resolves when the current line finishes (or is stopped), so callers can wait
+// for Red Teddy to finish speaking instead of cutting him off mid-sentence.
+let quiet = Promise.resolve();
+let release = () => {};
+function busy() {
+  release();
+  let done;
+  quiet = new Promise((r) => { done = r; });
+  release = () => { done(); release = () => {}; };
+  return release;
+}
+export function untilQuiet(maxMs = 6000) {
+  return Promise.race([quiet, new Promise((r) => setTimeout(r, maxMs))]);
+}
+export function stop() { if (clip) { clip.pause(); clip = null; } stopSpeaking(); release(); }
+
+function voice(text) {
+  const end = busy();
+  const ok = speak(text, { onend: end });
+  if (!ok) end();
+  return ok;
+}
 
 function play(path, fallback) {
   const a = new Audio(path);
   clip = a;
-  a.play().catch(() => { if (clip === a) { clip = null; speak(fallback); } });
+  const end = busy();
+  a.addEventListener('ended', () => { if (clip === a) clip = null; end(); });
+  a.play().catch(() => { if (clip === a) { clip = null; voice(fallback); } });
   return true;
 }
 
@@ -68,7 +91,7 @@ export function say(text) {
   stop();
   const rec = VOICE[norm(text)];
   if (rec && typeof Audio === 'function') return play(rec, text);
-  return speak(text);
+  return voice(text);
 }
 
 // Plays a recorded sound if one is sourced, then optionally says `after`.
@@ -79,7 +102,8 @@ export function sound(id, after = '') {
   if (s?.status === 'ready' && s.path && typeof Audio === 'function') {
     const a = new Audio(s.path);
     clip = a;
-    a.addEventListener('ended', () => { if (clip === a) { clip = null; if (after) say(after); } });
+    const end = busy();
+    a.addEventListener('ended', () => { if (clip === a) { clip = null; if (after) say(after); else end(); } });
     a.play().catch(() => { if (clip === a) { clip = null; say([s.say, after].filter(Boolean).join(' ')); } });
     return true;
   }

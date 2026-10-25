@@ -47,7 +47,7 @@
 .z-size{display:flex;align-items:center;justify-content:center}
 /* shape sorter */
 .z-sorter{display:flex;flex-direction:column;align-items:center;gap:20px}
-.z-piece{width:clamp(110px,24vw,160px);transition:transform .5s,opacity .5s}.z-piece.is-in{transform:translateY(120px) scale(.3);opacity:0}
+.z-piece{width:clamp(110px,24vw,160px);transition:transform .5s,opacity .5s;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;position:relative;z-index:2}.z-piece.is-drag{transition:none;cursor:grabbing;filter:drop-shadow(0 8px 10px rgba(0,0,0,.3))}.z-piece svg{pointer-events:none}.z-hole.is-over{outline:5px solid #ffd500;outline-offset:3px}.z-piece.is-in{transform:translateY(120px) scale(.3);opacity:0}
 .z-hole{width:clamp(96px,18vw,130px);padding:12px;border:3px solid var(--ink);border-radius:20px;background:#d9a441;cursor:pointer}
 .z-hole svg g{opacity:.8}
 /* colouring */

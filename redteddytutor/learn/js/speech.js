@@ -47,7 +47,7 @@ if (typeof window !== 'undefined' && canSpeak()) {
   window.speechSynthesis.getVoices(); // starts the async voice load early
 }
 
-export function speak(text, { volume = 1, muted = false } = {}) {
+export function speak(text, { volume = 1, muted = false, onend = null } = {}) {
   if (!canSpeak() || muted || !text) return false;
   try {
     const synth = window.speechSynthesis;
@@ -60,6 +60,7 @@ export function speak(text, { volume = 1, muted = false } = {}) {
       u.rate = 0.92;   // slightly slower reads clearer for young listeners
       u.pitch = 1;
       u.volume = Math.min(1, Math.max(0, volume));
+      if (onend) u.onend = onend;
       return u;
     };
     const voice = currentVoice();
@@ -69,8 +70,8 @@ export function speak(text, { volume = 1, muted = false } = {}) {
     u.onerror = (e) => {
       if (voice && e.error !== 'interrupted' && e.error !== 'canceled') {
         brokenVoice = voice; cachedVoice = null;
-        try { synth.speak(make(null)); } catch { /* ignore */ }
-      }
+        try { synth.speak(make(null)); } catch { onend?.(); }
+      } else onend?.();
     };
     current = u; // keep a reference: Chrome can garbage-collect a playing utterance
     const go = () => { if (synth.paused) synth.resume(); synth.speak(u); };

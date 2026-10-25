@@ -3,7 +3,7 @@
 // child succeeds and eases off after misses. Every 5 wins earns a sticker.
 //   /early-years/play-zone            → the game picker
 //   /early-years/play-zone?g=<id>     → one game
-import { say, stop, isMuted, setMuted, sound, soundText } from '../games/media.js';
+import { say, stop, isMuted, setMuted, sound, soundText, untilQuiet } from '../games/media.js';
 import { shape, COLORS } from '../games/visuals.js';
 import { award, celebrate, load } from './stickers.js';
 import { pop, chime, burst, confetti } from './sfx.js';
@@ -13,7 +13,7 @@ const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const sample = (a, k) => shuffle(a).slice(0, k);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const PRAISE = ['Yes!', 'Well done!', 'Brilliant!', 'Super!', 'Hooray!', 'Great job!', 'You did it!', 'Amazing!'];
+const PRAISE = ['Yes!', 'Well done!', 'Brilliant!', 'Super!', 'Yay!', 'Great job!', 'You did it!', 'Amazing!'];
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 
@@ -58,6 +58,7 @@ async function win(text) {
   stars();
   if (S.wins % 5 === 0) { stars(); await wait(900); $('#z-stars').innerHTML = '★★★★★'.split('').map(() => '<span class="on">★</span>').join(''); await celebrate(award()); stars(); }
   else await wait(1300);
+  await untilQuiet(); // let Red Teddy finish before the next round speaks
 }
 function miss() { S.miss += 1; if (S.miss >= 2) S.level = Math.max(1, S.level - 1); }
 const stage = () => $('#z-stage');
@@ -178,13 +179,45 @@ const GAMES = [
       const set = sample(SHAPES.slice(0, S.level < 5 ? 4 : 6), k);
       const s = pick(set);
       const col = pick(BALLOON);
-      stage().innerHTML = `<div class="z-sorter"><div class="z-piece">${shape(s, col)}</div><div class="z-holes">${shuffle(set).map((x) => `<button type="button" class="z-hole" data-s="${x}" aria-label="${x} hole">${shape(x, '#3a2a24')}</button>`).join('')}</div></div>`;
+      stage().innerHTML = `<div class="z-sorter"><div class="z-piece" aria-hidden="true">${shape(s, col)}</div><div class="z-holes">${shuffle(set).map((x) => `<button type="button" class="z-hole" data-s="${x}" aria-label="${x} hole">${shape(x, '#3a2a24')}</button>`).join('')}</div></div>`;
       teddy(`Where does the ${s} go?`);
       return new Promise((done) => {
-        stage().querySelectorAll('.z-hole').forEach((b) => b.addEventListener('click', async () => {
-          if (b.dataset.s === s) { stage().querySelector('.z-piece').classList.add('is-in'); bounce(b); await win(`Plop! The ${s} goes in!`); done(); }
+        const piece = stage().querySelector('.z-piece');
+        let over = false;
+        const tryHole = async (b) => {
+          if (over) return;
+          if (b.dataset.s === s) { over = true; piece.classList.add('is-in'); bounce(b); await win(`Plop! The ${s} goes in!`); done(); }
           else { wiggle(b); miss(); teddy(`That's the ${b.dataset.s} hole. Find the ${s}!`); }
-        }));
+        };
+        stage().querySelectorAll('.z-hole').forEach((b) => b.addEventListener('click', () => tryHole(b)));
+        // Drag the shape into a hole: pointer events cover mouse, touch and pen.
+        let drag = null;
+        const holeAt = (x, y) => document.elementsFromPoint(x, y).map((el) => el.closest?.('.z-hole')).find(Boolean);
+        const mark = (h) => stage().querySelectorAll('.z-hole').forEach((el) => el.classList.toggle('is-over', el === h));
+        piece.addEventListener('pointerdown', (e) => {
+          if (over) return;
+          e.preventDefault();
+          piece.setPointerCapture(e.pointerId);
+          drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
+          piece.classList.add('is-drag');
+        });
+        piece.addEventListener('pointermove', (e) => {
+          if (!drag || e.pointerId !== drag.id) return;
+          piece.style.transform = `translate(${e.clientX - drag.x}px, ${e.clientY - drag.y}px) scale(1.05)`;
+          mark(holeAt(e.clientX, e.clientY));
+        });
+        const drop = (e) => {
+          if (!drag || e.pointerId !== drag.id) return;
+          drag = null;
+          piece.classList.remove('is-drag');
+          mark(null);
+          const h = e.type === 'pointerup' && holeAt(e.clientX, e.clientY);
+          if (h && h.dataset.s === s) { piece.style.transform = ''; tryHole(h); return; }
+          piece.style.transform = '';
+          if (h) tryHole(h);
+        };
+        piece.addEventListener('pointerup', drop);
+        piece.addEventListener('pointercancel', drop);
       });
     },
   },

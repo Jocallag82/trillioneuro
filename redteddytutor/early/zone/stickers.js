@@ -53,6 +53,6 @@ export function celebrate(s) {
     const close = () => { el.remove(); done(); };
     el.querySelector('button').addEventListener('click', close);
     el.querySelector('button').focus({ preventScroll: true });
-    say(s.golden ? `A golden sticker! You got the ${s.name}!` : `Hooray! You got the ${s.name} sticker!`);
+    say(s.golden ? `A golden sticker! You got the ${s.name}!` : `Yay! You got the ${s.name} sticker!`);
   });
 }
