@@ -152,7 +152,7 @@
   try {
     if (localStorage.getItem(MEMBER_KEY)) {       // a member on this device: straight to their invitations
       var cta = $('[data-nav-cta]');
-      if (cta) { cta.href = '/app'; cta.removeAttribute('data-focus-form'); cta.removeAttribute('data-nav-cta'); cta.innerHTML = '<span>Open your stream</span>'; }
+      if (cta) { cta.href = '/app'; cta.removeAttribute('data-focus-form'); cta.removeAttribute('data-nav-cta'); cta.textContent = 'Open your stream'; var si = $('[data-nav-signin]'); if (si) si.hidden = true; }
     }
   } catch (e) {}
   function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 24); }
@@ -227,30 +227,6 @@
     }
   })();
 
-  /* ── cursor spotlight on cards ─────────────────────── */
-  // One style write per frame, not per mouse event (mice report at 125–1000 Hz).
-  if (finePointer) $$('.spot').forEach(function (el) {
-    var px = 0, py = 0, queued = false;
-    function paint() {
-      queued = false;
-      var r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', (px - r.left) + 'px');
-      el.style.setProperty('--my', (py - r.top) + 'px');
-    }
-    el.addEventListener('pointermove', function (e) {
-      px = e.clientX; py = e.clientY;
-      if (!queued) { queued = true; requestAnimationFrame(paint); }
-    });
-  });
-
-  /* ── pause looping animations in off-screen sections ─ */
-  if (hasIO) {
-    var idleIO = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { e.target.classList.toggle('idle', !e.isIntersecting); });
-    }, { rootMargin: '200px 0px' });
-    $$('main > section, .ticker').forEach(function (el) { idleIO.observe(el); });
-  }
-
   /* ── reveal on scroll ──────────────────────────────── */
   var revealables = $$('.rv, [data-reveal]');
   if (!hasIO || reduced) {
@@ -310,10 +286,22 @@
       title.textContent = d.name ? 'Check your inbox, ' + d.name + '.' : 'Check your inbox.';
       body.textContent = d.invite
         ? "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email and take the place your invitation holds.'
-        : "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email — that\'s the moment your founding place is claimed. Places go in the order people confirm.';
+        : founding.open
+          ? "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email — that\'s the moment your founding place is claimed. Places go in the order people confirm.'
+          : "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email.';
     }
-    host.innerHTML = '';
-    host.appendChild(node);
+    var again = $('[data-again]', node);
+    if (again && d.already) {
+      again.hidden = false;
+      $('[data-reset]', again).addEventListener('click', function () {
+        // Someone else on this device, or a different address: put the form back.
+        registered = null; store(false, null);
+        host.replaceChildren(host._form);
+        var f = $('input[name=email]', host); if (f) f.focus();
+      });
+    }
+    if (!host._form) host._form = host.firstElementChild;
+    host.replaceChildren(node);
     return node;
   }
 
@@ -383,7 +371,7 @@
         var done = showDone(host, { name: name, email: value, invite: !!code });
         done.focus({ preventScroll: true });
         if (dock && dock.hideForGood) dock.hideForGood();
-        track('founding_join', { source: joinSource(form), invited: !!code });
+        track('join_submitted', { source: joinSource(form), invited: !!code, phase: founding.open ? 'founding' : 'invite' });
       }).catch(function (err) {
         busy = false;
         setLoading(form, false);
@@ -415,205 +403,88 @@
 
   if (registered && !inviteFromUrl) $$('[data-form-host]').forEach(function (h) { showDone(h, { already: true }); });
 
-  /* ── social graph ──────────────────────────────────── */
-  var graph = $('#graph');
-  if (graph) {
-    var info = {
-      you: ['You', 'At the centre. Everything connects through you — and only as much as you choose.'],
-      people: ['People', 'Friends, family and the people you actually follow. First, by default.'],
-      communities: ['Communities', 'Spaces around anything — from film cameras to five-a-side.'],
-      creators: ['Creators', 'Follow the people who make things, without losing them in the noise.'],
-      events: ['Events', 'From a gig to a 5k — see it, share it, bring your people.'],
-      local: ['Local', "What's on near you, wherever you are in the world."],
-      interests: ['Interests', 'Topics you choose, not just topics chosen for you.'],
-      conversations: ['Conversations', 'Messages and discussions, connected to where they started.']
-    };
-    var cross = [['people', 'conversations'], ['communities', 'conversations'], ['communities', 'events'],
-                 ['local', 'events'], ['creators', 'interests'], ['interests', 'people'], ['creators', 'communities'], ['local', 'interests']];
-    var flowing = { people: 1, communities: 1, local: 1, creators: 1 };
-    var nodes = {};
-    $$('.node', graph).forEach(function (n) {
-      var cs = n.style;
-      nodes[n.getAttribute('data-k')] = { el: n, x: parseFloat(cs.getPropertyValue('--x')), y: parseFloat(cs.getPropertyValue('--y')) };
-    });
-    var g = $('#edges', graph), NS = 'http://www.w3.org/2000/svg', edges = [];
-    function line(a, b, cls, i) {
-      var A = nodes[a], B = nodes[b];
-      var p = document.createElementNS(NS, 'path');
-      var mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2 * 0.82;
-      var bend = cls.indexOf('x') > -1 ? 6 : 0;
-      p.setAttribute('d', 'M' + A.x + ' ' + A.y * 0.82 + ' Q' + (mx + bend) + ' ' + (my - bend) + ' ' + B.x + ' ' + B.y * 0.82);
-      p.setAttribute('class', 'edge ' + cls);
-      p.setAttribute('vector-effect', 'non-scaling-stroke');
-      p.style.setProperty('--d', (i * 0.06) + 's');
-      g.appendChild(p);
-      edges.push({ a: a, b: b, el: p });
-    }
-    var i = 0;
-    Object.keys(nodes).forEach(function (k) { if (k !== 'you') line('you', k, flowing[k] ? 'flow' : '', i++); });
-    cross.forEach(function (c) { line(c[0], c[1], 'x', i++); });
-
-    var cap = $('#world-cap');
-    function select(k) {
-      Object.keys(nodes).forEach(function (n) { nodes[n].el.setAttribute('aria-pressed', n === k ? 'true' : 'false'); });
-      edges.forEach(function (e) { e.el.classList.toggle('on', k !== 'you' && (e.a === k || e.b === k)); });
-      $('b', cap).textContent = info[k][0];
-      $('p', cap).textContent = info[k][1];
-    }
-    Object.keys(nodes).forEach(function (k) {
-      nodes[k].el.addEventListener('click', function () { select(k); });
-      if (finePointer) nodes[k].el.addEventListener('mouseenter', function () { select(k); });
-    });
-  }
-
-  /* ── control demo ──────────────────────────────────── */
-  var pv = $('#pv');
-  if (pv) {
-    var items = [
-      { who: 'Aoife Brennan', i: 'AB', g: 'g1', f: true, t: 'Photography', v: false, text: 'Golden hour on the pier. Portra 400, no edits.' },
-      { who: 'Sunday League', s: 'Sunday League', i: 'SL', g: 'g5', f: true, t: 'Football', v: false, text: "Kick-off moves to 11:30. You're welcome." },
-      { who: 'Kofi Mensah', i: 'KM', g: 'g3', f: false, t: 'Tech', v: true, text: 'Made a beat from a bus stop recording. 58 seconds.' },
-      { who: 'Tomás Ruiz', i: 'TR', g: 'g4', f: true, t: 'Tech', v: false, text: 'Home lab, finally racked. Cable management is a lifestyle.' },
-      { who: 'Street Food Hunters', s: 'Street Food Hunters', i: 'SF', g: 'g6', f: false, t: 'Food', v: true, text: 'The stall with no sign has a queue round the corner again.' },
-      { who: 'Celeb Daily', i: 'CD', g: 'g2', f: false, t: 'Celebrity', v: false, text: "You won't believe what happened at the premiere." },
-      { who: 'Maya Chen', i: 'MC', g: 'g2', f: true, t: 'Food', v: false, text: 'Sourdough attempt four. Getting there.' },
-      { who: 'Match Clips', i: 'MC', g: 'g1', f: false, t: 'Football', v: true, text: 'Every goal from the weekend, in 60 seconds.' }
+  /* ── feed preview ─────────────────────────────────────
+     Mirrors the real app's controls (stream.js modePanel + muted words):
+     the same three sources, the same "why" labels, newest first. The posts
+     are fixed samples; nothing here talks to the server. */
+  var demo = $('#demo-app');
+  if (demo) {
+    var POSTS = [
+      { a: 'Aoife', i: 'AB', g: 'g1', t: '4m', w: 'following', b: 'Golden hour on the pier. Portra 400, no edits.' },
+      { a: 'Tomás', i: 'TO', g: 'g4', c: 'Home Lab', t: '9m', w: 'community', b: 'Quietest mini PC you have actually lived with? Fan noise is all that matters now.' },
+      { a: 'Jordan', i: 'JD', g: 'g3', t: '15m', w: 'everyone', b: 'Is anyone else completely done with crypto adverts on every podcast?' },
+      { a: 'Priya', i: 'PR', g: 'g2', t: '22m', w: 'following', b: 'No spoiler, but that finale. Ring me when you have watched it.' },
+      { a: 'Kofi', i: 'KM', g: 'g5', c: 'Bedroom Producers', t: '31m', w: 'community', b: 'Made a whole beat from ten minutes of the bus stop outside my flat. Stems in the replies.' },
+      { a: 'You', i: 'ME', g: 'g6', t: '48m', w: 'yours', b: 'Trying out RipeStream. Following-only feed is very calm.' },
+      { a: 'Sam', i: 'SM', g: 'g1', c: 'Sunday League', t: '1h', w: 'community', b: 'Transfer window gossip thread, then back to finding a keeper for Sunday.' },
+      { a: 'Lena', i: 'LN', g: 'g4', t: '2h', w: 'everyone', b: 'First sourdough that actually rose. Photographic evidence to follow.' },
+      { a: 'Mina', i: 'MJ', g: 'g2', t: '3h', w: 'following', b: 'Week 9 of marathon training. Legs: questionable. Spirit: intact.' }
     ];
-    var state = { mode: 'following', topics: { Photography: 1, Football: 1, Tech: 1, Food: 1, Celebrity: 0 }, video: true, reply: 'Everyone' };
-    var modeName = { following: 'Following first', balanced: 'Balanced', discovery: 'Discovery' };
-
-    var render = function () {
-      var list = items.filter(function (x) { return state.topics[x.t] && (state.video || !x.v); });
-      var fol = list.filter(function (x) { return x.f; }), rest = list.filter(function (x) { return !x.f; });
-      var out = [];
-      if (state.mode === 'following') out = fol.concat(rest.slice(0, 1));
-      else if (state.mode === 'discovery') out = rest.concat(fol.slice(0, 1));
-      else { for (var k = 0; k < Math.max(fol.length, rest.length); k++) { if (fol[k]) out.push(fol[k]); if (rest[k]) out.push(rest[k]); } }
-      out = out.slice(0, 4);
-      pv.innerHTML = out.length ? out.map(function (x, n) {
-        var why = x.f ? 'You follow ' + (x.s || x.who.split(' ')[0]) : 'Suggested · because you like ' + x.t;
-        return '<div class="pv-item" style="--d:' + (reduced ? 0 : n * 0.06) + 's"><span class="av ' + x.g + '">' + x.i + '</span><div><b>' + x.who +
-          (x.v ? ' <span>· video</span>' : '') + '</b><p>' + x.text + '</p><span class="why-tag' + (x.f ? '' : ' d') + '">' + why + '</span></div></div>';
-      }).join('') : '<p class="pv-empty">Nothing matches right now. That\'s allowed — a quiet feed is a feature.</p>';
-      $('#pv-mode').textContent = modeName[state.mode];
-      $('#pv-reply').textContent = state.reply;
+    var WHY = { yours: 'Your post', following: 'You follow them', community: 'From a community you joined', everyone: 'Everyone · newest first' };
+    var SRC = {
+      following: ['Following', 'Only people you follow, plus your own posts.', ['following', 'yours']],
+      communities: ['Communities', 'Only communities you’ve joined.', ['community']],
+      all: ['Everyone', 'Every member’s posts, newest first.', ['following', 'yours', 'community', 'everyone']]
     };
-
-    var seg = function (id, attr, key) {
-      $$('#' + id + ' button').forEach(function (b) {
-        b.addEventListener('click', function () {
-          $$('#' + id + ' button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
-          state[key] = b.getAttribute(attr); render();
-        });
+    var st = { src: 'following', mutes: {} };
+    var feedEl = $('#feed');
+    var el = function (tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+    function card(p) {
+      var li = el('li', 'post'), ph = el('div', 'ph');
+      var av = el('span', 'av ' + p.g, p.i); av.setAttribute('aria-hidden', 'true');
+      ph.appendChild(av); ph.appendChild(el('b', null, p.a));
+      ph.appendChild(el('span', 't', (p.c ? 'in ' + p.c + ' · ' : '· ') + p.t));
+      li.appendChild(ph); li.appendChild(el('p', 'body', p.b));
+      li.appendChild(el('span', 'why', WHY[p.w] + (p.c && p.w === 'community' ? ' · ' + p.c : '')));
+      return li;
+    }
+    var swapT = 0;
+    function draw(animate) {
+      var s = SRC[st.src], words = Object.keys(st.mutes).filter(function (k) { return st.mutes[k]; });
+      var inSrc = POSTS.filter(function (p) { return s[2].indexOf(p.w) > -1; });
+      var shown = inSrc.filter(function (p) {
+        var b = p.b.toLowerCase();
+        return !words.some(function (w) { return b.indexOf(w) > -1; });
       });
-    };
-    seg('mode', 'data-mode', 'mode');
-    seg('reply', 'data-reply', 'reply');
-    $$('#topics .tg').forEach(function (b) {
+      var hidden = inSrc.length - shown.length;
+      $('#scr-title').textContent = s[0];
+      $('#src-desc').textContent = s[1];
+      $('#scr-count').textContent = shown.length + (shown.length === 1 ? ' post' : ' posts');
+      $('#hidden-note').textContent = hidden ? hidden + (hidden === 1 ? ' post' : ' posts') + ' hidden by your muted words.' : '';
+      var render = function () {
+        feedEl.replaceChildren.apply(feedEl, shown.length ? shown.map(card) : [el('li', 'empty-feed', 'Nothing here — every post matched a muted word.')]);
+        if (animate && !reduced) {
+          var kids = Array.prototype.slice.call(feedEl.children);
+          kids.forEach(function (k, n) { k.classList.add('enter'); k.style.transitionDelay = (n * 35) + 'ms'; });
+          requestAnimationFrame(function () { requestAnimationFrame(function () { kids.forEach(function (k) { k.classList.remove('enter'); }); }); });
+        }
+      };
+      clearTimeout(swapT);
+      if (animate && !reduced && feedEl.children.length) {
+        Array.prototype.forEach.call(feedEl.children, function (k) { k.style.transitionDelay = '0ms'; k.classList.add('leave'); });
+        swapT = setTimeout(render, 180);
+      } else render();
+    }
+    $$('#src button').forEach(function (b) {
       b.addEventListener('click', function () {
-        var on = b.getAttribute('aria-pressed') !== 'true';
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-        state.topics[b.getAttribute('data-topic')] = on ? 1 : 0; render();
+        if (st.src === b.getAttribute('data-src')) return;
+        st.src = b.getAttribute('data-src');
+        $$('#src button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+        draw(true);
+        track('demo_interact', { control: 'source', value: st.src });
       });
     });
-    var sw = $('#sw-video');
-    sw.addEventListener('click', function () {
-      state.video = sw.getAttribute('aria-checked') !== 'true';
-      sw.setAttribute('aria-checked', state.video ? 'true' : 'false'); render();
+    $$('#mutes .chip').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var w = b.getAttribute('data-mute'), on = !st.mutes[w];
+        st.mutes[w] = on;
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('aria-label', (on ? 'Unmute ' : 'Mute ') + w);
+        draw(true);
+        track('demo_interact', { control: 'mute' });
+      });
+      b.setAttribute('aria-label', 'Mute ' + b.getAttribute('data-mute'));
     });
-    render();
-  }
-
-  /* ── local city switcher ───────────────────────────── */
-  var cities = {
-    dublin: ['Dublin', [
-      ['#SeaSwimSeason', 'Photos from the morning swimmers'], ['New cycle lane', 'The debate continues']],
-      [['Outdoor film night', 'Thu · 8pm · 0.8 km'], ['Saturday food market', 'Sat · 10am']],
-      [['Sea Swimmers', 'Tide times, meet-ups, bravery'], ['Northside Runners', 'Easy pace, every Tuesday']],
-      [['A bike repair pop-up by the canal', 'Open weekends']],
-      [["“Where's a quiet pint that isn't a tourist trap?”", 'Local discussion']],
-      [['Photographers near you', 'Who share what you shoot']]],
-    lagos: ['Lagos', [
-      ['Beach day this weekend', 'Plans are forming'], ['Traffic this morning', 'Shortcuts, shared live']],
-      [['Rooftop Afrobeats night', 'Fri · 9pm'], ['Founders breakfast', 'Sat · 9am']],
-      [['Lagos Film Photographers', 'Golden hour, every hour'], ['Lekki Runners', 'Before the heat, 6am']],
-      [['A new suya spot near you', 'Opened this week']],
-      [['“Best place to work remotely with reliable power?”', 'Local discussion']],
-      [['Designers near you', 'Portfolios worth following']]],
-    lisbon: ['Lisbon', [
-      ['Miradouro sunsets', 'Tonight looks good'], ['Surf forecast', 'Clean waves on Saturday']],
-      [['Fado night', 'Thu · 9:30pm'], ['Flea market morning', 'Sat · 9am']],
-      [['Surf Carpool', 'Seats to the coast'], ['Language Swap', 'Portuguese ⇄ English']],
-      [['A new speciality coffee roaster nearby', 'Tasting flights on Fridays']],
-      [['“Onde se come o melhor pastel de nata?”', 'Translated · Where do locals actually go?']],
-      [['Surfers near you', 'Same break, same mornings']]],
-    toronto: ['Toronto', [
-      ['First snow predictions', 'Everyone has a theory'], ['Best patios still open', 'Last call for the season']],
-      [['Night market', 'Fri · 6pm'], ['Ravine clean-up', 'Sun · 10am']],
-      [['Pickup Basketball', 'Courts, times, teams'], ['Board Game Nights East End', 'New players welcome']],
-      [['A new ramen bar near you', 'Opened on your street']],
-      [['“Winter tyres — worth it downtown?”', 'Local discussion']],
-      [['Climbers near you', 'Looking for a belay partner']]],
-    melbourne: ['Melbourne', [
-      ['Four seasons in one day', 'Again'], ['The laneway coffee debate', 'Strong opinions only']],
-      [['Rooftop cinema', 'Sat · 8pm'], ['Riverside 5k', 'Sat · 8am']],
-      [['Coffee Nerds', 'Beans, grinders, gossip'], ['Bayside Cyclists', 'Sunday coastal loop']],
-      [['A new dumpling place near you', 'Handmade, open late']],
-      [['“Best op shops in the north?”', 'Local discussion']],
-      [['Musicians near you', 'Looking for a drummer']]],
-    seoul: ['Seoul', [
-      ['Han River picnic weather', 'Blankets out'], ['New café street', 'Everyone went this weekend']],
-      [['Indie gig', 'Fri · 8pm'], ['Night hike', 'Sat · 7pm']],
-      [['Film Photographers', 'Scans from the old town'], ['Language Exchange', 'Korean ⇄ English']],
-      [['A new bakery near you', 'Salt bread sells out by noon']],
-      [['“Best late-night food near the station?”', 'Translated from Korean']],
-      [['Runners near you', 'River loop at 6am']]]
-  };
-  var heads = [['Trending locally', 'var(--ripe)'], ['Events', 'var(--lime)'], ['Local communities', 'var(--sky)'],
-               ['Businesses', '#ffd166'], ['Discussions', '#b69cff'], ['People', '#ff9fc6']];
-  var lf = $('#localfeed');
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  $$('#cities button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (b.getAttribute('aria-pressed') === 'true') return;
-      $$('#cities button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
-      var c = cities[b.getAttribute('data-city')];
-      lf.classList.add('swap');
-      setTimeout(function () {
-        $('#lf-name').textContent = c[0];
-        $('#lf-grid').innerHTML = heads.map(function (h, n) {
-          return '<div class="lf" style="--c:' + h[1] + '"><h3>' + h[0] + '</h3><ul>' + c[n + 1].map(function (x) {
-            return '<li>' + esc(x[0]) + '<small>' + esc(x[1]) + '</small></li>';
-          }).join('') + '</ul></div>';
-        }).join('');
-        requestAnimationFrame(function () { lf.classList.remove('swap'); });
-      }, reduced ? 0 : 220);
-    });
-  });
-
-  /* ── AI demos ──────────────────────────────────────── */
-  var sb = $('#sum-btn');
-  if (sb) sb.addEventListener('click', function () {
-    var out = $('#sum-out'), open = out.hasAttribute('hidden');
-    if (open) out.removeAttribute('hidden'); else out.setAttribute('hidden', '');
-    sb.setAttribute('aria-expanded', open ? 'true' : 'false');
-    $('span', sb).textContent = open ? 'Show the full thread' : 'Summarise 212 replies';
-  });
-  var tb = $('#tr-btn');
-  if (tb) {
-    var pt = 'Alguém sabe onde se come o melhor pastel de nata fora das zonas turísticas?';
-    var en = 'Does anyone know where to get the best pastel de nata outside the tourist areas?';
-    tb.addEventListener('click', function () {
-      var on = tb.getAttribute('aria-pressed') !== 'true';
-      tb.setAttribute('aria-pressed', on ? 'true' : 'false');
-      var t = $('#tr-text');
-      t.style.opacity = 0;
-      setTimeout(function () {
-        t.textContent = on ? en : pt;
-        $('#tr-meta').textContent = on ? 'Inês · Lisbon · Translated from Portuguese' : 'Inês · Lisbon · Portuguese';
-        $('span', tb).textContent = on ? 'Show original' : 'Translate to English';
-        t.style.opacity = 1;
-      }, reduced ? 0 : 200);
-    });
+    draw(false);
   }
 })();
