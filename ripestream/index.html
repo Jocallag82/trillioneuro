@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RipeStream — a social feed you choose, newest first</title>
+<title>RipeStream — Social, but actually yours. A feed you choose</title>
 <meta name="description" content="RipeStream is a social network where you choose what fills your feed: people you follow, communities you join, or everyone — newest first, no ads ranking it. Free early beta; the first 10,000 members become Founding Members.">
 <link rel="canonical" href="https://www.ripestream.com/">
 <meta name="robots" content="index,follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RipeStream">
 <meta property="og:url" content="https://www.ripestream.com/">
-<meta property="og:title" content="RipeStream — a social feed you choose, newest first">
+<meta property="og:title" content="RipeStream — Social, but actually yours.">
 <meta property="og:description" content="Choose your feed's sources — people you follow, communities you join, or everyone. Newest first, every post says why it's there. Free early beta.">
 <meta property="og:image" content="https://www.ripestream.com/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -18,7 +18,7 @@
 <meta property="og:image:alt" content="RipeStream — Social, but actually yours.">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RipeStream — a social feed you choose, newest first">
+<meta name="twitter:title" content="RipeStream — Social, but actually yours.">
 <meta name="twitter:description" content="People you follow, communities you join, or everyone. Newest first. Free early beta.">
 <meta name="twitter:image" content="https://www.ripestream.com/og-image.png">
 <meta name="theme-color" content="#0c0a09">
@@ -181,6 +181,7 @@ main,footer{overflow-x:clip}
 .screen .tag{color:var(--lime)}
 .screen .count{font-variant-numeric:tabular-nums}
 .empty-feed{padding:28px 16px;text-align:center;color:var(--mute-d);border:1px dashed var(--line-d2);border-radius:16px;font-size:15px}
+.tagline{display:flex;margin:4px 0 14px;color:var(--lime)}
 .hidden-note{margin-top:12px;font-size:13px;color:var(--mute-d)}
 .no-why .post .why{display:none}
 
@@ -351,13 +352,14 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
       <p class="invite-banner" id="invite-banner" role="status" hidden></p>
       <p class="status" id="hero-status"><span class="dot" aria-hidden="true"></span><span><b>Free early beta.</b> <span data-when="open">Founding places are open.</span><span data-when="closed" hidden>Joining is by invitation.</span></span></p>
       <span class="wordmark" aria-hidden="true">Ripe<span class="r">Stream</span></span>
+      <p class="eyebrow tagline">Social, but actually yours.</p>
       <h1 id="hero-title" class="display"><span class="sr">RipeStream: </span>A social feed <em>you</em> choose.</h1>
       <p class="hero-copy">Most feeds are ranked to keep you scrolling. On RipeStream you pick the source — people you follow, communities you join, or everyone — and posts arrive newest first. No ads ranking them, and every post says why it's there.</p>
       <div class="hero-cta">
         <a class="btn btn-ripe" href="#join" data-focus-form><span data-when="open">Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-line" href="#demo">Try the feed controls</a>
       </div>
-      <p class="hero-terms" data-when="open">Free. No password — we email you a sign-in link. <b>The first 10,000 members to confirm become Founding Members</b>; after that, joining needs an invitation from a member.</p>
+      <p class="hero-terms" data-when="open">Free. No password and no invitation needed — we email you a sign-in link. <b>The first 10,000 members to confirm become Founding Members.</b></p>
       <p class="hero-terms" data-when="closed" hidden>Free. No password — we email you a sign-in link. <b>All 10,000 founding places are taken</b>, so you'll need an invitation code from a member.</p>
     </div>
 
@@ -452,13 +454,13 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
         </ul>
       </div>
       <div class="col next rv" style="--d:.08s">
-        <h3>Not built yet</h3>
+        <h3>Still being developed</h3>
         <ul>
           <li><span>Blocking<small>Muting hides someone from you; it doesn't stop them seeing your posts</small></span></li>
           <li><span>Per-post audience and reply controls<small>Every post is visible to all confirmed members</small></span></li>
           <li><span>Direct messages, events and local discovery</span></li>
           <li><span>Native apps<small>Web only for now — works in a phone browser</small></span></li>
-          <li><span>Self-service account deletion<small>Email privacy@ripestream.com and we delete everything within 30 days</small></span></li>
+          <li><span>Self-service account deletion<small>Email privacy@ripestream.com and we act on it within 30 days</small></span></li>
         </ul>
       </div>
     </div>
@@ -494,11 +496,11 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
   <div class="wrap">
     <p class="eyebrow rv">Membership</p>
     <h2 id="mem-title" class="display h2 rv">How joining works.</h2>
-    <p class="lede rv">Free, and growing on purpose: first through 10,000 founding places, then by invitation from people already here.</p>
+    <p class="lede rv" data-when="open">Free, and open to anyone right now. Invitations only take over once all 10,000 founding places have been claimed.</p><p class="lede rv" data-when="closed" hidden>Free. The 10,000 founding places are claimed, so new members now join by invitation from people already here.</p>
     <ol class="steps">
       <li class="rv"><b>Join with your email</b><p>No password. We email you a link — opening it confirms your address and signs you in. Lost it? Ask for a <a href="/member">new link</a> any time.</p></li>
       <li class="rv" style="--d:.06s"><b>The first 10,000 become Founding Members</b><p>Numbered in the order people confirm. It's permanent recognition — not something you can buy, and it doesn't lapse.</p></li>
-      <li class="rv" style="--d:.12s"><b>Then it's by invitation</b><p>Every member gets <span data-fm-per-month>5</span> invitations a month. Each code works once and expires after <span data-fm-ttl>30</span> days.</p></li>
+      <li class="rv" style="--d:.12s"><b>Later: by invitation</b><p>Every member gets <span data-fm-per-month>5</span> invitations a month. Each code works once and expires after <span data-fm-ttl>30</span> days.</p></li>
     </ol>
     <div class="phase rv" role="status"><span class="dot" aria-hidden="true"></span><p data-when="open"><b>Right now:</b> founding places are open — no invitation needed.</p><p data-when="closed" hidden><b>Right now:</b> all founding places are taken. Joining needs an invitation code from a member.</p></div>
     <p class="noinv rv" data-when="closed" hidden>No invitation? Ask someone you know on RipeStream — members can create one in seconds. We announce any open-invitation rounds on <a href="https://bsky.app/profile/ripestream.com" rel="noopener" target="_blank">Bluesky</a> and <a href="https://x.com/ripestream" rel="noopener" target="_blank">X</a>.</p>
@@ -514,7 +516,7 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
       <p class="lede" data-when="closed" hidden>If a member has invited you, enter their code below.</p>
       <ul class="facts">
         <li>Free — no card, no password</li>
-        <li>Your email is never shown to other members or sold</li>
+        <li>Your email is never shown to other members, sold or rented</li>
         <li>Leave any time: we delete your data on request</li>
       </ul>
     </div>
@@ -541,7 +543,7 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
         <div class="hp" aria-hidden="true"><label for="join-web">Leave this empty</label><input id="join-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <button class="btn btn-ripe" type="submit"><span class="lbl" data-label-open="Claim my founding place" data-label-closed="Join with invitation">Claim my founding place</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
         <p class="err" id="join-err" role="alert"></p>
-        <p class="fine">We only email you about your RipeStream account. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a><br>Already a member? <a href="/member">Email me my sign-in link</a></p>
+        <p class="fine">We email you about your account and, now and then, RipeStream news — see Privacy. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a><br>Already a member? <a href="/member">Email me my sign-in link</a></p>
       </form>
     </div>
   </div>

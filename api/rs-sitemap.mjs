@@ -3,7 +3,7 @@
 import { rpc } from './_te/lib.mjs';
 import { SITE, indexable } from './rs-community.mjs';
 
-const STATIC = [['/', null], ['/communities', null], ['/privacy', '2026-10-17'], ['/terms', '2026-10-17']];
+const STATIC = [['/', null], ['/communities', null], ['/privacy', '2026-10-27'], ['/terms', '2026-10-17']];
 
 export function build(cs) {
   const x = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
