@@ -61,13 +61,16 @@
      The default (open) is what no-JS visitors see; the counter below flips
      it from the live number. The server refuses a join without an
      invitation once places are gone, whatever this page shows. */
-  var founding = { state: null, open: true };
-  function setPhase(open) {
-    founding.open = open;
-    document.documentElement.classList.toggle('fm-closed', !open);
+  // phase: 'unknown' until the server answers (the static default), then
+  // 'open' or 'closed'. founding.open stays null while unknown, so nothing
+  // claims a founding place or demands an invitation on a guess.
+  var founding = { state: null, open: null, phase: 'unknown' };
+  function setPhase(phase) {
+    founding.phase = phase;
+    founding.open = phase === 'unknown' ? null : phase === 'open';
+    document.documentElement.classList.toggle('fm-closed', phase === 'closed');
     $$('[data-when]').forEach(function (el) {
-      var want = el.getAttribute('data-when') === 'open';
-      if (want === open) el.removeAttribute('hidden'); else el.setAttribute('hidden', '');
+      if (el.getAttribute('data-when') === phase) el.removeAttribute('hidden'); else el.setAttribute('hidden', '');
     });
     $$('.rs-form').forEach(function (f) { syncForm(f); });
   }
@@ -86,8 +89,13 @@
       if (!st || typeof st.claimed !== 'number') throw new Error('bad status');
       founding.state = st;
       renderCounter(st);
-      setPhase(!!st.open);
-    }).catch(function () { /* keep the static copy; the server still enforces the rules */ });
+      setPhase(st.open ? 'open' : 'closed');
+    }).catch(function () {
+      // Status unknown: say so instead of guessing. Joining still works —
+      // rs_join decides, and its INVITE_REQUIRED answer is handled below.
+      if (founding.phase !== 'unknown') return;
+      $$('[data-status-msg]').forEach(function (el) { el.textContent = "Couldn't check membership status just now. You can still join; we'll tell you if an invitation is needed."; });
+    });
   }
   loadFounding();
   document.addEventListener('visibilitychange', function () {
@@ -138,12 +146,13 @@
   // Closed phase: the invitation field is required and always open.
   function syncForm(form) {
     var d = $('[data-invite-field]', form), inp = $('input[name=invite]', form);
-    if (d) { d.classList.toggle('req', !founding.open); if (!founding.open) d.open = true; }
-    if (inp) { if (founding.open) inp.removeAttribute('required'); else inp.setAttribute('required', ''); }
-    var opt = $('[data-invite-opt]', form); if (opt) opt.textContent = founding.open ? 'Optional' : 'Required';
+    var closed = founding.open === false;
+    if (d) { d.classList.toggle('req', closed); if (closed) d.open = true; }
+    if (inp) { if (closed) inp.setAttribute('required', ''); else inp.removeAttribute('required'); }
+    var opt = $('[data-invite-opt]', form); if (opt) opt.textContent = closed ? 'Required' : 'Optional';
     var lbl = $('.lbl', form);
     if (lbl && !$('button[type=submit]', form).disabled) {
-      lbl.textContent = lbl.getAttribute(founding.open ? 'data-label-open' : 'data-label-closed');
+      lbl.textContent = lbl.getAttribute('data-label-' + founding.phase);
     }
   }
 
@@ -286,7 +295,7 @@
       title.textContent = d.name ? 'Check your inbox, ' + d.name + '.' : 'Check your inbox.';
       body.textContent = d.invite
         ? "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email and take the place your invitation holds.'
-        : founding.open
+        : founding.open === true
           ? "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email — that\'s the moment your founding place is claimed. Places go in the order people confirm.'
           : "We've emailed " + (d.email || 'you') + ' a link. Open it to confirm your email.';
     }
@@ -317,7 +326,7 @@
     btn.disabled = on;
     btn.classList.toggle('loading', on);
     btn.setAttribute('aria-busy', on ? 'true' : 'false');
-    lbl.textContent = on ? 'Joining…' : lbl.getAttribute(founding.open ? 'data-label-open' : 'data-label-closed');
+    lbl.textContent = on ? 'Joining…' : lbl.getAttribute('data-label-' + founding.phase);
   }
 
   $$('.rs-form').forEach(function (form) {
@@ -353,7 +362,7 @@
         $('[data-invite-field]', form).open = true;
         return setError(form, 'Invitation codes look like ABCD-2345.', invite);
       }
-      if (!code && !founding.open) {
+      if (!code && founding.open === false) {
         $('[data-invite-field]', form).open = true;
         return setError(form, 'Founding membership is closed, so joining needs an invitation code from a member.', invite);
       }
@@ -371,7 +380,7 @@
         var done = showDone(host, { name: name, email: value, invite: !!code });
         done.focus({ preventScroll: true });
         if (dock && dock.hideForGood) dock.hideForGood();
-        track('join_submitted', { source: joinSource(form), invited: !!code, phase: founding.open ? 'founding' : 'invite' });
+        track('join_submitted', { source: joinSource(form), invited: !!code, phase: founding.phase });
       }).catch(function (err) {
         busy = false;
         setLoading(form, false);
@@ -387,9 +396,12 @@
           setError(form, INVITE_MSG[inv[1].toLowerCase()], invite);
         } else if (msg.indexOf('INVITE_REQUIRED') === 0) {
           // The last founding place went while this page was open.
+          var wasOpen = founding.open === true;
           loadFounding();
-          setPhase(false);
-          setError(form, 'The last founding place has just been claimed. RipeStream is now invite-only — add an invitation code from a member to join.', invite);
+          setPhase('closed');
+          setError(form, wasOpen
+            ? 'The last founding place has just been claimed. RipeStream is now invite-only — add an invitation code from a member to join.'
+            : 'Founding places are all taken, so joining needs an invitation code from a member.', invite);
         } else if (err && err.name === 'AbortError') {
           setError(form, 'That took too long. Check your connection and try again.');
         } else if (err instanceof TypeError) {

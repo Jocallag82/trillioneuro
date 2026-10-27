@@ -337,7 +337,7 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
     </nav>
     <div class="nav-end">
       <a class="signin" href="/member" data-nav-signin>Member sign-in</a>
-      <a class="btn btn-ripe btn-sm" href="#join" data-focus-form data-nav-cta><span data-when="open">Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span></a>
+      <a class="btn btn-ripe btn-sm" href="#join" data-focus-form data-nav-cta><span data-when="unknown">Join RipeStream</span><span data-when="open" hidden>Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span></a>
     </div>
   </div>
 </header>
@@ -350,16 +350,17 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
   <div class="wrap hero-grid">
     <div class="hero-enter">
       <p class="invite-banner" id="invite-banner" role="status" hidden></p>
-      <p class="status" id="hero-status"><span class="dot" aria-hidden="true"></span><span><b>Free early beta.</b> <span data-when="open">Founding places are open.</span><span data-when="closed" hidden>Joining is by invitation.</span></span></p>
+      <p class="status" id="hero-status"><span class="dot" aria-hidden="true"></span><span><b>Free early beta.</b> <span data-when="unknown" data-status-msg>Checking membership status…</span><span data-when="open" hidden>Founding places are open.</span><span data-when="closed" hidden>Joining is by invitation.</span></span></p>
       <span class="wordmark" aria-hidden="true">Ripe<span class="r">Stream</span></span>
       <p class="eyebrow tagline">Social, but actually yours.</p>
       <h1 id="hero-title" class="display"><span class="sr">RipeStream: </span>A social feed <em>you</em> choose.</h1>
       <p class="hero-copy">Most feeds are ranked to keep you scrolling. On RipeStream you pick the source — people you follow, communities you join, or everyone — and posts arrive newest first. No ads ranking them, and every post says why it's there.</p>
       <div class="hero-cta">
-        <a class="btn btn-ripe" href="#join" data-focus-form><span data-when="open">Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ripe" href="#join" data-focus-form><span data-when="unknown">Join RipeStream</span><span data-when="open" hidden>Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-line" href="#demo">Try the feed controls</a>
       </div>
-      <p class="hero-terms" data-when="open">Free. No password and no invitation needed — we email you a sign-in link. <b>The first 10,000 members to confirm become Founding Members.</b></p>
+      <p class="hero-terms" data-when="unknown">Free. No password — we email you a sign-in link. Whether you get a founding place or need an invitation is decided when you join.</p>
+      <p class="hero-terms" data-when="open" hidden>Free. No password and no invitation needed — we email you a sign-in link. <b>The first 10,000 members to confirm become Founding Members.</b></p>
       <p class="hero-terms" data-when="closed" hidden>Free. No password — we email you a sign-in link. <b>All 10,000 founding places are taken</b>, so you'll need an invitation code from a member.</p>
     </div>
 
@@ -496,13 +497,13 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
   <div class="wrap">
     <p class="eyebrow rv">Membership</p>
     <h2 id="mem-title" class="display h2 rv">How joining works.</h2>
-    <p class="lede rv" data-when="open">Free, and open to anyone right now. Invitations only take over once all 10,000 founding places have been claimed.</p><p class="lede rv" data-when="closed" hidden>Free. The 10,000 founding places are claimed, so new members now join by invitation from people already here.</p>
+    <p class="lede rv" data-when="unknown">Free. The first 10,000 members to confirm become Founding Members; after that, new members join by invitation.</p><p class="lede rv" data-when="open" hidden>Free, and open to anyone right now. Invitations only take over once all 10,000 founding places have been claimed.</p><p class="lede rv" data-when="closed" hidden>Free. The 10,000 founding places are claimed, so new members now join by invitation from people already here.</p>
     <ol class="steps">
       <li class="rv"><b>Join with your email</b><p>No password. We email you a link — opening it confirms your address and signs you in. Lost it? Ask for a <a href="/member">new link</a> any time.</p></li>
       <li class="rv" style="--d:.06s"><b>The first 10,000 become Founding Members</b><p>Numbered in the order people confirm. It's permanent recognition — not something you can buy, and it doesn't lapse.</p></li>
       <li class="rv" style="--d:.12s"><b>Later: by invitation</b><p>Every member gets <span data-fm-per-month>5</span> invitations a month. Each code works once and expires after <span data-fm-ttl>30</span> days.</p></li>
     </ol>
-    <div class="phase rv" role="status"><span class="dot" aria-hidden="true"></span><p data-when="open"><b>Right now:</b> founding places are open — no invitation needed.</p><p data-when="closed" hidden><b>Right now:</b> all founding places are taken. Joining needs an invitation code from a member.</p></div>
+    <div class="phase rv" role="status"><span class="dot" aria-hidden="true"></span><p data-when="unknown"><b>Right now:</b> <span data-status-msg>checking whether founding places are still open…</span></p><p data-when="open" hidden><b>Right now:</b> founding places are open — no invitation needed.</p><p data-when="closed" hidden><b>Right now:</b> all founding places are taken. Joining needs an invitation code from a member.</p></div>
     <p class="noinv rv" data-when="closed" hidden>No invitation? Ask someone you know on RipeStream — members can create one in seconds. We announce any open-invitation rounds on <a href="https://bsky.app/profile/ripestream.com" rel="noopener" target="_blank">Bluesky</a> and <a href="https://x.com/ripestream" rel="noopener" target="_blank">X</a>.</p>
   </div>
 </section>
@@ -511,8 +512,9 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
 <section class="join pad" id="join" aria-labelledby="join-title">
   <div class="wrap join-grid">
     <div class="rv">
-      <h2 id="join-title" class="display"><span data-when="open">Claim your founding place.</span><span data-when="closed" hidden>Join with an invitation.</span></h2>
-      <p class="lede" data-when="open">Your place is claimed the moment you open the link we email you.</p>
+      <h2 id="join-title" class="display"><span data-when="unknown">Join RipeStream.</span><span data-when="open" hidden>Claim your founding place.</span><span data-when="closed" hidden>Join with an invitation.</span></h2>
+      <p class="lede" data-when="unknown">We email you a link; opening it confirms your address.</p>
+      <p class="lede" data-when="open" hidden>Your place is claimed the moment you open the link we email you.</p>
       <p class="lede" data-when="closed" hidden>If a member has invited you, enter their code below.</p>
       <ul class="facts">
         <li>Free — no card, no password</li>
@@ -522,7 +524,7 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
     </div>
     <div class="card-form rv" style="--d:.08s" data-form-host>
       <form class="rs-form" data-source="join" novalidate>
-        <h3><span data-when="open">Join RipeStream</span><span data-when="closed" hidden>Join with an invitation</span></h3>
+        <h3><span data-when="unknown">Join RipeStream</span><span data-when="open" hidden>Join RipeStream</span><span data-when="closed" hidden>Join with an invitation</span></h3>
         <p class="intro" data-invite-intro>Takes ten seconds. We email you a link to confirm.</p>
         <div class="field">
           <label for="join-name">First name <span>Optional</span></label>
@@ -541,8 +543,9 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
           </div>
         </details>
         <div class="hp" aria-hidden="true"><label for="join-web">Leave this empty</label><input id="join-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <button class="btn btn-ripe" type="submit"><span class="lbl" data-label-open="Claim my founding place" data-label-closed="Join with invitation">Claim my founding place</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
+        <button class="btn btn-ripe" type="submit"><span class="lbl" data-label-unknown="Join RipeStream" data-label-open="Claim my founding place" data-label-closed="Join with invitation">Join RipeStream</span><svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
         <p class="err" id="join-err" role="alert"></p>
+        <noscript><p class="err">Joining needs JavaScript turned on.</p></noscript>
         <p class="fine">We email you about your account and, now and then, RipeStream news — see Privacy. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a><br>Already a member? <a href="/member">Email me my sign-in link</a></p>
       </form>
     </div>
@@ -589,7 +592,7 @@ footer{border-top:1px solid var(--line-d);padding:48px 0 calc(40px + env(safe-ar
   </div>
 </footer>
 
-<div class="dock" id="dock"><a class="btn btn-ripe" href="#join" data-focus-form><span data-when="open">Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+<div class="dock" id="dock"><a class="btn btn-ripe" href="#join" data-focus-form><span data-when="unknown">Join RipeStream</span><span data-when="open" hidden>Claim a founding place</span><span data-when="closed" hidden>Join with an invitation</span> <svg class="arr" width="20" height="20" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
 
 <template id="done-tpl">
   <div class="done" tabindex="-1">

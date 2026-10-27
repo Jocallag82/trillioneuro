@@ -9,19 +9,19 @@ const read = (f) => readFileSync(new URL('../ripestream/' + f, import.meta.url),
 const html = read('index.html');
 const body = html.slice(html.indexOf('<body'));
 
-test('every phase-dependent element has a matching pair, closed copy hidden by default', () => {
-  const open = body.match(/data-when="open"/g).length;
-  const closed = body.match(/data-when="closed"/g).length;
-  assert.ok(open >= 8);
-  assert.equal(closed, open + 1); // + the closed-only "No invitation?" note
-  for (const m of body.matchAll(/<[^>]*data-when="closed"[^>]*>/g)) assert.match(m[0], /\shidden[\s>]/, m[0]);
-  for (const m of body.matchAll(/<[^>]*data-when="open"[^>]*>/g)) assert.doesNotMatch(m[0], /\shidden[\s>]/, m[0]);
+test('static default is the honest unknown state; open/closed copy hidden until the server answers', () => {
+  const count = (w) => (body.match(new RegExp(`data-when="${w}"`, 'g')) || []).length;
+  assert.ok(count('unknown') >= 10);
+  assert.equal(count('open'), count('unknown'));
+  assert.equal(count('closed'), count('open') + 1); // + the closed-only "No invitation?" note
+  for (const w of ['open', 'closed']) for (const m of body.matchAll(new RegExp(`<[^>]*data-when="${w}"[^>]*>`, 'g'))) assert.match(m[0], /\shidden[\s>]/, m[0]);
+  for (const m of body.matchAll(/<[^>]*data-when="unknown"[^>]*>/g)) assert.doesNotMatch(m[0], /\shidden[\s>]/, m[0]);
 });
 
-test('open-phase copy never asks for an invitation or says founding is closed', () => {
-  const visible = body.replace(/<[^>]*data-when="closed"[^>]*>[\s\S]*?<\/(p|span)>/g, '');
-  assert.doesNotMatch(visible, /places are taken|founding (membership|places?) (is |are )?closed/i);
-  assert.match(visible, /no invitation needed/i);
+test('default (pre-status / no-JS) copy makes no claim about the current phase', () => {
+  const visible = body.replace(/<([a-z0-9]+)[^>]*data-when="(open|closed)"[^>]*>[\s\S]*?<\/\1>/g, '').replace(/data-label-[a-z]+="[^"]*"/g, '');
+  assert.doesNotMatch(visible, /places are (open|taken)|no invitation needed|Claim (a|my|your) founding place/i);
+  assert.match(body, /data-label-unknown="Join RipeStream"[^>]*>Join RipeStream</);
 });
 
 test('join CTAs point at an existing #join form', () => {
