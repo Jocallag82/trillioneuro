@@ -7,6 +7,7 @@ import { screenText } from '@/lib/screening';
 import { audit } from '@/lib/audit';
 import { rateLimit } from '@/lib/security';
 import { openReconfirmation } from '@/lib/disputes';
+import { draftReply, TONES, type Tone } from '@/lib/ai';
 
 const back = (id: string, k: 'msg' | 'err', m: string) => `/dashboard/b/${id}/reviews?${k}=${encodeURIComponent(m)}`;
 
@@ -44,4 +45,22 @@ export async function disputeReview(form: FormData) {
     reason: DISPUTE_REASONS[reason as keyof typeof DISPUTE_REASONS], allegation });
   if (!res.ok) redirect(back(id, 'err', res.error));
   redirect(back(id, 'msg', 'Dispute submitted. We’ve asked the reviewer to reconfirm. If they don’t within 14 days, the review is removed automatically.'));
+}
+
+export type DraftState = { text?: string; error?: string; n?: number };
+
+/** Returns an AI draft into the reply box. Never publishes: the owner edits and clicks Publish. */
+export async function draftReplyAction(prev: DraftState, form: FormData): Promise<DraftState> {
+  const id = String(form.get('business_id') ?? '');
+  const reviewId = String(form.get('review_id') ?? '');
+  const tone = String(form.get('tone') ?? 'professional');
+  const ctx = await loadBusinessCtx(id, `/dashboard/b/${id}/reviews`);
+  if (!ctx.verified || !ctx.ent.active) return { error: 'Reply drafts are a member feature.' };
+  if (!(tone in TONES)) return { error: 'Choose a tone.' };
+  if (!(await rateLimit(`draft:${ctx.user.id}`, 15, 3600))) return { error: 'Too many drafts in a short time. Try again later.' };
+  const [r] = await sql<{ rating: number; title: string | null; body: string | null }[]>`
+    select rating, title, body from reviews where id = ${reviewId} and business_id = ${id} and status = 'published'`;
+  if (!r) return { error: 'Review not found.' };
+  const res = await draftReply({ businessId: id, userId: ctx.user.id, reviewId, businessName: ctx.business.name, rating: r.rating, title: r.title, body: r.body, tone: tone as Tone });
+  return res.ok ? { text: res.text, n: (prev.n ?? 0) + 1 } : { error: res.error, n: prev.n };
 }

@@ -60,7 +60,7 @@ export default async function BusinessPage({ params, searchParams }: P) {
   ]);
   const isMember = ent.active;
   const isOwner = user ? (await sql`select 1 from business_members where business_id = ${b.id} and user_id = ${user.id} and status in ('pending','verified')`).length > 0 : false;
-  if (b.status === 'published' && !isOwner && (await isHumanPageView())) await bumpStat(b.id, 'profile_views', await visitorKey()).catch(() => {});
+  if (b.status === 'published' && !isOwner && !(user && isStaff(user)) && (await isHumanPageView())) await bumpStat(b.id, 'profile_views', await visitorKey()).catch(() => {});
 
   const location = [b.locality_name, `Co. ${b.county_name}`].filter(Boolean).join(', ');
   const jsonLd = b.status === 'published' ? {

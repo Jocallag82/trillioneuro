@@ -9,6 +9,7 @@ export function BizNav({ ctx, active }: { ctx: BizCtx; active: string }) {
     ['membership', `/dashboard/b/${id}/membership`, 'Membership'],
     ['qr', `/dashboard/b/${id}/qr`, 'QR code'],
     ['reviews', `/dashboard/b/${id}/reviews`, 'Reviews'],
+    ['badge', `/dashboard/b/${id}/badge`, 'Website badge'],
     ['edit', `/dashboard/b/${id}/edit`, 'Edit profile'],
   ];
   const items = ctx.verified ? all : all.filter(([k]) => k === 'verify');

@@ -13,10 +13,12 @@ export const metadata: Metadata = { title: 'Business overview' };
 
 export default async function Overview({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> }) {
   const { id } = await params;
-  const range = parseRange((await searchParams).range);
-  const days = RANGES[range];
+  const requested = parseRange((await searchParams).range);
   const ctx = await loadBusinessCtx(id, `/dashboard/b/${id}`);
+  // Free verified owners see the real last-30-day funnel; longer history is a member tool.
+  const range = ctx.ent.active ? requested : '30';
   const b = ctx.business;
+  const days = RANGES[range];
   const [recent, f] = await Promise.all([publishedReviews(id, { limit: 3 }), loadFunnel(id, days)]);
   const comp = profileCompleteness(b);
   // Prompts appear only when the underlying data supports them.
@@ -68,13 +70,13 @@ export default async function Overview({ params, searchParams }: { params: Promi
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="activity-h" className="font-sans text-base font-bold tracking-normal">Customer feedback funnel</h2>
           <nav aria-label="Date range" className="flex gap-1 text-sm">
-            {(Object.keys(RANGES) as (keyof typeof RANGES)[]).map((k) => (
+            {(Object.keys(RANGES) as (keyof typeof RANGES)[]).filter((k) => ctx.ent.active || k === '30').map((k) => (
               <Link key={k} href={`/dashboard/b/${id}?range=${k}`} aria-current={range === k ? 'page' : undefined}
                 className={`rounded-full border border-line px-3 py-1 ${range === k ? 'bg-ink text-white' : 'bg-white'}`}>{k === '365' ? '12 months' : `${k} days`}</Link>
             ))}
           </nav>
         </div>
-        {ctx.ent.active ? (
+        {ctx.verified ? (
           <>
             <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
               {funnel.map((m) => (
@@ -95,9 +97,15 @@ export default async function Overview({ params, searchParams }: { params: Promi
                 </div>
               </div>
             ) : <p className="mt-4 text-sm text-muted">No visits or scans recorded in this period yet. Numbers appear as people view your profile or scan your QR code.</p>}
+            {!ctx.ent.active && (
+              <div className="mt-4 flex flex-col items-start justify-between gap-3 rounded-xl border border-gorse/60 bg-gorse-soft p-4 sm:flex-row sm:items-center">
+                <p className="text-sm"><strong>These are your real numbers for the last 30 days.</strong> Members also get 12 months of history, replies to reviews, the QR print kit and invitation messages that turn visits into reviews.</p>
+                <Link href={`/dashboard/b/${id}/membership`} className="btn btn-primary btn-sm shrink-0">Become a member</Link>
+              </div>
+            )}
             <p className="mt-3 text-xs text-muted">Counted from real page loads and the reviews themselves. Bots, link previews and your own visits are excluded; repeat visits by the same visitor on the same day count once.</p>
           </>
-        ) : <p className="mt-2 text-sm text-muted">Activity insights are a member feature. Reviews and your rating stay public either way.</p>}
+        ) : <p className="mt-2 text-sm text-muted">Verify ownership to see activity on your listing.</p>}
       </section>
       <div className="mt-8 grid gap-6 lg:grid-cols-[22rem_1fr]">
         <div className="space-y-6">

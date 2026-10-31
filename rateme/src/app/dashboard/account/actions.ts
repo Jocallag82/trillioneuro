@@ -48,3 +48,11 @@ export async function deleteAccount(form: FormData) {
   await destroySession();
   redirect('/?account=deleted');
 }
+
+export async function setDigest(form: FormData) {
+  const u = await requireUser({ verified: false });
+  const on = form.get('digest') === 'on';
+  await sql`update users set digest_opt_out = ${!on}, updated_at = now() where id = ${u.id}`;
+  if (on) await sql`delete from email_suppressions where email = ${u.email} and reason = 'unsubscribed'`;
+  redirect(back('msg', on ? 'Weekly summaries turned on.' : 'Weekly summaries turned off.'));
+}

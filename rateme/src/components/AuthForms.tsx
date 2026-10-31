@@ -23,13 +23,14 @@ export function LoginForm({ next }: { next?: string }) {
   );
 }
 
-export function RegisterForm({ intent }: { intent?: string }) {
+export function RegisterForm({ intent, refCode, claimToken }: { intent?: string; refCode?: string; claimToken?: string }) {
   const [s, a] = useActionState(registerAction, {});
   if (s.ok) return <div className="notice notice-info" role="status">Check your inbox — we’ve sent you an email with the next step.</div>;
   return (
     <form action={a} className="space-y-4">
       <Err s={s} />
       <input type="hidden" name="intent" value={intent ?? ''} />
+      <input type="hidden" name="ref" value={refCode ?? ''} /><input type="hidden" name="ct" value={claimToken ?? ''} />
       <div className="sr-only-hp" aria-hidden="true"><label>Leave empty<input name="website_confirm" tabIndex={-1} autoComplete="off" /></label></div>
       <FormStarted />
       <label className="field"><span className="label">Your name</span><input name="display_name" className="input" autoComplete="name" required maxLength={80} /></label>

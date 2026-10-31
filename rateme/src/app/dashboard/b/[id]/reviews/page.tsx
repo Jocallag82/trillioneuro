@@ -8,7 +8,9 @@ import { Stars } from '@/components/Stars';
 import { EmptyState, Notice } from '@/components/ui';
 import { SubmitButton } from '@/components/SubmitButton';
 import { formatDate, formatMonth } from '@/lib/format';
-import { respondToReview, disputeReview } from './actions';
+import { disputeReview } from './actions';
+import { ReplyBox } from './ReplyBox';
+import { aiSettings, aiConfigured } from '@/lib/ai';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Reviews' };
@@ -27,6 +29,7 @@ export default async function Reviews({ params, searchParams }: { params: Promis
     from reviews r left join review_responses rr on rr.review_id = r.id
     where r.business_id = ${id} and r.status = 'published' order by r.published_at desc limit 200`;
   const canRespond = ctx.verified && ctx.ent.active;
+  const aiOn = canRespond && aiConfigured() && (await aiSettings()).reply_drafts_enabled;
   return (
     <div>
       <BizNav ctx={ctx} active="reviews" />
@@ -61,11 +64,7 @@ export default async function Reviews({ params, searchParams }: { params: Promis
               {canRespond && (
                 <details className="rounded-xl border border-line p-3">
                   <summary className="cursor-pointer text-sm font-semibold">{r.response_body ? 'Edit response' : 'Respond publicly'}</summary>
-                  <form action={respondToReview} className="mt-3 space-y-2">
-                    <input type="hidden" name="business_id" value={id} /><input type="hidden" name="review_id" value={r.id} />
-                    <textarea name="body" className="textarea" minLength={2} maxLength={2000} required defaultValue={r.response_body ?? ''} aria-label="Your response" />
-                    <SubmitButton className="btn btn-primary btn-sm" pendingText="Saving…">Publish response</SubmitButton>
-                  </form>
+                  <ReplyBox businessId={id} reviewId={r.id} initial={r.response_body ?? ''} aiOn={aiOn} />
                 </details>
               )}
               {ctx.verified && (

@@ -12,9 +12,10 @@ import { CreateBusinessForm } from './CreateBusinessForm';
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Find or add your business' };
 
-export default async function Claim({ searchParams }: { searchParams: Promise<{ q?: string; county?: string; business?: string; error?: string }> }) {
+export default async function Claim({ searchParams }: { searchParams: Promise<{ q?: string; county?: string; business?: string; error?: string; ct?: string }> }) {
   const sp = await searchParams;
-  await requireUser({ next: '/dashboard/claim' });
+  const keep = new URLSearchParams(Object.entries({ business: sp.business, ct: sp.ct }).filter(([, v]) => v) as [string, string][]).toString();
+  await requireUser({ next: `/dashboard/claim${keep ? `?${keep}` : ''}` });
   const [cats, counties, localities] = await Promise.all([getCategories(), getCounties(), getLocalities()]);
   const q = (sp.q ?? '').trim().slice(0, 80);
   const results = q || sp.business ? await sql<{ id: string; slug: string; name: string; status: string; county: string; locality: string | null; claimed: boolean }[]>`
@@ -50,7 +51,7 @@ export default async function Claim({ searchParams }: { searchParams: Promise<{ 
                     <p className="text-sm text-muted">{r.locality ? `${r.locality}, ` : ''}Co. {r.county}{r.status === 'pending' ? ' · awaiting review' : ''}</p>
                   </div>
                   <form action={claimBusiness}>
-                    <input type="hidden" name="business_id" value={r.id} />
+                    <input type="hidden" name="business_id" value={r.id} /><input type="hidden" name="ct" value={sp.ct ?? ''} />
                     <SubmitButton className="btn btn-primary btn-sm" pendingText="…">{r.claimed ? 'Request access' : 'Claim this business'}</SubmitButton>
                   </form>
                 </li>

@@ -13,8 +13,14 @@ export const metadata: Metadata = {
   alternates: { canonical: '/for-business' },
 };
 
-export default async function ForBusiness() {
+export default async function ForBusiness({ searchParams }: { searchParams: Promise<{ ref?: string; claim?: string; ct?: string }> }) {
+  const sp = await searchParams;
   const plan = await publicPlan();
+  const ref = (sp.ref ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 16);
+  const claimSlug = /^[a-z0-9-]{1,120}$/.test(sp.claim ?? '') ? sp.claim! : '';
+  const ct = /^[A-Za-z0-9_-]{16,64}$/.test(sp.ct ?? '') ? sp.ct! : '';
+  const next = `/dashboard/claim${claimSlug ? `?business=${claimSlug}${ct ? `&ct=${ct}` : ''}` : ''}`;
+  const regQs = new URLSearchParams(Object.entries({ intent: 'business', ref, ct }).filter(([, v]) => v) as [string, string][]).toString();
   const price = plan ? formatEuro(plan.amount_cents) : null;
   return (
     <div>
@@ -39,8 +45,8 @@ export default async function ForBusiness() {
             ))}
           </ol>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/register?intent=business" className="btn btn-primary text-base">Create a business account</Link>
-            <Link href="/login?next=/dashboard/claim" className="btn btn-ghost text-base">I already have an account</Link>
+            <Link href={`/register?${regQs}`} className="btn btn-primary text-base">{claimSlug ? 'Claim your free listing' : 'Create a free business account'}</Link>
+            <Link href={`/login?next=${encodeURIComponent(next)}`} className="btn btn-ghost text-base">I already have an account</Link>
           </div>
         </div>
         <MembershipCard plan={plan} />

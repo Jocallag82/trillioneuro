@@ -62,4 +62,20 @@ suspend member tools.
 - Live billing needs both a live key **and** `ALLOW_LIVE_PAYMENTS=true`.
 - Indexing is off unless `APP_ENV=production` **and** `ALLOW_INDEXING=true` (set only on the real domain).
 
+## Revenue engine (migration 005)
+| Feature | Where | Default |
+|---|---|---|
+| Free owner dashboard: real 30-day funnel; members get 12-month history | `/dashboard/b/[id]` | on |
+| Website badge (real rating, neutral "Review us" state with no reviews) | `/badge/[slug]`, `/dashboard/b/[id]/badge` | on |
+| AI reply drafts (Claude Haiku 5.5, owner edits and publishes) | `src/lib/ai.ts` | **off** (needs `ANTHROPIC_API_KEY` + admin switch) |
+| "You've been reviewed" claim invites: role mailboxes only, 90-day limit, unsubscribe | `src/lib/notify.ts` | **off** |
+| Weekly digest / renewal reminders / unused-kit nudge | daily cron → `runLifecycle()` | **off** |
+| Outreach CRM, claim links, printable letter + flyer, campaign results | `/admin/outreach` | admin only |
+| Partner referral links `/p/CODE`, configurable rewards, self-referral block | `/admin/partners` | admin only |
+| Commercial KPIs (ARR vs cash, conversion, refunds, AI spend) | `/admin/commercial` | admin only |
+| Listing import with validation, dedupe and provenance (dry run by default) | `node scripts/import-listings.mjs file.csv [--apply]` | n/a |
+
+All switches live at `/admin/notifications`. Every message is logged in `notifications` with a unique dedupe key;
+scheduled jobs take a lease in `job_locks` and record runs in `job_runs`.
+
 Environment variables: see `.env.example`.

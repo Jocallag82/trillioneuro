@@ -11,7 +11,7 @@ let businessId = '';
 test('register, verify email, create listing, verify ownership, pay, use QR, edit', async ({ page, request }) => {
   // 1. Register
   await page.goto('/for-business');
-  await page.getByRole('link', { name: 'Create a business account' }).click();
+  await page.getByRole('link', { name: 'Create a free business account' }).click();
   await page.getByLabel('Your name').fill('Declan Murphy');
   await page.getByLabel('Email').fill(OWNER);
   await page.getByLabel('Password').fill(PASSWORD);

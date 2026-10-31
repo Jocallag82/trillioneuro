@@ -27,6 +27,7 @@ export default defineConfig({
     env: {
       DATABASE_URL: TEST_DB, APP_URL: `http://localhost:${PORT}`, APP_ENV: 'test', APP_SECRET: 'e2e-secret-value-0001',
       STRIPE_SECRET_KEY: 'sk_test_e2e_dummy_key', STRIPE_WEBHOOK_SECRET: 'whsec_e2e_test_secret', CRON_SECRET: 'e2e-cron',
+      ANTHROPIC_API_KEY: 'sk-ant-e2e-mock', ANTHROPIC_BASE_URL: 'http://localhost:3299',
     },
   },
 });

@@ -37,6 +37,11 @@ export async function registerAction(_p: AuthState, form: FormData): Promise<Aut
   }
   const id = rows[0].id;
   await audit(id, 'user.registered', 'user', id);
+  // First-party attribution: a valid partner code and/or an outreach claim token (no cookies).
+  const ref = String(form.get('ref') ?? '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 16);
+  const ct = String(form.get('ct') ?? '').trim();
+  if (ref) await sql`update users set ref_code = ${ref} where id = ${id} and exists (select 1 from partners where code = ${ref} and active)`;
+  if (/^[A-Za-z0-9_-]{16,64}$/.test(ct)) await sql`update users set signup_claim_token = ${ct} where id = ${id}`;
   const raw = await createToken('verify_email', { userId: id, ttlHours: 48 });
   await sendEmail({ to: email.data, template: 'verify_email', ...templates.verifyEmail(name, `${env.appUrl}/verify-email?token=${raw}`) });
   await createSession(id);

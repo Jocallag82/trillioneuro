@@ -1,4 +1,5 @@
 import 'server-only';
+import { onReviewPublished } from './notify';
 import { sql } from './db';
 import type { Tx } from './db';
 import { env } from './env';
@@ -85,10 +86,13 @@ export async function confirmReview(reviewId: string): Promise<{ status: string;
                      ${reasons.length ? `Automatically rejected: ${reasons.join(', ')}` : 'Passed automated checks'})`;
     const manageToken = await createToken('review_manage', { refId: r.id, ttlHours: 24 * 365 * 3 }, tx);
     const [b] = await tx<{ slug: string; name: string }[]>`select slug, name from businesses where id = ${r.business_id}`;
-    return { status, manageToken, businessSlug: b.slug, businessName: b.name, businessId: r.business_id, rating: r.rating };
+    return { status, manageToken, businessSlug: b.slug, businessName: b.name, businessId: r.business_id, rating: r.rating, reviewId: r.id };
   });
   if (!result) return null;
-  if (result.status === 'published') await notifyOwners(result.businessId, result.businessName, result.rating);
+  if (result.status === 'published') {
+    await notifyOwners(result.businessId, result.businessName, result.rating);
+    await onReviewPublished(result.businessId, result.reviewId).catch((e) => console.error('claim invite queue failed', (e as Error).message));
+  }
   return { status: result.status, manageToken: result.manageToken, businessSlug: result.businessSlug };
 }
 

@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { requireUser } from '@/lib/auth';
 import { Notice } from '@/components/ui';
 import { SubmitButton } from '@/components/SubmitButton';
-import { updateName, changePassword, deleteAccount } from './actions';
+import { updateName, changePassword, deleteAccount, setDigest } from './actions';
+import { sql } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Account' };
@@ -11,6 +12,7 @@ export const metadata: Metadata = { title: 'Account' };
 export default async function Account({ searchParams }: { searchParams: Promise<{ msg?: string; err?: string }> }) {
   const sp = await searchParams;
   const user = await requireUser({ next: '/dashboard/account', verified: false });
+  const [pref] = await sql<{ digest_opt_out: boolean }[]>`select digest_opt_out from users where id = ${user.id}`;
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <Link href="/dashboard" className="text-sm text-muted hover:underline">← Dashboard</Link>
@@ -21,6 +23,13 @@ export default async function Account({ searchParams }: { searchParams: Promise<
         <p className="text-sm text-muted">Email: {user.email} {user.email_verified_at ? '(confirmed)' : '(not confirmed)'}</p>
         <label className="field"><span className="label">Name</span><input name="display_name" className="input" defaultValue={user.display_name} maxLength={80} required /></label>
         <SubmitButton className="btn btn-ghost" pendingText="Saving…">Save</SubmitButton>
+      </form>
+      <form action={setDigest} className="card space-y-3 p-5">
+        <h2 className="font-sans text-lg font-bold tracking-normal">Emails</h2>
+        <label className="flex items-start gap-3"><input type="checkbox" name="digest" defaultChecked={!pref?.digest_opt_out} className="mt-1 h-5 w-5" />
+          <span><span className="font-semibold">Weekly activity summary</span><span className="block text-sm text-muted">Members only. Sent on Mondays when there was real activity; never when there wasn’t.</span></span></label>
+        <p className="text-xs text-muted">Payment, renewal and security emails are always sent because they concern your account.</p>
+        <SubmitButton className="btn btn-ghost" pendingText="Saving…">Save email preferences</SubmitButton>
       </form>
       <form action={changePassword} className="card space-y-3 p-5">
         <h2 className="font-sans text-lg font-bold tracking-normal">Change password</h2>

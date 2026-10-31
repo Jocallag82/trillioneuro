@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import { env } from '@/lib/env';
 import { expireReconfirmations } from '@/lib/disputes';
+import { runLifecycle } from '@/lib/notify';
 
 // Daily housekeeping (Vercel Cron). Implements the data-retention policy.
 export async function GET(req: Request) {
@@ -19,5 +20,6 @@ export async function GET(req: Request) {
     return { expiredReviews: expiredReviews.length, sessions: sessions.length, tokens: tokens.length, limits: limits.length, ips: ips.length + reportIps.length, outbox: outbox.length, dedupe: dedupe.length };
   });
   const autoRemoved = await expireReconfirmations();
-  return NextResponse.json({ ok: true, ...r, autoRemoved });
+  const lifecycle = await runLifecycle().catch((e) => ({ error: String((e as Error).message) }));
+  return NextResponse.json({ ok: true, ...r, autoRemoved, lifecycle });
 }

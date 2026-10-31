@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic';
 const NAV: [string, string, 'moderator' | 'admin'][] = [
   ['/admin', 'Overview', 'moderator'], ['/admin/reviews', 'Reviews', 'moderator'], ['/admin/verifications', 'Ownership claims', 'moderator'],
   ['/admin/businesses', 'Businesses', 'moderator'], ['/admin/reports', 'Reports & corrections', 'moderator'], ['/admin/data-requests', 'Privacy & legal requests', 'moderator'],
+  ['/admin/commercial', 'Commercial', 'admin'], ['/admin/outreach', 'Outreach', 'admin'], ['/admin/partners', 'Partners', 'admin'], ['/admin/notifications', 'Automation', 'admin'],
   ['/admin/categories', 'Categories', 'admin'], ['/admin/pricing', 'Pricing', 'admin'], ['/admin/users', 'Users', 'admin'], ['/admin/audit', 'Audit log', 'admin'],
 ];
 

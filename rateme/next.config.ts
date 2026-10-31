@@ -31,7 +31,7 @@ const config: NextConfig = {
           { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
         ],
       },
-      ...['/dashboard/:path*', '/admin/:path*', '/account/:path*', '/login', '/register', '/verify-email', '/forgot-password', '/reset-password', '/review/:path*', '/api/:path*', '/r/:path*']
+      ...['/dashboard/:path*', '/admin/:path*', '/account/:path*', '/login', '/register', '/verify-email', '/forgot-password', '/reset-password', '/review/:path*', '/api/:path*', '/r/:path*', '/badge/:path*', '/p/:path*', '/claim/:path*', '/unsubscribe']
         .map((source) => ({ source, headers: [privateNoIndex] })),
     ];
   },

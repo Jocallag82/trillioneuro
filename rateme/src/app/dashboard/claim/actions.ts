@@ -7,6 +7,7 @@ import { similarBusinesses, uniqueSlug } from '@/lib/businesses';
 import { audit } from '@/lib/audit';
 import { rateLimit } from '@/lib/security';
 import { slugify } from '@/lib/util';
+import { attributeClaim } from '@/lib/attribution';
 
 export type CreateState = { error?: string; duplicates?: { slug: string; name: string; locality: string | null }[] };
 
@@ -20,6 +21,7 @@ export async function claimBusiness(form: FormData) {
   await sql`insert into business_members (business_id, user_id, role, status) values (${id}, ${user.id}, 'owner', 'pending')
             on conflict (business_id, user_id) do update set status = case when business_members.status in ('rejected','revoked') then 'pending' else business_members.status end`;
   await audit(user.id, 'business.claim_started', 'business', id);
+  await attributeClaim(id, user, String(form.get('ct') ?? '') || null).catch((e) => console.error('attribution failed', (e as Error).message));
   redirect(`/dashboard/b/${id}/verify`);
 }
 
@@ -52,5 +54,6 @@ export async function createBusiness(_p: CreateState, form: FormData): Promise<C
     if ((e as { code?: string }).code === '23505') return { error: 'A business with this name already exists in that area. Search for it above and claim it instead.' };
     throw e;
   }
+  await attributeClaim(id, user, null).catch((e) => console.error('attribution failed', (e as Error).message));
   redirect(`/dashboard/b/${id}/verify`);
 }
