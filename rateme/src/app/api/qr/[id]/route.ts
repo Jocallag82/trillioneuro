@@ -4,6 +4,7 @@ import { sql } from '@/lib/db';
 import { getEntitlement } from '@/lib/membership';
 import { ensureQrCode, qrPng, qrSvg } from '@/lib/qr';
 import { slugify } from '@/lib/util';
+import { bumpStat } from '@/lib/businesses';
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,6 +17,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   if (!(await getEntitlement(id)).active) return new NextResponse('An active membership is required to download QR codes.', { status: 402 });
   const code = await ensureQrCode(id);
   const format = new URL(req.url).searchParams.get('format') === 'svg' ? 'svg' : 'png';
+  await bumpStat(id, 'kit_downloads', `owner:${user.id}:${new Date().toISOString().slice(0, 10)}:${format}`).catch(() => {});
   const filename = `rateme-qr-${slugify(m.name) || 'business'}.${format}`;
   const headers = { 'Content-Disposition': `attachment; filename="${filename}"`, 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff' };
   if (format === 'svg') return new NextResponse(await qrSvg(code), { headers: { ...headers, 'Content-Type': 'image/svg+xml' } });

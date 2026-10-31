@@ -19,6 +19,9 @@ export default async function QrPage({ params }: { params: Promise<{ id: string 
   const code = await ensureQrCode(id);
   const svg = await qrSvg(code);
   const link = qrUrl(code);
+  const n = ctx.business.name;
+  const whatsapp = `Hi, thanks for choosing ${n}. If you have a minute, we'd value your honest review on RateMe.ie: ${link}`;
+  const email = `Subject: How did we do?\n\nHi,\n\nThank you for choosing ${n}. We'd value your honest feedback about your experience, good or bad. It takes about a minute and helps other customers choose:\n\n${link}\n\nThank you,\n${n}`;
   return (
     <div>
       <BizNav ctx={ctx} active="qr" />
@@ -29,11 +32,28 @@ export default async function QrPage({ params }: { params: Promise<{ id: string 
           <div className="mt-4 grid gap-2">
             <a className="btn btn-primary" href={`/api/qr/${id}?format=png`} download>Download PNG (high resolution)</a>
             <a className="btn btn-ghost" href={`/api/qr/${id}?format=svg`} download>Download SVG (for printers)</a>
-            <Link className="btn btn-ghost" href={`/dashboard/b/${id}/poster`} target="_blank">Printable review card & poster</Link>
+            <Link className="btn btn-ghost" href={`/dashboard/b/${id}/poster`}>Print kit: poster, counter cards, invoice slips, van sticker</Link>
             <CopyButton text={link} label="Copy review link" />
           </div>
         </div>
         <div className="prose-rm max-w-2xl">
+          <h2>Send the link directly</h2>
+          <p>Use the same message for every customer, whatever their experience. Copy it into an email, text or WhatsApp after a job.</p>
+          <div className="not-prose space-y-3">
+            {[
+              { k: 'WhatsApp or text', t: whatsapp },
+              { k: 'Email', t: email },
+            ].map((m) => (
+              <div key={m.k} className="card p-4">
+                <p className="text-sm font-semibold">{m.k}</p>
+                <p className="mt-2 whitespace-pre-line text-sm text-ink-2">{m.t}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <CopyButton text={m.t} label={`Copy ${m.k.toLowerCase()} message`} />
+                  {m.k === 'WhatsApp or text' && <a className="btn btn-ghost btn-sm" href={`https://wa.me/?text=${encodeURIComponent(m.t)}`} target="_blank" rel="noopener">Open in WhatsApp</a>}
+                </div>
+              </div>
+            ))}
+          </div>
           <h2>Where to put your QR code</h2>
           <ul>
             <li><strong>At the counter or reception</strong> — print the review card and stand it next to the till.</li>

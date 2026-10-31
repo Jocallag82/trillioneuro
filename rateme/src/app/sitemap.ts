@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { sql } from '@/lib/db';
 import { siteUrl } from '@/lib/site';
 import { MIN_LISTING_FOR_INDEX } from '@/lib/seo';
+import { GUIDES } from '@/lib/guides';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +10,7 @@ export const dynamic = 'force-dynamic';
 // category/county pages that already list enough real businesses.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
-  const staticPages = ['', '/search', '/categories', '/counties', '/for-business', '/how-it-works', '/review-policy', '/add-business', '/privacy', '/terms', '/cookies', '/membership-terms', '/contact']
+  const staticPages = ['', '/search', '/categories', '/counties', '/for-business', '/how-it-works', '/review-policy', '/add-business', '/privacy', '/terms', '/cookies', '/membership-terms', '/contact', '/guides', ...GUIDES.map((g) => `/guides/${g.slug}`)]
     .map((p) => ({ url: `${base}${p}`, changeFrequency: 'weekly' as const }));
   const [biz, cats, counties] = await Promise.all([
     sql<{ slug: string; updated_at: Date }[]>`select slug, greatest(updated_at, coalesce(last_review_at, updated_at)) updated_at from businesses where status = 'published' and not is_test_data limit 45000`,

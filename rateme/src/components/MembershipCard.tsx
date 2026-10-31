@@ -4,10 +4,10 @@ import { formatEuro } from '@/lib/format';
 
 export const MEMBER_BENEFITS = [
   'A public business profile with your own permanent link',
-  'Your unique QR code — PNG, SVG and a printable review card',
-  'Invite customers to rate genuine experiences they’ve had with you',
+  'A permanent QR code: high-resolution PNG, SVG for printers, A4 poster, counter cards, invoice slips and van artwork',
+  'Ready-to-send email and WhatsApp invitations with your review link',
   'Reply publicly to reviews under a fair response policy',
-  'Dashboard: ratings, distribution, recent reviews and genuinely measured profile activity',
+  'Dashboard: rating trends, unanswered reviews, and a measured funnel from profile visits and QR scans to published reviews',
   'Edit your business details, logo and links any time',
 ];
 
@@ -31,7 +31,8 @@ export function MembershipCard({ plan, cta = true }: { plan: Plan | null; cta?: 
           <li key={b} className="flex gap-3"><Check /><span>{b}</span></li>
         ))}
       </ul>
-      <p className="mt-6 rounded-xl bg-paper p-4 text-sm text-ink-2">
+      <p className="mt-6 text-sm text-ink-2">Claiming and verifying your listing, requesting corrections and disputing reviews are <strong>free</strong>. Membership adds the tools above.</p>
+      <p className="mt-4 rounded-xl bg-paper p-4 text-sm text-ink-2">
         <strong>What membership doesn’t buy:</strong> a better rating, hidden or removed reviews, or a higher place in search and category listings.
         The same rules apply to every business, paying or not.
       </p>

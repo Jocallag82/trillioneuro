@@ -112,3 +112,19 @@ test('suggest a missing business (goes to moderation, not live)', async ({ page 
   const [b] = await db`select status, source from businesses where name = 'Hypothetical Hardware Kilkenny'`;
   expect(b).toMatchObject({ status: 'pending', source: 'community' });
 });
+
+test('highest-rated lists require enough reviews and explain the method', async ({ page }) => {
+  await page.goto('/search?q=bakery&sort=rated');
+  await expect(page.getByText(/at least 5 published reviews/)).toBeVisible();
+  // The e2e bakery has fewer than 5 reviews, so it must not be ranked as highest rated.
+  await expect(page.locator('main')).not.toContainText('Nolan');
+  await page.goto('/search?q=bakery&sort=reviewed');
+  await expect(page.locator('main')).toContainText('Nolan');
+});
+
+test('guides are published and linked', async ({ page }) => {
+  await page.goto('/guides');
+  await page.getByRole('link', { name: 'How to choose a reliable tradesperson in Ireland' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('How to choose a reliable tradesperson in Ireland');
+  await expect(page.locator('script[type="application/ld+json"]').first()).toBeAttached();
+});

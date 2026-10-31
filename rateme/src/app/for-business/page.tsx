@@ -28,10 +28,11 @@ export default async function ForBusiness() {
           </p>
           <ol className="mt-8 space-y-5">
             {[
-              ['Claim or create your listing', 'Search first — a customer may already have added you. Then confirm your details.'],
-              ['Verify you’re the owner', 'Instantly with a business email or website, or with a quick manual check for sole traders.'],
+              ['Claim or create your listing', 'Free. Search first: a customer may already have added you. Then confirm your details.'],
+              ['Verify you’re the owner', 'Free. Instantly with a business email or website, or with a quick manual check for sole traders.'],
               [`Join${price ? ` for ${price} a year` : ''}`, 'Pay securely by card. Cancel future renewals whenever you like.'],
-              ['Display your QR code', 'Counter, receipts, invoices, the van, the menu. Customers scan and rate in about a minute.'],
+              ['Display your QR code', 'Print the poster, counter cards, invoice slips or van artwork, or send the WhatsApp and email invitation. Customers rate in about a minute.'],
+              ['Watch it work', 'Your dashboard shows profile visits, QR scans, forms opened and reviews published, so you can see which invitations work.'],
             ].map(([t, d], i) => (
               <li key={t} className="flex gap-4"><span className="display grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-lg text-gorse">{i + 1}</span>
                 <div><p className="font-semibold">{t}</p><p className="text-ink-2">{d}</p></div></li>
@@ -55,6 +56,10 @@ export default async function ForBusiness() {
             ['Protection from abuse', 'Report or dispute reviews that break the rules. Fake, conflicted and abusive reviews are removed after review.'],
           ].map(([t, d]) => <div key={t}><p className="display text-xl">{t}</p><p className="mt-2 text-ink-2">{d}</p></div>)}
         </div>
+      </section>
+
+      <section className="container-x mt-16">
+        <p className="text-ink-2">New to collecting reviews? Read <Link className="text-sea underline" href="/guides/collecting-customer-reviews-fairly">how to collect customer reviews fairly</Link> and <Link className="text-sea underline" href="/guides/responding-to-a-negative-review">how to respond to a negative review</Link>.</p>
       </section>
 
       <section className="container-x mt-16" id="faq">

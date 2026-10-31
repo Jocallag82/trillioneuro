@@ -2,17 +2,18 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getCategories, getCounties, childrenOf } from '@/lib/catalog';
-import { listBusinesses } from '@/lib/businesses';
+import { listBusinesses, parseSort, type Sort } from '@/lib/businesses';
+import { SortNav } from '@/components/SortNav';
 import { activeMemberIds } from '@/lib/membership';
 import { BusinessCard } from '@/components/BusinessCard';
 import { Breadcrumbs, EmptyState, PageHeader } from '@/components/ui';
 import { MIN_LISTING_FOR_INDEX } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
-type P = { params: Promise<{ slug: string }>; searchParams: Promise<{ county?: string }> };
+type P = { params: Promise<{ slug: string }>; searchParams: Promise<{ county?: string; sort?: string }> };
 
 export async function generateMetadata({ params, searchParams }: P): Promise<Metadata> {
-  const { slug } = await params; const { county } = await searchParams;
+  const { slug } = await params; const { county, sort } = await searchParams;
   const cat = (await getCategories()).find((c) => c.slug === slug);
   if (!cat) return { title: 'Category not found' };
   const list = await listBusinesses({ categorySlug: slug, limit: MIN_LISTING_FOR_INDEX });
@@ -21,18 +22,19 @@ export async function generateMetadata({ params, searchParams }: P): Promise<Met
     description: `Irish ${cat.name.toLowerCase()} rated by their customers on RateMe.ie.`,
     alternates: { canonical: `/categories/${slug}` },
     // Thin pages (few real listings) and filtered variants stay out of the index.
-    robots: { index: !county && list.length >= MIN_LISTING_FOR_INDEX, follow: true },
+    robots: { index: !county && !sort && list.length >= MIN_LISTING_FOR_INDEX, follow: true },
   };
 }
 
 export default async function CategoryPage({ params, searchParams }: P) {
-  const { slug } = await params; const { county } = await searchParams;
+  const { slug } = await params; const { county, sort: sortP } = await searchParams;
+  const sort = parseSort(sortP, 'reviewed');
   const [cats, counties] = await Promise.all([getCategories(), getCounties()]);
   const cat = cats.find((c) => c.slug === slug);
   if (!cat) notFound();
   const parent = cat.parent_id ? cats.find((c) => c.id === cat.parent_id) : null;
   const subs = childrenOf(cats, cat.id);
-  const list = await listBusinesses({ categorySlug: slug, countySlug: county || undefined });
+  const list = await listBusinesses({ categorySlug: slug, countySlug: county || undefined, sort });
   const members = await activeMemberIds(list.map((b) => b.id));
   return (
     <div className="container-x py-12">
@@ -49,6 +51,7 @@ export default async function CategoryPage({ params, searchParams }: P) {
         </select>
         <button className="btn btn-ghost btn-sm">Apply</button>
       </form>
+      <SortNav current={sort} include={['reviewed', 'rated', 'recent', 'new']} hrefFor={(s: Sort) => `/categories/${slug}?${county ? `county=${county}&` : ''}sort=${s}`} />
       {list.length ? (
         <ul className="grid gap-3 md:grid-cols-2">{list.map((b) => <li key={b.id}><BusinessCard b={b} member={members.has(b.id)} /></li>)}</ul>
       ) : (

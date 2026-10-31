@@ -99,6 +99,24 @@ test('register, verify email, create listing, verify ownership, pay, use QR, edi
   // printable poster
   await page.goto(`/dashboard/b/${businessId}/poster`);
   await expect(page.getByText('How did we do?')).toBeVisible();
+  // A second scan by the same phone on the same day is not double-counted.
+  await page.goto(scanned);
+  const [stat2] = await db`select qr_scans from business_daily_stats where business_id = ${businessId}`;
+  expect(stat2.qr_scans).toBe(stat.qr_scans);
+  // Every print template renders the same permanent code with neutral wording.
+  for (const [kit, text] of [['counter', 'Rate your visit'], ['invoice', 'Scan to leave an honest review'], ['van', 'Scan to rate us']]) {
+    await page.goto(`/dashboard/b/${businessId}/poster?kit=${kit}`);
+    await expect(page.getByText(text).first()).toBeVisible();
+    await expect(page.locator('main svg, [role=img] svg').first()).toBeVisible();
+    await expect(page.locator('body')).not.toContainText(/discount|prize|5 stars|5-star/i);
+  }
+  // Invitation messages carry the same review link
+  await page.goto(`/dashboard/b/${businessId}/qr`);
+  await expect(page.getByText(/we'd value your honest review on RateMe\.ie: http:\/\/localhost:3200\/r\//)).toBeVisible();
+  // Funnel uses recorded events
+  await page.goto(`/dashboard/b/${businessId}?range=7`);
+  await expect(page.getByRole('heading', { name: 'Customer feedback funnel' })).toBeVisible();
+  await expect(page.getByText('QR scans', { exact: true })).toBeVisible();
 
   // 11. Edit authorised business information
   await page.goto(`/dashboard/b/${businessId}/edit`);

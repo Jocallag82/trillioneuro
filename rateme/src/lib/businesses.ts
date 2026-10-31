@@ -36,7 +36,31 @@ export async function getBusinessBySlug(slug: string): Promise<{ business: Busin
   return { business: null, redirectTo: h?.slug };
 }
 
-export type SearchParams = { q?: string; category?: string; county?: string; where?: string; page?: number };
+/** Sort orders shown to consumers. Membership never appears in any of them. */
+export const SORTS = {
+  relevance: 'Best match',
+  rated: 'Highest rated',
+  reviewed: 'Most reviewed',
+  recent: 'Recently reviewed',
+  new: 'Newly listed',
+} as const;
+export type Sort = keyof typeof SORTS;
+/** A business needs this many published reviews before it can appear in "Highest rated". */
+export const MIN_RATED_REVIEWS = 5;
+export const parseSort = (v: string | undefined, fallback: Sort = 'relevance'): Sort => (v && v in SORTS ? (v as Sort) : fallback);
+
+function sortSql(sort: Sort) {
+  switch (sort) {
+    case 'rated': return sql`order by b.rating_avg desc nulls last, b.rating_count desc, b.name`;
+    case 'reviewed': return sql`order by b.rating_count desc, b.last_review_at desc nulls last, b.name`;
+    case 'recent': return sql`order by b.last_review_at desc nulls last, b.name`;
+    case 'new': return sql`order by b.published_at desc nulls last, b.created_at desc`;
+    default: return null;
+  }
+}
+const sortFilter = (sort: Sort) => (sort === 'rated' ? sql`and b.rating_count >= ${MIN_RATED_REVIEWS}` : sort === 'recent' ? sql`and b.rating_count > 0` : sql``);
+
+export type SearchParams = { q?: string; category?: string; county?: string; where?: string; page?: number; sort?: Sort };
 
 export async function searchBusinesses(p: SearchParams): Promise<{ results: BusinessCard[]; total: number; matchedCategory: string | null }> {
   const page = Math.max(1, Math.min(50, p.page ?? 1));
@@ -66,15 +90,16 @@ export async function searchBusinesses(p: SearchParams): Promise<{ results: Busi
                  or word_similarity(rateme.norm(${where}), rateme.norm(coalesce(l.name, ''))) >= 0.6
                  or rateme.norm(coalesce(l.name, '')) like rateme.norm(${where}) || '%')`
     : sql``;
-  const order = q
+  const sort = p.sort ?? 'relevance';
+  const order = sortSql(sort) ?? (q
     ? sql`order by greatest(similarity(rateme.norm(b.name), rateme.norm(${q})), word_similarity(rateme.norm(${q}), rateme.norm(b.name))) desc, b.rating_count desc, b.name`
-    : sql`order by b.rating_count desc, b.name`;
+    : sql`order by b.rating_count desc, b.name`);
 
   const rows = await sql<(BusinessCard & { total: number })[]>`
     select ${cardColumns}, count(*) over ()::int total
     from businesses b join categories c on c.id = b.category_id join counties co on co.id = b.county_id
       left join localities l on l.id = b.locality_id
-    where b.status = 'published' ${testFilter()} ${textCond} ${catCond} ${countyCond} ${whereCond}
+    where b.status = 'published' ${testFilter()} ${textCond} ${catCond} ${countyCond} ${whereCond} ${sortFilter(sort)}
     ${order} limit ${perPage} offset ${(page - 1) * perPage}`;
 
   let matchedCategory: string | null = null;
@@ -86,7 +111,8 @@ export async function searchBusinesses(p: SearchParams): Promise<{ results: Busi
   return { results: rows, total: rows[0]?.total ?? 0, matchedCategory };
 }
 
-export async function listBusinesses(filter: { categorySlug?: string; countySlug?: string; limit?: number }) {
+export async function listBusinesses(filter: { categorySlug?: string; countySlug?: string; limit?: number; sort?: Sort }) {
+  const sort = filter.sort ?? 'reviewed';
   return sql<BusinessCard[]>`
     select ${cardColumns}
     from businesses b join categories c on c.id = b.category_id join counties co on co.id = b.county_id
@@ -94,7 +120,8 @@ export async function listBusinesses(filter: { categorySlug?: string; countySlug
     where b.status = 'published' ${testFilter()}
       ${filter.categorySlug ? sql`and (c.slug = ${filter.categorySlug} or c.parent_id = (select id from categories where slug = ${filter.categorySlug}))` : sql``}
       ${filter.countySlug ? sql`and co.slug = ${filter.countySlug}` : sql``}
-    order by b.rating_count desc, b.last_review_at desc nulls last, b.name
+      ${sortFilter(sort)}
+    ${sortSql(sort) ?? sql`order by b.rating_count desc, b.last_review_at desc nulls last, b.name`}
     limit ${filter.limit ?? 60}`;
 }
 
@@ -150,7 +177,17 @@ export async function uniqueSlug(base: string): Promise<string> {
   return `${root}-${Date.now().toString(36)}`;
 }
 
-export async function bumpStat(businessId: string, field: 'profile_views' | 'qr_scans' | 'review_starts') {
+export type StatField = 'profile_views' | 'qr_scans' | 'review_starts' | 'kit_downloads';
+
+/**
+ * Counts one event. When a visitor fingerprint is supplied the event is counted at most once per
+ * visitor, business, event type and Dublin day, so refreshes and double scans don't inflate numbers.
+ */
+export async function bumpStat(businessId: string, field: StatField, visitorKey?: string) {
+  if (visitorKey) {
+    const ins = await sql`insert into stat_dedupe (key) values (${`${visitorKey}:${businessId}:${field}`}) on conflict do nothing returning key`;
+    if (!ins.length) return;
+  }
   const col = sql(field);
   await sql`insert into business_daily_stats (business_id, day, ${col}) values (${businessId}, (now() at time zone 'Europe/Dublin')::date, 1)
             on conflict (business_id, day) do update set ${col} = business_daily_stats.${col} + 1`;

@@ -5,7 +5,7 @@ import { getBusinessBySlug, publishedReviews, bumpStat } from '@/lib/businesses'
 import { getEntitlement } from '@/lib/membership';
 import { currentUser, isStaff } from '@/lib/auth';
 import { sql } from '@/lib/db';
-import { isHumanPageView } from '@/lib/view';
+import { isHumanPageView, visitorKey } from '@/lib/view';
 import { RatingSummary } from '@/components/RatingSummary';
 import { Initials } from '@/components/BusinessCard';
 import { ReviewItem } from '@/components/ReviewItem';
@@ -60,7 +60,7 @@ export default async function BusinessPage({ params, searchParams }: P) {
   ]);
   const isMember = ent.active;
   const isOwner = user ? (await sql`select 1 from business_members where business_id = ${b.id} and user_id = ${user.id} and status in ('pending','verified')`).length > 0 : false;
-  if (b.status === 'published' && !isOwner && (await isHumanPageView())) await bumpStat(b.id, 'profile_views').catch(() => {});
+  if (b.status === 'published' && !isOwner && (await isHumanPageView())) await bumpStat(b.id, 'profile_views', await visitorKey()).catch(() => {});
 
   const location = [b.locality_name, `Co. ${b.county_name}`].filter(Boolean).join(', ');
   const jsonLd = b.status === 'published' ? {

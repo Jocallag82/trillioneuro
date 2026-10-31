@@ -105,8 +105,10 @@ a { text-underline-offset: 3px; }
   @keyframes flow-pulse { 0%, 30% { border-color: var(--color-sea); box-shadow: 0 0 0 3px var(--color-sea-soft); } 36%, 100% { border-color: var(--color-line); box-shadow: none; } }
 }
 
+@page { size: A4; margin: 12mm; }
 @media print {
   .no-print { display: none !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { background: #fff; }
 }
 .prose-rm table { display: block; overflow-x: auto; max-width: 100%; }

@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { SearchForm } from '@/components/SearchForm';
 import { BusinessCard } from '@/components/BusinessCard';
 import { EmptyState } from '@/components/ui';
-import { searchBusinesses } from '@/lib/businesses';
+import { searchBusinesses, parseSort, type Sort } from '@/lib/businesses';
+import { SortNav } from '@/components/SortNav';
 import { getCategories, getCounties, topLevel } from '@/lib/catalog';
 import { activeMemberIds } from '@/lib/membership';
 
@@ -17,8 +18,9 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
   const sp = await searchParams;
   const q = one(sp.q), where = one(sp.where), county = one(sp.county), category = one(sp.category);
   const page = Number(one(sp.page)) || 1;
+  const sort = parseSort(one(sp.sort), q ? 'relevance' : 'reviewed');
   const [{ results, total, matchedCategory }, cats, counties] = await Promise.all([
-    searchBusinesses({ q, where, county, category, page }), getCategories(), getCounties(),
+    searchBusinesses({ q, where, county, category, page, sort }), getCategories(), getCounties(),
   ]);
   const members = await activeMemberIds(results.map((r) => r.id));
   const countyName = counties.find((c) => c.slug === county)?.name;
@@ -27,6 +29,7 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
   const qs = (p: number) => {
     const u = new URLSearchParams();
     if (q) u.set('q', q); if (where) u.set('where', where); if (county) u.set('county', county); if (category) u.set('category', category);
+    if (sort !== (q ? 'relevance' : 'reviewed')) u.set('sort', sort);
     u.set('page', String(p));
     return `/search?${u}`;
   };
@@ -53,6 +56,10 @@ export default async function SearchPage({ searchParams }: { searchParams: SP })
             {countyName && <> in Co. {countyName}</>}
             {matchedCategory && !category && <> · including the <em>{matchedCategory}</em> category</>}
           </p>
+        )}
+        {(results.length > 0 || sort === 'rated' || sort === 'recent') && (
+          <SortNav current={sort} include={q ? ['relevance', 'rated', 'reviewed', 'recent', 'new'] : ['reviewed', 'rated', 'recent', 'new']}
+            hrefFor={(s: Sort) => qsWith({ q, where, county, category, sort: s })} />
         )}
         {results.length ? (
           <>

@@ -14,8 +14,9 @@ export async function GET(req: Request) {
     // Network fingerprints are only needed for abuse checks; drop them after 90 days.
     const ips = await tx`update reviews set ip_hash = null where ip_hash is not null and created_at < now() - interval '90 days' returning id`;
     const reportIps = await tx`update reports set ip_hash = null where ip_hash is not null and created_at < now() - interval '90 days' returning id`;
+    const dedupe = await tx`delete from stat_dedupe where created_at < now() - interval '2 days' returning key`;
     const outbox = await tx`delete from email_outbox where created_at < now() - interval '90 days' returning id`;
-    return { expiredReviews: expiredReviews.length, sessions: sessions.length, tokens: tokens.length, limits: limits.length, ips: ips.length + reportIps.length, outbox: outbox.length };
+    return { expiredReviews: expiredReviews.length, sessions: sessions.length, tokens: tokens.length, limits: limits.length, ips: ips.length + reportIps.length, outbox: outbox.length, dedupe: dedupe.length };
   });
   const autoRemoved = await expireReconfirmations();
   return NextResponse.json({ ok: true, ...r, autoRemoved });

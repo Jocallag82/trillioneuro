@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { siteUrl } from '@/lib/site';
 
 export function EmptyState({ title, children, action }: { title: string; children?: ReactNode; action?: ReactNode }) {
   return (
@@ -50,7 +51,12 @@ export function BotFields() {
 import { FormStarted } from './FormStarted';
 
 export function Breadcrumbs({ items }: { items: { href?: string; label: string }[] }) {
+  const base = siteUrl();
+  const ld = { '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, name: it.label, ...(it.href ? { item: `${base}${it.href}` } : {}) })) };
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, '\\u003c') }} />
     <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted">
       <ol className="flex flex-wrap items-center gap-1.5">
         {items.map((it, i) => (
@@ -61,5 +67,6 @@ export function Breadcrumbs({ items }: { items: { href?: string; label: string }
         ))}
       </ol>
     </nav>
+    </>
   );
 }

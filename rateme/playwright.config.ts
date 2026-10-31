@@ -10,7 +10,11 @@ export default defineConfig({
   retries: 0,
   reporter: [['list']],
   globalSetup: './tests/e2e/global-setup.ts',
-  use: { baseURL: `http://localhost:${PORT}`, trace: 'retain-on-failure' },
+  use: {
+    baseURL: `http://localhost:${PORT}`, trace: 'retain-on-failure',
+    // Optional: point at a preinstalled Chromium (e.g. CI images) without reinstalling browsers.
+    ...(process.env.PW_CHROMIUM_PATH ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } } : {}),
+  },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'] }, testIgnore: /mobile\.spec\.ts/ },
     { name: 'mobile', use: { ...devices['Pixel 7'] }, testMatch: /mobile\.spec\.ts/ },

@@ -22,6 +22,16 @@ export default function HowItWorks() {
       <p>A business’s score is the simple average of all its <strong>published</strong> star ratings, shown to one decimal place, together with the number of ratings and how they’re distributed. Every published rating counts equally. We don’t weight, round up, hide or reorder ratings for anyone. If a business has no published ratings, we show no score at all.</p>
       <p>Reviews are shown newest first. Membership never changes the score, the order of reviews or whether a review appears.</p>
 
+      <h2 id="ranking">How lists are ordered</h2>
+      <ul>
+        <li><strong>Most reviewed</strong> (the default on category and county pages): most published reviews first. Businesses without reviews are still listed, after those with reviews, and are never shown as badly rated.</li>
+        <li><strong>Highest rated</strong>: highest average first, but only for businesses with at least 5 published reviews, so a single review can’t put a business at the top.</li>
+        <li><strong>Recently reviewed</strong>: businesses with the newest published review first.</li>
+        <li><strong>Newly listed</strong>: the most recently added listings first.</li>
+        <li><strong>Best match</strong> (search): closest name or service match first.</li>
+      </ul>
+      <p>Paid membership is never an input to any of these orders, and nobody can pay for placement.</p>
+
       <h2 id="badges">What the labels mean</h2>
       <ul>
         <li><strong>Owner verified</strong> — we’ve checked that a person managing the profile is connected to the business, using a business email address, control of the business’s website or domain, or a manual check of public records. It is not an endorsement of the business’s quality or a guarantee about its products or services.</li>

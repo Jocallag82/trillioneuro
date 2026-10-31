@@ -50,8 +50,10 @@ test('SEO metadata: unique titles, canonicals, structured data only with real ra
     expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toBeTruthy();
   }
   await page.goto('/business/nolans-e2e-bakery');
-  const ld = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
-  expect(ld['@type']).toBe('LocalBusiness');
+  const lds = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((t) => JSON.parse(t));
+  const ld = lds.find((x) => x['@type'] === 'LocalBusiness');
+  expect(ld).toBeTruthy();
+  expect(lds.find((x) => x['@type'] === 'BreadcrumbList')?.itemListElement.length).toBe(3);
   expect(ld.aggregateRating.reviewCount).toBe(2);
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect(sitemap).toContain('/business/nolans-e2e-bakery');

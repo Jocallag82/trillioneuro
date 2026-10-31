@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { getBusinessBySlug, bumpStat } from '@/lib/businesses';
 import { EXPERIENCE_TYPES } from '@/lib/reviews';
 import { isProduction } from '@/lib/env';
-import { isHumanPageView } from '@/lib/view';
+import { isHumanPageView, visitorKey } from '@/lib/view';
 import { Initials } from '@/components/BusinessCard';
 import { ReviewForm } from './ReviewForm';
 
@@ -32,7 +32,7 @@ export default async function RatePage({ params, searchParams }: P) {
   const { src } = await searchParams;
   const { business: b } = await getBusinessBySlug(slug);
   if (!b || b.status !== 'published') notFound();
-  if (await isHumanPageView()) await bumpStat(b.id, 'review_starts').catch(() => {});
+  if (await isHumanPageView()) await bumpStat(b.id, 'review_starts', await visitorKey()).catch(() => {});
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
       <div className="card flex items-center gap-4 p-4">

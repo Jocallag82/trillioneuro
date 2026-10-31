@@ -15,6 +15,7 @@ export default function Privacy() {
         <tr><td>Email address</td><td>Confirm the review, let you manage it, tell you about automated decisions and ask you to reconfirm if your review is disputed</td><td>Legitimate interests (review integrity); contract</td><td>While the review exists, then up to 12 months</td></tr>
         <tr><td>Display name, rating, review text, experience month/type</td><td>Publishing your review</td><td>Contract (our terms)</td><td>Until you withdraw it or it’s removed</td></tr>
         <tr><td>Keyed hash of your IP address</td><td>Preventing spam, fake and duplicate reviews</td><td>Legitimate interests</td><td>90 days</td></tr>
+        <tr><td>Day-scoped keyed hash of IP address and browser type (no cookie)</td><td>Counting a profile visit or QR scan once per visitor per day, so businesses see honest totals</td><td>Legitimate interests</td><td>2 days</td></tr>
         <tr><td>Unconfirmed reviews</td><td>Waiting for email confirmation</td><td>Legitimate interests</td><td>Deleted after 14 days</td></tr>
       </tbody></table>
       <p>Your email is never published or shown to the business. Please don’t include sensitive personal data (for example health information) in a review.</p>
