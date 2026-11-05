@@ -106,7 +106,7 @@ export const GUIDES: Guide[] = [
         <li>Accusing the reviewer of lying in public.</li>
       </ul>
       <h2>When to dispute instead</h2>
-      <p>If you believe the review isn’t from a real customer, or it breaches the <Link href="/review-policy">review policy</Link>, verified owners can dispute it. On RateMe.ie a dispute asks the reviewer to reconfirm their review within 14 days. Disagreeing with an honest opinion isn’t grounds for a dispute.</p>
+      <p>If you believe the review isn’t from a real customer, or it breaches the <Link href="/review-policy">review policy</Link>, verified owners can dispute it. On RateMe.ie you choose a specific reason and can add evidence; the reviewer has 14 days to respond, and a moderator decides contested or unanswered cases with a written, appealable finding. Disagreeing with an honest opinion isn’t grounds for a dispute.</p>
     </>),
   },
 ];

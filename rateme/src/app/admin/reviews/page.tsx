@@ -5,13 +5,14 @@ import { Stars } from '@/components/Stars';
 import { formatDate } from '@/lib/format';
 import { HOLD_REASON_LABELS, type HoldReason } from '@/lib/screening';
 
-const FILTERS: Record<string, string> = { disputed: 'Awaiting reconfirmation', reported: 'Reported', published: 'Published', rejected: 'Rejected', removed: 'Removed', pending_confirmation: 'Unconfirmed' };
+const FILTERS: Record<string, string> = { escalated: 'Needs decision', appealed: 'Appeals', disputed: 'Awaiting reviewer', reported: 'Reported', published: 'Published', rejected: 'Rejected', removed: 'Removed', pending_confirmation: 'Unconfirmed' };
 
 export default async function AdminReviews({ searchParams }: { searchParams: Promise<{ status?: string; q?: string }> }) {
   await requireStaff();
-  const { status = 'disputed', q } = await searchParams;
+  const { status = 'escalated', q } = await searchParams;
   const cond =
     status === 'reported' ? sql`r.id in (select review_id from reports where status = 'open' and review_id is not null)`
+    : status === 'escalated' ? sql`r.id in (select review_id from disputes where status = 'escalated')`
     : status === 'disputed' ? sql`r.id in (select review_id from disputes where status = 'open')`
     : status === 'appealed' ? sql`r.id in (select review_id from appeals where status = 'open')`
     : sql`r.status = ${FILTERS[status] ? status : 'published'}`;
@@ -24,7 +25,7 @@ export default async function AdminReviews({ searchParams }: { searchParams: Pro
   return (
     <div>
       <h1 className="text-3xl font-semibold">Review moderation</h1>
-      <p className="mt-1 text-sm text-muted">Monitoring view. Decisions are automatic; manual overrides are optional and logged.</p>
+      <p className="mt-1 text-sm text-muted">Disputes that the reviewer didn’t answer, or where facts are contested, land in “Needs decision”. Every decision needs a written finding and is logged.</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {Object.entries(FILTERS).map(([k, v]) => <Link key={k} href={`/admin/reviews?status=${k}`} className={`badge px-3 py-1.5 ${status === k ? 'badge-sea' : 'badge-muted'}`}>{v}</Link>)}
       </div>

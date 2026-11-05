@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getCategories, getCounties, childrenOf } from '@/lib/catalog';
 import { listBusinesses, parseSort, type Sort } from '@/lib/businesses';
@@ -32,6 +32,8 @@ export default async function CategoryPage({ params, searchParams }: P) {
   const [cats, counties] = await Promise.all([getCategories(), getCounties()]);
   const cat = cats.find((c) => c.slug === slug);
   if (!cat) notFound();
+  // One URL per county/category combination.
+  if (county && counties.some((c) => c.slug === county)) permanentRedirect(`/county/${county}/${slug}${sortP ? `?sort=${encodeURIComponent(sortP)}` : ''}`);
   const parent = cat.parent_id ? cats.find((c) => c.id === cat.parent_id) : null;
   const subs = childrenOf(cats, cat.id);
   const list = await listBusinesses({ categorySlug: slug, countySlug: county || undefined, sort });

@@ -28,19 +28,22 @@ export default function ReviewPolicy() {
         <li>Spam, advertising, links, or automated or bulk submissions.</li>
         <li>Duplicate reviews of the same experience, or reviews of a different business.</li>
       </ul>
-      <h2>4. How enforcement works — fully automated</h2>
+      <h2 id="disputes">4. How enforcement and disputes work</h2>
       <ol>
         <li>Every review is confirmed by email before publication.</li>
         <li>Reviews containing phone numbers, email addresses, links, threats or abusive language can’t be submitted — the reviewer is told what to fix.</li>
         <li>On confirmation, rating-blind rules reject reviews with a conflict of interest (for example an email on the business’s own domain, or a registered member of the business) and repeat reviews of the same business from the same network within 30 days.</li>
         <li>Verified owners can dispute up to 5 reviews every 30 days. Anyone can report a review; three reports from different people count as a dispute.</li>
-        <li>A dispute automatically asks the reviewer to reconfirm. Reconfirmed reviews stay and can’t be disputed again by the business. Reviews not reconfirmed within 14 days are removed automatically.</li>
-        <li>Every automated decision and its reason is logged.</li>
+        <li>A dispute must give a specific reason and an explanation; the business may add evidence for the moderator. The review stays published while the dispute is open.</li>
+        <li>The reviewer is emailed (with a reminder) and has 14 days to stand by the review, adding their side, or withdraw it.</li>
+        <li>If the reviewer stands by it and the business gave no evidence, the review stays. Evidence-backed disputes, alleged policy breaches (personal information, abuse) and disputes the reviewer doesn’t answer go to a human moderator. Not replying is never treated as proof that a review is fake.</li>
+        <li>Moderators record a written finding, sent to both the business and the reviewer. Either side can appeal once within 30 days; appeals are reviewed afresh.</li>
+        <li>Membership has no effect on any step. Every automated and human decision, and its reason, is logged.</li>
       </ol>
       <h2>5. Decisions and reasons</h2>
-      <p>When a rule rejects or removes a review, we tell the reviewer which rule applied. When a dispute closes, the business is shown the outcome in its dashboard.</p>
+      <p>When a rule rejects or a moderator removes a review, we tell the reviewer which rule applied and why. When a dispute closes, both the business and the reviewer receive the written finding.</p>
       <h2>6. Restoring and complaints</h2>
-      <p>A reviewer can restore a removed review at any time by reconfirming it from their private link, or write a new review that follows this policy. To object to an automated decision, or for anything the rules don’t cover, use our <Link href="/contact">complaints form</Link>. You may also have rights to take a complaint to an out-of-court dispute settlement body or to the courts.</p>
+      <p>Either side can appeal a dispute decision once, within 30 days, from their dashboard or private review link. A reviewer can also write a new review that follows this policy. To object to an automated decision, or for anything the rules don’t cover, use our <Link href="/contact">complaints form</Link>. You may also have rights to take a complaint to an out-of-court dispute settlement body or to the courts.</p>
       <h2>7. Business responses</h2>
       <p>Responses must be professional and truthful. They must not reveal customer information, threaten (including legal threats), harass, or pressure a reviewer. Responses with contact details or abusive language can’t be published.</p>
       <h2>8. Soliciting reviews</h2>

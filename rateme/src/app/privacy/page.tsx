@@ -12,7 +12,7 @@ export default function Privacy() {
       <p>The data controller is {operator.name}{operator.address ? `, ${operator.address}` : ''}{operator.cro ? ` (CRO ${operator.cro})` : ''}. Contact us about privacy at <a href={`mailto:${operator.privacyEmail}`}>{operator.privacyEmail}</a>.</p>
       <h2>Reviewers</h2>
       <table className="table-rm"><thead><tr><th>Data</th><th>Why</th><th>Lawful basis</th><th>Kept</th></tr></thead><tbody>
-        <tr><td>Email address</td><td>Confirm the review, let you manage it, tell you about automated decisions and ask you to reconfirm if your review is disputed</td><td>Legitimate interests (review integrity); contract</td><td>While the review exists, then up to 12 months</td></tr>
+        <tr><td>Email address</td><td>Confirm the review, let you manage it, tell you about moderation decisions and ask for your side if your review is disputed</td><td>Legitimate interests (review integrity); contract</td><td>While the review exists, then up to 12 months</td></tr>
         <tr><td>Display name, rating, review text, experience month/type</td><td>Publishing your review</td><td>Contract (our terms)</td><td>Until you withdraw it or it’s removed</td></tr>
         <tr><td>Keyed hash of your IP address</td><td>Preventing spam, fake and duplicate reviews</td><td>Legitimate interests</td><td>90 days</td></tr>
         <tr><td>Day-scoped keyed hash of IP address and browser type (no cookie)</td><td>Counting a profile visit or QR scan once per visitor per day, so businesses see honest totals</td><td>Legitimate interests</td><td>2 days</td></tr>
@@ -41,7 +41,7 @@ export default function Privacy() {
       <h2>Your rights</h2>
       <p>You can ask to access, correct, erase, restrict or port your data, and object to processing based on legitimate interests. Account holders can download their data and delete their account from Account settings. Anyone can use our <Link href="/data-request">privacy request form</Link>. We reply within one month. You can also complain to the Data Protection Commission (dataprotection.ie).</p>
       <h2>Automated decisions</h2>
-      <p>Reviews are moderated automatically, without human review. Automated rules can reject a review (for example a conflict of interest) or remove it if the reviewer doesn’t reconfirm it after a dispute. We always tell you which rule applied, and you can restore a removed review by reconfirming it, write a new review, or contact us to object to an automated decision.</p>
+      <p>Automated rules screen reviews when they are confirmed and can reject one (for example a conflict of interest). We always tell you which rule applied, and you can write a new review or contact us to have a person look at an automated decision. Disputed reviews are never removed automatically: where a dispute is contested or unanswered, a human moderator decides and you can appeal that decision.</p>
     </LegalPage>
   );
 }

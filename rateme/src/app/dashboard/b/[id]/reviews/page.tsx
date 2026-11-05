@@ -8,13 +8,13 @@ import { Stars } from '@/components/Stars';
 import { EmptyState, Notice } from '@/components/ui';
 import { SubmitButton } from '@/components/SubmitButton';
 import { formatDate, formatMonth } from '@/lib/format';
-import { respondToReview, disputeReview } from './actions';
+import { respondToReview, disputeReview, appealDecision } from './actions';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Reviews' };
 
 type Row = { id: string; rating: number; title: string | null; body: string | null; reviewer_name: string; experience_month: Date; published_at: Date;
-  response_body: string | null; response_status: string | null; dispute_status: string | null; dispute_finding: string | null };
+  response_body: string | null; response_status: string | null; dispute_status: string | null; dispute_finding: string | null; appeal_until: Date | null; appealed: boolean };
 
 export default async function Reviews({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ msg?: string; err?: string }> }) {
   const { id } = await params; const sp = await searchParams;
@@ -23,7 +23,9 @@ export default async function Reviews({ params, searchParams }: { params: Promis
     select r.id, r.rating, r.title, r.body, r.reviewer_name, r.experience_month, r.published_at,
       rr.body response_body, rr.status response_status,
       (select d.status from disputes d where d.review_id = r.id order by d.created_at desc limit 1) dispute_status,
-      (select d.finding from disputes d where d.review_id = r.id order by d.created_at desc limit 1) dispute_finding
+      (select d.finding from disputes d where d.review_id = r.id order by d.created_at desc limit 1) dispute_finding,
+      (select d.appeal_until from disputes d where d.review_id = r.id order by d.created_at desc limit 1) appeal_until,
+      exists(select 1 from appeals a where a.review_id = r.id and a.appellant = 'business') appealed
     from reviews r left join review_responses rr on rr.review_id = r.id
     where r.business_id = ${id} and r.status = 'published' order by r.published_at desc limit 200`;
   const canRespond = ctx.verified && ctx.ent.active;
@@ -69,16 +71,28 @@ export default async function Reviews({ params, searchParams }: { params: Promis
                 </details>
               )}
               {ctx.verified && (
-                r.dispute_status === 'open' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">Waiting for the reviewer to reconfirm. If they don’t, it’s removed automatically.</p> :
-                r.dispute_status === 'rejected' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">The reviewer reconfirmed this review, so it stays.</p> :
+                r.dispute_status === 'open' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">Dispute in progress: the reviewer has been asked to respond. The review stays published meanwhile.</p> :
+                r.dispute_status === 'escalated' ? <p className="rounded-xl border border-line p-3 text-sm text-ink-2">With a moderator. You’ll get a written decision by email.</p> :
+                r.dispute_status === 'rejected' || r.dispute_status === 'upheld' ? (
+                  <div className="rounded-xl border border-line p-3 text-sm text-ink-2">
+                    <p><strong>Decision:</strong> {r.dispute_finding}</p>
+                    {r.appealed ? <p className="mt-2 text-xs text-muted">You have appealed this decision.</p>
+                      : r.appeal_until && new Date(r.appeal_until) > new Date() ? (
+                      <details className="mt-2"><summary className="cursor-pointer font-semibold">Appeal (once, until {formatDate(r.appeal_until)})</summary>
+                        <form action={appealDecision} className="mt-2 space-y-2">
+                          <input type="hidden" name="business_id" value={id} /><input type="hidden" name="review_id" value={r.id} />
+                          <textarea name="body" className="textarea" minLength={30} maxLength={3000} required placeholder="What new information should a moderator consider?" aria-label="Appeal" />
+                          <SubmitButton className="btn btn-ghost btn-sm" pendingText="Sending…">Submit appeal</SubmitButton>
+                        </form></details>) : null}
+                  </div>) :
                 <details className="rounded-xl border border-line p-3">
                   <summary className="cursor-pointer text-sm font-semibold">Dispute this review</summary>
-                  {r.dispute_finding && <p className="mt-2 text-xs text-muted">Previous finding: {r.dispute_finding}</p>}
                   <form action={disputeReview} className="mt-3 space-y-2">
                     <input type="hidden" name="business_id" value={id} /><input type="hidden" name="review_id" value={r.id} />
-                    <select name="reason" className="select" required defaultValue="" aria-label="Reason"><option value="" disabled>Reason</option>{Object.entries(DISPUTE_REASONS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
-                    <textarea name="allegation" className="textarea" minLength={10} maxLength={3000} required placeholder="Briefly explain the problem (e.g. no booking under that name in that month). The reviewer sees the reason you choose." aria-label="Explanation" />
-                    <p className="text-xs text-muted">We automatically ask the reviewer to reconfirm. If they don’t within 14 days, the review is removed; if they do, it stays. Up to 5 disputes every 30 days.</p>
+                    <select name="reason" className="select" required defaultValue="" aria-label="Reason"><option value="" disabled>Specific reason</option>{Object.entries(DISPUTE_REASONS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
+                    <textarea name="allegation" className="textarea" minLength={30} maxLength={3000} required placeholder="What is wrong with this review? Be specific (e.g. no booking under that name in that month). The reviewer sees the reason and this explanation." aria-label="Explanation" />
+                    <textarea name="evidence" className="textarea" maxLength={3000} placeholder="Evidence for the moderator (optional): what records you checked, dates, reference numbers. Don’t include customers’ personal data." aria-label="Evidence" />
+                    <p className="text-xs text-muted">The reviewer gets 14 days to stand by or withdraw the review. A reviewer not replying does <strong>not</strong> remove the review — a moderator decides and both sides get a written finding they can appeal. Up to 5 disputes every 30 days. Membership has no effect on the outcome.</p>
                     <SubmitButton className="btn btn-ghost btn-sm" pendingText="Sending…">Submit dispute</SubmitButton>
                   </form>
                 </details>

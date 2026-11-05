@@ -14,7 +14,7 @@ export default function HowItWorks() {
       <ul>
         <li><strong>Email confirmation.</strong> A review is only published after the reviewer clicks a link sent to their email address. One person can have one live review per business.</li>
         <li><strong>Rating-blind checks.</strong> We check for personal information, links, threats and abusive language, conflicts of interest (for example a reviewer email on the business’s own domain) and repeat reviews from the same network. A 1-star review and a 5-star review are treated in exactly the same way.</li>
-        <li><strong>Fully automated decisions.</strong> Reviews containing personal contact details, links, threats or abuse can’t be submitted. Reviews from people connected to the business are rejected automatically. Nobody at RateMe.ie picks which reviews appear.</li>
+        <li><strong>Automated screening, human disputes.</strong> Reviews containing personal contact details, links, threats or abuse can’t be submitted. Reviews from people connected to the business are rejected automatically. Nobody at RateMe.ie picks which reviews appear.</li>
         <li><strong>What we don’t do:</strong> we don’t independently verify that a purchase or visit took place. That’s why you won’t see a “verified purchase” badge on RateMe.ie. A reviewer’s declaration is not the same as independent proof, and we say so.</li>
       </ul>
 
@@ -39,8 +39,11 @@ export default function HowItWorks() {
         <li><strong>Paid member</strong> — the business pays an annual RateMe.ie membership for tools such as a QR code, replying to reviews and profile editing. It has no effect on ratings.</li>
       </ul>
 
-      <h2>Disputes are settled by the reviewer, automatically</h2>
-      <p>Verified owners can reply publicly and can dispute a review. A dispute doesn’t remove anything by itself: we email the reviewer and ask them to reconfirm that it’s their own genuine experience. If they reconfirm, the review stays and can’t be disputed again by the business. If they don’t respond within 14 days, it’s removed automatically — and they can restore it later by reconfirming. When several visitors report the same review, the same check runs. Businesses can dispute up to 5 reviews every 30 days.</p>
+      <h2 id="confidence">Score confidence</h2>
+      <p>Next to every score we show how much weight it can bear, using only the number and age of published reviews: <strong>Early score</strong> (fewer than 5 reviews — one more can change it a lot), <strong>Building</strong> (5–19) and <strong>Established</strong> (20 or more). If there has been no new review for 12 months we say so, because the score may not reflect the business today. This indicator is not a statistical guarantee and says nothing about whether any individual review is genuine. Membership never affects it.</p>
+
+      <h2 id="disputes">Disputes are fair to both sides</h2>
+      <p>Verified owners can reply publicly and can dispute a review, choosing a specific reason and adding evidence. A dispute doesn’t remove anything by itself and the review stays published while it’s looked at. We email the reviewer, who can stand by the review (adding their side for our moderators) or withdraw it. If the reviewer stands by it and the business gave no evidence, the review stays. If the business supplied evidence, the allegation is a policy breach such as personal information or abuse, or the reviewer doesn’t reply within 14 days, a RateMe.ie moderator decides. A reviewer not replying is not treated as proof the review is fake. Every decision comes with a written finding sent to both sides, and either side can appeal once within 30 days. When several visitors report the same review, the same process runs. Businesses can dispute up to 5 reviews every 30 days, and membership plays no part.</p>
 
       <h2>Asking customers for reviews</h2>
       <p>Businesses may invite customers to rate them, for example with their QR code. They must ask customers fairly — not just the happy ones — and must not offer incentives for reviews or pressure anyone to change a rating. Every customer sees the same form; there is no route that sends unhappy customers somewhere private instead.</p>

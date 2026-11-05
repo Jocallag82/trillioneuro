@@ -6,7 +6,7 @@ export default async function AdminHome() {
   await requireStaff();
   const [c] = await sql<Record<string, number>[]>`select
     (select count(*)::int from disputes where status = 'open') reconfirming,
-    (select count(*)::int from disputes where status = 'upheld' and decided_at > now() - interval '30 days') auto_removed,
+    (select count(*)::int from disputes where status = 'escalated') escalated,
     (select count(*)::int from reports where status = 'open' and kind in ('review','response')) review_reports,
     (select count(*)::int from reports where status = 'open' and kind = 'business_info') info_reports,
     (select count(*)::int from disputes where status = 'open') disputes,
@@ -19,14 +19,14 @@ export default async function AdminHome() {
     (select count(distinct business_id)::int from subscriptions where status in ('active','trialing','past_due') and refunded_at is null and disputed_at is null) members,
     (select count(*)::int from stripe_events where processed_at is null and received_at < now() - interval '10 minutes') stuck_events`;
   const tiles: [string, number, string][] = [
-    ['Awaiting reviewer reconfirmation', c.reconfirming, '/admin/reviews?status=disputed'], ['Auto-removed (30 days)', c.auto_removed, '/admin/reviews?status=removed'],
+    ['Awaiting reviewer reconfirmation', c.reconfirming, '/admin/reviews?status=disputed'], ['Disputes needing a decision', c.escalated, '/admin/reviews?status=escalated'], ['Open appeals', c.appeals, '/admin/reviews?status=appealed'],
     ['Manual ownership claims', c.manual_claims, '/admin/verifications'], ['Business suggestions', c.suggestions, '/admin/businesses?status=pending'],
     ['Corrections & info reports', c.info_reports, '/admin/reports'], ['Privacy / legal requests', c.data_requests, '/admin/data-requests'],
   ];
   return (
     <div>
       <h1 className="text-3xl font-semibold">Overview</h1>
-      <p className="mt-1 text-sm text-muted">Review moderation and disputes run automatically. These numbers are for monitoring — no action is required.</p>
+      <p className="mt-1 text-sm text-muted">Screening is automatic. Disputes the reviewer didn’t answer, contested evidence and appeals need a human decision.</p>
       <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {tiles.map(([label, n, href]) => (
           <li key={label}><Link href={href} className={`card block p-5 hover:border-sea/40 ${n ? 'border-gorse' : ''}`}><p className="text-sm text-muted">{label}</p><p className="display mt-1 text-3xl">{n}</p></Link></li>

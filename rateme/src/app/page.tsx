@@ -5,8 +5,10 @@ import { CategoryIcon } from '@/components/CategoryIcon';
 import { BusinessCard } from '@/components/BusinessCard';
 import { Faq } from '@/components/Faq';
 import { MembershipCard } from '@/components/MembershipCard';
-import { ProductShowcase, ReviewFlow, ProfilePreview, QrCardPreview, DashboardPreview, SampleTag } from '@/components/ProductShowcase';
-import { getCategories, topLevel } from '@/lib/catalog';
+import { ProductShowcase, ReviewFlow } from '@/components/ProductShowcase';
+import { getCategories, getCounties, topLevel } from '@/lib/catalog';
+import { sql } from '@/lib/db';
+import { isProduction } from '@/lib/env';
 import { recentlyReviewed, platformCounts } from '@/lib/businesses';
 import { publicPlan } from '@/lib/membership';
 import { formatEuro } from '@/lib/format';
@@ -15,7 +17,10 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 export default async function Home() {
-  const [cats, recent, counts, plan] = await Promise.all([getCategories(), recentlyReviewed(6), platformCounts(), publicPlan()]);
+  const [cats, recent, counts, plan, counties, countyCounts] = await Promise.all([getCategories(), recentlyReviewed(6), platformCounts(), publicPlan(), getCounties(),
+    sql<{ county_id: number; n: number }[]>`select county_id, count(*)::int n from businesses where status = 'published' ${isProduction() ? sql`and not is_test_data` : sql``} group by county_id`]);
+  const nByCounty = new Map(countyCounts.map((c) => [c.county_id, c.n]));
+  const activeCounties = counties.filter((c) => nByCounty.has(c.id)).sort((a, b) => (nByCounty.get(b.id)! - nByCounty.get(a.id)!) || a.name.localeCompare(b.name));
   const tops = topLevel(cats);
   return (
     <>
@@ -23,11 +28,11 @@ export default async function Home() {
         <div className="container-x pb-14 pt-12 sm:pb-20 sm:pt-20">
           <p className="rise eyebrow">Irish businesses, rated by their customers</p>
           <h1 className="rise mt-4 max-w-3xl text-[2.5rem] leading-[1.04] text-ink sm:text-[4.1rem]">
-            Choose Irish businesses <span className="text-sea">with confidence.</span>
+            Real experiences. <span className="text-sea">Better choices.</span>
           </h1>
           <p className="rise mt-5 max-w-2xl text-lg leading-relaxed text-ink-2 sm:text-xl">
-            Discover local businesses, share your own experience and help people choose well. Ratings come from customers who
-            say they used the business — collected fairly and published under rules we show you.
+            Find Irish businesses by service and county, read what their customers actually experienced, and see how many reviews
+            every score is based on. Independent: businesses can’t pay for better ratings, visibility or rankings.
           </p>
           <div className="rise mt-8 max-w-4xl"><SearchForm /></div>
           <p className="mt-4 text-sm text-muted">
@@ -58,6 +63,21 @@ export default async function Home() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="container-x mt-16" aria-labelledby="where">
+        <div className="flex items-end justify-between gap-4">
+          <h2 id="where" className="text-2xl font-semibold sm:text-3xl">Browse by county</h2>
+          <Link href="/counties" className="text-sm font-semibold text-sea hover:underline">All 32 counties</Link>
+        </div>
+        {activeCounties.length ? (
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {activeCounties.slice(0, 16).map((c) => (
+              <li key={c.id}><Link href={`/county/${c.slug}`} className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium transition hover:border-sea/40 hover:text-sea">
+                Co. {c.name}<span className="text-muted tabular-nums">{nByCounty.get(c.id)}</span></Link></li>
+            ))}
+          </ul>
+        ) : <p className="mt-4 text-ink-2">No counties have listings yet. <Link className="text-sea underline" href="/add-business">Suggest the first business</Link>.</p>}
       </section>
 
       <section className="container-x mt-20" aria-labelledby="recent">
@@ -99,7 +119,7 @@ export default async function Home() {
           <ul className="grid gap-4 sm:grid-cols-2">
             {[
               ['No paying to look better', 'Membership never changes a rating, the order of reviews or whether a review is shown.'],
-              ['Disputes settled automatically', 'If a business questions a review, the reviewer is asked to reconfirm it. Reviews people stand behind stay; unconfirmed ones are removed.'],
+              ['Fair disputes', 'A business must give a specific reason. The reviewer can respond, a moderator decides contested cases with a written finding, and either side can appeal.'],
               ['No review gating', 'Every customer gets the same form. Happy and unhappy customers are never routed differently.'],
               ['Honest labels', 'We don’t claim a review is a “verified purchase”. Reviewers declare it’s their own genuine experience.'],
               ['Checks before publishing', 'Email confirmation, rate limits and rating-blind automated checks block spam, abuse and conflicts of interest.'],
@@ -126,11 +146,6 @@ export default async function Home() {
               their published review appears on your profile — helping the next customer choose you.
               {plan ? ` All for ${formatEuro(plan.amount_cents)} a year.` : ''}
             </p>
-            <div className="relative mt-8 hidden grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:grid rounded-3xl bg-paper-2/70 p-4 sm:p-6" inert aria-hidden="true">
-              <div className="space-y-4 [&_.card]:text-[13px]"><div className="max-h-56 overflow-hidden rounded-2xl"><ProfilePreview /></div><div className="hidden max-h-44 overflow-hidden rounded-2xl sm:block"><DashboardPreview /></div></div>
-              <div className="w-32 sm:w-44"><QrCardPreview compact /></div>
-              <span className="absolute right-3 top-3"><SampleTag /></span>
-            </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/dashboard/claim" className="btn btn-ghost text-base">Claim your business</Link>
               <Link href="/for-business" className="btn btn-ghost text-base">How membership works</Link>
@@ -147,7 +162,7 @@ export default async function Home() {
             { q: 'Do I have to pay to leave a rating?', a: 'No. Rating a business is free and always will be. Only businesses pay, and only for membership tools.' },
             { q: 'Will my email address be shown?', a: 'Never. We use it to confirm your review is genuine and to let you manage it later. Only the display name you choose is shown.' },
             { q: 'Are the reviews verified purchases?', a: 'No, and we don’t claim they are. Reviewers declare that they personally used the business. We confirm their email and run automated and human checks, but we can’t independently verify every transaction.' },
-            { q: 'Can a business remove a bad review?', a: <>Not directly. A business can reply publicly or dispute a review. A dispute automatically asks the reviewer to reconfirm it: if they stand by it, it stays; if they don’t respond within 14 days, it’s removed. The same applies to good and bad reviews. <Link className="text-sea underline" href="/review-policy">Review policy</Link></> },
+            { q: 'Can a business remove a bad review?', a: <>Not directly. A business can reply publicly or dispute a review. A dispute needs a specific reason. The reviewer can stand by or withdraw the review; contested or unanswered disputes are decided by a moderator, with a written finding either side can appeal. Silence alone never removes a review, and the same rules apply to good and bad reviews. <Link className="text-sea underline" href="/review-policy">Review policy</Link></> },
             { q: 'Does paying for membership improve a business’s rating?', a: 'No. Ratings are calculated the same way for every business from published reviews only. Membership is clearly labelled.' },
             { q: 'My business is listed but I didn’t add it. What can I do?', a: <>Customers can suggest businesses so they can rate them. You can <Link className="text-sea underline" href="/dashboard/claim">claim the listing</Link>, verify you’re the owner and keep its details accurate — or <Link className="text-sea underline" href="/contact">contact us</Link> if something is wrong.</> },
           ]} />

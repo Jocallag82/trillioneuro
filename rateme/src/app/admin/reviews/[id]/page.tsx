@@ -7,7 +7,8 @@ import { Notice } from '@/components/ui';
 import { SubmitButton } from '@/components/SubmitButton';
 import { formatDate, formatMonth } from '@/lib/format';
 import { HOLD_REASON_LABELS, type HoldReason } from '@/lib/screening';
-import { REPORT_REASONS, DISPUTE_REASONS, STATUS_LABELS } from '@/lib/reviews';
+import { REPORT_REASONS, STATUS_LABELS } from '@/lib/reviews';
+import { ESCALATION_LABELS } from '@/lib/dispute-policy';
 import { moderateReview, resolveDispute, decideAppeal, moderateResponse } from './actions';
 
 const REJECT_REASONS = [
@@ -28,7 +29,10 @@ export default async function ReviewDetail({ params, searchParams }: { params: P
   if (!r) notFound();
   const [reports, disputes, appeals, history, related, response] = await Promise.all([
     sql<{ id: string; reason: string; details: string | null; status: string; created_at: Date }[]>`select id, reason, details, status, created_at from reports where review_id = ${id} order by created_at`,
-    sql<{ id: string; reason: string; allegation: string; status: string; finding: string | null; created_at: Date }[]>`select id, reason, allegation, status, finding, created_at from disputes where review_id = ${id} order by created_at`,
+    sql<{ id: string; reason: string; allegation: string; evidence: string | null; source: string; status: string; finding: string | null; created_at: Date; deadline_at: Date | null;
+      reviewer_statement: string | null; reviewer_responded_at: Date | null; escalation_reason: string | null; decided_by_email: string | null }[]>`
+      select d.id, d.reason, d.allegation, d.evidence, d.source, d.status, d.finding, d.created_at, d.deadline_at, d.reviewer_statement, d.reviewer_responded_at, d.escalation_reason,
+        u.email decided_by_email from disputes d left join users u on u.id = d.decided_by where d.review_id = ${id} order by d.created_at`,
     sql<{ id: string; appellant: string; body: string; status: string; decision_notes: string | null; created_at: Date }[]>`select id, appellant, body, status, decision_notes, created_at from appeals where review_id = ${id} order by created_at`,
     sql<{ action: string; from_status: string | null; to_status: string | null; reason: string | null; notes: string | null; created_at: Date; actor: string | null }[]>`
       select m.action, m.from_status, m.to_status, m.reason, m.notes, m.created_at, u.email actor from moderation_actions m left join users u on u.id = m.actor_user_id where m.review_id = ${id} order by m.created_at`,
@@ -66,14 +70,17 @@ export default async function ReviewDetail({ params, searchParams }: { params: P
         )}
         {disputes.map((d) => (
           <section key={d.id} className="card p-5">
-            <h2 className="font-sans text-lg font-bold tracking-normal">Business dispute <span className="badge badge-muted">{d.status}</span></h2>
-            <p className="mt-1 text-sm text-muted">Allegation by the business (not a finding): {DISPUTE_REASONS[d.reason as keyof typeof DISPUTE_REASONS] ?? d.reason}</p>
+            <h2 className="font-sans text-lg font-bold tracking-normal">{d.source === 'business' ? 'Business dispute' : 'Report-triggered dispute'} <span className={`badge ${d.status === 'escalated' ? 'badge-danger' : 'badge-muted'}`}>{d.status}</span></h2>
+            {d.escalation_reason && <p className="mt-1 text-sm font-semibold">Needs a decision: {ESCALATION_LABELS[d.escalation_reason] ?? d.escalation_reason}</p>}
+            <p className="mt-1 text-sm text-muted">Allegation (not a finding): {d.reason} · opened {formatDate(d.created_at)}{d.deadline_at ? ` · reviewer deadline ${formatDate(d.deadline_at)}` : ''}</p>
             <p className="mt-2 whitespace-pre-line text-sm">{d.allegation}</p>
-            {d.finding && <p className="mt-2 text-sm"><strong>Moderator finding:</strong> {d.finding}</p>}
-            {d.status === 'open' && (
+            {d.evidence && <div className="mt-2 rounded-xl bg-paper p-3 text-sm"><strong>Business evidence:</strong> <span className="whitespace-pre-line">{d.evidence}</span></div>}
+            <div className="mt-2 rounded-xl bg-paper p-3 text-sm"><strong>Reviewer:</strong> {d.reviewer_responded_at ? <>responded {formatDate(d.reviewer_responded_at)}{d.reviewer_statement ? <> — <span className="whitespace-pre-line">{d.reviewer_statement}</span></> : ' (stood by it, no statement)'}</> : 'no response yet. Silence is not evidence either way.'}</div>
+            {d.finding && <p className="mt-2 text-sm"><strong>Finding{d.decided_by_email ? ` (${d.decided_by_email})` : ' (automatic)'}:</strong> {d.finding}</p>}
+            {(d.status === 'open' || d.status === 'escalated') && (
               <form action={resolveDispute} className="mt-4 space-y-2">
                 <input type="hidden" name="dispute_id" value={d.id} /><input type="hidden" name="review_id" value={id} />
-                <textarea name="finding" className="textarea" required minLength={10} placeholder="Finding: what you checked and concluded. Sent to the business." aria-label="Finding" />
+                <textarea name="finding" className="textarea" required minLength={30} placeholder="Written finding: what you checked, what each side provided and why you decided. Sent to the business AND the reviewer — no private data." aria-label="Finding" />
                 <div className="flex flex-wrap gap-2">
                   <SubmitButton name="outcome" value="rejected" className="btn btn-ghost btn-sm">Reject dispute — keep review</SubmitButton>
                   <SubmitButton name="outcome" value="upheld" className="btn btn-danger btn-sm">Uphold — remove review</SubmitButton>
@@ -90,8 +97,8 @@ export default async function ReviewDetail({ params, searchParams }: { params: P
             {a.status === 'open' && (
               <form action={decideAppeal} className="mt-3 space-y-2">
                 <input type="hidden" name="appeal_id" value={a.id} /><input type="hidden" name="review_id" value={id} />
-                <textarea name="notes" className="textarea" required minLength={5} aria-label="Decision notes" />
-                <div className="flex gap-2"><SubmitButton name="outcome" value="granted" className="btn btn-primary btn-sm">Grant (publish review)</SubmitButton><SubmitButton name="outcome" value="denied" className="btn btn-ghost btn-sm">Deny</SubmitButton></div>
+                <textarea name="notes" className="textarea" required minLength={10} aria-label="Decision notes" placeholder="Reasons for the appeal decision. Ideally decided by a different moderator from the original decision." />
+                <div className="flex gap-2"><SubmitButton name="outcome" value="granted" className="btn btn-primary btn-sm">Grant (reverse the decision)</SubmitButton><SubmitButton name="outcome" value="denied" className="btn btn-ghost btn-sm">Deny</SubmitButton></div>
               </form>
             )}
           </section>

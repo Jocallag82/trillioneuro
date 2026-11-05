@@ -1,6 +1,7 @@
 import { Stars } from './Stars';
+import { ConfidenceBadge } from './ConfidenceBadge';
 
-export function RatingSummary({ avg, count, dist }: { avg: string | null; count: number; dist: number[] }) {
+export function RatingSummary({ avg, count, dist, lastReviewAt = null }: { avg: string | null; count: number; dist: number[]; lastReviewAt?: Date | string | null }) {
   if (!count) {
     return (
       <div className="card p-5">
@@ -34,6 +35,7 @@ export function RatingSummary({ avg, count, dist }: { avg: string | null; count:
           );
         })}
       </ul>
+      <ConfidenceBadge count={count} lastReviewAt={lastReviewAt} full />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
 import { env } from '@/lib/env';
-import { expireReconfirmations } from '@/lib/disputes';
+import { processDisputeDeadlines } from '@/lib/disputes';
 
 // Daily housekeeping (Vercel Cron). Implements the data-retention policy.
 export async function GET(req: Request) {
@@ -18,6 +18,6 @@ export async function GET(req: Request) {
     const outbox = await tx`delete from email_outbox where created_at < now() - interval '90 days' returning id`;
     return { expiredReviews: expiredReviews.length, sessions: sessions.length, tokens: tokens.length, limits: limits.length, ips: ips.length + reportIps.length, outbox: outbox.length, dedupe: dedupe.length };
   });
-  const autoRemoved = await expireReconfirmations();
-  return NextResponse.json({ ok: true, ...r, autoRemoved });
+  const disputes = await processDisputeDeadlines();
+  return NextResponse.json({ ok: true, ...r, disputes });
 }

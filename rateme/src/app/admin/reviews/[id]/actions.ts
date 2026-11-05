@@ -7,6 +7,7 @@ import { setReviewStatus, STATUS_LABELS } from '@/lib/reviews';
 import { sendEmail, templates } from '@/lib/email';
 import { createToken } from '@/lib/tokens';
 import { audit } from '@/lib/audit';
+import { decideDispute, decideAppeal as decideAppealLib } from '@/lib/disputes';
 
 const back = (id: string, m: string) => `/admin/reviews/${id}?msg=${encodeURIComponent(m)}`;
 const isUuid = (s: string) => /^[0-9a-f-]{36}$/i.test(s);
@@ -47,22 +48,9 @@ export async function resolveDispute(form: FormData) {
   const reviewId = String(form.get('review_id') ?? '');
   const outcome = String(form.get('outcome') ?? '');
   const finding = String(form.get('finding') ?? '').trim().slice(0, 3000);
-  if (!isUuid(disputeId) || !isUuid(reviewId) || !['upheld', 'rejected'].includes(outcome) || finding.length < 10) redirect(back(reviewId, 'A finding of at least 10 characters is required.'));
-  const info = await sql.begin(async (tx) => {
-    const [d] = await tx<{ business_id: string; raised_by: string }[]>`
-      update disputes set status = ${outcome}, finding = ${finding}, decided_by = ${staff.id}, decided_at = now()
-      where id = ${disputeId} and status = 'open' returning business_id, raised_by`;
-    if (!d) return null;
-    if (outcome === 'upheld') await setReviewStatus(tx, reviewId, 'removed', staff.id, 'dispute_upheld', 'Business dispute upheld', finding);
-    else await tx`insert into moderation_actions (review_id, actor_user_id, action, reason, notes) values (${reviewId}, ${staff.id}, 'dispute_rejected', 'Dispute not upheld', ${finding})`;
-    const [u] = await tx<{ email: string; name: string }[]>`select u.email, b.name from users u, businesses b where u.id = ${d.raised_by} and b.id = ${d.business_id}`;
-    return { ...u, businessId: d.business_id };
-  });
-  if (info) {
-    await sendEmail({ to: info.email, template: 'dispute_decision', ...templates.disputeDecision(info.name, outcome === 'upheld' ? 'Upheld — the review has been removed' : 'Not upheld — the review stays published', finding, `${env.appUrl}/dashboard/b/${info.businessId}/reviews`) });
-    if (outcome === 'upheld') await notifyReviewer(reviewId);
-  }
-  redirect(back(reviewId, 'Dispute resolved.'));
+  if (!isUuid(disputeId) || !isUuid(reviewId) || !['upheld', 'rejected'].includes(outcome) || finding.length < 30) redirect(back(reviewId, 'A written finding of at least 30 characters is required — it is sent to both parties.'));
+  const ok = await decideDispute({ disputeId, staffId: staff.id, outcome: outcome as 'upheld' | 'rejected', finding });
+  redirect(back(reviewId, ok ? 'Dispute decided. Both parties have been notified.' : 'This dispute was already decided.'));
 }
 
 export async function decideAppeal(form: FormData) {
@@ -71,14 +59,9 @@ export async function decideAppeal(form: FormData) {
   const reviewId = String(form.get('review_id') ?? '');
   const outcome = String(form.get('outcome') ?? '');
   const notes = String(form.get('notes') ?? '').trim().slice(0, 2000);
-  if (!isUuid(appealId) || !isUuid(reviewId) || !['granted', 'denied'].includes(outcome)) redirect(back(reviewId, 'Invalid request.'));
-  await sql.begin(async (tx) => {
-    const [a] = await tx`update appeals set status = ${outcome}, decision_notes = ${notes}, decided_by = ${staff.id}, decided_at = now() where id = ${appealId} and status = 'open' returning id`;
-    if (!a) return;
-    if (outcome === 'granted') await setReviewStatus(tx, reviewId, 'published', staff.id, 'appeal_granted', 'Appeal granted', notes);
-    else await tx`insert into moderation_actions (review_id, actor_user_id, action, reason, notes) values (${reviewId}, ${staff.id}, 'appeal_denied', 'Appeal denied', ${notes})`;
-  });
-  await notifyReviewer(reviewId);
+  if (!isUuid(appealId) || !isUuid(reviewId) || !['granted', 'denied'].includes(outcome) || notes.length < 10) redirect(back(reviewId, 'Decision notes (10+ characters) are required.'));
+  const done = await decideAppealLib({ appealId, staffId: staff.id, outcome: outcome as 'granted' | 'denied', notes });
+  if (done) { await notifyReviewer(reviewId); await audit(staff.id, 'review.appeal_decided', 'review', reviewId, { outcome }); }
   redirect(back(reviewId, 'Appeal decided.'));
 }
 

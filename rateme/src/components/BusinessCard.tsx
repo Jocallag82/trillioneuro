@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { BusinessCard as Card } from '@/lib/businesses';
 import { RatingNumber } from './Stars';
+import { ConfidenceBadge } from './ConfidenceBadge';
 
 export function Initials({ name, logoId, size = 52 }: { name: string; logoId?: string | null; size?: number }) {
   if (logoId) {
@@ -24,6 +25,7 @@ export function BusinessCard({ b, member }: { b: Card; member?: boolean }) {
         <p className="truncate text-sm text-muted">{b.category_name} · {b.locality_name ? `${b.locality_name}, ` : ''}Co. {b.county_name}</p>
         <div className="mt-1.5 flex flex-wrap items-center gap-2">
           <RatingNumber avg={b.rating_avg} count={b.rating_count} />
+          <ConfidenceBadge count={b.rating_count} lastReviewAt={b.last_review_at} />
           {b.ownership_verified_at && <span className="badge badge-sea">Owner verified</span>}
           {member && <span className="badge badge-muted">Member</span>}
         </div>

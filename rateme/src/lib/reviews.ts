@@ -125,20 +125,13 @@ export const REPORT_REASONS = {
   other: 'Something else',
 } as const;
 
-export const DISPUTE_REASONS = {
-  not_a_customer: 'We have no record of this customer or experience',
-  conflict: 'We believe this was written by a competitor or someone connected to us',
-  personal_info: 'It reveals private or personal information',
-  false_facts: 'It states facts we can show are false',
-  harassment: 'It is abusive or threatening',
-  other: 'Other',
-} as const;
+export { DISPUTE_REASONS } from './dispute-policy';
 
 export const STATUS_LABELS: Record<string, string> = {
   pending_confirmation: 'Awaiting email confirmation',
   published: 'Published',
   held: 'Being checked',
   rejected: 'Not published — breaches the review policy',
-  removed: 'Removed — not reconfirmed after a dispute',
+  removed: 'Removed after a dispute or policy review',
   withdrawn: 'Withdrawn by the reviewer',
 };

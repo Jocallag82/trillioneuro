@@ -103,7 +103,7 @@ export default async function BusinessPage({ params, searchParams }: P) {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[22rem_1fr]">
         <aside className="space-y-6">
-          <RatingSummary avg={b.rating_avg} count={b.rating_count} dist={b.rating_dist} />
+          <RatingSummary avg={b.rating_avg} count={b.rating_count} dist={b.rating_dist} lastReviewAt={b.last_review_at} />
           <div className="card p-5">
             <h2 className="font-sans text-base font-bold tracking-normal">About</h2>
             {b.description ? <p className="mt-2 whitespace-pre-line leading-relaxed text-ink-2">{b.description}</p> : <p className="mt-2 text-sm text-muted">The business hasn’t added a description yet.</p>}

@@ -37,7 +37,7 @@ npm run test:e2e                  # Playwright: consumer, onboarding/payments, s
 |---|---|
 | Ratings are computed only from `published` reviews, by a DB trigger | `migrations/001_init.sql` (`refresh_business_rating`) |
 | Screening never looks at the star rating (no gating); breaches blocked at submit, conflicts auto-rejected | `src/lib/screening.ts`, `src/lib/reviews.ts` |
-| Hands-off disputes: reviewer must reconfirm within 14 days or the review is auto-removed (daily cron); 3 reports = dispute; 5 disputes / business / 30 days | `src/lib/disputes.ts` |
+| Fair disputes: specific reason + evidence; reviewer can stand by or withdraw; silence or contested evidence escalates to a moderator (never auto-removal); written findings to both sides; one appeal each within 30 days; 3 reports = dispute; 5 disputes / business / 30 days | `src/lib/disputes.ts`, `src/lib/dispute-policy.ts` |
 | One live review per email per business | unique index `reviews_one_per_reviewer` |
 | Membership granted only from verified Stripe webhooks, idempotent, order-safe | `src/lib/billing.ts`, `src/app/api/stripe/webhook` |
 | Account / claimed / ownership verified / paid are separate states | `users`, `business_members`, `businesses.ownership_verified_at`, `subscriptions` |

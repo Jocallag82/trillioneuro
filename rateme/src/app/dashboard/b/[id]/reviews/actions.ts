@@ -6,7 +6,7 @@ import { DISPUTE_REASONS } from '@/lib/reviews';
 import { screenText } from '@/lib/screening';
 import { audit } from '@/lib/audit';
 import { rateLimit } from '@/lib/security';
-import { openReconfirmation } from '@/lib/disputes';
+import { openReconfirmation, submitAppeal } from '@/lib/disputes';
 
 const back = (id: string, k: 'msg' | 'err', m: string) => `/dashboard/b/${id}/reviews?${k}=${encodeURIComponent(m)}`;
 
@@ -38,10 +38,23 @@ export async function disputeReview(form: FormData) {
   if (!ctx.verified) redirect(back(id, 'err', 'Only verified owners can dispute reviews.'));
   const reason = String(form.get('reason') ?? '');
   const allegation = String(form.get('allegation') ?? '').trim().slice(0, 3000);
-  if (!(reason in DISPUTE_REASONS) || allegation.length < 10) redirect(back(id, 'err', 'Choose a reason and explain the problem.'));
+  const evidence = String(form.get('evidence') ?? '').trim().slice(0, 3000);
+  if (!(reason in DISPUTE_REASONS) || allegation.length < 30) redirect(back(id, 'err', 'Choose a specific reason and explain the problem in at least 30 characters.'));
   if (!(await rateLimit(`dispute:${id}`, 20, 86400))) redirect(back(id, 'err', 'You’ve raised many disputes today. A moderator will work through the existing ones first.'));
   const res = await openReconfirmation({ reviewId, businessId: id, source: 'business', raisedBy: ctx.user.id,
-    reason: DISPUTE_REASONS[reason as keyof typeof DISPUTE_REASONS], allegation });
+    reasonCode: reason, allegation, evidence });
   if (!res.ok) redirect(back(id, 'err', res.error));
-  redirect(back(id, 'msg', 'Dispute submitted. We’ve asked the reviewer to reconfirm. If they don’t within 14 days, the review is removed automatically.'));
+  redirect(back(id, 'msg', 'Dispute submitted. The reviewer has 14 days to respond. If they don’t, or if the facts are contested, a moderator decides and sends you a written finding. The review stays published meanwhile.'));
+}
+
+export async function appealDecision(form: FormData) {
+  const id = String(form.get('business_id') ?? '');
+  const reviewId = String(form.get('review_id') ?? '');
+  const ctx = await loadBusinessCtx(id, `/dashboard/b/${id}/reviews`);
+  if (!ctx.verified) redirect(back(id, 'err', 'Only verified owners can appeal.'));
+  if (!(await rateLimit(`appeal:${id}`, 10, 86400))) redirect(back(id, 'err', 'Too many appeals today.'));
+  const res = await submitAppeal({ reviewId, appellant: 'business', userId: ctx.user.id, body: String(form.get('body') ?? ''), businessId: id });
+  if (!res.ok) redirect(back(id, 'err', res.error));
+  await audit(ctx.user.id, 'review.appeal_submitted', 'review', reviewId, { business: id });
+  redirect(back(id, 'msg', 'Appeal submitted. A moderator will review it and email you the decision.'));
 }

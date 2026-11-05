@@ -5,7 +5,7 @@ import { isProduction } from './env';
 export type BusinessCard = {
   id: string; slug: string; name: string; description: string | null; logo_id: string | null;
   category_name: string; category_slug: string; county_name: string; locality_name: string | null;
-  rating_count: number; rating_avg: string | null; ownership_verified_at: Date | null; status: string;
+  rating_count: number; rating_avg: string | null; ownership_verified_at: Date | null; status: string; last_review_at: Date | null;
 };
 
 export type BusinessFull = BusinessCard & {
@@ -13,21 +13,21 @@ export type BusinessFull = BusinessCard & {
   county_id: number; county_slug: string; locality_id: number | null; locality_slug: string | null;
   address_line1: string | null; address_line2: string | null; eircode: string | null; show_address: boolean;
   phone: string | null; public_email: string | null; website: string | null; website_domain: string | null;
-  socials: Record<string, string>; cro_number: string | null; rating_dist: number[]; last_review_at: Date | null;
+  socials: Record<string, string>; cro_number: string | null; rating_dist: number[];
   source: string; created_at: Date; updated_at: Date; is_test_data: boolean;
 };
 
 const testFilter = () => (isProduction() ? sql`and b.is_test_data = false` : sql``);
 
 const cardColumns = sql`b.id, b.slug, b.name, b.description, b.logo_id, c.name category_name, c.slug category_slug,
-  co.name county_name, l.name locality_name, b.rating_count, b.rating_avg::text, b.ownership_verified_at, b.status`;
+  co.name county_name, l.name locality_name, b.rating_count, b.rating_avg::text, b.ownership_verified_at, b.status, b.last_review_at`;
 
 export async function getBusinessBySlug(slug: string): Promise<{ business: BusinessFull | null; redirectTo?: string }> {
   const [b] = await sql<BusinessFull[]>`
     select ${cardColumns}, b.category_id, pc.name parent_category_name, pc.slug parent_category_slug,
       b.county_id, co.slug county_slug, b.locality_id, l.slug locality_slug, b.address_line1, b.address_line2, b.eircode,
       b.show_address, b.phone, b.public_email, b.website, b.website_domain, b.socials, b.cro_number, b.rating_dist,
-      b.last_review_at, b.source, b.created_at, b.updated_at, b.is_test_data
+      b.source, b.created_at, b.updated_at, b.is_test_data
     from businesses b join categories c on c.id = b.category_id left join categories pc on pc.id = c.parent_id
       join counties co on co.id = b.county_id left join localities l on l.id = b.locality_id
     where b.slug = ${slug} ${testFilter()}`;
@@ -191,4 +191,24 @@ export async function bumpStat(businessId: string, field: StatField, visitorKey?
   const col = sql(field);
   await sql`insert into business_daily_stats (business_id, day, ${col}) values (${businessId}, (now() at time zone 'Europe/Dublin')::date, 1)
             on conflict (business_id, day) do update set ${col} = business_daily_stats.${col} + 1`;
+}
+
+/** Real published listings per top-level category within a county (for internal links and index decisions). */
+export async function categoryCountsInCounty(countySlug: string) {
+  return sql<{ slug: string; name: string; n: number }[]>`
+    select coalesce(pc.slug, c.slug) slug, coalesce(pc.name, c.name) name, count(*)::int n
+    from businesses b join categories c on c.id = b.category_id left join categories pc on pc.id = c.parent_id
+      join counties co on co.id = b.county_id
+    where b.status = 'published' ${testFilter()} and co.slug = ${countySlug}
+    group by 1, 2 order by n desc, name`;
+}
+
+/** County/category pairs with enough real listings to deserve their own indexable page. */
+export async function indexableCountyCategories(min: number) {
+  return sql<{ county: string; category: string }[]>`
+    select co.slug county, coalesce(pc.slug, c.slug) category
+    from businesses b join categories c on c.id = b.category_id left join categories pc on pc.id = c.parent_id
+      join counties co on co.id = b.county_id
+    where b.status = 'published' and not b.is_test_data
+    group by 1, 2 having count(*) >= ${min}`;
 }
