@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RipeStream — The feed that doesn't decide for you</title>
+<meta name="description" content="RipeStream: a social feed you choose. People you follow, communities you join, or everyone — newest first. Free early beta; the first 10,000 members become Founding Members.">
+<link rel="canonical" href="https://www.ripestream.com/">
+<meta name="robots" content="noindex,follow">
+<meta property="og:image" content="https://www.ripestream.com/og-image.png">
+<meta name="theme-color" content="#050403">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-weight:200 800;font-display:swap;src:url(/fonts/bricolage-grotesque.woff2) format('woff2')}
+@font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(/fonts/inter.woff2) format('woff2')}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#050403;--cream:#f3eee6;--ripe:#ff5b1f;--lime:#c8f55a;--plum:#7a2cff;--hue:90;--ripeness:0}
+html{background:var(--ink);color:var(--cream);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--ink);overflow-x:hidden;min-height:100vh}
+a{color:inherit}
+.d{font-family:'Bricolage Grotesque',Inter,sans-serif;font-weight:800;letter-spacing:-.04em;line-height:.88}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+#gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+.grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-8%,4%)}40%{transform:translate(6%,-6%)}60%{transform:translate(-4%,8%)}80%{transform:translate(9%,2%)}}
+main{position:relative;z-index:2}
+
+/* cursor */
+.cur,.cur-dot{position:fixed;top:0;left:0;z-index:80;pointer-events:none;border-radius:50%;mix-blend-mode:difference}
+.cur{width:44px;height:44px;margin:-22px 0 0 -22px;background:var(--cream);transition:width .3s,height .3s,margin .3s}
+.cur.big{width:120px;height:120px;margin:-60px 0 0 -60px}
+.cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--lime);mix-blend-mode:normal}
+@media (pointer:coarse){.cur,.cur-dot{display:none}}
+@media (pointer:fine){body,a,button{cursor:none}}
+
+/* ripeness meter */
+.meter{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;align-items:center;gap:10px;font:600 10px/1 Inter;letter-spacing:.2em;text-transform:uppercase;writing-mode:vertical-rl}
+.meter .bar{width:4px;height:38vh;border-radius:4px;background:rgba(243,238,230,.12);position:relative;overflow:hidden}
+.meter .bar i{position:absolute;left:0;right:0;bottom:0;height:calc(var(--ripeness)*100%);background:linear-gradient(to top,var(--lime),#ffd23a,var(--ripe),#c2185b)}
+@media (max-width:700px){.meter{display:none}}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:55;display:flex;justify-content:space-between;align-items:center;padding:18px clamp(16px,4vw,40px);mix-blend-mode:difference}
+.logo{display:flex;align-items:center;gap:10px;font:800 20px/1 'Bricolage Grotesque';letter-spacing:-.03em;text-decoration:none}
+.logo svg{width:30px;height:30px;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav .go{font:700 13px/1 Inter;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1.5px solid currentColor;padding:12px 18px;border-radius:99px}
+
+/* hero */
+.hero{position:relative;height:100vh;min-height:620px;display:grid;place-items:center;overflow:hidden;perspective:1200px}
+.portal{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.portal span{position:absolute;border:1.5px solid rgba(243,238,230,.18);border-radius:46% 54% 50% 50%/55% 45% 55% 45%;animation:tunnel 8s linear infinite;opacity:0}
+@keyframes tunnel{0%{width:2vmin;height:2vmin;opacity:0;transform:rotate(0)}15%{opacity:1}100%{width:220vmax;height:220vmax;opacity:0;transform:rotate(240deg);border-color:var(--ripe)}}
+.hero-in{position:relative;text-align:center;padding:0 16px;transform-style:preserve-3d;will-change:transform}
+.kicker{display:inline-flex;gap:10px;align-items:center;font:600 12px/1 Inter;letter-spacing:.22em;text-transform:uppercase;padding:10px 16px;border:1px solid rgba(243,238,230,.25);border-radius:99px;backdrop-filter:blur(8px);background:rgba(5,4,3,.35)}
+.kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 var(--lime);animation:ping 1.6s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 12px transparent}}
+.mega{font-size:clamp(64px,15.5vw,240px);margin:28px 0 22px;position:relative}
+.mega .w{display:inline-block;transform:translateZ(var(--z,0px))}
+.mega .you{color:transparent;-webkit-text-stroke:2px var(--lime);font-style:italic;position:relative}
+.glitch{position:relative}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;inset:0;pointer-events:none}
+.glitch::before{color:var(--ripe);clip-path:inset(0 0 60% 0);animation:g1 3.2s infinite steps(1)}
+.glitch::after{color:var(--plum);clip-path:inset(55% 0 0 0);animation:g2 2.7s infinite steps(1)}
+@keyframes g1{0%,92%{transform:none;opacity:0}93%{transform:translate(-6px,2px);opacity:.9}96%{transform:translate(5px,-3px);opacity:.9}}
+@keyframes g2{0%,88%{transform:none;opacity:0}89%{transform:translate(7px,1px);opacity:.9}94%{transform:translate(-4px,3px);opacity:.9}}
+.sub{max-width:600px;margin:0 auto;font-size:clamp(17px,2vw,21px);line-height:1.5;color:#cfc7bc}
+.cta-row{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{position:relative;display:inline-flex;align-items:center;gap:12px;border:0;font:800 17px/1 'Bricolage Grotesque';letter-spacing:-.01em;padding:22px 34px;border-radius:99px;text-decoration:none;color:var(--ink);background:var(--lime);overflow:hidden;isolation:isolate;transition:transform .2s}
+.btn::before{content:"";position:absolute;inset:-2px;z-index:-1;background:conic-gradient(from var(--a,0deg),var(--lime),var(--ripe),var(--plum),var(--lime));animation:rot 3s linear infinite;opacity:0;transition:opacity .3s}
+.btn:hover::before{opacity:1}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes rot{to{--a:360deg}}
+.btn.ghost{background:transparent;color:var(--cream);box-shadow:inset 0 0 0 1.5px rgba(243,238,230,.4)}
+.scrollhint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font:600 11px/1 Inter;letter-spacing:.3em;text-transform:uppercase;opacity:.6;display:flex;flex-direction:column;align-items:center;gap:10px}
+.scrollhint i{width:1px;height:46px;background:linear-gradient(var(--cream),transparent);animation:drip 1.8s infinite}
+@media (max-height:880px){.scrollhint{display:none}}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* marquee */
+.mq{position:relative;overflow:hidden;padding:26px 0;border-block:1px solid rgba(243,238,230,.12);background:var(--ripe);color:var(--ink);transform:rotate(-2.5deg) scale(1.06);margin:40px 0}
+.mq.rev{background:var(--lime);transform:rotate(2deg) scale(1.06);margin-top:-70px}
+.mq .t{display:flex;width:max-content;animation:mq 22s linear infinite;font:800 clamp(30px,5vw,64px)/1 'Bricolage Grotesque';letter-spacing:-.03em;white-space:nowrap}
+.mq.rev .t{animation-direction:reverse}
+.mq .t span{padding:0 28px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* sections */
+.sec{position:relative;padding:clamp(90px,14vw,180px) clamp(16px,5vw,64px);max-width:1280px;margin:0 auto}
+.eyebrow{font:700 12px/1 Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--lime);margin-bottom:22px;display:block}
+.h2{font-size:clamp(44px,8vw,120px)}
+.lead{font-size:clamp(17px,1.8vw,20px);line-height:1.6;color:#bfb6ab;max-width:560px;margin-top:26px}
+
+/* paradox staircase / reverse scroll */
+.para{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,80px);align-items:center}
+@media (max-width:860px){.para{grid-template-columns:1fr}}
+.penrose{width:100%;max-width:460px;aspect-ratio:1;margin:0 auto;filter:drop-shadow(0 30px 80px rgba(255,91,31,.35))}
+.penrose svg{width:100%;height:100%;animation:spin 30s linear infinite}
+.counter-feed{height:440px;overflow:hidden;border-radius:28px;border:1px solid rgba(243,238,230,.14);background:rgba(20,17,15,.6);backdrop-filter:blur(10px);position:relative;mask-image:linear-gradient(transparent,#000 15%,#000 85%,transparent)}
+.counter-feed ul{list-style:none;padding:20px;display:flex;flex-direction:column;gap:12px;will-change:transform}
+.post{padding:16px 18px;border-radius:18px;background:rgba(243,238,230,.06);border:1px solid rgba(243,238,230,.08);font-size:15px;line-height:1.45}
+.post b{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;color:var(--cream)}
+.post b em{font-style:normal;font-weight:600;color:var(--lime);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.post small{display:block;margin-top:8px;color:#8f877d;font-size:12px}
+
+/* feed source dial */
+.dial-wrap{display:grid;grid-template-columns:auto 1fr;gap:clamp(30px,6vw,90px);align-items:center;margin-top:60px}
+@media (max-width:860px){.dial-wrap{grid-template-columns:1fr;justify-items:center}}
+.dial{width:min(80vw,340px);aspect-ratio:1;border-radius:50%;position:relative;background:radial-gradient(circle,#1a1512 0 38%,transparent 39%),conic-gradient(from 0deg,var(--lime) 0 33.3%,var(--ripe) 0 66.6%,var(--plum) 0);box-shadow:0 0 120px -20px var(--ripe),inset 0 0 0 10px rgba(5,4,3,.6);touch-action:none;user-select:none}
+.dial .knob{position:absolute;inset:18%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a322c,#0d0b0a);box-shadow:0 20px 50px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.08);transform:rotate(var(--r,60deg));transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.dial .knob::after{content:"";position:absolute;top:8%;left:50%;width:6px;height:22%;margin-left:-3px;border-radius:6px;background:var(--cream);box-shadow:0 0 18px var(--cream)}
+.dial .lbl{position:absolute;font:800 13px/1 Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);pointer-events:none}
+.dial button{position:absolute;width:34%;height:34%;border-radius:50%;background:transparent;border:0;z-index:2}
+.dial-out .mode{font-size:clamp(40px,6vw,84px)}
+.dial-out p{margin-top:14px;color:#bfb6ab;font-size:18px;line-height:1.55;max-width:460px}
+.dial-out .mini{margin-top:24px;display:flex;flex-direction:column;gap:10px;max-width:460px}
+.dial-out .mini .post{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.9) rotate(-2deg)}}
+
+/* tilt cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:60px;perspective:1000px}
+.card{position:relative;padding:34px 28px 30px;border-radius:28px;background:linear-gradient(160deg,rgba(243,238,230,.08),rgba(243,238,230,.02));border:1px solid rgba(243,238,230,.12);transform-style:preserve-3d;transition:transform .15s;overflow:hidden;min-height:280px}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(200,245,90,.18),transparent 45%);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card .n{font:800 88px/1 'Bricolage Grotesque';color:transparent;-webkit-text-stroke:1.5px rgba(243,238,230,.25);transform:translateZ(40px)}
+.card h3{font:800 28px/1.05 'Bricolage Grotesque';letter-spacing:-.02em;margin:18px 0 12px;transform:translateZ(60px)}
+.card p{color:#bfb6ab;line-height:1.55;transform:translateZ(30px)}
+.card .st{display:inline-block;margin-top:16px;font:700 11px/1 Inter;letter-spacing:.14em;text-transform:uppercase;padding:7px 10px;border-radius:99px;background:rgba(200,245,90,.14);color:var(--lime)}
+.card .st.soon{background:rgba(255,91,31,.14);color:var(--ripe)}
+
+/* clock paradox */
+.clock{display:flex;flex-wrap:wrap;gap:clamp(10px,3vw,40px);align-items:baseline;margin-top:40px;font-variant-numeric:tabular-nums}
+.clock .d{font-size:clamp(56px,11vw,170px)}
+.clock .d:nth-child(2){color:var(--ripe)}
+.clock small{display:block;font:600 12px/1 Inter;letter-spacing:.2em;text-transform:uppercase;color:#8f877d;margin-top:12px}
+
+/* join */
+.join{position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;overflow:hidden;padding:120px 16px}
+.join .orb{position:absolute;width:min(130vw,1100px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffb36b,var(--ripe) 30%,#c2185b 58%,#2a0b2e 75%,transparent 76%);filter:blur(2px);animation:breathe 7s ease-in-out infinite;opacity:.85}
+@keyframes breathe{50%{transform:scale(1.08) rotate(8deg);border-radius:46% 54% 52% 48%}}
+.join-in{position:relative;max-width:620px;width:100%}
+.join .h2{color:var(--ink);mix-blend-mode:normal}
+.join .h2 span{display:block}
+form{margin-top:36px;display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:30px;background:rgba(5,4,3,.82);backdrop-filter:blur(16px);box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.row{display:flex;gap:12px}
+@media (max-width:600px){.row{flex-direction:column}}
+input{flex:1;min-width:0;font:500 17px/1 Inter;color:var(--cream);background:rgba(243,238,230,.07);border:1.5px solid rgba(243,238,230,.14);border-radius:18px;padding:20px 20px;outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus{border-color:var(--lime);box-shadow:0 0 0 5px rgba(200,245,90,.15)}
+input::placeholder{color:#7d756c}
+form .btn{justify-content:center;width:100%}
+.hp{position:absolute;left:-9999px}
+.err{min-height:1.2em;color:#ffb3a0;font-size:14px}
+.fine{color:#2a0b2e;font-weight:600;font-size:14px;margin-top:14px}
+.fine a{text-decoration:underline}
+.done{padding:40px 24px;border-radius:30px;background:rgba(5,4,3,.85);margin-top:36px}
+.done h3{font:800 44px/1 'Bricolage Grotesque';color:var(--lime)}
+.done p{margin-top:12px;color:#cfc7bc;line-height:1.55}
+details.inv summary{color:#8f877d;font-size:14px;cursor:pointer;text-align:left;padding:4px 6px}
+details.inv input{margin-top:8px;width:100%}
+
+footer{position:relative;z-index:2;padding:40px clamp(16px,5vw,64px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;color:#8f877d;font-size:14px;border-top:1px solid rgba(243,238,230,.1);background:var(--ink)}
+footer a{text-decoration:none;margin-left:18px}
+footer a:hover{color:var(--cream)}
+
+.rv{opacity:0;transform:translateY(60px) skewY(4deg);transition:opacity 1s,transform 1.1s cubic-bezier(.2,.9,.2,1)}
+.rv.in{opacity:1;transform:none}
+.split .ch{display:inline-block;transform:translateY(110%) rotate(12deg);opacity:0;transition:transform .9s cubic-bezier(.2,1.2,.3,1),opacity .6s;transition-delay:calc(var(--i)*22ms)}
+.split.in .ch{transform:none;opacity:1}
+
+.egg{position:fixed;inset:0;z-index:90;pointer-events:none;display:grid;place-items:center;font:800 18vw/1 'Bricolage Grotesque';color:var(--lime);opacity:0;transition:opacity .4s}
+.egg.on{opacity:1}
+body.flip main{transform:rotate(180deg);transition:transform 1.2s cubic-bezier(.7,0,.3,1)}
+body main{transition:transform 1.2s cubic-bezier(.7,0,.3,1)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv,.split .ch{opacity:1;transform:none}
+  #gl,.grain{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"></div><div class="cur-dot" aria-hidden="true"></div>
+<div class="meter" aria-hidden="true"><span>Ripe</span><div class="bar"><i></i></div><span>Raw</span></div>
+<div class="egg" aria-hidden="true">↑↑↓↓ RIPE</div>
+
+<header class="nav">
+  <a class="logo" href="#top" aria-label="RipeStream home"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="15" fill="#ff5b1f"/><path d="M17.5 3.2c2.2-2.4 6.2-2.6 8.3-.9-2.1 2.6-5.7 3-8.3.9z" fill="#c8f55a"/><path d="M5 17.5c3.7-3.6 7.3-3.6 11 0s7.3 3.6 11 0" stroke="#0c0a09" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M8.5 24c2.5-2.3 5-2.3 7.5 0s5 2.3 7.5 0" stroke="#0c0a09" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>RipeStream</a>
+  <a class="go" href="#join" data-magnet>Join the beta</a>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <div class="portal" aria-hidden="true"><span></span><span style="animation-delay:-1.6s"></span><span style="animation-delay:-3.2s"></span><span style="animation-delay:-4.8s"></span><span style="animation-delay:-6.4s"></span></div>
+  <div class="hero-in" id="heroIn">
+    <span class="kicker"><span class="dot"></span><span id="status">Free early beta · Founding places</span></span>
+    <h1 id="h1" class="d mega"><span class="w glitch" data-t="A feed" style="--z:40px">A feed</span><br><span class="w you" style="--z:120px">you</span> <span class="w glitch" data-t="choose." style="--z:70px">choose.</span></h1>
+    <p class="sub">No algorithm deciding what you see. Pick your sources — people, communities, or everyone — and get them newest first. That's it. That's the whole trick.</p>
+    <div class="cta-row"><a class="btn" href="#join" data-magnet>Claim a founding place →</a><a class="btn ghost" href="#dial" data-magnet>Spin the feed</a></div>
+  </div>
+  <div class="scrollhint" aria-hidden="true">Scroll to ripen<i></i></div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="t"><span>NEWEST FIRST ✺</span><span>NO RANKING ✺</span><span>NO ADS IN YOUR FEED ✺</span><span>YOUR SOURCES ✺</span><span>NEWEST FIRST ✺</span><span>NO RANKING ✺</span><span>NO ADS IN YOUR FEED ✺</span><span>YOUR SOURCES ✺</span></div></div>
+<div class="mq rev" aria-hidden="true"><div class="t"><span>FOLLOWING ● COMMUNITIES ● EVERYONE ●</span><span>FOLLOWING ● COMMUNITIES ● EVERYONE ●</span><span>FOLLOWING ● COMMUNITIES ● EVERYONE ●</span><span>FOLLOWING ● COMMUNITIES ● EVERYONE ●</span></div></div>
+
+<section class="sec" aria-labelledby="p-title">
+  <div class="para">
+    <div>
+      <span class="eyebrow">The paradox</span>
+      <h2 id="p-title" class="d h2 split">The more they scroll for you, the less you see.</h2>
+      <p class="lead rv">Engagement feeds climb forever and never arrive — like this staircase. Scroll down and watch the feed on the right run <em>backwards</em>. Ranking is the same trick: motion that goes nowhere you asked to go.</p>
+    </div>
+    <div>
+      <div class="penrose rv" aria-hidden="true"><svg viewBox="-110 -110 220 220"><defs><linearGradient id="pa" x1="0" x2="1"><stop offset="0" stop-color="#c8f55a"/><stop offset="1" stop-color="#ff5b1f"/></linearGradient><linearGradient id="pb" x1="0" x2="1"><stop offset="0" stop-color="#ff5b1f"/><stop offset="1" stop-color="#7a2cff"/></linearGradient><linearGradient id="pc" x1="0" x2="1"><stop offset="0" stop-color="#7a2cff"/><stop offset="1" stop-color="#c8f55a"/></linearGradient></defs>
+        <path d="M-17.3 -90 L95.3 105 L60.6 105 L-17.3 -30 Z" fill="url(#pa)"/>
+        <path d="M95.3 105 L-95.3 105 L-77.9 75 L60.6 75 Z" fill="url(#pb)" transform="rotate(0)"/>
+        <path d="M-95.3 105 L17.3 -90 L34.6 -60 L-60.6 105 Z" fill="url(#pc)"/>
+        <path d="M-17.3 -90 L17.3 -90 L-43.3 15 L-60.6 -15 Z" fill="#c8f55a" opacity=".9"/>
+      </svg></div>
+    </div>
+  </div>
+  <div class="counter-feed rv" style="margin-top:50px" aria-label="Example feed that scrolls backwards">
+    <ul id="revFeed"></ul>
+  </div>
+</section>
+
+<section class="sec" id="dial" aria-labelledby="dial-title">
+  <span class="eyebrow">Turn the dial</span>
+  <h2 id="dial-title" class="d h2 split">You hold the knob. Not us.</h2>
+  <div class="dial-wrap">
+    <div class="dial rv" id="dialEl" role="group" aria-label="Feed source">
+      <span class="lbl" style="top:18%;right:10%">Follow</span>
+      <span class="lbl" style="bottom:12%;left:42%">Spaces</span>
+      <span class="lbl" style="top:18%;left:9%">All</span>
+      <button type="button" data-m="0" style="top:0;right:0" aria-label="Following"></button>
+      <button type="button" data-m="1" style="bottom:0;left:33%" aria-label="Communities"></button>
+      <button type="button" data-m="2" style="top:0;left:0" aria-label="Everyone"></button>
+      <div class="knob"></div>
+    </div>
+    <div class="dial-out" aria-live="polite">
+      <div class="d mode" id="modeName">Following</div>
+      <p id="modeDesc">Only people you follow, plus your own posts. Newest first.</p>
+      <div class="mini" id="mini"></div>
+      <p style="font-size:13px;color:#7d756c">Simulated — example posts, not real members.</p>
+    </div>
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="t"><span>EVERY POST SAYS WHY IT'S THERE ✺</span><span>MUTE WORDS ✺</span><span>EVERY POST SAYS WHY IT'S THERE ✺</span><span>MUTE WORDS ✺</span></div></div>
+
+<section class="sec" aria-labelledby="c-title">
+  <span class="eyebrow">What's real today</span>
+  <h2 id="c-title" class="d h2 split">Four rules. Zero tricks.</h2>
+  <div class="cards">
+    <article class="card" data-tilt><div class="n">01</div><h3>You choose the sources</h3><p>Following, communities, or everyone. Switch any time.</p><span class="st">In the beta</span></article>
+    <article class="card" data-tilt><div class="n">02</div><h3>Newest first</h3><p>Chronological. No engagement ranking reshuffling your day.</p><span class="st">In the beta</span></article>
+    <article class="card" data-tilt><div class="n">03</div><h3>Every post explains itself</h3><p>"You follow them" or "from a community you joined" — never a mystery.</p><span class="st">In the beta</span></article>
+    <article class="card" data-tilt><div class="n">04</div><h3>Founding Members</h3><p>The first 10,000 get a permanent founding number and invitations to share.</p><span class="st soon">Limited</span></article>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="t-title">
+  <span class="eyebrow">Time paradox</span>
+  <h2 id="t-title" class="d h2 split">Time you've spent on this page vs. time the feed wanted.</h2>
+  <div class="clock" aria-live="off">
+    <div><div class="d" id="tUp">0:00</div><small>You, on purpose</small></div>
+    <div><div class="d" id="tDown">∞</div><small>An infinite feed's ask</small></div>
+  </div>
+  <p class="lead rv">A feed that ends. When you've seen everything new, it says so. Then you can go live your life.</p>
+</section>
+
+<section class="join" id="join" aria-labelledby="j-title">
+  <div class="orb" aria-hidden="true"></div>
+  <div class="join-in">
+    <h2 id="j-title" class="d h2"><span>Get in</span><span>while it's</span><span>ripe.</span></h2>
+    <div id="formHost">
+      <form id="joinForm" novalidate>
+        <div class="row">
+          <label class="sr" for="fn">First name (optional)</label><input id="fn" name="first_name" maxlength="40" autocomplete="given-name" placeholder="First name">
+          <label class="sr" for="em">Email</label><input id="em" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="you@example.com">
+        </div>
+        <details class="inv"><summary>Have an invitation code?</summary><label class="sr" for="iv">Invitation code</label><input id="iv" name="invite" maxlength="12" autocomplete="off" placeholder="ABCD-2345"></details>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <button class="btn" type="submit" data-magnet>Claim my founding place →</button>
+        <p class="err" id="err" role="alert"></p>
+      </form>
+    </div>
+    <p class="fine">Free. We'll email a link to confirm. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+  </div>
+</section>
+</main>
+
+<footer><span>© 2026 RipeStream. Product shown is a concept of the early beta.</span><span><a href="/?v=a">Classic view</a><a href="/member">Members</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span></footer>
+
+<script>
+(function(){
+'use strict';
+var RPC='https://kxzywyflylkcqoidiqmo.supabase.co/rest/v1/rpc/',KEY='sb_publishable_37yXvakYMXdpz2e3Hf_zng__oGOVC-g';
+var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,fine=matchMedia('(pointer: fine)').matches;
+var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
+function track(n,d){try{window.va&&window.va('event',d?{name:n,data:d}:{name:n})}catch(e){}}
+function rpc(n,a){return fetch(RPC+n,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(a||{})}).then(function(r){return r.json().catch(function(){return null}).then(function(b){if(r.ok)return b;var e=new Error((b&&b.message)||'HTTP '+r.status);e.code=b&&b.code;throw e})})}
+var utm='';try{utm=(new URLSearchParams(location.search).get('utm_source')||'').toLowerCase();if(!/^[a-z0-9_-]{1,12}$/.test(utm))utm=''}catch(e){}
+track('ab_view',{variant:'b'});
+
+/* status */
+rpc('rs_founding_status').then(function(s){if(s&&typeof s.open==='boolean')$('#status').textContent=s.open?'Free early beta · Founding places open':'Free early beta · Invite-only now'}).catch(function(){});
+
+/* split text */
+$$('.split').forEach(function(el){var i=0;el.innerHTML=el.textContent.split(' ').map(function(w){return '<span style="display:inline-block;overflow:hidden;vertical-align:top">'+w.split('').map(function(c){return '<span class="ch" style="--i:'+(i++)+'">'+c+'</span>'}).join('')+'</span>'}).join(' ')});
+if('IntersectionObserver' in window&&!reduced){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});$$('.rv,.split').forEach(function(el){io.observe(el)})}else $$('.rv,.split').forEach(function(el){el.classList.add('in')});
+
+/* fluid particle stream (canvas 2D, flow field) */
+var cv=$('#gl'),cx=cv.getContext('2d'),W,H,DPR=Math.min(devicePixelRatio||1,2),P=[],mx=-1e4,my=-1e4,rip=0;
+function size(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;cx.setTransform(DPR,0,0,DPR,0,0)}size();addEventListener('resize',size);
+var N=Math.min(1400,Math.floor(innerWidth*innerHeight/900));
+for(var i=0;i<N;i++)P.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,v:Math.random()*1.5+.5,h:Math.random()});
+var t=0;
+function lerpC(a,b,k){return a.map(function(v,i){return Math.round(v+(b[i]-v)*k)})}
+var G=[200,245,90],O=[255,91,31],R=[194,24,91];
+function frame(){
+  t+=.004;
+  cx.fillStyle='rgba(5,4,3,.12)';cx.fillRect(0,0,W,H);
+  for(var i=0;i<P.length;i++){var p=P[i];
+    var a=Math.sin(p.x*.0032+t*2)*Math.cos(p.y*.0041-t)*3.1+Math.sin((p.x+p.y)*.001+t)*1.2;
+    var dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;
+    p.x+=Math.cos(a)*p.v*1.4;p.y+=Math.sin(a)*p.v*1.4+.3;
+    if(d2<26000){var f=(26000-d2)/26000*6;p.x+=dx/Math.sqrt(d2+1)*f;p.y+=dy/Math.sqrt(d2+1)*f}
+    if(p.x<0)p.x+=W;if(p.x>W)p.x-=W;if(p.y<0)p.y+=H;if(p.y>H){p.y=0;p.x=Math.random()*W}
+    var k=Math.min(1,Math.max(0,rip*1.4+p.h*.35-.15));
+    var c=k<.5?lerpC(G,O,k*2):lerpC(O,R,(k-.5)*2);
+    cx.fillStyle='rgba('+c+','+(.35+p.h*.5)+')';cx.fillRect(p.x,p.y,1.6,1.6);
+  }
+  requestAnimationFrame(frame);
+}
+if(!reduced)frame();
+
+/* cursor + magnet */
+var cur=$('.cur'),dot=$('.cur-dot'),cxp=0,cyp=0,tx=0,ty=0;
+addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY;mx=tx;my=ty;dot.style.transform='translate('+tx+'px,'+ty+'px)'});
+(function loop(){cxp+=(tx-cxp)*.18;cyp+=(ty-cyp)*.18;cur.style.transform='translate('+cxp+'px,'+cyp+'px)';requestAnimationFrame(loop)})();
+$$('a,button,[data-tilt],input').forEach(function(el){el.addEventListener('pointerenter',function(){cur.classList.add('big')});el.addEventListener('pointerleave',function(){cur.classList.remove('big')})});
+if(fine&&!reduced)$$('[data-magnet]').forEach(function(el){
+  el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();el.style.transform='translate('+(e.clientX-r.left-r.width/2)*.3+'px,'+(e.clientY-r.top-r.height/2)*.4+'px)'});
+  el.addEventListener('pointerleave',function(){el.style.transform=''});
+});
+
+/* hero 3D parallax */
+var hi=$('#heroIn');
+if(fine&&!reduced)addEventListener('pointermove',function(e){var x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;hi.style.transform='rotateY('+x*22+'deg) rotateX('+(-y*18)+'deg)'});
+
+/* tilt cards */
+$$('[data-tilt]').forEach(function(c){
+  c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.setProperty('--mx',x*100+'%');c.style.setProperty('--my',y*100+'%');if(!reduced)c.style.transform='rotateY('+(x-.5)*20+'deg) rotateX('+(.5-y)*20+'deg) translateZ(10px)'});
+  c.addEventListener('pointerleave',function(){c.style.transform=''});
+});
+
+/* reverse-scrolling feed + ripeness */
+var posts=[
+ ['Maya','You follow her','Sourdough attempt #14. It finally has an ear.','2m'],
+ ['Film Club','Community you joined','Spoiler-free thread for Friday’s screening.','6m'],
+ ['Dev','You follow him','Shipped the thing. Going outside now.','11m'],
+ ['Climbing','Community you joined','New route set on the north wall — V4, crimpy.','18m'],
+ ['Priya','You follow her','Garden update: the tomatoes are, in fact, ripe.','25m'],
+ ['Everyone','Public post','Anyone else listen to rain sounds while working?','31m'],
+ ['Sam','You follow them','Trying to read 20 books this year. On #3.','40m'],
+ ['Board Games','Community you joined','Who’s in for Saturday? Bringing two new games.','52m']];
+function li(p){return '<li class="post"><b>'+p[0]+' <em>'+p[1]+'</em></b>'+p[2]+'<small>'+p[3]+' ago · example</small></li>'}
+var rf=$('#revFeed');rf.innerHTML=posts.concat(posts).map(li).join('');
+var meter=document.documentElement;
+function onScroll(){var max=document.documentElement.scrollHeight-innerHeight,k=max>0?scrollY/max:0;rip=k;meter.style.setProperty('--ripeness',k.toFixed(3));
+  var r=rf.parentNode.getBoundingClientRect();var prog=(innerHeight-r.top)/(innerHeight+r.height);rf.style.transform='translateY('+(-(1-prog)*rf.scrollHeight*.5)+'px)';}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* dial */
+var modes=[
+ {n:'Following',d:'Only people you follow, plus your own posts. Newest first.',r:60,f:function(p){return /follow/.test(p[1])}},
+ {n:'Communities',d:'Posts from spaces you joined. Still newest first, still no ranking.',r:180,f:function(p){return /Community/.test(p[1])}},
+ {n:'Everyone',d:'The whole public stream, newest first. Mute words you never want to see.',r:300,f:function(){return true}}];
+var knob=$('.knob');
+function setMode(i){var m=modes[i];knob.style.setProperty('--r',m.r+'deg');$('#modeName').textContent=m.n;$('#modeDesc').textContent=m.d;
+  $('#mini').innerHTML=posts.filter(m.f).slice(0,3).map(function(p,j){return li(p).replace('<li','<div style="animation-delay:'+j*90+'ms"').replace('</li>','</div>')}).join('');track('demo_interact',{control:'dial',value:m.n})}
+$$('#dialEl button').forEach(function(b){b.addEventListener('click',function(){setMode(+b.dataset.m)})});
+var dragging=false,de=$('#dialEl');
+de.addEventListener('pointerdown',function(){dragging=true});addEventListener('pointerup',function(){dragging=false});
+de.addEventListener('pointermove',function(e){if(!dragging)return;var r=de.getBoundingClientRect(),a=Math.atan2(e.clientX-r.left-r.width/2,-(e.clientY-r.top-r.height/2))*180/Math.PI;a=(a+360)%360;var i=a<120?0:a<240?1:2;if($('#modeName').textContent!==modes[i].n)setMode(i)});
+setMode(0);
+
+/* clock paradox */
+var t0=Date.now(),tu=$('#tUp'),td=$('#tDown'),inf=['∞','∞+1','∞·2','∞²','ℵ₀','∞'];
+setInterval(function(){var s=Math.floor((Date.now()-t0)/1000);tu.textContent=Math.floor(s/60)+':'+('0'+s%60).slice(-2);td.textContent=inf[s%inf.length]},1000);
+
+/* konami: flip the world */
+var seq=[38,38,40,40,37,39,37,39,66,65],pos=0;
+addEventListener('keydown',function(e){pos=e.keyCode===seq[pos]?pos+1:0;if(pos===seq.length){pos=0;document.body.classList.toggle('flip');var eg=$('.egg');eg.classList.add('on');setTimeout(function(){eg.classList.remove('on')},1400);track('easter_egg')}});
+
+/* join */
+var form=$('#joinForm'),err=$('#err'),busy=false,started=false;
+form.addEventListener('input',function(){if(!started){started=true;track('join_form_start',{source:'join-b'})}});
+form.addEventListener('submit',function(e){e.preventDefault();if(busy)return;
+  var em=form.email.value.trim(),fn=form.first_name.value.trim(),iv=form.invite.value.trim().toUpperCase();
+  if(form.website.value)return;
+  if(!/^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$/.test(em)){err.textContent="That doesn't look like a valid email address.";form.email.focus();return}
+  busy=true;err.textContent='';var btn=form.querySelector('button');btn.textContent='Ripening…';
+  rpc('rs_join',{p_email:em,p_first_name:fn||null,p_invite:iv||null,p_source:utm?'join-b:'+utm:'join-b'}).then(function(){
+    track('join_submitted',{source:'join-b',invited:!!iv});
+    $('#formHost').innerHTML='<div class="done" tabindex="-1"><h3>Check your inbox.</h3><p>We\'ve emailed you a link. Open it to confirm your email and lock in your place.</p><p style="font-size:14px;color:#8f877d">Nothing there in a few minutes? Check spam, or <a href="/member">send the link again</a>.</p></div>';
+    $('#formHost .done').focus();
+    if(!reduced)burst();
+  }).catch(function(x){busy=false;btn.textContent='Claim my founding place →';var m=String(x&&x.message||'');
+    track('join_error',{reason:(m.match(/^[A-Z_]+/)||['other'])[0]});
+    err.textContent=/RATE_LIMIT/.test(m)||x.code==='54000'?'Too many attempts from this connection. Try again in a few minutes.':/INVALID_EMAIL/.test(m)?"That doesn't look like a valid email address.":/INVITE_REQUIRED/.test(m)?'Founding places are all taken — joining now needs an invitation code from a member.':/^INVITE_/.test(m)?'That invitation code isn\'t valid any more.':'Something went wrong. Please try again.';
+    if(/INVITE/.test(m))form.querySelector('details').open=true;
+  });
+});
+function burst(){var r=$('#formHost').getBoundingClientRect(),ox=r.left+r.width/2,oy=r.top+r.height/2;for(var i=0;i<400;i++){P.push({x:ox,y:oy,v:Math.random()*6+2,h:Math.random()})}setTimeout(function(){P.splice(N)},4000)}
+})();
+</script>
+</body>
+</html>

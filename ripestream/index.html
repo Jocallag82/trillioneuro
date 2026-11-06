@@ -25,6 +25,10 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script>document.documentElement.classList.add('js')</script>
+<script>/* A/B: 50/50, sticky per browser. ?v=a or ?v=b forces (and sticks). Variant B lives at /b.html. */
+(function(){var v,K='rs_ab_v1';try{var q=new URLSearchParams(location.search).get('v');v=q==='a'||q==='b'?q:localStorage.getItem(K);if(v!=='a'&&v!=='b')v=Math.random()<.5?'a':'b';localStorage.setItem(K,v)}catch(e){v='a'}
+if(v==='b'){location.replace('/b.html'+location.search+location.hash);return}
+window.addEventListener('load',function(){try{window.va&&window.va('event',{name:'ab_view',data:{variant:'a'}})}catch(e){}})})();</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 <link rel="preload" href="/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
