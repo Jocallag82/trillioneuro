@@ -15,6 +15,8 @@ const CSP = vercel.routes.find((r) => r.headers?.['Content-Security-Policy'])?.h
 const ALIASES = { '/learn/parent': '/learn/parent.html', '/learn/account': '/learn/account.html', '/privacy': '/privacy.html', '/curriculum': '/curriculum.html', '/little-world/play': '/early/little-world-play.html', '/early-years/games': '/early/games/games.html', '/early-years/games/play': '/early/games/play.html', '/early-years/play-zone': '/early/zone/zone.html', '/early-years/stickers': '/early/zone/stickers.html', '/preschool': '/paths/preschool.html', '/primary': '/paths/primary.html', '/high-school': '/paths/high-school.html' };
 for (const s of ['early-years', 'little-world', 'toddler-activities', 'preschool-activities', 'pre-k-kindergarten-readiness', ...'learning-colors-for-toddlers|counting-activities-for-preschoolers|letter-sounds-activities|shapes-activities-for-toddlers|rhyming-activities-for-kids|first-words-activities-for-babies'.split('|')]) ALIASES[`/${s}`] = `/early/${s}.html`;
 
+for (const s of ['games', 'multiplication-games', 'addition-games', 'fraction-games', 'spelling-games']) ALIASES[`/${s}`] = `/games/${s}.html`;
+
 createServer(async (req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/\/$/, '') || '/';
   if (p.startsWith('/api/')) { res.writeHead(503, { 'content-type': 'application/json' }); return res.end('{"ok":false,"reason":"offline"}'); }

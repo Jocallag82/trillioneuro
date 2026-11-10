@@ -110,3 +110,11 @@ separate (`early/games/content.js`, `engine.js`, `player.js`). Photos/sounds com
 `early/games/manifest.json` via `scripts/import-early-assets.mjs`; until a photo is imported a labelled
 symbol tile is shown. No accounts, no network calls, nothing recorded. Details: `early/games/README.md`.
 Tests: `node --test scripts/early-games.test.mjs`, `scripts/early-games-e2e.mjs`.
+
+## Free games arcade (November 2026)
+SEO landing pages with playable arcade games for ages 5–11, served at `/games` (hub),
+`/multiplication-games`, `/addition-games`, `/fraction-games` and `/spelling-games`.
+Pages are generated: edit `scripts/build-rtt-games.mjs`, then run `node scripts/build-rtt-games.mjs`.
+Each page has VideoGame/LearningResource, HowTo, FAQPage and BreadcrumbList JSON-LD and is listed in
+`sitemap.xml`. Game code is in `games/` (`arcade.js` is the shared kit: sound, particles, speech, best
+scores). Nothing is sent over the network; best scores are kept in `localStorage` only.

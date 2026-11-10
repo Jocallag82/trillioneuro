@@ -780,6 +780,39 @@
       "dest": "/redteddytutor/early/little-world-play.html"
     },
     {
+      "src": "/(games|multiplication-games|addition-games|fraction-games|spelling-games)/?",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "dest": "/redteddytutor/games/$1.html"
+    },
+    {
+      "src": "/games/(games|multiplication-games|addition-games|fraction-games|spelling-games)\\.html",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "inc": [
+              "redteddytutor.com",
+              "www.redteddytutor.com"
+            ]
+          }
+        }
+      ],
+      "headers": {
+        "Location": "/$1"
+      },
+      "status": 308
+    },
+    {
       "src": "/(early-years|little-world|toddler-activities|preschool-activities|pre-k-kindergarten-readiness|learning-colors-for-toddlers|counting-activities-for-preschoolers|letter-sounds-activities|shapes-activities-for-toddlers|rhyming-activities-for-kids|first-words-activities-for-babies)/?",
       "has": [
         {
