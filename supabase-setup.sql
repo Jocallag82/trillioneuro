@@ -145,9 +145,8 @@ create index if not exists founders_created_at_idx  on public.founders (created_
 
 alter table public.founders enable row level security;
 
+-- No anon INSERT policy/grant: all writes go through reserve_founder() (SECURITY DEFINER).
 drop policy if exists "anyone can reserve a place" on public.founders;
-create policy "anyone can reserve a place"
-  on public.founders for insert to anon with check (true);
 
 -- The record is public by design, so rows are readable. Which COLUMNS are
 -- readable is controlled by the grants below, not by this policy.
@@ -166,7 +165,6 @@ create view public.founders_public with (security_invoker = true) as
   from public.founders;
 
 revoke all on public.founders from anon;
-grant insert on public.founders to anon;
 grant select (founder_number, name, message, country, created_at)
   on public.founders to anon;             -- note: `email` is never granted
 revoke all on public.founders_public from anon;
