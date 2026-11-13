@@ -115,7 +115,8 @@ export default async function handler(req, res) {
   }
 
   const reply = parseReply(result.text, body);
-  await finish(result.input, result.output, Boolean(reply));
+  // The model call succeeded and cost money, so it is never refunded, even if the reply is unusable.
+  await finish(result.input, result.output, true);
   if (!reply) return send(res, 200, { ok: false, reason: 'fallback' });
   return send(res, 200, { ok: true, ...reply, remaining: begin.remaining, limit: begin.limit });
 }
