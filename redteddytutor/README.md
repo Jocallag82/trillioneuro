@@ -10,9 +10,6 @@ could not. The skill list is rendered from `curriculum/framework.js`. Nothing is
 Copy rules: only describe what exists; Plus is "not on sale yet" until billing is connected.
 `privacy.html` (`/privacy`) describes the data actually stored; keep it in step with the schema.
 
-## Motion layer
-`wow.css` + `wow.js` (loaded after `home.css`/`paths.css`) add the animation: intro doors, cursor lamp and particle theatre in the hero (`.wow-fx` canvas, glyphs from the book), kinetic headlines, scroll-driven marquee, count-up numbers, 3D tilt cards, cursor sparks and the closing wordmark. All of it is gated on `html.wow`, which an inline script in `<head>` sets only when the visitor has not asked for reduced motion, so the plain page is unchanged without it. Hero glyph origin is `--ox/--oy` on `.hx`.
-
 ## News form (was early access)
 Posts `{p_email, p_audience}` to the Supabase RPC `rtt_join` (project `trillioneuro`),
 which inserts into `public.rtt_waitlist`. The table is RLS-locked with no anon grants;
