@@ -120,6 +120,7 @@ const cases = [
   [R,  '/stream.js',     'serve',    '/ripestream/stream.js'],
   [R,  '/index.html',    'redirect', '/'],
   [R,  '/app.js',        'serve',    '/ripestream/app.js'],
+  [R,  '/wow.js',        'serve',    '/ripestream/wow.js'],
   [R,  '/favicon.svg',   'serve',    '/ripestream/favicon.svg'],
   [RW, '/og-image.png',  'serve',    '/ripestream/og-image.png'],
   [R,  '/apple-touch-icon.png', 'serve', '/ripestream/apple-touch-icon.png'],

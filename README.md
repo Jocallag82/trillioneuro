@@ -57,6 +57,7 @@ platform in development. Same stack and rules as the other two sites: plain HTML
 |---|---|
 | `ripestream/index.html` | The page. All CSS inline (no render-blocking stylesheet). Readable with JS off. |
 | `ripestream/app.js` | Progressive enhancement: reveal-on-scroll, concept demos, live founding counter, join submit, `?invite=` handling |
+| `ripestream/wow.js` | The animation layer (no dependencies): WebGL "ripening" shader background that shifts raw→ripe with scroll, intro curtain, split-text, pinned scroll-driven story, 3D auto-cycling phone, magnetic buttons, cursor, marquee, confetti on join. Everything degrades: no JS = static page, reduced motion = one still frame, no WebGL = CSS gradient |
 | `ripestream/member.html` / `member.js` | `/member` — Founding Member status + invitations (create, copy, share, withdraw) |
 | `ripestream/privacy.html` / `terms.html` | Legal, scoped to the interest list |
 | `ripestream/fonts/` | Self-hosted Bricolage Grotesque + Inter (latin, variable weight, OFL) — no Google Fonts request |
@@ -95,8 +96,7 @@ platform in development. Same stack and rules as the other two sites: plain HTML
   `notified_at` (one-shot, so replays send nothing). Credentials are Vault secrets
   `rs_smtp_user`, `rs_smtp_pass`, `rs_admin_email`, `rs_from`, read only by the service role.
   Rows that arrived before the password was set: `select public.rs_notify_backlog();`
-- **Hero**: `#flow` is a canvas flow field (no video file, ~2 KB of JS) — pauses off-screen,
-  one still frame under reduced motion.
+- **Hero**: a fixed full-page WebGL fragment shader (`#gl`, half-resolution, adaptive, pauses in background tabs) plus the 3D phone; `flow.js`/`#flow` is no longer used by the page.
 
 
 ## Beat Elon — the Founders' Record (trillioneuro.com)

@@ -58,3 +58,18 @@ test('sitemap lists public pages only', () => {
   for (const p of ['/', '/communities', '/privacy', '/terms']) assert.ok(xml.includes(`<loc>https://www.ripestream.com${p}</loc>`), p);
   assert.doesNotMatch(xml, /\/member|\/app</);
 });
+
+test('animation layer: wow.js is loaded, parses, and degrades (no JS / reduced motion)', async () => {
+  const { existsSync } = await import('node:fs');
+  assert.match(body, /<script src="\/wow\.js" defer><\/script>/);
+  assert.ok(existsSync(new URL('../ripestream/wow.js', import.meta.url)));
+  const js = read('wow.js');
+  new Function(js); // syntax only
+  assert.match(js, /prefers-reduced-motion/);
+  // split-text class must not collide with the story's post class (.sp)
+  assert.doesNotMatch(js, /classList\.(add|contains)\('sp'/);
+  assert.match(html, /@media \(prefers-reduced-motion:reduce\)/);
+  // every hidden-until-JS state has a CSS fail-safe so a failed script never leaves the page blank
+  assert.match(html, /\[data-split\]:not\(\.sx\)\{visibility:hidden;animation:vis 0s/);
+  assert.match(html, /\.js \.curtain\{[^}]*animation:curtainFail/);
+});
