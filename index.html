@@ -21,11 +21,17 @@
 <link rel="preload" href="/assets/te/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/te/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/te/te.css?v=20261014">
+<link rel="stylesheet" href="/assets/te/wow.css?v=20261118">
+<script>(function(d){var r=d.documentElement;r.classList.add('w');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('te_intro'))r.classList.add('nocur')}catch(e){}setTimeout(function(){if(!window.__wow){var c=d.getElementById('curtain');if(c)c.remove();r.classList.add('go')}},6000)})(document)</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"TrillionEuro.com","url":"https://www.trillioneuro.com/"}</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body data-page="home">
+<canvas id="gl" aria-hidden="true"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="prog" aria-hidden="true"></div>
+<div id="curtain" aria-hidden="true"><div class="door t"></div><div class="door b"></div><div class="seam"></div><div class="count"><span>€0</span><small>The record opens</small></div></div>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-head">
   <div class="wrap">
@@ -61,6 +67,27 @@
     </div>
   </div>
 </section>
+
+<section class="climb" id="climb" aria-labelledby="climb-h">
+  <div class="climb-stage">
+    <h2 id="climb-h" class="sr-only">How big is a trillion?</h2>
+    <p class="c-label">How big is a trillion?</p>
+    <p class="c-num num" id="c-num" aria-hidden="true"><b>€</b><span>1,000,000,000,000</span></p>
+    <div class="c-zeros" id="c-zeros" aria-hidden="true"></div>
+    <div class="c-cap" id="c-cap">
+      <p>€1. Every fortune starts as a single euro.</p>
+      <p>A thousand, then a million. Still numbers you can picture.</p>
+      <p>A billion is a thousand millions. The world’s richest list begins here.</p>
+      <p>Each zero is ten times the one before it. Three to go.</p>
+      <p>€1,000,000,000,000. Counting to it at one euro a second takes 31,688&nbsp;years.<small>That is the whole target. This site follows the attempt, in public.</small></p>
+    </div>
+    <div class="c-hint" aria-hidden="true">Scroll to climb</div>
+    <div class="c-rail" aria-hidden="true"><i></i><span style="left:0">€1</span><span style="left:25%">€1 thousand</span><span style="left:50%">€1 million</span><span style="left:75%">€1 billion</span><span style="left:100%">€1 trillion</span></div>
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mq-track"><span class="f">€1,000,000,000,000</span><span>BEAT ELON</span><span class="g">€</span><span class="f">12 zeros</span><span>ONE FOUNDER</span><span class="g">€</span></div></div>
+<div class="mq" aria-hidden="true"><div class="mq-track"><span>THE FOUNDERS’ RECORD</span><span class="g">Nº 000001</span><span class="f">IN PUBLIC</span><span>NUMBERED &amp; PERMANENT</span><span class="g">€</span></div></div>
 
 <section aria-labelledby="status-h">
   <div class="wrap">
@@ -179,5 +206,6 @@
 <script defer src="/assets/te/core.js?v=20261014"></script>
 <script defer src="/assets/te/world.js?v=20261014"></script>
 <script defer src="/assets/te/home.js?v=20261014"></script>
+<script defer src="/assets/te/wow.js?v=20261118"></script>
 </body>
 </html>

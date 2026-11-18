@@ -66,8 +66,15 @@ footer{border-top:1px solid var(--line);padding:36px 20px;color:var(--faint);fon
 details{border-bottom:1px solid var(--line);padding:16px 0}summary{cursor:pointer}details p{color:var(--mid);margin-top:10px;line-height:1.6}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<link rel="stylesheet" href="/wow.css?v=20261118">
+<script>(function(d){var r=d.documentElement;r.classList.add('w');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('qe_intro'))r.classList.add('nocur')}catch(e){}setTimeout(function(){if(!window.__wow){var c=d.getElementById('curtain');if(c)c.remove();r.classList.add('go')}},6000)})(document)</script>
 </head>
 <body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div id="prog" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
+<div id="curtain" aria-hidden="true"><canvas></canvas><div class="count">10<sup>0</sup><small>One quadrillion</small></div></div>
 <nav>
   <a class="logo" href="/">Quadrillion<b>Euro</b></a>
   <div class="links"><a href="#ai">AI &amp; electricity</a><a href="#ev">Electric cars</a><a href="#energy">Clean energy</a><a href="#any">Any market</a><a href="#clock">The quadrillion clock</a><a href="https://trillioneuro.com/">TrillionEuro →</a></div>
@@ -78,7 +85,32 @@ details{border-bottom:1px solid var(--line);padding:16px 0}summary{cursor:pointe
   <h1 class="serif">What happens when something reaches <i>civilisation scale?</i></h1>
   <p>Start from what is known, change one assumption, and watch what it implies for the planet. Every number here is labelled, so a guess can never pass for a fact.</p>
   <div class="legend"><span><span class="tag fact">Fact</span>published, source named</span><span><span class="tag est">Estimate</span>derived from facts, working shown</span><span><span class="tag ass">Assumption</span>yours to change</span><span><span class="tag scn">Scenario</span>what follows — not a forecast</span></div>
+  <a class="go-cta" href="#ascent">Climb to a quadrillion</a>
 </header>
+
+<section class="ascent" id="ascent" aria-labelledby="asc-h">
+  <div class="asc-stage">
+    <h2 id="asc-h" class="sr-only">Powers of ten, from one to a quadrillion</h2>
+    <svg class="asc-gauge" viewBox="-40 -40 480 480" aria-hidden="true"><defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#19d3c5"/><stop offset=".55" stop-color="#8b7bff"/><stop offset="1" stop-color="#e8c869"/></linearGradient></defs><circle class="trk" cx="200" cy="200" r="176"/><circle class="arc" cx="200" cy="200" r="176" pathLength="1000"/></svg>
+    <div class="asc-core" aria-hidden="true">
+      <p class="asc-k">Powers of ten</p>
+      <p class="asc-exp" id="asc-exp">10<sup>15</sup></p>
+      <p class="asc-num" id="asc-num">1,000,000,000,000,000</p>
+      <p class="asc-name" id="asc-name">quadrillion</p>
+    </div>
+    <div class="asc-hint" aria-hidden="true">Scroll to accelerate</div>
+    <div class="asc-cap" id="asc-cap">
+      <p>Start at one. Count a second at a time.</p>
+      <p>A thousand seconds is about 17 minutes.</p>
+      <p>A million seconds is about 11.6 days.</p>
+      <p>A billion seconds is about 31.7 years.</p>
+      <p>A trillion seconds is about 31,700 years.</p>
+      <p>A quadrillion seconds is about 31.7 million years.<small><span class="tag est">Estimate</span> The world produced about $118 trillion in 2025 (IMF). A quadrillion is roughly eight and a half years of all of it.</small></p>
+    </div>
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mq-track"><span>THOUSAND</span><span class="g">million</span><span>BILLION</span><span class="g">trillion</span><span>QUADRILLION</span><span class="g">€</span></div></div>
 
 <section id="ai"><div class="wrap">
   <div class="kicker">Scenario 1</div>
@@ -156,6 +188,7 @@ details{border-bottom:1px solid var(--line);padding:16px 0}summary{cursor:pointe
 
 <footer><div class="wrap"><a href="https://trillioneuro.com/">TrillionEuro</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><span>© QuadrillionEuro · a Conjora product</span></div></footer>
 
+<script defer src="/wow.js?v=20261118"></script>
 <script type="module">
 import { FACTS, ESTIMATES, aiElectricity, evTakeover, cumulativeInvestment, marketAtScale, quadrillionClock, fmt } from '/lib/scenario.js';
 

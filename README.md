@@ -18,6 +18,11 @@ visitor's input or an editable default) or **Scenario/Calculated** (arithmetic o
 forecast). Nothing is stored server-side; saved analyses live in the visitor's browser and share
 links carry assumptions in the URL hash.
 
+Animation layers (progressive enhancement, no dependencies; reduced-motion and no-JS fall back to the static pages):
+`assets/te/wow.{js,css}` (trillioneuro.com: molten-gold WebGL field, €1→€1T pinned "Climb", coin bursts) and
+`quadrillioneuro/wow.{js,css}` (quadrillioneuro.com: nebula-tunnel WebGL, warp stars that react to every slider,
+pinned powers-of-ten "Ascent"). Tests: `node --test scripts/wow.test.mjs`.
+
 Tests: `node --test scripts/scale.test.mjs` · routing: `node scripts/check-routes.mjs` ·
 `node scripts/check-vercel-json.mjs`.
 
