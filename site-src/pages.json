@@ -5,16 +5,6 @@
   "noindex": false
  },
  {
-  "out": "admin.html",
-  "path": "/admin",
-  "noindex": true
- },
- {
-  "out": "challenge.html",
-  "path": "/challenge",
-  "noindex": false
- },
- {
   "out": "contact.html",
   "path": "/contact",
   "noindex": false
@@ -35,8 +25,8 @@
   "noindex": true
  },
  {
-  "out": "entry.html",
-  "path": "/record",
+  "out": "dashboard.html",
+  "path": "/dashboard",
   "noindex": true
  },
  {
@@ -50,53 +40,13 @@
   "noindex": false
  },
  {
-  "out": "join-cancelled.html",
-  "path": "/join/cancelled",
-  "noindex": true
- },
- {
-  "out": "join-success.html",
-  "path": "/join/success",
-  "noindex": true
- },
- {
   "out": "join.html",
   "path": "/join",
   "noindex": false
  },
  {
-  "out": "journal-entry.html",
-  "path": "/journal",
-  "noindex": true
- },
- {
-  "out": "journal.html",
-  "path": "/journal",
-  "noindex": false
- },
- {
-  "out": "manage.html",
-  "path": "/manage",
-  "noindex": true
- },
- {
   "out": "privacy.html",
   "path": "/privacy",
-  "noindex": false
- },
- {
-  "out": "record.html",
-  "path": "/record",
-  "noindex": false
- },
- {
-  "out": "refunds.html",
-  "path": "/refunds",
-  "noindex": false
- },
- {
-  "out": "report.html",
-  "path": "/report",
   "noindex": false
  },
  {

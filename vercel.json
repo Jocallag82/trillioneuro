@@ -846,42 +846,26 @@
       "dest": "/redteddytutor/$1"
     },
     {
-      "src": "/(admin|manage|join/success|join/cancelled|api/.*)",
+      "src": "/(dashboard|api/.*)",
       "headers": {
         "X-Robots-Tag": "noindex, nofollow"
       },
       "continue": true
     },
     {
-      "src": "/assets/te/(.*)\\.(js|css)",
+      "src": "/assets/mv/(.*)\\.(js|css|json)",
       "headers": {
         "Cache-Control": "public, max-age=3600"
       },
       "continue": true
     },
     {
-      "src": "/record/(\\d{1,12})/?",
-      "dest": "/api/te-render?kind=entry&id=$1"
-    },
-    {
-      "src": "/countries/([A-Za-z]{2})/?",
-      "dest": "/api/te-render?kind=country&id=$1"
-    },
-    {
-      "src": "/journal/([a-z0-9-]{1,80})/?",
-      "dest": "/api/te-render?kind=journal&id=$1"
-    },
-    {
-      "src": "/join/success/?",
-      "dest": "/join-success.html"
-    },
-    {
-      "src": "/join/cancelled/?",
-      "dest": "/join-cancelled.html"
+      "src": "/countries/([A-Za-z0-9-]{2,60})/?",
+      "dest": "/api/mv-render?slug=$1"
     },
     {
       "src": "/sitemap\\.xml",
-      "dest": "/api/te-sitemap"
+      "dest": "/api/mv-sitemap"
     },
     {
       "src": "/claim(\\.html)?/?",
@@ -891,11 +875,25 @@
       "status": 308
     },
     {
-      "src": "/(challenge|about|faq|contact|privacy|terms|refunds|cookies|report|manage|admin|early-record|countries|journal|record|join)/?",
+      "src": "/record(/.*)?(\\.html)?",
+      "headers": {
+        "Location": "/countries"
+      },
+      "status": 308
+    },
+    {
+      "src": "/(challenge|journal|refunds|report|manage|admin|early-record|join/success|join/cancelled)(/.*)?(\\.html)?/?",
+      "headers": {
+        "Location": "/"
+      },
+      "status": 308
+    },
+    {
+      "src": "/(about|faq|contact|privacy|terms|cookies|countries|join|dashboard)/?",
       "dest": "/$1.html"
     },
     {
-      "src": "/(challenge|about|faq|contact|privacy|terms|refunds|cookies|report|manage|admin|early-record|countries|journal|record|join)\\.html",
+      "src": "/(about|faq|contact|privacy|terms|cookies|countries|join|dashboard)\\.html",
       "headers": {
         "Location": "/$1"
       },

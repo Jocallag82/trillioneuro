@@ -1,26 +1,31 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Country — TrillionEuro.com</title>
-<meta name="description" content="Verified Founders’ Record entries from this country.">
+<title>Country community — Trillion Euro</title>
+<meta name="description" content="A Trillion Euro country community: how many people have joined the free global movement from this country, its position and its growth.">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0a0a0c">
-<meta property="og:site_name" content="TrillionEuro.com">
+<meta name="theme-color" content="#02040b">
+<meta property="og:site_name" content="Trillion Euro">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Country — TrillionEuro.com">
-<meta property="og:description" content="Verified Founders’ Record entries from this country.">
+<meta property="og:locale" content="en_IE">
+<meta property="og:title" content="Country community — Trillion Euro">
+<meta property="og:description" content="A Trillion Euro country community: how many people have joined the free global movement from this country, its position and its growth.">
 <meta property="og:url" content="https://www.trillioneuro.com/countries">
-<meta property="og:image" content="https://www.trillioneuro.com/assets/te/og-beat-elon.png">
+<meta property="og:image" content="https://www.trillioneuro.com/assets/mv/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="BEAT ELON. One impossible ambition. A place in the story. — TrillionEuro.com">
+<meta property="og:image:alt" content="Trillion Euro — One trillion. One world. A better future.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/assets/te/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/assets/te/apple-touch-icon.png">
-<link rel="preload" href="/assets/te/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/te/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/te/te.css?v=20261014">
+<meta name="twitter:title" content="Country community — Trillion Euro">
+<meta name="twitter:description" content="A Trillion Euro country community: how many people have joined the free global movement from this country, its position and its growth.">
+<meta name="twitter:image" content="https://www.trillioneuro.com/assets/mv/og.png">
+<link rel="icon" href="/assets/mv/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/mv/apple-touch-icon.png">
+<link rel="preload" href="/assets/mv/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/mv/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/mv/mv.css?v=20261121">
+<script>document.documentElement.className='js'</script>
 
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -29,47 +34,43 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-head">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="TrillionEuro.com — home"><span class="brand-mark">Trillion<b>€</b>uro</span><span class="brand-sub">Beat Elon</span></a>
+    <a class="brand" href="/" aria-label="Trillion Euro — home"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d894"/><stop offset="1" stop-color="#6cc3ff"/></linearGradient></defs><circle cx="16" cy="16" r="13.5" fill="none" stroke="url(#bm)" stroke-width="1.6"/><ellipse cx="16" cy="16" rx="6" ry="13.5" fill="none" stroke="url(#bm)" stroke-width="1.1" opacity=".7"/><path d="M3 16h26M5.5 9.500h21M5.500 22.500h21" stroke="url(#bm)" stroke-width="1" opacity=".55"/><circle cx="22.500" cy="10.500" r="2.200" fill="#f3d894"/></svg><span class="brand-name">Trillion<b>€</b>uro</span></a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
     <nav class="nav" id="site-nav" aria-label="Main">
-      <a href="/record">The Record</a>
+      <a href="/#mission">Mission</a>
       <a href="/countries" aria-current="page">Countries</a>
-      <a href="/journal">Journal</a>
-      <a href="/challenge">The Challenge</a>
+      <a href="/#priorities">Priorities</a>
+      <a href="/#roadmap">Road ahead</a>
       <a href="/faq">FAQ</a>
-      <a class="btn btn-gold btn-sm" href="/join">Join the Record</a>
+      <a class="btn btn-gold btn-sm" href="/join" data-auth-cta>Join the movement</a>
     </nav>
   </div>
 </header>
 <main id="main">
-<div class="wrap" style="padding:56px var(--gutter) 96px">
-  <p class="small"><a href="/countries">← All countries</a></p>
-  <div id="country-head" aria-live="polite"><span class="skeleton" style="display:block;width:50%;height:72px;margin-top:24px"></span></div>
-  <div class="ledger" id="list" style="margin-top:40px"></div>
-  <nav class="pager" id="pager" aria-label="Pagination"></nav>
-</div>
+<noscript><div class="noscript-note">Trillion Euro works best with JavaScript on — the live counters, map and voting need it. Everything you read here is still true without it.</div></noscript>
+<div id="country-root"><!--SSR--></div>
 </main>
 <footer class="site-foot">
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <a class="brand" href="/"><span class="brand-mark">Trillion<b>€</b>uro</span></a>
-        <p style="margin-top:14px;max-width:38ch">One founder’s public attempt to build a €1 trillion personal fortune — and the permanent record of the people who joined the story.</p>
+        <a class="brand" href="/"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d894"/><stop offset="1" stop-color="#6cc3ff"/></linearGradient></defs><circle cx="16" cy="16" r="13.5" fill="none" stroke="url(#bm)" stroke-width="1.6"/><ellipse cx="16" cy="16" rx="6" ry="13.5" fill="none" stroke="url(#bm)" stroke-width="1.1" opacity=".7"/><path d="M3 16h26M5.5 9.500h21M5.500 22.500h21" stroke="url(#bm)" stroke-width="1" opacity=".55"/><circle cx="22.500" cy="10.500" r="2.200" fill="#f3d894"/></svg><span class="brand-name">Trillion<b>€</b>uro</span></a>
+        <p style="margin-top:16px;max-width:42ch">A free global movement: make €1 trillion of value and put it back into the world — decided by the people who join.</p>
       </div>
-      <div><h4>Explore</h4><ul>
-        <li><a href="/record">The Founders’ Record</a></li><li><a href="/countries">Countries</a></li>
-        <li><a href="/journal">Journal</a></li><li><a href="/challenge">The Challenge</a></li><li><a href="/join">Join</a></li></ul></div>
+      <div><h4>The movement</h4><ul>
+        <li><a href="/#mission">Mission</a></li><li><a href="/countries">Countries</a></li>
+        <li><a href="/#priorities">Priorities</a></li><li><a href="/#roadmap">Road ahead</a></li><li><a href="/join">Join the movement</a></li></ul></div>
       <div><h4>About</h4><ul>
-        <li><a href="/about">About &amp; disclosure</a></li><li><a href="/faq">FAQ</a></li>
-        <li><a href="/contact">Contact</a></li><li><a href="/report">Report content</a></li><li><a href="/manage">Manage your entry</a></li></ul></div>
+        <li><a href="/about">What this is — and isn’t</a></li><li><a href="/faq">FAQ</a></li><li><a href="/contact">Contact</a></li><li><a href="/dashboard">Contributor dashboard</a></li></ul></div>
       <div><h4>Legal</h4><ul>
-        <li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li>
-        <li><a href="/refunds">Refunds</a></li><li><a href="/cookies">Cookies</a></li></ul></div>
+        <li><a href="/terms">Terms</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/cookies">Cookies</a></li></ul></div>
     </div>
-    <p class="foot-legal">An entry in the Founders’ Record is a digital product: a numbered public entry and certificate. It is not an investment, a share, a loan, a donation or a charitable gift, and it carries no right to any part of the founder’s wealth or any financial return. The challenge may not succeed. “Beat Elon” names the founder’s own ambition; TrillionEuro.com has no affiliation with, and no endorsement from, Elon Musk or any of his companies.</p>
+    <p class="foot-legal">Trillion Euro is a free community movement. The €1 trillion figure is a long-term aspiration — it is not money held, raised, pledged or guaranteed, and nothing on this site asks for or accepts payment. Joining is free. Voting on priorities expresses community preferences and creates no financial commitment. Nothing here is an offer of investment, a donation appeal, or financial advice. Every number on this site comes from real registrations; where there are none yet, it says so. Flag artwork: Twemoji, © Twitter, Inc. and other contributors, CC-BY 4.0. Map data: Natural Earth (public domain).</p>
   </div>
 </footer>
-<script defer src="/assets/te/core.js?v=20261014"></script>
-<script defer src="/assets/te/country.js?v=20261014"></script>
+<script defer src="/assets/mv/mv.js?v=20261121"></script>
+<script defer src="/assets/mv/share.js?v=20261121"></script>
+<script defer src="/assets/mv/map.js?v=20261121"></script>
+<script defer src="/assets/mv/country.js?v=20261121"></script>
 </body>
 </html>

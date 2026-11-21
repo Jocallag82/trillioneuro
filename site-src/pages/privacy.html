@@ -1,42 +1,39 @@
-<!--meta {"out":"privacy.html","path":"/privacy","title":"Privacy notice","description":"What TrillionEuro.com collects for the Founders’ Record, why, who processes it, how long it is kept, and your rights under the GDPR.","nav":"","scripts":["challenge"]} -->
-<div class="page-head"><div class="wrap"><p class="kicker">Privacy notice · version 2026-10-14</p><h1>Your data, plainly.</h1>
-<p class="lede">A nickname is enough to join. We collect the least we can, publish only what you choose, and never sell data.</p></div></div>
-<div class="wrap" style="padding-bottom:96px"><div class="prose">
+<!--meta {"out":"privacy.html","path":"/privacy","title":"Privacy notice","description":"What Trillion Euro collects when you register, why, who processes it, how long it is kept and how to access, download or delete your data.","nav":""} -->
+<section class="page-hero"><div class="wrap"><span class="kicker">Privacy notice · version 2026-11-21</span><h1 style="margin-top:22px">Your data, <em>plainly.</em></h1><p class="lede">We collect the least we can, publish none of it, and never sell it.</p></div></section>
+<section class="sec bg-b" style="padding-top:40px"><div class="wrap"><div class="prose">
 <h2>Who is responsible</h2>
-<p>The controller is the operator of TrillionEuro.com. <span id="operator-line">The operator’s legal name and address are published here before paid entries open.</span> Contact for anything privacy-related: <a href="mailto:privacy@trillioneuro.com">privacy@trillioneuro.com</a>.</p>
+<p>The controller is the operator of TrillionEuro.com. For anything privacy-related, write to <a class="link" href="mailto:privacy@trillioneuro.com">privacy@trillioneuro.com</a>.</p>
 <h2>What we collect and why</h2>
 <table><thead><tr><th>Data</th><th>Purpose</th><th>Legal basis (GDPR art. 6)</th></tr></thead><tbody>
-<tr><td>Nickname, country, message</td><td>Publishing your entry, certificate and country count</td><td>Contract (b)</td></tr>
-<tr><td>Real name (optional)</td><td>Kept privately with your entry; shown publicly only if you opt in</td><td>Contract (b); public display on your consent (a), which you can withdraw at any time</td></tr>
-<tr><td>Email address</td><td>Receipt, entry management, answering requests; one notice if you join the waitlist</td><td>Contract (b); waitlist: consent (a)</td></tr>
-<tr><td>Payment confirmation (amount, currency, Stripe IDs)</td><td>Issuing your entry, refunds, accounting</td><td>Contract (b); legal obligation (c)</td></tr>
-<tr><td>IP address (transient) and a salted hash of IP + browser string</td><td>Rate-limiting and stopping referral fraud and spam</td><td>Legitimate interests (f) in protecting the record’s integrity</td></tr>
-<tr><td>Reports, requests and contact messages</td><td>Moderation and answering you</td><td>Legitimate interests (f); legal obligation (c) for rights requests</td></tr>
+<tr><td>Name, email address, country</td><td>Creating your account, counting you in your country’s community, sending you the confirmation email</td><td>Contract / steps at your request (b)</td></tr>
+<tr><td>Password</td><td>Signing you in. It is stored only as a salted hash by Supabase Auth — we cannot read it</td><td>Contract (b)</td></tr>
+<tr><td>Display name (optional)</td><td>Shown only to people who open your invitation link, if you set one</td><td>Consent (a)</td></tr>
+<tr><td>Marketing consent and when you gave or withdrew it</td><td>Recording your choice. We do not currently send marketing email; if we start, it will only go to people who opted in</td><td>Consent (a)</td></tr>
+<tr><td>Votes, suggested ideas, invitations you shared</td><td>Running the vote, moderating ideas, showing you your own activity</td><td>Contract (b)</td></tr>
+<tr><td>Who invited you / who joined through your link</td><td>Referral attribution shown on your own dashboard</td><td>Legitimate interests (f): letting the movement grow by invitation</td></tr>
+<tr><td>IP address (transient)</td><td>Rate-limiting and blocking spam and abuse. Counters are kept for hours, then deleted</td><td>Legitimate interests (f): protecting the integrity of votes and counts</td></tr>
 </tbody></table>
-<p>We do <strong>not</strong> infer your country from your location, build advertising profiles, or use your data for automated decisions with legal effects.</p>
+<p>We do <strong>not</strong> collect payment details (there are no payments), build advertising profiles, infer your location, or make automated decisions with legal effects.</p>
 <h2>What is public</h2>
-<p>Entry number, nickname, country, message, entry date and, if you choose, your real name and referral title. Entry pages are kept out of search engines until a moderator approves them. Your email, private real name and payment details are never public, never in page metadata or share previews, and never sent to analytics.</p>
+<p>Only aggregates: how many contributors a country has, rankings, vote totals and milestones. Your name, email and individual votes are never shown publicly, in page metadata or in share previews. Your optional display name is shown only to someone who opens your personal invitation link. Ideas you suggest are shown (without your name) once approved.</p>
 <h2>Who processes it</h2>
 <ul>
-<li><strong>Supabase</strong> (database, hosted in the EU — Ireland) — processor.</li>
-<li><strong>Vercel</strong> (hosting and privacy-friendly, cookie-free analytics) — processor; transfers outside the EEA are covered by the EU–US Data Privacy Framework and/or Standard Contractual Clauses.</li>
-<li><strong>Stripe</strong> (payments) — processes card data under its own terms as an independent controller for payment data. We never see or store your card number.</li>
+<li><strong>Supabase</strong> — database and authentication, hosted in the EU (Ireland). Processor. It also sends the account-confirmation and password-reset emails.</li>
+<li><strong>Vercel</strong> — hosting and cookie-free analytics. Processor; transfers outside the EEA are covered by the EU–US Data Privacy Framework and/or Standard Contractual Clauses.</li>
 </ul>
 <h2>How long we keep it</h2>
 <ul>
-<li>Unpaid drafts: deleted after 30 days.</li>
-<li>Entries: for as long as the record is published, unless you ask us to remove or erase them.</li>
-<li>Payment and accounting records: 6 years, as Irish tax law requires — even after an entry is removed (stripped of anything not needed for that purpose).</li>
-<li>Rate-limit data: hours. Referral-visit hashes: 12 months.</li>
-<li>Waitlist emails: until the notice is sent, then deleted.</li>
-<li>Reports, requests and messages: up to 24 months.</li>
+<li>Your account data: until you delete your account.</li>
+<li>Sign-ups that never confirm their email are not counted anywhere and are cleared periodically.</li>
+<li>If you delete your account, your profile, votes, invitation records and unpublished ideas are erased and your login is removed. An idea that the community has already voted on stays, with no link to you. Totals update immediately.</li>
+<li>Rate-limit data: hours.</li>
 </ul>
 <h2>Your rights</h2>
-<p>You can ask to access, correct, erase, restrict or port your data, object to processing based on legitimate interests, and withdraw consent at any time (for example, hide your real name). Use your management link, the <a href="/manage">request form</a>, or email us. We answer within one month. Erasure removes your personal data from the public record; your entry number stays retired and the minimal payment record is kept for the period the law requires. You can complain to the Data Protection Commission (Ireland) at <a href="https://www.dataprotection.ie" rel="noopener">dataprotection.ie</a>.</p>
+<p>You can access, correct, port, restrict or erase your data, object to processing based on legitimate interests, and withdraw consent at any time. Most of it is self-service: from your <a class="link" href="/dashboard">dashboard</a> you can edit your profile and marketing choice, <strong>download a copy of your data</strong>, and <strong>permanently delete your account</strong>. For anything else email us; we answer within one month. You can complain to the Data Protection Commission (Ireland) at <a class="link" href="https://www.dataprotection.ie" rel="noopener">dataprotection.ie</a>.</p>
 <h2>Cookies and storage</h2>
-<p>We set no tracking cookies. See the <a href="/cookies">cookie notice</a> for the small amount of browser storage the site uses.</p>
-<h2>Children</h2>
-<p>Paid entries are for adults (18+). We don’t knowingly collect data from children.</p>
+<p>No tracking cookies. See the <a class="link" href="/cookies">cookie notice</a>.</p>
+<h2>Age</h2>
+<p>You must be 16 or over to register. We do not knowingly collect data from children.</p>
 <h2>Changes</h2>
-<p>We’ll date any change here and, for material changes, tell entry holders by email.</p>
-</div></div>
+<p>We will date any change here and, for material changes, tell registered contributors by email.</p>
+</div></div></section>
